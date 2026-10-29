@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 
-import { Gallery } from "@/components/gallery";
+import type { GalleryItem } from "@/components/gallery";
 import { galleryItems } from "@/components/gallery-items";
-import { Eyebrow, OccasionLinks } from "@/components/sections";
+import { OccasionLinks } from "@/components/sections";
+import { Reveal, TemplateRow, TemplatesHero } from "@/components/templates-showcase";
 import { CATALOG } from "@/invite/templates/catalog";
+import type { Occasion } from "@/invite/types";
 
 export const metadata: Metadata = {
   title: "Invitation Templates: Wedding, Nikah, Mehndi, Birthday & More",
@@ -11,19 +13,54 @@ export const metadata: Metadata = {
   alternates: { canonical: "/templates" },
 };
 
+/** The designs people open most, in the order they are shown. */
+const MOST_LOVED = ["marigold", "jharokha", "sehra", "botanica", "deco"];
+
+/** Browse sections; a design lands in the first one that lists its main occasion, everything else goes to the last. */
+const GROUPS: { id: string; title: string; blurb: string; occasions: Occasion[] }[] = [
+  { id: "weddings", title: "Weddings & receptions", blurb: "For the big day and the dinner after it.", occasions: ["wedding", "reception"] },
+  { id: "nikah", title: "Nikah, walima & engagement", blurb: "Quieter, warmer, made for family.", occasions: ["nikah", "walima", "engagement"] },
+  { id: "festive", title: "Mehndi & festive nights", blurb: "Colour, music and a little noise.", occasions: ["mehndi", "eid"] },
+  { id: "celebrate", title: "Birthdays & every other reason", blurb: "Baby showers, graduations, housewarmings and parties.", occasions: [] },
+];
+
 export default function TemplatesPage() {
+  const all = galleryItems();
+  const loved = MOST_LOVED.map((id) => all.find((it) => it.meta.id === id)).filter((it): it is GalleryItem => !!it);
+  const rest = all.filter((it) => !MOST_LOVED.includes(it.meta.id));
+  const grouped = GROUPS.map((g, gi) => ({
+    ...g,
+    items: rest.filter((it) => {
+      const own = GROUPS.findIndex((x) => x.occasions.includes(it.meta.defaultOccasion));
+      return (own === -1 ? GROUPS.length - 1 : own) === gi;
+    }),
+  })).filter((g) => g.items.length);
+
   return (
-    <main className="mx-auto max-w-6xl px-4 pt-10 sm:px-6 sm:pt-14">
-      <Eyebrow>{CATALOG.length} designs</Eyebrow>
-      <h1 className="font-serif text-[40px] leading-[1.06] sm:text-[52px]">Invitation templates</h1>
-      <p className="mt-4 mb-10 max-w-2xl text-[16.5px] leading-relaxed text-muted">
-        Every template opens with its own animation and comes in several colour palettes. Open one to see it full screen, then make it yours. All free.
-      </p>
-      <Gallery items={galleryItems()} />
-      <div className="mt-16">
+    <main className="mx-auto max-w-6xl px-4 sm:px-6">
+      <TemplatesHero count={CATALOG.length} items={loved} links={grouped.map((g) => ({ id: g.id, label: g.title.split(",")[0].split(" &")[0] }))} />
+
+
+      {grouped.map((g) => (
+        <section key={g.id} id={g.id} aria-labelledby={`${g.id}-h`} className="scroll-mt-8 border-t border-line pt-10 pb-12">
+          <Reveal className="mb-6 flex flex-wrap items-end justify-between gap-x-8 gap-y-1">
+            <div>
+              <h2 id={`${g.id}-h`} className="font-serif text-[28px] leading-tight sm:text-[32px]">
+                {g.title}
+              </h2>
+              <p className="mt-1 text-[15.5px] text-muted">
+                {g.blurb} <span className="text-muted/70">· {g.items.length} designs</span>
+              </p>
+            </div>
+          </Reveal>
+          <TemplateRow items={g.items} />
+        </section>
+      ))}
+
+      <section className="border-t border-line pt-10 pb-16">
         <p className="mb-3 text-[14px] text-muted">Looking for something specific?</p>
         <OccasionLinks />
-      </div>
+      </section>
     </main>
   );
 }
