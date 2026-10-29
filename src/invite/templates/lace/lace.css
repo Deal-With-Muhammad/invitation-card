@@ -1,0 +1,104 @@
+/* Ivory Lace: cut paper lace over a soft coloured backing card. */
+
+.t-lace {
+  --st-env: #fcfbf8;
+  --lc-back: color-mix(in oklab, var(--accent) 62%, var(--bg));
+}
+
+.t-lace .st-card {
+  background: transparent;
+  box-shadow: none;
+  filter: drop-shadow(0 calc(0.5 * var(--k)) calc(0.8 * var(--k)) color-mix(in srgb, #2a2420 20%, transparent))
+    drop-shadow(0 calc(9 * var(--k)) calc(14 * var(--k)) color-mix(in srgb, #2a2420 22%, transparent));
+}
+
+.lc-backing {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(90% 60% at 30% 20%, color-mix(in srgb, #fff 18%, transparent), transparent 70%),
+    var(--lc-back);
+}
+
+.lc-paper {
+  position: absolute;
+  inset: 0;
+  filter: drop-shadow(calc(0.4 * var(--k)) calc(0.9 * var(--k)) calc(0.7 * var(--k)) color-mix(in srgb, #2a2420 30%, transparent));
+}
+
+.lc-sheet {
+  inset: 0;
+  background:
+    radial-gradient(120% 80% at 30% 15%, #fffefb, transparent 70%),
+    var(--bg);
+}
+
+.lc-text {
+  inset: calc(56 * var(--k)) calc(52 * var(--k)) calc(52 * var(--k));
+  gap: calc(8 * var(--k));
+  color: var(--ink);
+}
+
+.lc-text .st-bless {
+  color: color-mix(in oklab, var(--accent) 70%, var(--ink));
+}
+
+.lc-text .inv-bism {
+  width: calc(80 * var(--k));
+}
+
+.lc-text .st-title {
+  font: 500 calc(8 * var(--k)) / 1.5 var(--f-body);
+  letter-spacing: 0.26em;
+  opacity: 0.8;
+}
+
+.lc-text .st-names {
+  font-size: min(calc(38 * var(--k)), calc(100cqi / (var(--len) * 0.46)));
+  line-height: 1.15;
+}
+
+.lc-text .st-names .inv-amp {
+  font-size: 0.5em;
+  color: color-mix(in oklab, var(--accent) 70%, var(--ink));
+}
+
+.lc-rule {
+  width: calc(36 * var(--k));
+  height: 1px;
+  background: color-mix(in oklab, var(--accent) 70%, var(--ink));
+  opacity: 0.6;
+}
+
+.lc-text .st-sc {
+  font-size: calc(7.8 * var(--k));
+  opacity: 0.85;
+}
+
+.lc-text .st-when strong {
+  font: 500 calc(12.5 * var(--k)) / 1.4 var(--f-display);
+}
+
+.lc-text .st-venue {
+  font-size: calc(11 * var(--k));
+}
+
+.lc-liner {
+  background:
+    radial-gradient(80% 60% at 30% 20%, color-mix(in srgb, #fff 25%, transparent), transparent),
+    var(--lc-back);
+}
+
+.lc-liner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  opacity: 0.25;
+  -webkit-mask: var(--st-cloud) 0 0 / calc(110 * var(--k)) calc(110 * var(--k)) repeat;
+  mask: var(--st-cloud) 0 0 / calc(110 * var(--k)) calc(110 * var(--k)) repeat;
+}
+
+.t-lace {
+  --st-sheet: var(--bg);
+}

@@ -40,7 +40,7 @@ const stepsEn = (what: string, extra: string) => ({
 export const PAGES: Record<string, LandingPage> = {
   "wedding-invitation-maker": {
     slug: "wedding-invitation-maker",
-    featured: "envelope",
+    featured: "gilded",
     label: "Wedding invitation maker",
     title: "Free Online Wedding Invitation Maker",
     description: "Make an animated wedding invitation online and share it as a link on WhatsApp. Add every function, maps, countdown and calendar. Free, no sign-up.",
@@ -142,7 +142,7 @@ export const PAGES: Record<string, LandingPage> = {
   },
   "kad-kahwin-digital": {
     slug: "kad-kahwin-digital",
-    featured: "songket",
+    featured: "velvetrose",
     label: "Kad kahwin digital",
     title: "Kad Kahwin Digital Percuma",
     description: "Buat kad kahwin digital percuma dalam beberapa minit. Pilih reka bentuk, isi nama, tarikh dan lokasi, dan kongsi satu pautan di WhatsApp. Google Maps, Waze dan kalendar.",
@@ -156,7 +156,7 @@ export const PAGES: Record<string, LandingPage> = {
         id: "how",
         heading: "Cara buat kad kahwin digital",
         items: [
-          { term: "Pilih reka bentuk", text: "Contohnya Songket dengan tenunan emas, atau mana-mana reka bentuk lain. Buka dahulu untuk melihat animasinya." },
+          { term: "Pilih reka bentuk", text: "Contohnya Red Velvet dengan sampul baldu dan bunga mawar emas, atau mana-mana reka bentuk lain. Buka dahulu untuk melihat animasinya." },
           { term: "Isi maklumat majlis", text: "Nama pengantin, ibu bapa, tarikh, masa, lokasi dan aturcara majlis. Pilih Bahasa Melayu sebagai bahasa utama." },
           { term: "Terbitkan dan kongsi", text: "Pilih pautan anda, terbitkan, dan hantar di WhatsApp. Simpan pautan edit peribadi untuk ubah maklumat kemudian." },
         ],
@@ -165,7 +165,7 @@ export const PAGES: Record<string, LandingPage> = {
         id: "ciri",
         heading: "Apa yang ada dalam setiap kad",
         items: [
-          { term: "Animasi pembukaan", text: "Kain songket terbuka, pintu, sampul surat atau tirai." },
+          { term: "Animasi pembukaan", text: "Sampul surat dibuka dan kad diangkat keluar, pintu atau tirai." },
           { term: "Lokasi", text: "Butang Google Maps dan Waze, serta peta." },
           { term: "Tambah ke kalendar", text: "Google Calendar, Apple dan Outlook." },
           { term: "Hubungi", text: "Butang WhatsApp dan panggilan untuk wakil keluarga." },
@@ -215,25 +215,6 @@ export const PAGES: Record<string, LandingPage> = {
     faqs: [
       { q: "What is written on an aqiqah card?", a: "Usually a line of thanks to Allah, the baby's name, the parents' names, and the date, time and place. DWM Invite fills in gentle wording you can change." },
       { q: "Is there music?", a: "For aqiqah the music starts off; you can turn it on if you want it." },
-    ],
-    dateModified: D,
-  },
-  "eid-invitation-card": {
-    slug: "eid-invitation-card",
-    featured: "lantern",
-    label: "Eid invitation card",
-    title: "Eid Invitation Card Maker: Eid Lunch, Dinner or Open House",
-    description: "Make an Eid invitation online with glowing lanterns and a crescent moon. Invite family to Eid lunch, an open house or iftar with one WhatsApp link. Free.",
-    answer:
-      "Make an Eid invitation online for an Eid lunch, dinner, open house or iftar: pick a design, add your family's name, the time and your address, and share one link. Guests get the map, a countdown and a calendar reminder.",
-    occasion: "eid",
-    occasions: ["eid", "party", "housewarming"],
-    lang: "en",
-    sections: [stepsEn("Eid invitation", "Write the hosts as your family name, for example “The Rahman family”.")],
-    steps: "how",
-    faqs: [
-      { q: "Can I use it for an iftar party?", a: "Yes. Choose Eid as the occasion and change the wording to iftar, or pick Party and write your own." },
-      { q: "Can I invite people to an open house (rumah terbuka)?", a: "Yes. Add the open-house hours as the start and end time, and your address with a map." },
     ],
     dateModified: D,
   },

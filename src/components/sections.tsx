@@ -11,12 +11,12 @@ export function Eyebrow({ children }: { children: React.ReactNode }) {
 }
 
 const OCCASION_TILES = [
-  { href: "/wedding-invitation-maker", label: "Wedding", id: "envelope" },
+  { href: "/wedding-invitation-maker", label: "Wedding", id: "gilded" },
   { href: "/nikah-invitation-card", label: "Nikah & Walima", id: "jharokha" },
   { href: "/mehndi-invitation-card", label: "Mehndi", id: "marigold" },
   { href: "/birthday-invitation-maker", label: "Birthday", id: "confetti" },
   { href: "/aqiqah-invitation-card", label: "Aqiqah & baby", id: "cloudnine" },
-  { href: "/eid-invitation-card", label: "Eid", id: "lantern" },
+  { href: "/engagement-invitation-card", label: "Engagement", id: "celestial" },
 ];
 
 export function OccasionTiles() {
@@ -45,7 +45,7 @@ export function HowItWorks() {
     <div className="grid gap-4 md:grid-cols-3" id="steps">
       <article className="rounded-3xl bg-paper-2 p-6">
         <div className="relative h-44">
-          {["botanica", "kashi", "songket"].map((id, i) => (
+          {["rosestudy", "gilded", "peony"].map((id, i) => (
             <div
               key={id}
               className="absolute top-2 w-[30%] overflow-hidden rounded-xl shadow-[0_14px_30px_-18px_rgb(31_28_25/0.6)] ring-1 ring-black/5"

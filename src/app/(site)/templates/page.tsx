@@ -9,7 +9,7 @@ import type { Occasion } from "@/invite/types";
 
 export const metadata: Metadata = {
   title: "Invitation Templates: Wedding, Nikah, Mehndi, Birthday & More",
-  description: `Browse ${CATALOG.length} animated invitation templates for weddings, nikah, walima, mehndi, birthdays, aqiqah, Eid and parties. Free to use and share as a link.`,
+  description: `Browse ${CATALOG.length} animated invitation templates for weddings, nikah, walima, mehndi, birthdays, aqiqah and parties. Free to use and share as a link.`,
   alternates: { canonical: "/templates" },
 };
 

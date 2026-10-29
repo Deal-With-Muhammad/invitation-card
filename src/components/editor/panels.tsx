@@ -42,7 +42,8 @@ const EVENT_IDEAS: Partial<Record<Occasion, string[]>> = {
 export function OccasionPanel({ data, set }: P) {
   return (
     <div className="flex flex-wrap gap-1.5">
-      {OCCASIONS.map((o) => (
+      {/* Eid is retired; it only shows for invitations that were made with it. */}
+      {OCCASIONS.filter((o) => o !== "eid" || data.occasion === "eid").map((o) => (
         <button
           key={o}
           type="button"
