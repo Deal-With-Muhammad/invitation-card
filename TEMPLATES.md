@@ -75,3 +75,20 @@ venue and map, buttons, programme, swatches, contacts, prayer, closing) under
 
 **Motion.** Transform and opacity only, eased, nothing that loops fast. Reduced
 motion is handled globally.
+
+## Stationery wedding cards
+
+The wedding cards modelled on printed stationery (Gilded Blossom, Rose Study,
+Midnight Orchid, Wildflower Lane, Ivory Lace, Gilded Wreath, Lily of the Valley,
+Peony Arch, Rose Shower, Red Velvet) share one kit in `templates/stationery/`:
+
+| File | What it gives you |
+| --- | --- |
+| `stationery/kit.tsx` | `makeStationery(id, { Card, Liner, surface, seal })`: the envelope, the opening, the marble / linen / velvet surface and the enclosure cards below |
+| `stationery/flora.ts` | Seeded botanical drawing: roses, peonies, blossoms, orchids, lily-of-the-valley bells, wildflowers, leaves, stems, and `svgUrl` for foil masks |
+| `stationery/stationery.css` | Scene geometry, the opening timeline, painted-tone classes (`fa`…`fd`, `la`, `lb`, `lv`, `sm`) and `.st-foil` |
+
+A new card only draws its face (`Card`, sized in `calc(N * var(--k))` on a 280 × 392
+card) and its envelope liner (`Liner`). Painted art is inline SVG coloured by
+`--f1…--f4` and `--g1…--g3`; foil and lace are CSS masks made with `svgUrl`, so
+thumbnails never carry SVG ids.

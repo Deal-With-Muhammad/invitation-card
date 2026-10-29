@@ -1,0 +1,124 @@
+/* Midnight Orchid: a white orchid spray on a dark card, copper-lined envelope. */
+
+.t-orchid {
+  --st-env: color-mix(in srgb, var(--bg) 92%, #fffaf2);
+  --st-env-in: color-mix(in srgb, var(--bg) 85%, #120f10);
+  --f1: color-mix(in oklab, #fbf6f1 90%, var(--accent));
+  --f2: color-mix(in oklab, #f3e4e4 85%, var(--accent));
+  --f3: color-mix(in oklab, #9b2c5e 78%, var(--accent));
+  --f4: color-mix(in oklab, #6e1d3f 80%, var(--accent));
+  --g1: color-mix(in oklab, #4c6a43 88%, var(--bg));
+  --g2: color-mix(in oklab, #2f4a2b 85%, var(--bg));
+  --g3: color-mix(in oklab, #6c6a3c 80%, var(--bg));
+}
+
+.t-orchid .st-card {
+  background:
+    radial-gradient(100% 60% at 30% 25%, color-mix(in srgb, var(--soft) 70%, transparent), transparent 75%),
+    var(--bg);
+}
+
+.mo-art {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.mo-art .st-twig {
+  fill: none;
+  stroke: var(--g3);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+}
+
+.mo-art .fl {
+  stroke: var(--f3);
+  opacity: 0.35;
+}
+
+.mo-art .fa {
+  fill-opacity: 0.96;
+}
+
+.mo-text {
+  inset: calc(52 * var(--k)) calc(16 * var(--k)) calc(44 * var(--k)) calc(118 * var(--k));
+  gap: calc(9 * var(--k));
+  color: var(--ink);
+}
+
+.mo-text .st-bless {
+  color: var(--accent);
+}
+
+.mo-text .inv-bism {
+  width: calc(80 * var(--k));
+}
+
+.mo-text .st-title {
+  font: italic 400 calc(11 * var(--k)) / 1.4 var(--f-display);
+  letter-spacing: 0.04em;
+  text-transform: none;
+  opacity: 0.85;
+}
+
+.mo-text .st-names {
+  font-size: min(calc(21 * var(--k)), calc(100cqi / (var(--len) * 0.78)));
+  line-height: 1.2;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.mo-text.is-script .st-names {
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: min(calc(30 * var(--k)), calc(100cqi / (var(--len) * 0.5)));
+}
+
+.mo-text .st-names .inv-amp {
+  font: italic 400 0.8em / 1.3 var(--f-display);
+  letter-spacing: 0;
+  text-transform: lowercase;
+  color: var(--accent);
+}
+
+.mo-rule {
+  width: calc(1 * var(--k));
+  height: calc(20 * var(--k));
+  background: color-mix(in srgb, var(--accent) 70%, transparent);
+}
+
+.mo-text .st-sc {
+  font-size: calc(7.8 * var(--k));
+  letter-spacing: 0.24em;
+  opacity: 0.85;
+}
+
+.mo-text .st-when strong {
+  font: 500 calc(9.5 * var(--k)) / 1.5 var(--f-body);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.mo-text .st-venue {
+  font: 500 calc(8 * var(--k)) / 1.5 var(--f-body);
+  font-style: normal;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+.mo-liner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--accent) 50%, #2a1810);
+  opacity: 0.35;
+  -webkit-mask: var(--st-cloud) 0 0 / calc(150 * var(--k)) calc(150 * var(--k)) repeat;
+  mask: var(--st-cloud) 0 0 / calc(150 * var(--k)) calc(150 * var(--k)) repeat;
+}
+
+.t-orchid .inv-sec {
+  background:
+    radial-gradient(120% 60% at 20% 0%, color-mix(in srgb, var(--soft) 70%, transparent), transparent 70%),
+    var(--bg);
+}

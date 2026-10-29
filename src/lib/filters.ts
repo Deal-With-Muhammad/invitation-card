@@ -9,7 +9,6 @@ export const FILTERS: { id: string; label: string; occasions: Occasion[] }[] = [
   { id: "engagement", label: "Engagement", occasions: ["engagement"] },
   { id: "birthday", label: "Birthday", occasions: ["birthday"] },
   { id: "baby", label: "Aqiqah & baby", occasions: ["aqiqah", "babyshower"] },
-  { id: "eid", label: "Eid", occasions: ["eid"] },
   { id: "graduation", label: "Graduation", occasions: ["graduation"] },
   { id: "home", label: "Housewarming", occasions: ["housewarming"] },
   { id: "anniversary", label: "Anniversary", occasions: ["anniversary"] },

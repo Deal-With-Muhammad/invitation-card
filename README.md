@@ -1,10 +1,10 @@
 # DWM Invite
 
 Free online invitations you send as a link: weddings, nikah, walima, mehndi,
-engagements, birthdays, aqiqah, Eid, graduations, housewarmings and more.
+engagements, birthdays, aqiqah, graduations, housewarmings and more.
 Live at **invite.dealwithmuhammad.com**.
 
-Pick one of 20 animated designs, type the names, days and venues, choose colours,
+Pick one of 27 animated designs, type the names, days and venues, choose colours,
 fonts and languages, and publish. Guests get a tap-to-open invitation with a
 countdown, maps, calendar buttons and (optionally) music and auto-scroll.
 

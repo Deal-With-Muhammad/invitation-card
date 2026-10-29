@@ -1,0 +1,124 @@
+/* Wildflower Lane: meadow flowers up both sides of a gold-framed card. */
+
+.t-wildflower {
+  --st-env: #fbf9f4;
+  --gold: color-mix(in oklab, #c49a4a 85%, var(--ink));
+  --g1: color-mix(in oklab, #7d9a5e 85%, var(--ink));
+  --g2: color-mix(in oklab, #4f6b3b 85%, var(--ink));
+}
+
+.wf-art .h1 {
+  --f1: color-mix(in oklab, var(--accent) 80%, #fff);
+  --f2: var(--accent);
+  --f3: color-mix(in oklab, var(--accent) 80%, #5a2030);
+  --c1: color-mix(in oklab, var(--accent) 70%, #5a2030);
+}
+
+.wf-art .h2 {
+  --f1: #f1c64e;
+  --f2: #e2a830;
+  --f3: #c58a1e;
+  --c1: #d9a22b;
+}
+
+.wf-art .h3 {
+  --f1: #7c97d4;
+  --f2: #5e7cc0;
+  --f3: #3f5ea4;
+  --c1: #3c4f86;
+}
+
+.wf-art .h4 {
+  --f1: #e7674f;
+  --f2: #d2503c;
+  --f3: #3a2724;
+  --f4: #3a2724;
+  --c1: #3a2724;
+}
+
+.wf-art .h5 {
+  --f1: #fffdf8;
+  --f2: #f3efe6;
+  --f3: #d9d2c4;
+}
+
+.wf-art .h6 {
+  --f1: #a28bcf;
+}
+
+.wf-art .h5.fa {
+  stroke: color-mix(in srgb, var(--ink) 30%, transparent);
+  stroke-width: 0.4;
+}
+
+.wf-art {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.wf-frame {
+  position: absolute;
+  inset: calc(12 * var(--k));
+  border: calc(1.2 * var(--k)) solid var(--gold);
+  box-shadow: inset 0 0 0 calc(2.5 * var(--k)) var(--bg), inset 0 0 0 calc(3.2 * var(--k)) var(--gold);
+}
+
+.wf-text {
+  inset: calc(40 * var(--k)) calc(60 * var(--k)) calc(40 * var(--k));
+  gap: calc(8 * var(--k));
+  color: var(--ink);
+}
+
+.wf-text .st-bless {
+  color: var(--gold);
+}
+
+.wf-text .inv-bism {
+  width: calc(78 * var(--k));
+}
+
+.wf-text .st-title {
+  font: 500 calc(8 * var(--k)) / 1.5 var(--f-body);
+  letter-spacing: 0.24em;
+}
+
+.wf-text .st-names {
+  font-size: min(calc(36 * var(--k)), calc(100cqi / (var(--len) * 0.48)));
+  line-height: 1.15;
+}
+
+.wf-text .st-names .inv-amp {
+  font-size: 0.55em;
+  color: var(--accent);
+}
+
+.wf-text .st-sc {
+  font-size: calc(7.8 * var(--k));
+}
+
+.wf-text .st-when strong {
+  font: 500 calc(12 * var(--k)) / 1.4 var(--f-display);
+}
+
+.wf-text .st-venue {
+  font-size: calc(11 * var(--k));
+}
+
+.wf-liner {
+  background:
+    repeating-linear-gradient(90deg,
+      color-mix(in oklab, var(--accent) 45%, #fff) 0 calc(9 * var(--k)),
+      color-mix(in oklab, var(--accent) 30%, #fff) calc(9 * var(--k)) calc(10 * var(--k)),
+      #fffaf6 calc(10 * var(--k)) calc(18 * var(--k)));
+}
+
+.wf-liner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: color-mix(in oklab, var(--accent) 60%, #fff);
+  opacity: 0.35;
+  -webkit-mask: var(--st-cloud) 0 0 / calc(120 * var(--k)) calc(120 * var(--k)) repeat;
+  mask: var(--st-cloud) 0 0 / calc(120 * var(--k)) calc(120 * var(--k)) repeat;
+}

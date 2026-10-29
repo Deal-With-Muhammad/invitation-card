@@ -1,0 +1,114 @@
+/* Gilded Blossom: foil blossoms on a watercolour wash. */
+
+.t-gilded {
+  --st-env: #f8f6f1;
+}
+
+.t-gilded .st-card {
+  background:
+    radial-gradient(120% 70% at 70% 100%, color-mix(in srgb, var(--bg) 82%, var(--ink)), transparent 70%),
+    radial-gradient(90% 60% at 20% 20%, color-mix(in srgb, var(--bg) 80%, var(--soft)), transparent 70%),
+    var(--bg);
+}
+
+.gb-wash {
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--soft) 60%, var(--ink));
+  opacity: 0.2;
+  -webkit-mask: var(--st-cloud) 0 0 / calc(300 * var(--k, 1px)) calc(300 * var(--k, 1px)) repeat;
+  mask: var(--st-cloud) 0 0 / calc(300 * var(--k, 1px)) calc(300 * var(--k, 1px)) repeat;
+}
+
+.gb-wash-2 {
+  background: color-mix(in srgb, var(--bg) 70%, #0d0f1c);
+  opacity: 0.28;
+  -webkit-mask-position: calc(140 * var(--k, 1px)) calc(90 * var(--k, 1px));
+  mask-position: calc(140 * var(--k, 1px)) calc(90 * var(--k, 1px));
+}
+
+.gb-art {
+  inset: 0;
+}
+
+.gb-dots {
+  background: color-mix(in srgb, var(--accent) 62%, #3a2a14);
+}
+
+.gb-text {
+  inset: calc(186 * var(--k)) calc(26 * var(--k)) calc(22 * var(--k));
+  gap: calc(6 * var(--k));
+  color: var(--ink);
+}
+
+.gb-text .st-bless {
+  color: var(--accent);
+}
+
+.gb-text .inv-bism {
+  width: calc(78 * var(--k));
+}
+
+.gb-text .st-title {
+  font: 400 calc(10.5 * var(--k)) / 1.4 var(--f-display);
+  font-style: italic;
+  letter-spacing: 0.06em;
+  text-transform: none;
+  opacity: 0.9;
+}
+
+.gb-text .st-names {
+  font-size: min(calc(31 * var(--k)), calc(100cqi / (var(--len) * 0.58)));
+  line-height: 1.05;
+  letter-spacing: 0.01em;
+}
+
+.gb-text .st-names .inv-amp {
+  font-size: 0.72em;
+  margin: calc(1 * var(--k)) 0;
+}
+
+.gb-text .st-when {
+  margin-top: calc(6 * var(--k));
+}
+
+.gb-text .st-sc {
+  font: 400 calc(9.5 * var(--k)) / 1.45 var(--f-display);
+  letter-spacing: 0.14em;
+  text-transform: lowercase;
+}
+
+.gb-text .st-when strong {
+  font: 400 calc(10.5 * var(--k)) / 1.45 var(--f-display);
+  letter-spacing: 0.14em;
+  text-transform: lowercase;
+}
+
+.gb-text .st-venue {
+  font: 400 calc(9.5 * var(--k)) / 1.45 var(--f-display);
+  font-style: normal;
+  letter-spacing: 0.14em;
+  text-transform: lowercase;
+  opacity: 0.9;
+}
+
+/* liner: the same wash with a looser repeat of foil blossoms */
+.gb-liner {
+  background: var(--bg);
+}
+
+.gb-liner-foil {
+  position: absolute;
+  inset: 0;
+  -webkit-mask-size: calc(118 * var(--k)) calc(118 * var(--k));
+  mask-size: calc(118 * var(--k)) calc(118 * var(--k));
+  -webkit-mask-repeat: repeat;
+  mask-repeat: repeat;
+}
+
+/* enclosure cards share the card's wash */
+.t-gilded .inv-sec {
+  background:
+    radial-gradient(120% 60% at 20% 0%, color-mix(in srgb, var(--bg) 82%, var(--soft)), transparent 70%),
+    var(--bg);
+}

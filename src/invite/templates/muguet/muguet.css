@@ -1,0 +1,112 @@
+/* Lily of the Valley: white bells and long leaves inside a fine gold frame. */
+
+.t-muguet {
+  --st-env: #f9f7f2;
+  --f1: color-mix(in oklab, #fdfbf5 94%, var(--bg));
+  --f2: color-mix(in oklab, #d9ddd2 80%, var(--bg));
+  --g1: color-mix(in oklab, #5f8a52 80%, var(--bg));
+  --g2: color-mix(in oklab, #3a6233 82%, var(--bg));
+  --g3: color-mix(in oklab, #7f9a5a 85%, var(--bg));
+}
+
+.t-muguet .st-card {
+  background:
+    radial-gradient(110% 70% at 30% 20%, color-mix(in srgb, var(--soft) 80%, transparent), transparent 75%),
+    var(--bg);
+}
+
+.mg-art {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.mg-art .mg-ped {
+  fill: none;
+  stroke: var(--g3);
+  stroke-width: 0.8;
+  stroke-linecap: round;
+}
+
+.mg-art .fa {
+  fill-opacity: 1;
+}
+
+.mg-art .fb {
+  opacity: 0.45;
+}
+
+.mg-art .la {
+  fill-opacity: 0.94;
+}
+
+.mg-frame {
+  position: absolute;
+  inset: calc(16 * var(--k));
+  border: calc(0.9 * var(--k)) solid var(--accent);
+}
+
+.mg-frame::after {
+  content: "";
+  position: absolute;
+  inset: calc(3.5 * var(--k));
+  border: calc(0.5 * var(--k)) solid color-mix(in srgb, var(--accent) 70%, transparent);
+}
+
+.mg-text {
+  inset: calc(36 * var(--k)) calc(50 * var(--k)) calc(178 * var(--k));
+  gap: calc(8 * var(--k));
+  color: var(--ink);
+}
+
+.mg-text .st-bless {
+  color: var(--accent);
+}
+
+.mg-text .inv-bism {
+  width: calc(80 * var(--k));
+}
+
+.mg-text .st-title {
+  font: 500 calc(8 * var(--k)) / 1.5 var(--f-body);
+  letter-spacing: 0.26em;
+}
+
+.mg-text .st-names {
+  font-size: min(calc(32 * var(--k)), calc(100cqi / (var(--len) * 0.56)));
+  font-style: italic;
+  line-height: 1.1;
+}
+
+.mg-text .st-names .inv-amp {
+  font-size: 0.6em;
+  color: var(--accent);
+}
+
+.mg-text .st-sc {
+  font-size: calc(7.8 * var(--k));
+}
+
+.mg-text .st-when strong {
+  font: 500 calc(12 * var(--k)) / 1.4 var(--f-display);
+}
+
+.mg-text .st-venue {
+  font-size: calc(11 * var(--k));
+}
+
+.mg-liner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--accent) 55%, #3a2a14);
+  opacity: 0.28;
+  -webkit-mask: var(--st-cloud) 0 0 / calc(150 * var(--k)) calc(150 * var(--k)) repeat;
+  mask: var(--st-cloud) 0 0 / calc(150 * var(--k)) calc(150 * var(--k)) repeat;
+}
+
+.t-muguet .inv-sec {
+  background:
+    radial-gradient(120% 60% at 20% 0%, color-mix(in srgb, var(--soft) 80%, transparent), transparent 70%),
+    var(--bg);
+}

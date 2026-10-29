@@ -1,0 +1,101 @@
+/* Gilded Wreath: a gold-foil line-art wreath and monogram. */
+
+.t-filigree {
+  --st-env: color-mix(in srgb, var(--bg) 25%, #fbf8f1);
+}
+
+.t-filigree .st-card {
+  background:
+    radial-gradient(110% 70% at 30% 15%, color-mix(in srgb, #fffdf8 16%, transparent), transparent 70%),
+    var(--bg);
+}
+
+.fg-art {
+  inset: 0;
+}
+
+.fg-border {
+  position: absolute;
+  inset: calc(9 * var(--k));
+  border: calc(0.8 * var(--k)) solid color-mix(in srgb, var(--accent) 80%, transparent);
+}
+
+.fg-mono {
+  position: absolute;
+  left: 50%;
+  top: calc(40 * var(--k));
+  translate: -50% -50%;
+  font: 500 calc(17 * var(--k)) / 1 var(--f-display);
+  letter-spacing: 0.04em;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.fg-text {
+  inset: calc(72 * var(--k)) calc(56 * var(--k)) calc(64 * var(--k));
+  gap: calc(7 * var(--k));
+  color: var(--ink);
+}
+
+.fg-text .st-bless {
+  color: var(--accent);
+}
+
+.fg-text .inv-bism {
+  width: calc(76 * var(--k));
+}
+
+.fg-text .st-title {
+  font: italic 400 calc(11 * var(--k)) / 1.4 var(--f-display);
+  letter-spacing: 0.04em;
+  text-transform: none;
+}
+
+.fg-text .st-names {
+  font-size: min(calc(24 * var(--k)), calc(100cqi / (var(--len) * 0.72)));
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.fg-text.is-script .st-names {
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: min(calc(34 * var(--k)), calc(100cqi / (var(--len) * 0.48)));
+}
+
+.fg-text .st-names .inv-amp {
+  font: italic 400 0.66em / 1.4 var(--f-display);
+  letter-spacing: 0;
+  text-transform: lowercase;
+  color: var(--accent);
+}
+
+.fg-rule {
+  width: calc(30 * var(--k));
+  height: calc(0.8 * var(--k));
+  background: var(--accent);
+}
+
+.fg-text .st-sc {
+  font-size: calc(7.6 * var(--k));
+}
+
+.fg-text .st-when strong {
+  font: 500 calc(12 * var(--k)) / 1.4 var(--f-display);
+}
+
+.fg-text .st-venue {
+  font-size: calc(11 * var(--k));
+}
+
+.fg-liner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--accent) 55%, #3a2a14);
+  opacity: 0.28;
+  -webkit-mask: var(--st-cloud) 0 0 / calc(150 * var(--k)) calc(150 * var(--k)) repeat;
+  mask: var(--st-cloud) 0 0 / calc(150 * var(--k)) calc(150 * var(--k)) repeat;
+}

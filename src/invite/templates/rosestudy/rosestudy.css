@@ -1,0 +1,108 @@
+/* Rose Study: a painted rose stem on ivory, text set to the right. */
+
+.t-rosestudy {
+  --st-env: color-mix(in srgb, var(--bg) 60%, #fbf8f1);
+  --f1: color-mix(in oklab, var(--accent) 42%, var(--bg));
+  --f2: color-mix(in oklab, var(--accent) 72%, var(--bg));
+  --f3: var(--accent);
+  --f4: color-mix(in oklab, var(--accent) 66%, #3a1820);
+  --g1: color-mix(in oklab, #86a06a 80%, var(--ink));
+  --g2: color-mix(in oklab, #4d6a3e 80%, var(--ink));
+}
+
+.t-rosestudy .st-card {
+  background:
+    radial-gradient(110% 70% at 30% 10%, color-mix(in srgb, #fffdf8 40%, transparent), transparent 70%),
+    var(--bg);
+}
+
+.rs-art {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.rs-art .fa,
+.rs-art .fb,
+.rs-art .fc,
+.rs-art .la {
+  mix-blend-mode: multiply;
+}
+
+.rs-text {
+  inset: calc(40 * var(--k)) calc(14 * var(--k)) calc(36 * var(--k)) calc(124 * var(--k));
+  gap: calc(8 * var(--k));
+}
+
+.rs-text .st-bless {
+  color: var(--accent);
+}
+
+.rs-text .inv-bism {
+  width: calc(80 * var(--k));
+}
+
+.rs-text .st-title {
+  font: 500 calc(8.5 * var(--k)) / 1.5 var(--f-body);
+  letter-spacing: 0.22em;
+  color: color-mix(in srgb, var(--ink) 80%, transparent);
+}
+
+.rs-text .st-names {
+  font-size: min(calc(25 * var(--k)), calc(100cqi / (var(--len) * 0.74)));
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.rs-text.is-script .st-names {
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: min(calc(32 * var(--k)), calc(100cqi / (var(--len) * 0.5)));
+}
+
+.rs-text .st-names .inv-amp {
+  font: italic 400 0.62em / 1.4 var(--f-display);
+  letter-spacing: 0.04em;
+  text-transform: lowercase;
+  color: var(--accent);
+}
+
+.rs-rule {
+  display: block;
+  width: calc(28 * var(--k));
+  height: 1px;
+  background: color-mix(in srgb, var(--accent) 70%, transparent);
+  margin: calc(2 * var(--k)) 0;
+}
+
+.rs-text .st-sc {
+  font-size: calc(8 * var(--k));
+  color: color-mix(in srgb, var(--ink) 80%, transparent);
+}
+
+.rs-text .st-when strong {
+  font: 500 calc(12.5 * var(--k)) / 1.35 var(--f-display);
+}
+
+.rs-text .st-venue {
+  font-size: calc(11 * var(--k));
+}
+
+.rs-liner {
+  background:
+    radial-gradient(60% 40% at 30% 20%, color-mix(in srgb, #fff6dc 45%, transparent), transparent),
+    linear-gradient(118deg, #a8813e, #f1d9a0 24%, #c9a25a 40%, #9c7634 58%, #e9cf8f 76%, #b08a45);
+}
+
+.rs-liner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #5a4320;
+  opacity: 0.25;
+  -webkit-mask: var(--st-cloud) 0 0 / calc(160 * var(--k)) calc(160 * var(--k)) repeat;
+  mask: var(--st-cloud) 0 0 / calc(160 * var(--k)) calc(160 * var(--k)) repeat;
+}

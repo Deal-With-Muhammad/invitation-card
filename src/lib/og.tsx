@@ -79,7 +79,7 @@ const CARDS: Pick<Palette, "bg" | "ink" | "accent">[] = [
 ];
 
 /** The share card for the site and its pages. */
-export async function renderSiteOg({ eyebrow = "Free online invitation maker", headline = "Invitations worth opening.", sub = "Weddings · Nikah · Mehndi · Birthdays · Aqiqah · Eid", palette }: { eyebrow?: string; headline?: string; sub?: string; palette?: Palette } = {}) {
+export async function renderSiteOg({ eyebrow = "Free online invitation maker", headline = "Invitations worth opening.", sub = "Weddings · Nikah · Mehndi · Birthdays · Aqiqah", palette }: { eyebrow?: string; headline?: string; sub?: string; palette?: Palette } = {}) {
   const text = `${eyebrow}${headline}${sub}${site.host}DWM Invite`;
   const f = await fonts([
     ["Cormorant Garamond", text, 500, false],

@@ -1,0 +1,124 @@
+/* Red Velvet: velvet envelope and surface, ivory card with gold-foil roses. */
+
+.t-velvetrose {
+  --st-velvet: var(--soft);
+  --st-env: color-mix(in srgb, var(--soft) 92%, #1a0a0c);
+  --st-env-in: color-mix(in srgb, var(--soft) 55%, #1a0a0c);
+  --st-cue: color-mix(in srgb, var(--soft) 20%, #fff3e6);
+}
+
+.t-velvetrose .st-tex {
+  display: block;
+  background:
+    radial-gradient(70% 50% at 28% 22%, color-mix(in srgb, var(--soft) 55%, #fff1e4), transparent 70%),
+    radial-gradient(60% 50% at 80% 85%, color-mix(in srgb, var(--soft) 70%, #fff1e4), transparent 70%);
+  opacity: 0.55;
+}
+
+.t-velvetrose .st-tex::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #120608;
+  opacity: 0.3;
+  -webkit-mask: var(--st-noise) 0 0 / calc(90 * var(--k)) calc(90 * var(--k)) repeat;
+  mask: var(--st-noise) 0 0 / calc(90 * var(--k)) calc(90 * var(--k)) repeat;
+}
+
+.t-velvetrose :is(.st-pk-l, .st-pk-r, .st-pk-b) {
+  opacity: 0.5;
+}
+
+.t-velvetrose .st-lip {
+  stroke: color-mix(in srgb, #fff1e4 25%, transparent);
+}
+
+.t-velvetrose .st-card {
+  background:
+    radial-gradient(110% 70% at 30% 15%, #fffdf8, transparent 70%),
+    var(--bg);
+}
+
+.vr-art {
+  inset: 0;
+}
+
+.vr-border {
+  position: absolute;
+  inset: calc(11 * var(--k));
+  border: calc(1.4 * var(--k)) solid var(--accent);
+}
+
+.vr-border::after {
+  content: "";
+  position: absolute;
+  inset: calc(3 * var(--k));
+  border: calc(0.5 * var(--k)) solid var(--accent);
+}
+
+.vr-text {
+  inset: calc(112 * var(--k)) calc(40 * var(--k)) calc(70 * var(--k));
+  gap: calc(7 * var(--k));
+  color: var(--ink);
+}
+
+.vr-text .st-bless {
+  color: var(--accent);
+}
+
+.vr-text .inv-bism {
+  width: calc(78 * var(--k));
+}
+
+.vr-text .st-title {
+  font: 500 calc(8 * var(--k)) / 1.5 var(--f-body);
+  letter-spacing: 0.26em;
+}
+
+.vr-text .st-names {
+  font-size: min(calc(38 * var(--k)), calc(100cqi / (var(--len) * 0.46)));
+  line-height: 1.12;
+}
+
+.vr-text .st-names .inv-amp {
+  font-size: 0.5em;
+  color: var(--accent);
+}
+
+.vr-rule {
+  width: calc(32 * var(--k));
+  height: calc(0.8 * var(--k));
+  background: var(--accent);
+}
+
+.vr-text .st-sc {
+  font-size: calc(7.8 * var(--k));
+}
+
+.vr-text .st-when strong {
+  font: 500 calc(12.5 * var(--k)) / 1.4 var(--f-display);
+}
+
+.vr-text .st-venue {
+  font-size: calc(11 * var(--k));
+}
+
+.vr-liner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--accent) 55%, #3a2a14);
+  opacity: 0.28;
+  -webkit-mask: var(--st-cloud) 0 0 / calc(150 * var(--k)) calc(150 * var(--k)) repeat;
+  mask: var(--st-cloud) 0 0 / calc(150 * var(--k)) calc(150 * var(--k)) repeat;
+}
+
+.t-velvetrose .inv-sec {
+  background:
+    radial-gradient(110% 60% at 30% 0%, #fffdf8, transparent 70%),
+    var(--bg);
+}
+
+.t-velvetrose .inv-sec::before {
+  border-color: var(--accent);
+}
