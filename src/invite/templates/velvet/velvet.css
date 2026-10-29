@@ -1,0 +1,847 @@
+/* Velvet: opening night. The hero is always 390 phone px wide, so the valance and
+   marquee are fixed drawings that scale with --u. Folds are palette gradients; the
+   tied-back swags are masks; the light is the ink colour at low alpha. */
+
+.inv.t-velvet {
+  --vv-0: var(--bg);
+  --vv-1: color-mix(in srgb, var(--soft) 55%, var(--bg));
+  --vv-2: var(--soft);
+  --vv-3: color-mix(in srgb, var(--soft) 78%, var(--ink));
+  --vv-gold-dk: color-mix(in srgb, var(--accent) 58%, var(--bg));
+  --vv-gold-hi: color-mix(in srgb, var(--accent) 55%, var(--ink));
+  --vv-champagne: color-mix(in srgb, var(--accent) 62%, var(--ink));
+  --vv-light: color-mix(in srgb, var(--ink) 72%, var(--accent));
+  --line: color-mix(in srgb, var(--accent) 45%, transparent);
+  --card: color-mix(in srgb, var(--soft) 42%, var(--bg));
+  --vv-noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1.6 -.55'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  --vv-folds:
+    repeating-linear-gradient(90deg, transparent 0, color-mix(in srgb, var(--vv-0) 60%, transparent) calc(21 * var(--u)), transparent calc(36 * var(--u)), transparent calc(63 * var(--u))),
+    repeating-linear-gradient(90deg, transparent 0, color-mix(in srgb, var(--vv-3) 30%, transparent) calc(7 * var(--u)), transparent calc(13 * var(--u)), transparent calc(29 * var(--u))),
+    repeating-linear-gradient(90deg, var(--vv-0) 0, var(--vv-0) calc(3 * var(--u)), var(--vv-1) calc(10 * var(--u)), var(--vv-2) calc(16 * var(--u)), var(--vv-3) calc(20 * var(--u)), var(--vv-2) calc(23.5 * var(--u)), var(--vv-1) calc(30 * var(--u)), var(--vv-0) calc(36 * var(--u)), var(--vv-0) calc(41 * var(--u)));
+}
+
+/* ── backdrop: a dim back curtain ── */
+
+.vv-back,
+.vv-back-shade {
+  position: absolute;
+  inset: 0;
+}
+
+.vv-back {
+  background: var(--vv-folds);
+  background-size: 140% 100%;
+  opacity: 0.16;
+}
+
+.vv-back-shade {
+  background: radial-gradient(ellipse 70% 60% at 50% 45%, transparent 30%, color-mix(in srgb, var(--bg) 75%, transparent) 100%);
+}
+
+/* ── gold bits shared by every drawing ── */
+
+.t-velvet .vv-gold {
+  fill: var(--accent);
+}
+
+.t-velvet .vv-gold-hi {
+  fill: var(--vv-gold-hi);
+  opacity: 0.55;
+  clip-path: inset(0 50% 30% 0);
+}
+
+.t-velvet .vv-gold-dk {
+  fill: var(--vv-gold-dk);
+}
+
+.t-velvet .vv-thread {
+  stroke: var(--vv-gold-dk);
+  stroke-width: 0.5;
+  opacity: 0.8;
+}
+
+.t-velvet .vv-cord {
+  stroke: var(--accent);
+  stroke-width: 5.5;
+  stroke-linecap: round;
+}
+
+.t-velvet .vv-cord-thin {
+  stroke-width: 3;
+}
+
+.t-velvet .vv-cord-twist {
+  stroke: var(--vv-gold-dk);
+  stroke-width: 0.7;
+  stroke-linecap: round;
+}
+
+.t-velvet .vv-divider .vv-cord {
+  stroke-width: 4.2;
+}
+
+/* ── hero ── */
+
+.vv-hero {
+  position: relative;
+  height: var(--sh);
+  overflow: hidden;
+}
+
+.vv-spot {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 44% 26% at 50% 45%, color-mix(in srgb, var(--ink) 15%, transparent), transparent 72%),
+    linear-gradient(180deg, color-mix(in srgb, var(--ink) 12%, transparent) 10%, color-mix(in srgb, var(--ink) 6%, transparent) 90%);
+  clip-path: polygon(42% 6%, 58% 6%, 94% 100%, 6% 100%);
+  filter: blur(calc(7 * var(--u)));
+}
+
+.vv-floor {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 24%;
+  background:
+    radial-gradient(ellipse 44% 38% at 50% 64%, color-mix(in srgb, var(--ink) 13%, transparent), transparent 72%),
+    linear-gradient(180deg, transparent, color-mix(in srgb, var(--soft) 35%, transparent));
+}
+
+.vv-swag {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--vv-0) 60%, transparent), transparent 16%),
+    linear-gradient(180deg, color-mix(in srgb, var(--vv-0) 55%, transparent), transparent 22%, transparent 80%, color-mix(in srgb, var(--vv-0) 45%, transparent)),
+    repeating-conic-gradient(from -2deg at 7% 57%, transparent 0deg, color-mix(in srgb, var(--vv-0) 60%, transparent) 1.9deg, transparent 3.1deg, transparent 5.3deg),
+    repeating-conic-gradient(from -2deg at 7% 57%, var(--vv-0) 0deg, var(--vv-1) 0.5deg, var(--vv-2) 0.95deg, var(--vv-3) 1.25deg, var(--vv-2) 1.5deg, var(--vv-1) 1.95deg, var(--vv-0) 2.3deg, var(--vv-0) 2.5deg);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M0 0H41C31 13 16 24 10.5 40C7.8 49 6.8 54 7.1 57C7.7 63 11 74 15.5 100H0Z'/%3E%3C/svg%3E") 0 0 / 100% 100% no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M0 0H41C31 13 16 24 10.5 40C7.8 49 6.8 54 7.1 57C7.7 63 11 74 15.5 100H0Z'/%3E%3C/svg%3E") 0 0 / 100% 100% no-repeat;
+}
+
+.vv-swag::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--ink);
+  opacity: 0.05;
+  -webkit-mask: var(--vv-noise) 0 0 / 160px 160px repeat;
+  mask: var(--vv-noise) 0 0 / 160px 160px repeat;
+}
+
+.vv-swag-r {
+  scale: -1 1;
+}
+
+.vv-tie {
+  position: absolute;
+  z-index: 4;
+  top: calc(57% - 12 * var(--u));
+  width: calc(66 * var(--u));
+  overflow: visible;
+}
+
+.vv-tie-l {
+  left: 0;
+}
+
+.vv-tie-r {
+  right: 0;
+  scale: -1 1;
+}
+
+.vv-valance {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 5;
+  height: calc(124 * var(--u));
+}
+
+.vv-valance-cloth {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--vv-0) 70%, transparent), transparent 30%),
+    repeating-radial-gradient(ellipse at 50% -48%, var(--vv-1) 0, var(--vv-2) calc(7 * var(--u)), var(--vv-3) calc(10 * var(--u)), var(--vv-2) calc(13 * var(--u)), var(--vv-1) calc(19 * var(--u)), var(--vv-0) calc(23 * var(--u))) 0 0 / calc(130 * var(--u)) 100% repeat-x;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='130' height='124' viewBox='0 0 130 124'%3E%3Cpath d='M0 0H130V52Q65 112 0 52Z'/%3E%3C/svg%3E") 0 0 / calc(130 * var(--u)) 100% repeat-x;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='130' height='124' viewBox='0 0 130 124'%3E%3Cpath d='M0 0H130V52Q65 112 0 52Z'/%3E%3C/svg%3E") 0 0 / calc(130 * var(--u)) 100% repeat-x;
+  filter: drop-shadow(0 calc(6 * var(--u)) calc(8 * var(--u)) color-mix(in srgb, var(--bg) 80%, transparent));
+}
+
+.vv-valance-trim {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.t-velvet .vv-fold-line {
+  stroke: color-mix(in srgb, var(--vv-0) 70%, transparent);
+  stroke-width: 1.4;
+}
+
+.t-velvet .vv-braid {
+  stroke: var(--accent);
+  stroke-width: 3.2;
+}
+
+.t-velvet .vv-braid-dots {
+  stroke: var(--vv-gold-dk);
+  stroke-width: 1.6;
+  stroke-dasharray: 1.2 2.6;
+}
+
+.t-velvet .vv-braid-thin {
+  stroke: var(--accent);
+  stroke-width: 1.2;
+  opacity: 0.8;
+}
+
+.t-velvet .vv-fringe {
+  stroke: var(--vv-champagne);
+  stroke-width: 0.9;
+  stroke-linecap: round;
+}
+
+.vv-stage {
+  position: absolute;
+  inset: calc(100 * var(--u)) 0 calc(56 * var(--u));
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: calc(14 * var(--u));
+  text-align: center;
+}
+
+.vv-bless .inv-bism {
+  width: calc(118 * var(--u));
+}
+
+.vv-bless .inv-bism-text {
+  font-size: calc(21 * var(--u));
+}
+
+.vv-mq {
+  position: relative;
+  flex: none;
+  width: calc(262 * var(--u));
+  aspect-ratio: 278 / 298;
+}
+
+.vv-mq-art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.t-velvet .vv-mq-plate {
+  fill: color-mix(in srgb, var(--bg) 72%, transparent);
+}
+
+.t-velvet .vv-mq-line {
+  stroke: var(--accent);
+  stroke-width: 2.4;
+}
+
+.t-velvet .vv-mq-thin {
+  stroke: var(--accent);
+  stroke-width: 0.8;
+  opacity: 0.75;
+}
+
+.t-velvet .vv-bulb-glow {
+  fill: color-mix(in srgb, var(--accent) 45%, transparent);
+  opacity: 0.45;
+}
+
+.t-velvet .vv-bulb-glass {
+  fill: var(--vv-light);
+}
+
+.t-velvet .vv-bulb-hot {
+  fill: var(--ink);
+}
+
+.vv-mq-in {
+  position: absolute;
+  inset: 13% 13%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: calc(6 * var(--u));
+  container-type: inline-size;
+}
+
+.vv-title {
+  font: italic 400 calc(15.5 * var(--u)) / 1.35 var(--f-display);
+  color: var(--accent);
+  text-wrap: balance;
+}
+
+.vv-names {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: min(calc(54 * var(--u)), calc(100cqi / (var(--len) * 0.46)));
+  line-height: 1.06;
+  color: var(--ink);
+  text-shadow: 0 0 calc(16 * var(--u)) color-mix(in srgb, var(--accent) 40%, transparent);
+  overflow-wrap: anywhere;
+}
+
+.vv-names:not(:has(.inv-amp)) {
+  font-size: min(calc(66 * var(--u)), calc(100cqi / (var(--len) * 0.46)));
+}
+
+.vv-names .inv-amp {
+  font: italic 400 calc(22 * var(--u)) / 1.1 var(--f-display);
+  color: var(--accent);
+  text-shadow: none;
+}
+
+.vv-milestone {
+  font: italic 400 calc(30 * var(--u)) / 1.1 var(--f-display);
+  color: var(--accent);
+}
+
+.vv-star {
+  position: absolute;
+  fill: var(--accent);
+  overflow: visible;
+}
+
+.vv-s1 {
+  top: -4%;
+  left: -3%;
+  width: calc(18 * var(--u));
+}
+
+.vv-s2 {
+  top: 18%;
+  right: -7%;
+  width: calc(11 * var(--u));
+}
+
+.vv-s3 {
+  bottom: 6%;
+  left: -8%;
+  width: calc(9 * var(--u));
+}
+
+.vv-when {
+  display: grid;
+  justify-items: center;
+  gap: calc(4 * var(--u));
+  padding: calc(9 * var(--u)) calc(18 * var(--u));
+  border-block: 1px solid var(--line);
+  font: 400 calc(10.5 * var(--u)) / 1.4 var(--f-body);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.vv-when strong {
+  font: 400 calc(21 * var(--u)) / 1.25 var(--f-display);
+  letter-spacing: 0.01em;
+  text-transform: none;
+  color: var(--ink);
+}
+
+.vv-venue {
+  margin-top: calc(-4 * var(--u));
+  font: italic 400 calc(15 * var(--u)) / 1.35 var(--f-display);
+  opacity: 0.85;
+  max-width: 24ch;
+  text-wrap: balance;
+}
+
+.vv-cue {
+  position: absolute;
+  left: 50%;
+  bottom: calc(14 * var(--u));
+  z-index: 6;
+  translate: -50% 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(8 * var(--u));
+  font: 400 calc(10.5 * var(--u)) / 1 var(--f-body);
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.vv-cue i {
+  width: 1px;
+  height: calc(22 * var(--u));
+  background: linear-gradient(var(--accent), transparent);
+  animation: vv-cue 2.4s ease-in-out infinite;
+}
+
+.inv[data-phase="closed"] .vv-cue {
+  visibility: hidden;
+}
+
+@keyframes vv-cue {
+  50% {
+    transform: translateY(calc(5 * var(--u)));
+    opacity: 0.4;
+  }
+}
+
+/* the stage comes up as the curtains go: content first, then the spotlight */
+.inv[data-phase="opening"] :is(.vv-a1, .vv-a2, .vv-a3, .vv-a4) {
+  animation: vv-rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.inv[data-phase="opening"] .vv-a1 { animation-delay: 0.8s; }
+.inv[data-phase="opening"] .vv-a2 { animation-delay: 0.95s; }
+.inv[data-phase="opening"] .vv-a3 { animation-delay: 1.15s; }
+.inv[data-phase="opening"] .vv-a4 { animation-delay: 1.3s; }
+
+.inv[data-phase="opening"] :is(.vv-spot, .vv-floor) {
+  animation: vv-spot 1s 1.35s ease-out both;
+}
+
+.inv[data-phase="opening"] .vv-b0 { animation: vv-bulb 0.45s 1.45s ease-out both; }
+.inv[data-phase="opening"] .vv-b1 { animation: vv-bulb 0.45s 1.57s ease-out both; }
+.inv[data-phase="opening"] .vv-b2 { animation: vv-bulb 0.45s 1.69s ease-out both; }
+.inv[data-phase="opening"] .vv-b3 { animation: vv-bulb 0.45s 1.81s ease-out both; }
+
+.inv[data-phase="opening"] .vv-cue {
+  animation: vv-fade-in 0.5s 2s ease both;
+}
+
+@keyframes vv-rise {
+  from {
+    opacity: 0;
+    transform: translateY(calc(12 * var(--u)));
+  }
+}
+
+@keyframes vv-spot {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes vv-bulb {
+  from {
+    opacity: 0.2;
+  }
+}
+
+@keyframes vv-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* ── cover: the closed curtains ── */
+
+.vv-cover {
+  position: absolute;
+  inset: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.vv-cstage {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: min(100%, 480px);
+  height: var(--sh);
+  translate: -50% 0;
+}
+
+.vv-curtain {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 1;
+  width: 53%;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--vv-0) 70%, transparent), transparent 24%, transparent 72%, color-mix(in srgb, var(--vv-0) 60%, transparent)),
+    var(--vv-folds);
+}
+
+.vv-curtain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--ink);
+  opacity: 0.05;
+  -webkit-mask: var(--vv-noise) 0 0 / 160px 160px repeat;
+  mask: var(--vv-noise) 0 0 / 160px 160px repeat;
+}
+
+.vv-curtain-l {
+  left: 0;
+  transform-origin: 0 0;
+}
+
+.vv-curtain-r {
+  right: 0;
+  z-index: 2;
+  transform-origin: 100% 0;
+  background-position: calc(17 * var(--u)) 0;
+  box-shadow:
+    calc(-1.5 * var(--u)) 0 0 color-mix(in srgb, var(--vv-0) 90%, transparent),
+    calc(-8 * var(--u)) 0 calc(16 * var(--u)) color-mix(in srgb, var(--vv-0) 90%, transparent);
+}
+
+.vv-curtain-r::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: calc(7 * var(--u));
+  background: linear-gradient(90deg, color-mix(in srgb, var(--vv-3) 55%, transparent), transparent);
+}
+
+.vv-cover-glow {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: radial-gradient(ellipse 46% 30% at 50% 54%, color-mix(in srgb, var(--ink) 14%, transparent), transparent 72%);
+}
+
+.vv-tap {
+  position: absolute;
+  left: 50%;
+  bottom: 12%;
+  z-index: 6;
+  translate: -50% 0;
+  display: flex;
+  align-items: center;
+  gap: calc(12 * var(--u));
+  font: italic 400 calc(17 * var(--u)) / 1 var(--f-display);
+  color: var(--accent);
+  text-shadow: 0 0 calc(10 * var(--u)) var(--bg);
+  white-space: nowrap;
+}
+
+.vv-tap i {
+  width: calc(28 * var(--u));
+  height: 1px;
+  background: currentColor;
+}
+
+.inv[data-phase="closed"] .vv-cover-glow {
+  animation: vv-breathe 4s ease-in-out infinite;
+}
+
+@keyframes vv-breathe {
+  50% {
+    opacity: 0.65;
+  }
+}
+
+.inv[data-phase="opening"] .vv-tap,
+.inv[data-phase="opening"] .vv-cover-glow {
+  animation: vv-fade-out 0.4s ease both;
+}
+
+.inv[data-phase="opening"] .vv-curtain-l {
+  animation: vv-draw-l 2.4s both;
+}
+
+.inv[data-phase="opening"] .vv-curtain-r {
+  animation: vv-draw-r 2.4s both;
+}
+
+@keyframes vv-draw-l {
+  0% {
+    transform: none;
+    animation-timing-function: cubic-bezier(0.55, 0, 0.3, 1);
+  }
+  60% {
+    transform: scaleX(0.3) skewX(2.5deg);
+    opacity: 1;
+    animation-timing-function: cubic-bezier(0.3, 0, 0.3, 1);
+  }
+  100% {
+    transform: scaleX(0.17) skewX(0deg);
+    opacity: 0;
+  }
+}
+
+@keyframes vv-draw-r {
+  0% {
+    transform: none;
+    animation-timing-function: cubic-bezier(0.55, 0, 0.3, 1);
+  }
+  60% {
+    transform: scaleX(0.3) skewX(-2.5deg);
+    opacity: 1;
+    animation-timing-function: cubic-bezier(0.3, 0, 0.3, 1);
+  }
+  100% {
+    transform: scaleX(0.17) skewX(0deg);
+    opacity: 0;
+  }
+}
+
+@keyframes vv-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+/* ── sections: theatre programme pages ── */
+
+.t-velvet .inv-divider {
+  padding: 14px 0;
+}
+
+.t-velvet .vv-divider {
+  width: 200px;
+  height: 42px;
+  overflow: visible;
+}
+
+.t-velvet .vv-orn {
+  width: 96px;
+  height: 14px;
+}
+
+.t-velvet .vv-orn-line {
+  stroke: var(--accent);
+  stroke-width: 0.8;
+  opacity: 0.8;
+}
+
+.t-velvet .inv-sec {
+  --k: color-mix(in srgb, var(--accent) 80%, transparent);
+  margin: 0 16px;
+  padding: 58px 28px 54px;
+  background:
+    linear-gradient(var(--k), var(--k)) 13px 13px / 16px 1px no-repeat,
+    linear-gradient(var(--k), var(--k)) 13px 13px / 1px 16px no-repeat,
+    linear-gradient(var(--k), var(--k)) calc(100% - 13px) 13px / 16px 1px no-repeat,
+    linear-gradient(var(--k), var(--k)) calc(100% - 13px) 13px / 1px 16px no-repeat,
+    linear-gradient(var(--k), var(--k)) 13px calc(100% - 13px) / 16px 1px no-repeat,
+    linear-gradient(var(--k), var(--k)) 13px calc(100% - 13px) / 1px 16px no-repeat,
+    linear-gradient(var(--k), var(--k)) calc(100% - 13px) calc(100% - 13px) / 16px 1px no-repeat,
+    linear-gradient(var(--k), var(--k)) calc(100% - 13px) calc(100% - 13px) / 1px 16px no-repeat,
+    radial-gradient(ellipse 80% 40% at 50% 0%, color-mix(in srgb, var(--ink) 6%, transparent), transparent 70%),
+    var(--card);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--accent) 60%, transparent),
+    0 18px 40px -22px color-mix(in srgb, var(--bg) 90%, transparent);
+  outline: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  outline-offset: -7px;
+}
+
+.t-velvet .inv-closing {
+  margin-bottom: 22px;
+}
+
+.t-velvet .inv-eyebrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font: 400 10.5px/1.4 var(--f-body);
+  letter-spacing: 0.32em;
+}
+
+.t-velvet .inv-eyebrow::before,
+.t-velvet .inv-eyebrow::after {
+  content: "";
+  width: 22px;
+  height: 1px;
+  background: var(--line);
+}
+
+.t-velvet .inv-title {
+  font: italic 400 33px/1.15 var(--f-display);
+}
+
+.t-velvet .inv-hosts {
+  font: 400 19px/1.45 var(--f-display);
+}
+
+.t-velvet .inv-line {
+  font: italic 400 16.5px/1.6 var(--f-display);
+}
+
+.t-velvet .inv-pname {
+  font: 400 42px/1.2 var(--f-names);
+  color: var(--ink);
+}
+
+.t-velvet .inv-pline {
+  font-size: 13px;
+  letter-spacing: 0.06em;
+}
+
+.t-velvet .inv-milestone {
+  font: italic 400 42px/1.1 var(--f-display);
+}
+
+.t-velvet .inv-message {
+  font: italic 400 17.5px/1.65 var(--f-display);
+}
+
+.t-velvet .inv-cd-unit {
+  border-radius: 2px;
+  border-color: var(--line);
+  background: color-mix(in srgb, var(--bg) 40%, transparent);
+}
+
+.t-velvet .inv-cd-unit b {
+  font: 400 32px/1 var(--f-display);
+  color: var(--accent);
+}
+
+.t-velvet .inv-cd-unit span {
+  font-size: 9.5px;
+  letter-spacing: 0.2em;
+}
+
+.t-velvet .inv-cd-done {
+  font-style: italic;
+}
+
+.t-velvet .inv-events.is-many .inv-ev {
+  border: 0;
+  border-top: 1px solid var(--line);
+  border-radius: 0;
+  background: none;
+  padding: 26px 4px 6px;
+}
+
+.t-velvet .inv-events.is-many .inv-ev:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.t-velvet .inv-ev-title {
+  font: italic 400 25px/1.2 var(--f-display);
+}
+
+.t-velvet .inv-ev-weekday,
+.t-velvet .inv-ev-month {
+  font-size: 11px;
+  letter-spacing: 0.3em;
+}
+
+.t-velvet .inv-ev-day {
+  font: 400 62px/1 var(--f-display);
+}
+
+.t-velvet .inv-ev-time {
+  font-weight: 400;
+  letter-spacing: 0.06em;
+}
+
+.t-velvet .inv-venue-name {
+  font: italic 400 22px/1.25 var(--f-display);
+}
+
+.t-velvet .inv-ev-shared {
+  padding-top: 30px;
+  border-top: 1px solid var(--line);
+}
+
+.t-velvet .inv-map {
+  border-radius: 2px;
+  border: 1px solid var(--line);
+  padding: 4px;
+  background: var(--card);
+}
+
+.t-velvet .inv-map iframe {
+  border-radius: 1px;
+}
+
+.t-velvet .inv-btn {
+  min-height: 44px;
+  padding: 11px 20px;
+  border-radius: 2px;
+  border: 1px solid var(--accent);
+  background: transparent;
+  color: var(--accent);
+  font: 500 11.5px/1 var(--f-body);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.t-velvet .inv-btn.is-primary {
+  background: linear-gradient(180deg, var(--vv-gold-hi), var(--accent) 45%, var(--vv-gold-dk) 140%);
+  color: var(--on-accent);
+  border-color: var(--accent);
+}
+
+.t-velvet .inv-btn svg {
+  width: 15px;
+  height: 15px;
+}
+
+.t-velvet .inv-cal-menu {
+  border-radius: 2px;
+  background: var(--card);
+}
+
+.t-velvet .inv-sched li {
+  grid-template-columns: 96px 1fr;
+  border-bottom: 1px solid var(--line);
+}
+
+.t-velvet .inv-sched li:last-child {
+  border-bottom: 0;
+}
+
+.t-velvet .inv-sched time {
+  font: italic 400 17px/1.4 var(--f-display);
+}
+
+.t-velvet .inv-dress-note,
+.t-velvet .inv-gifts-note,
+.t-velvet .inv-prayer-text {
+  font: italic 400 17px/1.6 var(--f-display);
+}
+
+.t-velvet .inv-swatches i {
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px var(--card), 0 0 0 4px var(--accent);
+}
+
+.t-velvet .inv-contact-name {
+  font: italic 400 21px/1.3 var(--f-display);
+}
+
+.t-velvet .inv-closing-text {
+  font: italic 400 22px/1.35 var(--f-display);
+}
+
+.t-velvet .inv-closing-names {
+  font-size: 50px;
+  color: var(--ink);
+  text-shadow: 0 0 18px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+
+.t-velvet .inv-closing-names .inv-amp {
+  font: italic 400 24px var(--f-display);
+  color: var(--accent);
+}
+
+.inv:is([lang="ur"], [lang="ar"], [lang="fa"], [lang="hi"], [lang="bn"]) :is(.vv-when, .vv-cue) {
+  letter-spacing: 0;
+}

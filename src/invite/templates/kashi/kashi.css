@@ -1,0 +1,669 @@
+/* Kashi: Multani blue pottery. Cobalt is the ink, turquoise the accent, the glaze
+   is the background. Hero and cover in --u; the cartouche in --c (1/260 of its width). */
+
+.t-kashi {
+  --line: color-mix(in srgb, var(--ink) 34%, transparent);
+  --card: color-mix(in srgb, var(--soft) 42%, var(--bg));
+}
+
+/* ── backdrop: a faint tile grid with a flower at every joint ── */
+
+.ks-grid {
+  position: absolute;
+  inset: 0;
+  background: var(--ink);
+  opacity: 0.1;
+  -webkit-mask: var(--grid) 50% 50% / calc(56 * var(--u)) calc(56 * var(--u)) repeat;
+  mask: var(--grid) 50% 50% / calc(56 * var(--u)) calc(56 * var(--u)) repeat;
+}
+
+.ks-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 50% at 50% 50%, var(--bg) 40%, transparent 90%);
+}
+
+/* ── paint ── */
+
+.t-kashi :is(.ks-corner, .ks-spray, .ks-cart, .ks-divider, .ks-orn, .ks-cover svg) {
+  overflow: visible;
+}
+
+.t-kashi .ks-side {
+  overflow: hidden;
+}
+
+.t-kashi .ks-petal {
+  fill: var(--accent);
+  stroke: var(--ink);
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+}
+
+.t-kashi .ks-thin {
+  stroke-width: 1;
+}
+
+.t-kashi .ks-cob {
+  fill: var(--ink);
+}
+
+.t-kashi .ks-tq {
+  fill: var(--accent);
+}
+
+.t-kashi .ks-glaze {
+  fill: var(--bg);
+}
+
+.t-kashi .ks-vine {
+  stroke: var(--ink);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.t-kashi .ks-vein {
+  stroke: var(--accent);
+  stroke-width: 1;
+  stroke-linecap: round;
+}
+
+.t-kashi .ks-glazefill {
+  fill: var(--bg);
+}
+
+.t-kashi .ks-cusp {
+  stroke: var(--ink);
+  stroke-width: 1.5;
+}
+
+.t-kashi .ks-line {
+  stroke: var(--ink);
+  stroke-width: 1.9;
+}
+
+.t-kashi .ks-line-bold {
+  stroke: var(--ink);
+  stroke-width: 2.2;
+}
+
+.t-kashi .ks-tqline {
+  stroke: var(--accent);
+  stroke-width: 1.1;
+}
+
+.t-kashi .ks-tilebody {
+  fill: var(--bg);
+  stroke: var(--ink);
+  stroke-width: 2.2;
+}
+
+.t-kashi .ks-tilebody-big {
+  stroke-width: 3;
+}
+
+/* a dark tile: cobalt glaze, the painting in white and turquoise */
+.t-kashi .ks-dark .ks-tilebody {
+  fill: var(--ink);
+}
+
+.t-kashi .ks-dark .ks-petal {
+  stroke: var(--bg);
+}
+
+.t-kashi .ks-dark .ks-cob {
+  fill: var(--bg);
+}
+
+.t-kashi .ks-dark .ks-glaze {
+  fill: var(--ink);
+}
+
+/* ── hero ── */
+
+.ks-hero {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: var(--sh);
+  padding: calc(64 * var(--u)) 0 calc(70 * var(--u));
+}
+
+.ks-frame {
+  position: absolute;
+  inset: calc(10 * var(--u));
+  border: calc(2 * var(--u)) solid var(--ink);
+  border-radius: calc(8 * var(--u));
+  pointer-events: none;
+}
+
+.ks-frame::before {
+  content: "";
+  position: absolute;
+  inset: calc(3.5 * var(--u));
+  border: calc(0.9 * var(--u)) solid var(--accent);
+  border-radius: calc(5 * var(--u));
+}
+
+.ks-corner {
+  position: absolute;
+  width: calc(146 * var(--u));
+  height: calc(146 * var(--u));
+}
+
+.ks-c-tl {
+  top: calc(3 * var(--u));
+  left: calc(3 * var(--u));
+}
+
+.ks-c-tr {
+  top: calc(3 * var(--u));
+  right: calc(3 * var(--u));
+  transform: scaleX(-1);
+}
+
+.ks-c-bl {
+  bottom: calc(3 * var(--u));
+  left: calc(3 * var(--u));
+  transform: scaleY(-1);
+}
+
+.ks-c-br {
+  bottom: calc(3 * var(--u));
+  right: calc(3 * var(--u));
+  transform: scale(-1);
+}
+
+.ks-spray {
+  position: absolute;
+  left: 50%;
+  width: calc(196 * var(--u));
+  height: auto;
+  translate: -50% 0;
+}
+
+.ks-spray-t {
+  top: calc(5 * var(--u));
+}
+
+.ks-spray-b {
+  bottom: calc(5 * var(--u));
+  transform: scaleY(-1);
+}
+
+.ks-side {
+  position: absolute;
+  top: calc(146 * var(--u));
+  width: calc(40 * var(--u));
+  height: max(0px, calc(100% - 292 * var(--u)));
+}
+
+.ks-side-s {
+  left: calc(3 * var(--u));
+}
+
+.ks-side-e {
+  right: calc(3 * var(--u));
+  transform: scaleX(-1);
+}
+
+.ks-medal {
+  --cw: min(calc(262 * var(--u)), calc((var(--sh) - 170 * var(--u)) * 0.565));
+  --c: calc(var(--cw) / 260);
+  position: relative;
+  z-index: 1;
+  width: var(--cw);
+  aspect-ratio: 260 / 460;
+}
+
+.ks-cart {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.ks-in {
+  position: absolute;
+  inset: 13.5% 15% 14%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: calc(8 * var(--c));
+  text-align: center;
+  container-type: inline-size;
+}
+
+.ks-in .inv-blessing {
+  color: var(--ink);
+}
+
+.ks-in .inv-bism {
+  width: calc(124 * var(--c));
+}
+
+.ks-in .inv-bism-text {
+  font-size: calc(18 * var(--c));
+}
+
+.ks-title {
+  font: 400 calc(11.5 * var(--c)) / 1.5 var(--f-display);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-top: calc(4 * var(--c)) !important;
+}
+
+.ks-names {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: min(calc(50 * var(--c)), calc(100cqi / (var(--len) * 0.44)));
+  line-height: 1.08;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+.ks-names .inv-name {
+  padding-inline: 0.1em;
+}
+
+.ks-names .inv-amp {
+  font-family: var(--f-display);
+  font-size: 0.34em;
+  color: var(--accent);
+  margin: 0.12em 0 0.14em;
+}
+
+.ks-milestone {
+  font: 400 calc(24 * var(--c)) / 1.2 var(--f-display);
+  color: var(--accent);
+}
+
+.ks-rule {
+  display: block;
+}
+
+.ks-rule .ks-orn {
+  width: calc(96 * var(--c));
+  height: calc(19 * var(--c));
+}
+
+.ks-when {
+  display: grid;
+  gap: calc(2 * var(--c));
+  max-width: calc(172 * var(--c));
+  font: 600 calc(9.5 * var(--c)) / 1.5 var(--f-body);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.ks-when strong {
+  font: 400 calc(16 * var(--c)) / 1.25 var(--f-display);
+  letter-spacing: 0;
+  text-transform: none;
+  text-wrap: balance;
+}
+
+.ks-venue {
+  max-width: 22ch;
+  font: 500 calc(11 * var(--c)) / 1.4 var(--f-body);
+  letter-spacing: 0.04em;
+  color: var(--accent);
+}
+
+.ks-cue {
+  position: absolute;
+  left: 50%;
+  bottom: calc(26 * var(--u));
+  translate: -50% 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(5 * var(--u));
+  font: 600 calc(9.5 * var(--u)) / 1 var(--f-body);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink);
+  white-space: nowrap;
+  z-index: 1;
+}
+
+.ks-cue i {
+  width: calc(6 * var(--u));
+  height: calc(6 * var(--u));
+  rotate: 45deg;
+  background: var(--accent);
+  animation: ks-cue 2.2s ease-in-out infinite;
+}
+
+.inv[data-phase="closed"] .ks-cue {
+  visibility: hidden;
+}
+
+@keyframes ks-cue {
+  50% {
+    transform: translate(calc(3 * var(--u)), calc(3 * var(--u)));
+    opacity: 0.45;
+  }
+}
+
+.inv[data-phase="opening"] :is(.ks-a1, .ks-a2, .ks-a3, .ks-a4, .ks-a5) {
+  animation: ks-rise 0.65s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.inv[data-phase="opening"] .ks-a1 { animation-delay: 0.65s; }
+.inv[data-phase="opening"] .ks-a2 { animation-delay: 0.8s; }
+.inv[data-phase="opening"] .ks-a3 { animation-delay: 0.95s; }
+.inv[data-phase="opening"] .ks-a4 { animation-delay: 1.1s; }
+.inv[data-phase="opening"] .ks-a5 { animation-delay: 1.22s; }
+
+@keyframes ks-rise {
+  from {
+    opacity: 0;
+    transform: translateY(calc(12 * var(--c)));
+  }
+}
+
+/* ── cover: the turned tile ── */
+
+.ks-cover {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ks-backing {
+  position: absolute;
+  inset: 0;
+  background: var(--bg);
+}
+
+.ks-loose {
+  position: absolute;
+  left: calc(50% + (var(--x) - var(--s) / 2) * var(--u));
+  top: calc(46% + (var(--y) - var(--s) / 2) * var(--u));
+  width: calc(var(--s) * var(--u));
+  aspect-ratio: 1;
+  transform: rotate(var(--turn));
+  filter: drop-shadow(0 calc(3 * var(--u)) calc(4 * var(--u)) color-mix(in srgb, var(--ink) 22%, transparent));
+}
+
+.ks-loose svg,
+.ks-big-tile svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.ks-big {
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  display: grid;
+  place-items: center;
+  width: calc(232 * var(--u));
+  aspect-ratio: 1;
+  translate: -50% -50%;
+}
+
+.ks-big-tile {
+  position: absolute;
+  inset: 0;
+  transform: perspective(calc(1100 * var(--u))) rotateY(0deg) rotate(45deg) scale(1);
+  filter: drop-shadow(0 calc(10 * var(--u)) calc(14 * var(--u)) color-mix(in srgb, var(--ink) 26%, transparent));
+}
+
+.ks-mono {
+  position: relative;
+  font: 400 calc(38 * var(--u)) / 1 var(--f-names);
+  color: var(--ink);
+  white-space: nowrap;
+  translate: 0 calc(2 * var(--u));
+}
+
+.ks-mono i {
+  font: 400 0.42em var(--f-display);
+  color: var(--accent);
+  margin: 0 0.16em;
+  vertical-align: 0.3em;
+}
+
+.ks-tap {
+  position: absolute;
+  left: 50%;
+  top: calc(46% + 186 * var(--u));
+  translate: -50% 0;
+  display: flex;
+  align-items: center;
+  gap: calc(10 * var(--u));
+  font: 400 calc(11 * var(--u)) / 1 var(--f-display);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.ks-tap::before,
+.ks-tap::after {
+  content: "";
+  width: calc(24 * var(--u));
+  height: 1px;
+  background: var(--accent);
+}
+
+.inv[data-phase="opening"] :is(.ks-mono, .ks-tap) {
+  animation: ks-fade 0.3s ease both;
+}
+
+.inv[data-phase="opening"] .ks-loose {
+  animation: ks-skid 0.8s var(--dl) cubic-bezier(0.4, 0, 0.6, 1) both;
+}
+
+.inv[data-phase="opening"] .ks-big-tile {
+  animation: ks-turn 1.15s 0.15s cubic-bezier(0.45, 0, 0.3, 1) both;
+}
+
+.inv[data-phase="opening"] .ks-backing {
+  animation: ks-fade 0.7s 0.5s ease both;
+}
+
+.inv[data-phase="opening"] .ks-cover {
+  animation: ks-fade 0.35s 1.5s ease both;
+}
+
+@keyframes ks-skid {
+  to {
+    transform: translate(calc(var(--dx) * var(--u)), calc(var(--dy) * var(--u))) rotate(calc(var(--turn) + 140deg)) scale(0.8);
+    opacity: 0;
+  }
+}
+
+@keyframes ks-turn {
+  45% {
+    transform: perspective(calc(1100 * var(--u))) rotateY(26deg) rotate(84deg) scale(1.08);
+    opacity: 1;
+  }
+  to {
+    transform: perspective(calc(1100 * var(--u))) rotateY(64deg) rotate(135deg) scale(1.42);
+    opacity: 0;
+  }
+}
+
+@keyframes ks-fade {
+  to {
+    opacity: 0;
+  }
+}
+
+/* ── sections: glazed tiles ── */
+
+.t-kashi .inv-title {
+  font-size: 31px;
+  line-height: 1.2;
+}
+
+.t-kashi .inv-eyebrow {
+  font-weight: 600;
+  letter-spacing: 0.26em;
+}
+
+.t-kashi .inv-hosts {
+  font-size: 18px;
+}
+
+.t-kashi .inv-pname {
+  font: 400 42px/1.2 var(--f-names);
+}
+
+.t-kashi :is(.inv-people-amp, .inv-hosts-amp) {
+  font-family: var(--f-display);
+  font-size: 17px;
+}
+
+.t-kashi .inv-message {
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+.t-kashi :is(.inv-ev, .inv-events:not(.is-many) .inv-ev, .inv-closing) {
+  position: relative;
+  padding: 40px 24px 34px;
+  border: 2px solid var(--ink);
+  border-radius: 10px;
+  background: radial-gradient(ellipse 90% 70% at 50% 30%, var(--bg), var(--card));
+}
+
+.t-kashi :is(.inv-ev, .inv-closing)::before {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  pointer-events: none;
+}
+
+/* a painted quarter-flower in each corner, like the joint of four tiles */
+.t-kashi :is(.inv-ev, .inv-closing)::after {
+  content: "";
+  position: absolute;
+  inset: 11px;
+  background: var(--accent);
+  pointer-events: none;
+  -webkit-mask:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M0 0Q9 1 12 6Q8 9 0 9ZM0 0Q1 9 6 12Q9 8 9 0ZM10 10L13 13' stroke='%23000' stroke-width='1.2' stroke-linecap='round'/%3E%3Ccircle cx='0' cy='0' r='3.5'/%3E%3Ccircle cx='14' cy='14' r='1.3'/%3E%3C/svg%3E") 0 0 / 20px 20px no-repeat,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M24 0Q15 1 12 6Q16 9 24 9ZM24 0Q23 9 18 12Q15 8 15 0ZM14 10L11 13' stroke='%23000' stroke-width='1.2' stroke-linecap='round'/%3E%3Ccircle cx='24' cy='0' r='3.5'/%3E%3Ccircle cx='10' cy='14' r='1.3'/%3E%3C/svg%3E") 100% 0 / 20px 20px no-repeat,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M0 24Q9 23 12 18Q8 15 0 15ZM0 24Q1 15 6 12Q9 16 9 24ZM10 14L13 11' stroke='%23000' stroke-width='1.2' stroke-linecap='round'/%3E%3Ccircle cx='0' cy='24' r='3.5'/%3E%3Ccircle cx='14' cy='10' r='1.3'/%3E%3C/svg%3E") 0 100% / 20px 20px no-repeat,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M24 24Q15 23 12 18Q16 15 24 15ZM24 24Q23 15 18 12Q15 16 15 24ZM14 14L11 11' stroke='%23000' stroke-width='1.2' stroke-linecap='round'/%3E%3Ccircle cx='24' cy='24' r='3.5'/%3E%3Ccircle cx='10' cy='10' r='1.3'/%3E%3C/svg%3E") 100% 100% / 20px 20px no-repeat;
+  mask:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M0 0Q9 1 12 6Q8 9 0 9ZM0 0Q1 9 6 12Q9 8 9 0ZM10 10L13 13' stroke='%23000' stroke-width='1.2' stroke-linecap='round'/%3E%3Ccircle cx='0' cy='0' r='3.5'/%3E%3Ccircle cx='14' cy='14' r='1.3'/%3E%3C/svg%3E") 0 0 / 20px 20px no-repeat,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M24 0Q15 1 12 6Q16 9 24 9ZM24 0Q23 9 18 12Q15 8 15 0ZM14 10L11 13' stroke='%23000' stroke-width='1.2' stroke-linecap='round'/%3E%3Ccircle cx='24' cy='0' r='3.5'/%3E%3Ccircle cx='10' cy='14' r='1.3'/%3E%3C/svg%3E") 100% 0 / 20px 20px no-repeat,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M0 24Q9 23 12 18Q8 15 0 15ZM0 24Q1 15 6 12Q9 16 9 24ZM10 14L13 11' stroke='%23000' stroke-width='1.2' stroke-linecap='round'/%3E%3Ccircle cx='0' cy='24' r='3.5'/%3E%3Ccircle cx='14' cy='10' r='1.3'/%3E%3C/svg%3E") 0 100% / 20px 20px no-repeat,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M24 24Q15 23 12 18Q16 15 24 15ZM24 24Q23 15 18 12Q15 16 15 24ZM14 14L11 11' stroke='%23000' stroke-width='1.2' stroke-linecap='round'/%3E%3Ccircle cx='24' cy='24' r='3.5'/%3E%3Ccircle cx='10' cy='10' r='1.3'/%3E%3C/svg%3E") 100% 100% / 20px 20px no-repeat;
+  opacity: 0.85;
+}
+
+.t-kashi .inv-ev-title {
+  font-size: 25px;
+}
+
+.t-kashi .inv-ev-day {
+  font-size: 62px;
+}
+
+.t-kashi .inv-ev-time {
+  font-weight: 600;
+}
+
+.t-kashi .inv-venue-name {
+  font-size: 21px;
+}
+
+.t-kashi .inv-map {
+  border: 2px solid var(--ink);
+  border-radius: 10px;
+  box-shadow: 0 0 0 4px var(--bg), 0 0 0 5px var(--accent);
+}
+
+.t-kashi .inv-btn {
+  min-height: 44px;
+  padding: 11px 20px;
+  border: 0;
+  border-radius: 7px;
+  background: var(--ink);
+  color: var(--bg);
+  box-shadow: inset 0 0 0 2px var(--ink), inset 0 0 0 3px color-mix(in srgb, var(--accent) 70%, var(--bg));
+  font: 600 14px/1 var(--f-body);
+  letter-spacing: 0.02em;
+}
+
+.t-kashi .inv-btn.is-primary {
+  background: var(--ink);
+  color: var(--bg);
+}
+
+.t-kashi .inv-btn svg {
+  stroke: var(--accent);
+}
+
+.t-kashi .inv-cd-unit {
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  background: var(--bg);
+  box-shadow: inset 0 0 0 3px var(--bg), inset 0 0 0 4px var(--accent);
+}
+
+.t-kashi .inv-cd-unit b {
+  font-size: 30px;
+  color: var(--ink);
+}
+
+.t-kashi .inv-sched li {
+  border-bottom: 1px solid var(--line);
+}
+
+.t-kashi .inv-sched time {
+  font-family: var(--f-display);
+  font-weight: 400;
+  color: var(--accent);
+}
+
+.t-kashi .inv-swatches i {
+  border-radius: 8px;
+  box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px var(--ink);
+}
+
+.t-kashi .inv-contact-name {
+  font-size: 20px;
+}
+
+.t-kashi .inv-closing {
+  margin: 8px 20px 24px;
+  padding: 54px 24px 48px;
+}
+
+.t-kashi .inv-closing-names {
+  font-size: 46px;
+  color: var(--ink);
+}
+
+.t-kashi .inv-closing-names .inv-amp {
+  font-family: var(--f-display);
+  font-size: 0.4em;
+  color: var(--accent);
+}
+
+.t-kashi .inv-divider svg {
+  width: 220px;
+  height: 34px;
+}
+
+.t-kashi .inv-orn .ks-orn {
+  width: 90px;
+  height: 18px;
+}

@@ -1,0 +1,903 @@
+/* Open House: a flat mid-century house front. Four tones from the palette: bg for
+   sky and trim, soft for walls, accent for the roof, ink for plants and type. The
+   house art is a 390 × 352 SVG sized by --hw; --hu is one house unit. */
+
+.t-openhouse {
+  --wall: var(--soft);
+  --panel: color-mix(in srgb, var(--soft) 76%, var(--accent));
+  --roof: var(--accent);
+  --roof-dark: color-mix(in srgb, var(--accent) 68%, var(--ink));
+  --trim: var(--bg);
+  --glass: color-mix(in srgb, var(--accent) 26%, var(--bg));
+  --door: color-mix(in srgb, var(--accent) 62%, var(--ink));
+  --leaf: color-mix(in srgb, var(--ink) 80%, var(--accent));
+  --leaf-2: color-mix(in srgb, var(--ink) 58%, var(--soft));
+  --pot: var(--bg);
+  --pot-2: color-mix(in srgb, var(--accent) 82%, var(--ink));
+  --ground: color-mix(in srgb, var(--soft), var(--ink) 15%);
+  --path: color-mix(in srgb, var(--bg) 72%, var(--soft));
+  --mat: color-mix(in srgb, var(--accent) 78%, var(--ink));
+  --line: color-mix(in srgb, var(--ink) 16%, transparent);
+  --card: var(--soft);
+}
+
+/* ── backdrop: faint mid-century starbursts ── */
+
+.oh-back {
+  position: absolute;
+  inset: 0;
+  background: var(--bg);
+}
+
+.oh-back::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  opacity: 0.07;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cg fill='none' stroke='%23000' stroke-width='1.2' stroke-linecap='round'%3E%3Cpath d='M30 22v16M22 30h16M24.5 24.5l11 11M35.5 24.5l-11 11'/%3E%3Cpath d='M86 82v10M81 87h10'/%3E%3Ccircle cx='92' cy='34' r='2.2'/%3E%3Ccircle cx='28' cy='92' r='1.6'/%3E%3C/g%3E%3C/svg%3E") 0 0 / 120px 120px repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cg fill='none' stroke='%23000' stroke-width='1.2' stroke-linecap='round'%3E%3Cpath d='M30 22v16M22 30h16M24.5 24.5l11 11M35.5 24.5l-11 11'/%3E%3Cpath d='M86 82v10M81 87h10'/%3E%3Ccircle cx='92' cy='34' r='2.2'/%3E%3Ccircle cx='28' cy='92' r='1.6'/%3E%3C/g%3E%3C/svg%3E") 0 0 / 120px 120px repeat;
+}
+
+/* ── hero ── */
+
+.oh-hero {
+  --hw: min(calc(390 * var(--u)), calc((var(--sh) - 236 * var(--u)) * 1.108));
+  --hu: calc(var(--hw) / 390);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: var(--sh);
+}
+
+.oh-hero::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: calc(40 * var(--hu));
+  background: var(--ground);
+  box-shadow: 0 -1px 0 color-mix(in srgb, var(--ink) 30%, transparent);
+}
+
+.oh-bunting {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: calc(390 * var(--u));
+  height: calc(96 * var(--u));
+  translate: -50% 0;
+  overflow: visible;
+}
+
+.oh-string {
+  fill: none;
+  stroke: color-mix(in srgb, var(--ink) 55%, transparent);
+  stroke-width: 1;
+}
+
+.oh-flag-0 { fill: var(--accent); }
+.oh-flag-1 { fill: var(--leaf-2); }
+.oh-flag-2 { fill: color-mix(in srgb, var(--accent) 40%, var(--bg)); }
+.oh-flag-3 { fill: var(--roof-dark); }
+
+.oh-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: calc(10 * var(--u));
+  flex: 1;
+  width: 100%;
+  padding: calc(96 * var(--u)) calc(30 * var(--u)) calc(26 * var(--u));
+  text-align: center;
+}
+
+.oh-top .inv-blessing {
+  color: var(--accent);
+}
+
+.oh-top .inv-bism {
+  width: calc(150 * var(--u));
+}
+
+.oh-top .inv-bism-text {
+  font-size: calc(21 * var(--u));
+}
+
+.oh-title {
+  font: 600 calc(11.5 * var(--u)) / 1.5 var(--f-body);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--accent);
+  text-wrap: balance;
+}
+
+.oh-namebox {
+  width: 100%;
+}
+
+.oh-names {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: baseline;
+  column-gap: 0.24em;
+  font-size: max(min(calc(58 * var(--u)), calc(330 * var(--u) / (var(--tl) * 0.47))), min(calc(40 * var(--u)), calc(330 * var(--u) / (var(--len) * 0.5))));
+  line-height: 1.06;
+  letter-spacing: -0.01em;
+  overflow-wrap: anywhere;
+}
+
+.oh-names .inv-amp {
+  font-style: italic;
+  font-size: 0.82em;
+  color: var(--accent);
+}
+
+.oh-milestone {
+  font: italic 400 calc(20 * var(--u)) / 1.2 var(--f-display);
+  color: var(--accent);
+}
+
+.oh-house {
+  position: relative;
+  z-index: 1;
+  flex: none;
+  width: var(--hw);
+  aspect-ratio: 390 / 352;
+}
+
+.oh-house-art {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* house parts */
+
+.oh-sun { fill: color-mix(in srgb, var(--accent) 18%, var(--bg)); }
+.oh-bird { fill: none; stroke: var(--ink); stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; opacity: 0.55; }
+.oh-chimney { fill: color-mix(in srgb, var(--soft) 60%, var(--accent)); }
+.oh-roof { fill: var(--roof); }
+.oh-roof-dark { fill: var(--roof-dark); }
+.oh-fascia { fill: none; stroke: var(--trim); stroke-width: 3; stroke-linejoin: round; }
+.oh-wall { fill: var(--wall); }
+.oh-panel { fill: var(--panel); }
+.oh-boards { fill: none; stroke: color-mix(in srgb, var(--ink) 12%, transparent); stroke-width: 1; }
+.oh-trim { fill: var(--trim); }
+.oh-glass { fill: var(--glass); }
+.oh-glow { fill: var(--bg); opacity: 0.55; }
+.oh-mullion { fill: none; stroke: var(--trim); stroke-width: 3.2; }
+.oh-inside { fill: none; stroke: color-mix(in srgb, var(--ink) 55%, var(--glass)); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.oh-inside-fill { fill: color-mix(in srgb, var(--ink) 40%, var(--glass)); }
+.oh-curtain { fill: color-mix(in srgb, var(--accent) 55%, var(--bg)); }
+.oh-sill { fill: color-mix(in srgb, var(--ink) 22%, var(--trim)); }
+.oh-box { fill: var(--roof-dark); }
+.oh-flower { fill: var(--bg); }
+.oh-stem { fill: none; stroke: var(--leaf); stroke-width: 1.1; }
+.oh-door { fill: var(--door); }
+.oh-door-panel { fill: none; stroke: color-mix(in srgb, var(--door) 70%, var(--bg)); stroke-width: 1; opacity: 0.6; }
+.oh-knob { fill: color-mix(in srgb, var(--accent) 25%, var(--bg)); }
+.oh-canopy { fill: color-mix(in srgb, var(--ink) 82%, var(--accent)); }
+.oh-bulb { fill: var(--bg); }
+.oh-cord { fill: none; stroke: color-mix(in srgb, var(--ink) 70%, var(--soft)); stroke-width: 1; }
+.oh-leg { fill: none; stroke: var(--ink); stroke-width: 1.6; stroke-linecap: round; }
+.oh-leaf { fill: var(--leaf); }
+.oh-leaf-2 { fill: var(--leaf-2); }
+.oh-vein { fill: none; stroke: color-mix(in srgb, var(--soft) 60%, transparent); stroke-width: 0.8; stroke-linecap: round; }
+.oh-vine { fill: none; stroke: var(--leaf); stroke-width: 1.1; stroke-linecap: round; }
+.oh-pot { fill: var(--pot); stroke: color-mix(in srgb, var(--ink) 25%, transparent); stroke-width: 0.8; }
+.oh-pot-band { fill: none; stroke: var(--accent); stroke-width: 1.4; }
+.oh-pot-2 { fill: var(--pot-2); }
+.oh-rim { fill: color-mix(in srgb, var(--pot-2) 80%, var(--bg)); }
+.oh-trunk { fill: none; stroke: var(--leaf); stroke-width: 3; stroke-linecap: round; }
+.oh-ground { fill: var(--ground); }
+.oh-groundline { fill: none; stroke: color-mix(in srgb, var(--ink) 30%, transparent); stroke-width: 1; }
+.oh-porch { fill: color-mix(in srgb, var(--trim) 70%, var(--ground)); }
+.oh-path { fill: var(--path); }
+.oh-mat { fill: var(--mat); }
+.oh-mat-line { fill: none; stroke: color-mix(in srgb, var(--mat) 50%, var(--bg)); stroke-width: 0.7; }
+.oh-tuft { fill: none; stroke: color-mix(in srgb, var(--leaf) 60%, transparent); stroke-width: 1.4; stroke-linecap: round; }
+
+/* the date plaque on the gable and the number on the door */
+
+.oh-plaque {
+  position: absolute;
+  left: 34.36%;
+  top: 36.4%;
+  width: 35.9%;
+  min-height: 15.3%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: calc(2.5 * var(--hu));
+  padding: calc(6 * var(--hu)) calc(8 * var(--hu));
+  border-radius: calc(4 * var(--hu));
+  background: var(--bg);
+  color: var(--ink);
+  text-align: center;
+  box-shadow:
+    0 0 0 calc(1.2 * var(--hu)) color-mix(in srgb, var(--ink) 70%, transparent),
+    0 calc(3 * var(--hu)) 0 calc(1.2 * var(--hu)) color-mix(in srgb, var(--ink) 18%, transparent);
+}
+
+.oh-plaque::before,
+.oh-plaque::after {
+  content: "";
+  position: absolute;
+  top: calc(5 * var(--hu));
+  width: calc(2.8 * var(--hu));
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--ink) 40%, var(--bg));
+}
+
+.oh-plaque::before {
+  left: calc(5 * var(--hu));
+}
+
+.oh-plaque::after {
+  right: calc(5 * var(--hu));
+}
+
+.oh-plaque span {
+  font: 600 calc(7 * var(--hu)) / 1.3 var(--f-body);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.oh-plaque strong {
+  font: 400 min(calc(15.5 * var(--hu)), calc(124 * var(--hu) / (var(--dl) * 0.47))) / 1.1 var(--f-display);
+  white-space: nowrap;
+}
+
+.oh-plaque em {
+  max-width: 100%;
+  font: 400 calc(7.6 * var(--hu)) / 1.3 var(--f-body);
+  font-style: normal;
+  opacity: 0.75;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.oh-num {
+  position: absolute;
+  left: 56.15%;
+  top: 66%;
+  translate: -50% -50%;
+  font: 400 calc(11 * var(--hu)) / 1 var(--f-display);
+  color: color-mix(in srgb, var(--accent) 25%, var(--bg));
+}
+
+.oh-cue {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  bottom: calc(7 * var(--hu));
+  translate: -50% 0;
+  display: flex;
+  align-items: center;
+  font: 600 calc(8.5 * var(--u)) / 1 var(--f-body);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink);
+  opacity: 0.65;
+  animation: oh-cue 2.4s ease-in-out infinite;
+}
+
+.oh-cue i {
+  display: none;
+}
+
+.inv[data-phase="closed"] .oh-cue {
+  visibility: hidden;
+}
+
+@keyframes oh-cue {
+  50% {
+    opacity: 0.3;
+  }
+}
+
+/* the house settles in as the cover fades */
+
+.inv[data-phase="opening"] :is(.oh-a1, .oh-a2) {
+  animation: oh-rise 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.inv[data-phase="opening"] .oh-a1 { animation-delay: 1.22s; }
+.inv[data-phase="opening"] .oh-a2 { animation-delay: 1.3s; }
+
+.inv[data-phase="opening"] .oh-a3 {
+  transform-origin: 50% -40%;
+  animation: oh-swing 0.55s cubic-bezier(0.3, 0.6, 0.35, 1.3) 1.3s both;
+}
+
+@keyframes oh-rise {
+  from {
+    opacity: 0;
+    transform: translateY(calc(14 * var(--u)));
+  }
+}
+
+@keyframes oh-swing {
+  from {
+    opacity: 0;
+    transform: rotate(-7deg);
+  }
+}
+
+/* ── cover: the front door, close up ── */
+
+.oh-cover {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  cursor: pointer;
+  background: var(--soft);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.oh-cv {
+  --dw: calc(212 * var(--u));
+  --dh: min(calc(var(--sh) - 216 * var(--u)), calc(496 * var(--u)));
+  --floor: calc(124 * var(--u));
+  --trim-w: calc(17 * var(--u));
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% calc(var(--sh) - var(--floor) - var(--dh) * 0.48);
+}
+
+.oh-cv-wall {
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 calc(25 * var(--u)), color-mix(in srgb, var(--ink) 9%, transparent) calc(25 * var(--u)) calc(26 * var(--u))),
+    var(--wall);
+  background-position: 50% 0;
+}
+
+.oh-cv-lamp {
+  position: absolute;
+  left: calc(50% - var(--dw) / 2 - var(--trim-w) - 52 * var(--u));
+  bottom: calc(var(--floor) + var(--dh) * 0.6);
+  width: calc(26 * var(--u));
+  height: calc(40 * var(--u));
+}
+
+.oh-cv-lamp-glow {
+  position: absolute;
+  left: 50%;
+  top: 70%;
+  width: calc(220 * var(--u));
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--bg) 80%, transparent), color-mix(in srgb, var(--bg) 30%, transparent) 45%, transparent);
+}
+
+.oh-cv-lamp-shade {
+  position: absolute;
+  inset: 0;
+  border-radius: calc(13 * var(--u)) calc(13 * var(--u)) calc(4 * var(--u)) calc(4 * var(--u));
+  background: linear-gradient(90deg, var(--roof-dark), var(--roof) 55%, var(--roof-dark));
+  box-shadow: 0 calc(5 * var(--u)) 0 calc(-1 * var(--u)) var(--bg);
+}
+
+.oh-cv-lamp-shade::before {
+  content: "";
+  position: absolute;
+  right: 100%;
+  top: 32%;
+  width: calc(10 * var(--u));
+  height: calc(5 * var(--u));
+  background: var(--canopy, color-mix(in srgb, var(--ink) 82%, var(--accent)));
+}
+
+.oh-cv-frame {
+  position: absolute;
+  left: 50%;
+  bottom: var(--floor);
+  width: calc(var(--dw) + var(--trim-w) * 2);
+  height: calc(var(--dh) + var(--trim-w));
+  translate: -50% 0;
+  border-radius: calc(3 * var(--u)) calc(3 * var(--u)) 0 0;
+  background: var(--trim);
+  box-shadow:
+    0 0 0 calc(1.2 * var(--u)) color-mix(in srgb, var(--ink) 14%, transparent),
+    calc(6 * var(--u)) 0 0 color-mix(in srgb, var(--ink) 6%, transparent);
+  perspective: calc(900 * var(--u));
+}
+
+.oh-cv-inside,
+.oh-cv-door {
+  position: absolute;
+  inset: var(--trim-w) var(--trim-w) 0;
+}
+
+.oh-cv-inside {
+  overflow: hidden;
+  background: color-mix(in srgb, var(--accent) 34%, var(--soft));
+  box-shadow: inset 0 0 calc(30 * var(--u)) color-mix(in srgb, var(--ink) 25%, transparent);
+}
+
+.oh-cv-light {
+  position: absolute;
+  inset: -20%;
+  background: radial-gradient(ellipse 50% 46% at 50% 46%, var(--bg), color-mix(in srgb, var(--bg) 70%, var(--accent)) 45%, transparent 80%);
+  opacity: 0.6;
+}
+
+.oh-cv-floor {
+  position: absolute;
+  inset: auto 0 0;
+  height: 18%;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 40%, var(--soft)), color-mix(in srgb, var(--accent) 22%, var(--bg)));
+}
+
+.oh-cv-door {
+  transform-origin: 0 50%;
+  transform-style: preserve-3d;
+}
+
+.oh-cv-face {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--door) 88%, var(--bg)), var(--door) 12%, var(--door) 86%, color-mix(in srgb, var(--door) 82%, var(--ink))),
+    var(--door);
+  box-shadow: inset 0 0 0 calc(2 * var(--u)) color-mix(in srgb, var(--door) 80%, var(--ink));
+}
+
+.oh-cv-face::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--ink);
+  opacity: 0;
+}
+
+.oh-cv-num {
+  position: absolute;
+  left: 50%;
+  top: 7%;
+  translate: -50% 0;
+  font: 400 calc(48 * var(--u)) / 1 var(--f-display);
+  color: color-mix(in srgb, var(--accent) 28%, var(--bg));
+  text-shadow: 0 calc(2 * var(--u)) 0 color-mix(in srgb, var(--door) 70%, var(--ink));
+}
+
+.oh-cv-lites {
+  position: absolute;
+  left: 50%;
+  top: 25%;
+  width: calc(120 * var(--u));
+  height: calc(120 * var(--u));
+  translate: -50% 0;
+}
+
+.oh-cv-lites i {
+  position: absolute;
+  width: calc(34 * var(--u));
+  aspect-ratio: 1;
+  border-radius: calc(2 * var(--u));
+  background: radial-gradient(circle at 40% 35%, var(--bg), var(--glass) 75%);
+  box-shadow:
+    0 0 0 calc(4 * var(--u)) color-mix(in srgb, var(--door) 78%, var(--bg)),
+    inset 0 calc(2 * var(--u)) calc(3 * var(--u)) color-mix(in srgb, var(--ink) 20%, transparent);
+}
+
+.oh-cv-lites i:nth-child(1) { left: 0; top: 0; }
+.oh-cv-lites i:nth-child(2) { left: calc(43 * var(--u)); top: calc(43 * var(--u)); }
+.oh-cv-lites i:nth-child(3) { left: calc(86 * var(--u)); top: calc(86 * var(--u)); }
+
+.oh-cv-slot {
+  position: absolute;
+  left: 50%;
+  top: 62%;
+  width: calc(70 * var(--u));
+  height: calc(10 * var(--u));
+  translate: -50% 0;
+  border-radius: calc(2 * var(--u));
+  background: color-mix(in srgb, var(--door) 60%, var(--ink));
+  box-shadow: 0 0 0 calc(3.5 * var(--u)) color-mix(in srgb, var(--accent) 30%, var(--bg));
+}
+
+.oh-cv-handle {
+  position: absolute;
+  right: calc(16 * var(--u));
+  top: 40%;
+  width: calc(7 * var(--u));
+  height: calc(110 * var(--u));
+  border-radius: calc(4 * var(--u));
+  background: linear-gradient(90deg, var(--bg), color-mix(in srgb, var(--accent) 30%, var(--bg)) 60%, color-mix(in srgb, var(--accent) 45%, var(--soft)));
+  box-shadow: calc(3 * var(--u)) calc(3 * var(--u)) 0 color-mix(in srgb, var(--ink) 25%, transparent);
+}
+
+.oh-cv-kick {
+  position: absolute;
+  inset: auto 0 0;
+  height: 8%;
+  background: color-mix(in srgb, var(--accent) 25%, var(--bg));
+  opacity: 0.85;
+  box-shadow: inset 0 calc(1.5 * var(--u)) 0 color-mix(in srgb, var(--ink) 15%, transparent);
+}
+
+.oh-cv-edge {
+  display: none;
+}
+
+.oh-cv-step {
+  position: absolute;
+  inset: auto 0 0;
+  height: var(--floor);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ground) 80%, var(--ink)) 0, var(--ground) calc(8 * var(--u)));
+  box-shadow: 0 calc(-2 * var(--u)) 0 var(--trim);
+}
+
+.oh-cv-step::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: calc(var(--dw) * 1.5);
+  height: 100%;
+  translate: -50% 0;
+  background: radial-gradient(ellipse 50% 70% at 50% 0, var(--bg), transparent);
+  clip-path: polygon(17% 0, 83% 0, 100% 100%, 0 100%);
+  opacity: 0;
+}
+
+.oh-cv-mat {
+  position: absolute;
+  left: 50%;
+  bottom: calc(34 * var(--u));
+  display: grid;
+  place-items: center;
+  width: calc(236 * var(--u));
+  height: calc(62 * var(--u));
+  translate: -50% 0;
+  border-radius: calc(5 * var(--u));
+  background:
+    repeating-linear-gradient(90deg, transparent 0 calc(6 * var(--u)), color-mix(in srgb, var(--mat) 80%, var(--ink)) calc(6 * var(--u)) calc(7 * var(--u))),
+    var(--mat);
+  box-shadow:
+    inset 0 0 0 calc(5 * var(--u)) var(--mat),
+    inset 0 0 0 calc(6.4 * var(--u)) color-mix(in srgb, var(--mat) 45%, var(--bg)),
+    0 calc(3 * var(--u)) 0 color-mix(in srgb, var(--ink) 22%, transparent);
+  clip-path: polygon(5% 0, 95% 0, 100% 100%, 0 100%);
+}
+
+.oh-cv-mat span {
+  padding: calc(3 * var(--u)) calc(10 * var(--u));
+  background: var(--mat);
+  font: 600 calc(11 * var(--u)) / 1.2 var(--f-body);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--bg);
+  white-space: nowrap;
+  animation: oh-breathe 3s ease-in-out infinite;
+}
+
+@keyframes oh-breathe {
+  50% {
+    opacity: 0.6;
+  }
+}
+
+.oh-cv-plants {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: min(100%, 480px);
+  height: calc(150 * var(--u));
+  translate: -50% 0;
+  overflow: visible;
+}
+
+/* opening: the door swings in, light spills, we walk through */
+
+.inv[data-phase="opening"] .oh-cv-mat span {
+  animation: oh-fade-out 0.25s ease both;
+}
+
+.inv[data-phase="opening"] .oh-cv-door {
+  animation: oh-door 1s cubic-bezier(0.5, 0, 0.3, 1) 0.08s both;
+}
+
+.inv[data-phase="opening"] .oh-cv-face::after {
+  animation: oh-shade 1s cubic-bezier(0.5, 0, 0.3, 1) 0.08s both;
+}
+
+.inv[data-phase="opening"] .oh-cv-light {
+  animation: oh-light 0.8s ease-out 0.25s both;
+}
+
+.inv[data-phase="opening"] .oh-cv-step::after {
+  animation: oh-spill 0.8s ease-out 0.3s both;
+}
+
+.inv[data-phase="opening"] .oh-cv {
+  animation: oh-walk 1.2s cubic-bezier(0.55, 0, 0.4, 1) 0.62s both;
+}
+
+.inv[data-phase="opening"] .oh-cover {
+  animation: oh-fade-out 0.5s ease 1.32s both;
+}
+
+@keyframes oh-door {
+  to {
+    transform: rotateY(100deg);
+  }
+}
+
+@keyframes oh-shade {
+  to {
+    opacity: 0.4;
+  }
+}
+
+@keyframes oh-light {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes oh-spill {
+  to {
+    opacity: 0.55;
+  }
+}
+
+@keyframes oh-walk {
+  to {
+    transform: scale(3.4);
+  }
+}
+
+@keyframes oh-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+/* ── divider and heading ornament ── */
+
+.oh-div {
+  width: 200px;
+  height: 56px;
+  overflow: visible;
+}
+
+.oh-shelf {
+  fill: color-mix(in srgb, var(--accent) 35%, var(--soft));
+}
+
+.oh-shelf-line {
+  fill: none;
+  stroke: color-mix(in srgb, var(--ink) 40%, transparent);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.oh-flower-2 {
+  fill: var(--accent);
+}
+
+.oh-orn {
+  width: 64px;
+  height: 16px;
+  overflow: visible;
+}
+
+.oh-orn-line {
+  fill: none;
+  stroke: color-mix(in srgb, var(--accent) 60%, transparent);
+  stroke-width: 1.2;
+}
+
+.oh-orn-roof {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.oh-orn-door {
+  fill: var(--accent);
+}
+
+/* ── sections: windows and wall plaques ── */
+
+.t-openhouse .inv-title {
+  font-size: 34px;
+  letter-spacing: -0.005em;
+}
+
+.t-openhouse .inv-eyebrow {
+  font-weight: 600;
+  letter-spacing: 0.24em;
+}
+
+.t-openhouse .inv-hosts {
+  font-size: 20px;
+}
+
+.t-openhouse .inv-hosts-amp,
+.t-openhouse .inv-people-amp {
+  font: italic 400 22px/1.4 var(--f-display);
+  color: var(--accent);
+}
+
+.t-openhouse .inv-pname {
+  font-size: 34px;
+  line-height: 1.15;
+}
+
+.t-openhouse .inv-milestone {
+  font-style: italic;
+}
+
+.t-openhouse .inv-message {
+  font-size: 16.5px;
+  line-height: 1.7;
+}
+
+/* countdown: a four-pane window */
+
+.t-openhouse .inv-cd {
+  gap: 7px;
+  padding: 7px;
+  border-radius: 6px;
+  background: var(--trim);
+  box-shadow:
+    0 0 0 1.5px color-mix(in srgb, var(--ink) 50%, transparent),
+    0 7px 0 -1px color-mix(in srgb, var(--ink) 22%, var(--trim)),
+    0 7px 0 0.5px color-mix(in srgb, var(--ink) 50%, transparent);
+  max-width: 340px;
+}
+
+.t-openhouse .inv-cd-unit {
+  border: 0;
+  border-radius: 2px;
+  padding: 16px 4px 14px;
+  background: radial-gradient(circle at 35% 30%, var(--bg), var(--glass) 90%);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 14%, transparent);
+}
+
+.t-openhouse .inv-cd-unit b {
+  font-family: var(--f-display);
+  font-size: 32px;
+}
+
+/* event cards: a window frame with a sill */
+
+.t-openhouse .inv-ev,
+.t-openhouse .inv-events:not(.is-many) .inv-ev {
+  position: relative;
+  padding: 34px 22px 30px;
+  border: 10px solid var(--trim);
+  border-radius: 8px;
+  background: var(--soft);
+  box-shadow: 0 0 0 1.5px color-mix(in srgb, var(--ink) 45%, transparent), inset 0 0 0 1.5px color-mix(in srgb, var(--ink) 18%, transparent);
+  margin-bottom: 12px;
+}
+
+.t-openhouse .inv-ev::after {
+  content: "";
+  position: absolute;
+  left: -22px;
+  right: -22px;
+  bottom: -22px;
+  height: 10px;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--ink) 22%, var(--trim));
+  box-shadow: 0 0 0 1.5px color-mix(in srgb, var(--ink) 45%, transparent);
+}
+
+.t-openhouse .inv-ev-day {
+  font-size: 64px;
+}
+
+.t-openhouse .inv-ev-time {
+  font-weight: 600;
+}
+
+.t-openhouse .inv-map {
+  border-radius: 12px;
+  border: 0;
+  box-shadow: 0 0 0 6px var(--trim), 0 0 0 7.5px color-mix(in srgb, var(--ink) 35%, transparent);
+}
+
+.t-openhouse .inv-btn {
+  min-height: 46px;
+  padding: 12px 22px;
+  border: 1.5px solid var(--accent);
+  border-radius: 999px;
+  background: var(--bg);
+  color: color-mix(in srgb, var(--accent) 72%, var(--ink));
+  font-weight: 600;
+}
+
+.t-openhouse .inv-btn.is-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+  box-shadow: 0 4px 0 color-mix(in srgb, var(--accent) 60%, var(--ink));
+}
+
+.t-openhouse .inv-btn.is-primary:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 color-mix(in srgb, var(--accent) 60%, var(--ink));
+}
+
+.t-openhouse .inv-sched li {
+  border-bottom: 1.5px dotted color-mix(in srgb, var(--ink) 30%, transparent);
+}
+
+.t-openhouse .inv-swatches i {
+  border-radius: 6px;
+}
+
+/* closing: a wall plaque with two screws */
+
+.t-openhouse .inv-closing {
+  margin: 18px 24px 26px;
+  padding: 44px 26px 40px;
+  border-radius: 14px;
+  background: var(--soft);
+  box-shadow:
+    0 0 0 1.5px color-mix(in srgb, var(--ink) 50%, transparent),
+    0 6px 0 0 color-mix(in srgb, var(--ink) 16%, transparent);
+}
+
+.t-openhouse .inv-closing::before,
+.t-openhouse .inv-closing::after {
+  content: "";
+  position: absolute;
+  top: 16px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--ink) 40%, var(--soft));
+}
+
+.t-openhouse .inv-closing::before {
+  left: 16px;
+}
+
+.t-openhouse .inv-closing::after {
+  right: 16px;
+}
+
+.t-openhouse .inv-closing-names {
+  font-size: 42px;
+  color: var(--ink);
+}
+
+.t-openhouse .inv-closing-names .inv-amp {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.t-openhouse .inv-closing-meta {
+  text-wrap: balance;
+}
+
+.t-openhouse .inv-divider {
+  padding: 6px 0 0;
+}
+
+/* ── scripts that must not be letter-spaced or upper-cased ── */
+
+.t-openhouse:is([lang="ur"], [lang="ar"], [lang="fa"], [lang="hi"], [lang="bn"]) :is(.oh-title, .oh-plaque span, .oh-cue, .oh-cv-mat span) {
+  letter-spacing: 0;
+  text-transform: none;
+}

@@ -1,0 +1,921 @@
+/* Scroll: a parchment diploma on two rollers, laid on a dark desk (the ink colour).
+   Everything on the paper uses the palette as printed matter: ink text, accent
+   laurels and seal, an ink-dark ribbon. Sections are certificates on the desk. */
+
+.t-scroll {
+  --desk: var(--ink);
+  --on-desk: var(--bg);
+  --gild: color-mix(in srgb, var(--accent) 58%, var(--bg));
+  --paper: var(--bg);
+  --paper-edge: color-mix(in srgb, var(--soft), var(--accent) 16%);
+  --wood: color-mix(in srgb, var(--accent) 46%, var(--ink));
+  --wood-hi: color-mix(in srgb, var(--accent) 70%, var(--bg));
+  --wood-lo: color-mix(in srgb, var(--accent) 22%, var(--ink));
+  --ribbon: color-mix(in srgb, var(--ink) 84%, var(--accent));
+  --seal: var(--accent);
+  --line: color-mix(in srgb, var(--accent) 50%, transparent);
+  --card: var(--paper);
+  color: var(--on-desk);
+}
+
+/* ── backdrop: the desk ── */
+
+.sc-desk {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 95% 70% at 50% 38%, color-mix(in srgb, var(--desk) 90%, var(--bg)), var(--desk) 75%);
+}
+
+.sc-desk-weave {
+  position: absolute;
+  inset: 0;
+  background: var(--bg);
+  opacity: 0.05;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='6' height='6'%3E%3Cpath d='M0 6L6 0M-1 1L1-1M5 7L7 5M0 0L6 6' stroke='%23000' stroke-width='.55'/%3E%3C/svg%3E") 0 0 / 6px 6px repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='6' height='6'%3E%3Cpath d='M0 6L6 0M-1 1L1-1M5 7L7 5M0 0L6 6' stroke='%23000' stroke-width='.55'/%3E%3C/svg%3E") 0 0 / 6px 6px repeat;
+}
+
+.sc-desk-light {
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 120px 10px color-mix(in srgb, var(--desk) 80%, transparent);
+}
+
+/* ── hero ── */
+
+.sc-hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: var(--sh);
+  padding: calc(16 * var(--u)) 0 calc(72 * var(--u));
+}
+
+.sc-scroll {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: calc(362 * var(--u));
+}
+
+/* rollers: a turned rod, the paper wound round it, two finials */
+
+.sc-roller {
+  position: relative;
+  z-index: 2;
+  flex: none;
+  width: 100%;
+  height: calc(30 * var(--u));
+}
+
+.sc-rod {
+  position: absolute;
+  left: calc(24 * var(--u));
+  right: calc(24 * var(--u));
+  top: 50%;
+  height: calc(11 * var(--u));
+  translate: 0 -50%;
+  border-radius: calc(5.5 * var(--u));
+  background: linear-gradient(180deg, var(--wood-hi), var(--wood) 45%, var(--wood-lo));
+}
+
+.sc-wrap {
+  position: absolute;
+  left: calc(38 * var(--u));
+  right: calc(38 * var(--u));
+  top: 0;
+  bottom: 0;
+  border-radius: calc(4 * var(--u)) / calc(15 * var(--u));
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--paper-edge) 80%, transparent), transparent calc(5 * var(--u)), transparent calc(100% - 5 * var(--u)), color-mix(in srgb, var(--paper-edge) 80%, transparent)),
+    linear-gradient(180deg, color-mix(in srgb, var(--paper) 70%, var(--soft)) 0%, var(--paper) 22%, var(--paper) 40%, color-mix(in srgb, var(--paper), var(--soft) 60%) 72%, var(--paper-edge) 100%);
+  box-shadow:
+    inset 0 calc(-1.5 * var(--u)) 0 color-mix(in srgb, var(--paper-edge), var(--ink) 12%),
+    0 calc(3 * var(--u)) calc(6 * var(--u)) calc(-3 * var(--u)) color-mix(in srgb, var(--ink) 55%, transparent);
+}
+
+.sc-wrap::after {
+  content: "";
+  position: absolute;
+  inset: 32% calc(6 * var(--u)) auto;
+  height: 1px;
+  background: color-mix(in srgb, var(--paper-edge) 70%, transparent);
+}
+
+.sc-fin {
+  position: absolute;
+  top: 50%;
+  width: calc(42 * var(--u));
+  height: calc(40 * var(--u));
+  translate: 0 -50%;
+  overflow: visible;
+}
+
+.sc-fin-l {
+  left: 0;
+}
+
+.sc-fin-r {
+  right: 0;
+}
+
+.sc-knob {
+  fill: var(--wood);
+}
+
+.sc-knob-lo {
+  fill: var(--wood-lo);
+}
+
+.sc-knob-hi {
+  fill: none;
+  stroke: var(--wood-hi);
+  stroke-width: 1;
+  stroke-linecap: round;
+  opacity: 0.85;
+}
+
+/* the paper */
+
+.sc-win {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin-top: calc(-15 * var(--u));
+}
+
+.sc-sheet {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.sc-sheet .sc-bot {
+  margin-top: calc(-15 * var(--u));
+}
+
+.sc-paper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: calc(282 * var(--u));
+  padding: calc(36 * var(--u)) calc(26 * var(--u)) calc(28 * var(--u));
+  color: var(--ink);
+  background:
+    linear-gradient(180deg, var(--paper-edge), color-mix(in srgb, var(--paper-edge) 30%, transparent) calc(12 * var(--u)), transparent calc(34 * var(--u))),
+    linear-gradient(0deg, var(--paper-edge), color-mix(in srgb, var(--paper-edge) 30%, transparent) calc(12 * var(--u)), transparent calc(34 * var(--u))),
+    linear-gradient(90deg, color-mix(in srgb, var(--paper-edge) 75%, transparent), transparent calc(16 * var(--u)), transparent calc(100% - 16 * var(--u)), color-mix(in srgb, var(--paper-edge) 75%, transparent)),
+    radial-gradient(ellipse 42% 22% at 18% 34%, color-mix(in srgb, var(--soft) 55%, transparent), transparent),
+    radial-gradient(ellipse 38% 18% at 84% 62%, color-mix(in srgb, var(--soft) 50%, transparent), transparent),
+    radial-gradient(ellipse 30% 14% at 66% 14%, color-mix(in srgb, var(--soft) 40%, transparent), transparent),
+    radial-gradient(ellipse 34% 16% at 30% 86%, color-mix(in srgb, var(--soft) 45%, transparent), transparent),
+    var(--paper);
+}
+
+.sc-grain {
+  position: absolute;
+  inset: 0;
+  background: var(--ink);
+  opacity: 0.09;
+  pointer-events: none;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1.6 -.62'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E") 0 0 / 220px 220px repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1.6 -.62'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E") 0 0 / 220px 220px repeat;
+}
+
+/* a printed double-rule border with small gems at the corners */
+
+.sc-frame {
+  position: absolute;
+  inset: calc(29 * var(--u)) calc(13 * var(--u));
+  border: calc(1.2 * var(--u)) solid color-mix(in srgb, var(--accent) 72%, transparent);
+  box-shadow:
+    inset 0 0 0 calc(3 * var(--u)) var(--paper),
+    inset 0 0 0 calc(3.7 * var(--u)) color-mix(in srgb, var(--accent) 55%, transparent);
+  pointer-events: none;
+}
+
+.sc-corner {
+  position: absolute;
+  width: calc(15 * var(--u));
+  height: calc(15 * var(--u));
+  overflow: visible;
+  color: var(--accent);
+}
+
+.sc-tl { top: 0; left: 0; translate: -50% -50%; }
+.sc-tr { top: 0; right: 0; translate: 50% -50%; }
+.sc-bl { bottom: 0; left: 0; translate: -50% 50%; }
+.sc-br { bottom: 0; right: 0; translate: 50% 50%; }
+
+.sc-corner-gem {
+  fill: var(--paper);
+  stroke: currentColor;
+  stroke-width: 1.4;
+}
+
+/* what is written on it */
+
+.sc-in {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  text-align: center;
+}
+
+.sc-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(11 * var(--u));
+  width: 100%;
+  margin-block: auto;
+}
+
+.sc-in .inv-blessing {
+  color: var(--accent);
+}
+
+.sc-in .inv-bism {
+  width: calc(150 * var(--u));
+}
+
+.sc-in .inv-bism-text {
+  font-size: calc(20 * var(--u));
+}
+
+.sc-crest {
+  position: relative;
+  width: calc(186 * var(--u));
+  margin-bottom: calc(4 * var(--u));
+}
+
+.sc-wreath {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.sc-crest.is-cap {
+  width: calc(124 * var(--u));
+}
+
+.sc-cap {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.sc-mile {
+  position: absolute;
+  inset: 0 18% 8%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+}
+
+.sc-mile span {
+  font: 400 calc(10 * var(--u)) / 1.3 var(--f-display);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink);
+  opacity: 0.8;
+}
+
+.sc-mile strong {
+  font: 500 calc(40 * var(--u)) / 1.05 var(--f-display);
+  letter-spacing: 0.04em;
+}
+
+.sc-mile strong.is-short {
+  font-size: calc(50 * var(--u));
+}
+
+.sc-mile strong.is-word {
+  font-size: calc(14 * var(--u));
+  line-height: 1.25;
+  text-wrap: balance;
+}
+
+.sc-title {
+  max-width: calc(236 * var(--u));
+  font: 400 calc(12 * var(--u)) / 1.6 var(--f-display);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-wrap: balance;
+  opacity: 0.85;
+}
+
+.sc-names {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: max(calc(30 * var(--u)), min(calc(68 * var(--u)), calc(230 * var(--u) / (var(--len) * 0.56))));
+  line-height: 1.16;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+.sc-names .inv-amp {
+  font: 400 0.34em / 1 var(--f-display);
+  color: var(--accent);
+  margin: 0.04em 0 0.1em;
+}
+
+.sc-mile-line {
+  font: 500 calc(14 * var(--u)) / 1.35 var(--f-display);
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  text-wrap: balance;
+}
+
+.sc-rule {
+  position: relative;
+  display: block;
+  width: calc(150 * var(--u));
+  height: calc(4 * var(--u));
+  margin: calc(2 * var(--u)) 0;
+  border-block: 1px solid color-mix(in srgb, var(--accent) 70%, transparent);
+}
+
+.sc-rule i {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc(9 * var(--u));
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  rotate: 45deg;
+  background: var(--accent);
+  box-shadow: 0 0 0 calc(3 * var(--u)) var(--paper);
+}
+
+.sc-when {
+  display: grid;
+  gap: calc(3 * var(--u));
+}
+
+.sc-when strong {
+  font: 400 calc(19.5 * var(--u)) / 1.3 var(--f-display);
+  letter-spacing: 0.03em;
+}
+
+.sc-when span {
+  font: 500 calc(10.5 * var(--u)) / 1.5 var(--f-body);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.sc-venue {
+  font: 400 calc(13.5 * var(--u)) / 1.4 var(--f-body);
+  letter-spacing: 0.02em;
+  opacity: 0.75;
+}
+
+/* laurels, cap and small ornaments (strokes and fills) */
+
+.t-scroll :is(.sc-wreath, .sc-cap, .sc-sprigs, .sc-orn) {
+  color: var(--accent);
+}
+
+.t-scroll .sc-stem {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.3;
+  stroke-linecap: round;
+}
+
+.t-scroll .sc-leaf {
+  fill: currentColor;
+}
+
+.t-scroll .sc-leaf.is-dark {
+  fill: color-mix(in srgb, currentColor 72%, var(--ink));
+}
+
+.t-scroll .sc-fill {
+  fill: currentColor;
+}
+
+.t-scroll .sc-line {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.t-scroll .sc-thin {
+  stroke-width: 0.9;
+  opacity: 0.8;
+}
+
+.sc-cap-board {
+  fill: color-mix(in srgb, var(--accent) 14%, var(--paper));
+  stroke: var(--accent);
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+}
+
+.sc-cap-skull {
+  fill: color-mix(in srgb, var(--accent) 22%, var(--paper));
+  stroke: var(--accent);
+  stroke-width: 1.6;
+}
+
+/* ribbon and seal */
+
+.sc-seal {
+  position: relative;
+  flex: none;
+  width: calc(96 * var(--u));
+  height: calc(90 * var(--u));
+  margin-top: calc(10 * var(--u));
+}
+
+.sc-tails {
+  position: absolute;
+  left: 50%;
+  top: calc(20 * var(--u));
+  width: calc(84 * var(--u));
+  translate: -50% 0;
+  overflow: visible;
+}
+
+.sc-tail {
+  fill: color-mix(in srgb, var(--ribbon) 86%, var(--bg));
+}
+
+.sc-tail.is-back {
+  fill: var(--ribbon);
+}
+
+.sc-tail-fold {
+  fill: color-mix(in srgb, var(--ribbon) 70%, var(--ink));
+  opacity: 0.7;
+}
+
+.sc-wax {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  display: grid;
+  place-items: center;
+  width: calc(62 * var(--u));
+  aspect-ratio: 1;
+  translate: -50% 0;
+  border-radius: 48% 52% 50% 50% / 53% 47% 54% 46%;
+  background: radial-gradient(circle at 36% 30%, color-mix(in srgb, var(--seal) 60%, var(--bg)) 0, var(--seal) 40%, color-mix(in srgb, var(--seal) 68%, var(--ink)) 100%);
+  box-shadow:
+    0 calc(3 * var(--u)) calc(6 * var(--u)) calc(-2 * var(--u)) color-mix(in srgb, var(--ink) 45%, transparent),
+    inset 0 calc(-2 * var(--u)) calc(3 * var(--u)) color-mix(in srgb, var(--seal) 60%, var(--ink));
+}
+
+.sc-wax-in {
+  display: grid;
+  place-items: center;
+  width: 70%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: calc(1.4 * var(--u)) solid color-mix(in srgb, var(--seal) 62%, var(--ink));
+  box-shadow: 0 0 0 calc(1 * var(--u)) color-mix(in srgb, var(--seal) 60%, var(--bg)), inset 0 0 0 calc(2.4 * var(--u)) color-mix(in srgb, var(--seal) 85%, var(--ink));
+  font: 500 calc(14 * var(--u)) / 1 var(--f-display);
+  letter-spacing: 0.04em;
+  color: color-mix(in srgb, var(--seal) 50%, var(--ink));
+  text-shadow: 0 1px 0 color-mix(in srgb, var(--seal) 55%, var(--bg));
+  white-space: nowrap;
+}
+
+/* scroll cue */
+
+.sc-cue,
+.sc-tap {
+  display: flex;
+  align-items: center;
+  gap: calc(10 * var(--u));
+  font: 500 calc(10.5 * var(--u)) / 1 var(--f-body);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gild);
+  white-space: nowrap;
+}
+
+.sc-cue {
+  position: absolute;
+  left: 50%;
+  bottom: calc(14 * var(--u));
+  translate: -50% 0;
+  flex-direction: column;
+}
+
+.sc-cue i {
+  width: 1px;
+  height: calc(24 * var(--u));
+  background: linear-gradient(var(--gild), transparent);
+  animation: sc-cue 2.4s ease-in-out infinite;
+}
+
+.inv[data-phase="closed"] .sc-cue {
+  visibility: hidden;
+}
+
+@keyframes sc-cue {
+  50% {
+    transform: translateY(calc(6 * var(--u)));
+    opacity: 0.5;
+  }
+}
+
+/* hero writing appears as the cover fades */
+
+.inv[data-phase="opening"] :is(.sc-a1, .sc-a2, .sc-a3, .sc-a4) {
+  animation: sc-ink 0.48s ease-out both;
+}
+
+.inv[data-phase="opening"] .sc-a1 { animation-delay: 1.36s; }
+.inv[data-phase="opening"] .sc-a2 { animation-delay: 1.4s; }
+.inv[data-phase="opening"] .sc-a3 { animation-delay: 1.44s; }
+.inv[data-phase="opening"] .sc-a4 { animation-delay: 1.48s; }
+
+.inv[data-phase="opening"] .sc-a5 {
+  animation: sc-stamp 0.42s cubic-bezier(0.3, 0.6, 0.35, 1.25) 1.5s both;
+}
+
+@keyframes sc-ink {
+  from {
+    opacity: 0;
+    transform: translateY(calc(6 * var(--u)));
+  }
+}
+
+@keyframes sc-stamp {
+  from {
+    opacity: 0;
+    transform: scale(1.35);
+  }
+}
+
+/* ── cover: the closed scroll, tied ── */
+
+.sc-cover {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  cursor: pointer;
+  background: var(--desk);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.sc-cover-desk {
+  position: absolute;
+  inset: 0;
+}
+
+.sc-cover-in {
+  position: relative;
+  width: min(100%, 480px);
+  margin-inline: auto;
+}
+
+.sc-hero-cover .sc-in {
+  visibility: hidden;
+}
+
+.sc-hero-cover .sc-scroll {
+  translate: 0 calc(var(--sh) * 0.4 - 60 * var(--u));
+}
+
+.sc-hero-cover .sc-win {
+  overflow: hidden;
+}
+
+.sc-hero-cover .sc-sheet {
+  translate: 0 calc(-100% + 45 * var(--u));
+}
+
+.sc-ribbon {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  top: calc(-16 * var(--u));
+  width: calc(130 * var(--u));
+  translate: -50% 0;
+}
+
+.sc-cover-seal {
+  position: absolute;
+  left: 50%;
+  top: calc(23 * var(--u));
+  width: calc(48 * var(--u));
+  height: calc(48 * var(--u));
+  margin: 0;
+  translate: -50% 0;
+}
+
+.sc-cover-seal .sc-wax {
+  width: 100%;
+}
+
+.sc-cover-seal .sc-wax-in {
+  font-size: calc(11 * var(--u));
+}
+
+.sc-ribbon svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.sc-band,
+.sc-loop,
+.sc-knot,
+.sc-ribbon .sc-tail {
+  fill: var(--accent);
+}
+
+.sc-loop.is-back,
+.sc-ribbon .sc-tail.is-back {
+  fill: color-mix(in srgb, var(--accent) 74%, var(--ink));
+}
+
+.sc-knot {
+  fill: color-mix(in srgb, var(--accent) 86%, var(--ink));
+}
+
+.sc-band-line {
+  fill: none;
+  stroke: color-mix(in srgb, var(--accent) 55%, var(--bg));
+  stroke-width: 0.9;
+  opacity: 0.8;
+}
+
+.sc-tap {
+  position: absolute;
+  left: 50%;
+  top: calc(190 * var(--u));
+  translate: -50% 0;
+  animation: sc-breathe 3.2s ease-in-out infinite;
+}
+
+.sc-tap i {
+  width: calc(28 * var(--u));
+  height: 1px;
+  background: var(--gild);
+}
+
+@keyframes sc-breathe {
+  50% {
+    opacity: 0.55;
+  }
+}
+
+.inv[data-phase="opening"] .sc-tap {
+  animation: sc-fade-out 0.3s ease both;
+}
+
+.inv[data-phase="opening"] .sc-ribbon {
+  animation: sc-slip 0.5s cubic-bezier(0.5, 0, 0.75, 0.4) both;
+}
+
+.inv[data-phase="opening"] .sc-hero-cover .sc-scroll {
+  animation: sc-rise 0.55s cubic-bezier(0.45, 0, 0.25, 1) 0.32s both;
+}
+
+.inv[data-phase="opening"] .sc-hero-cover .sc-sheet {
+  animation: sc-unroll 0.75s cubic-bezier(0.5, 0, 0.2, 1) 0.84s both;
+}
+
+.inv[data-phase="opening"] .sc-cover {
+  animation: sc-fade-out 0.4s ease 1.55s both;
+}
+
+@keyframes sc-slip {
+  to {
+    opacity: 0;
+    transform: translateY(calc(70 * var(--u))) rotate(6deg);
+  }
+}
+
+@keyframes sc-rise {
+  to {
+    translate: 0 0;
+  }
+}
+
+@keyframes sc-unroll {
+  to {
+    translate: 0 0;
+  }
+}
+
+@keyframes sc-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+/* ── dividers and heading ornaments ── */
+
+.sc-div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--gild);
+}
+
+.sc-div i {
+  width: 52px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--gild) 70%, transparent));
+}
+
+.sc-div i:last-child {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--gild) 70%, transparent), transparent);
+}
+
+.sc-div .sc-sprigs {
+  color: var(--gild);
+  width: 120px;
+  height: auto;
+  overflow: visible;
+}
+
+.t-scroll .sc-div .sc-leaf.is-dark {
+  fill: color-mix(in srgb, currentColor 80%, var(--desk));
+}
+
+.sc-orn {
+  width: 120px;
+  height: 14px;
+  overflow: visible;
+}
+
+/* ── sections: certificates on the desk ── */
+
+.t-scroll .inv-divider {
+  padding: 22px 0;
+}
+
+.t-scroll .inv-sec {
+  margin: 0 18px;
+  padding: 52px 30px 48px;
+  color: var(--ink);
+  background:
+    radial-gradient(ellipse 60% 30% at 20% 20%, color-mix(in srgb, var(--soft) 45%, transparent), transparent),
+    radial-gradient(ellipse 50% 26% at 85% 80%, color-mix(in srgb, var(--soft) 45%, transparent), transparent),
+    var(--paper);
+  border: 1px solid var(--paper-edge);
+  border-radius: 3px;
+  outline: 1px solid color-mix(in srgb, var(--accent) 70%, transparent);
+  outline-offset: -9px;
+  box-shadow:
+    inset 0 0 0 12px var(--paper),
+    inset 0 0 0 12.6px color-mix(in srgb, var(--accent) 55%, transparent),
+    0 18px 30px -20px color-mix(in srgb, var(--ink) 80%, transparent);
+}
+
+.t-scroll .inv-title {
+  font-size: 27px;
+  letter-spacing: 0.06em;
+  line-height: 1.25;
+}
+
+.t-scroll .inv-eyebrow {
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  color: var(--accent);
+}
+
+.t-scroll .inv-hosts {
+  font-size: 16px;
+  letter-spacing: 0.04em;
+}
+
+.t-scroll .inv-hosts-amp,
+.t-scroll .inv-people-amp {
+  font: 400 16px/1.7 var(--f-display);
+  color: var(--accent);
+}
+
+.t-scroll .inv-pname {
+  font: 400 40px/1.25 var(--f-names);
+}
+
+.t-scroll .inv-milestone {
+  font-size: 30px;
+  letter-spacing: 0.04em;
+}
+
+.t-scroll .inv-message {
+  font-size: 15.5px;
+  line-height: 1.75;
+}
+
+.t-scroll .inv-cd-unit {
+  border-radius: 2px;
+  border-color: color-mix(in srgb, var(--accent) 50%, transparent);
+  background: color-mix(in srgb, var(--soft) 40%, var(--paper));
+  box-shadow: inset 0 0 0 3px var(--paper), inset 0 0 0 3.6px color-mix(in srgb, var(--accent) 40%, transparent);
+}
+
+.t-scroll .inv-cd-unit b {
+  font-family: var(--f-display);
+  font-size: 27px;
+}
+
+.t-scroll .inv-ev-title,
+.t-scroll .inv-venue-name,
+.t-scroll .inv-contact-name {
+  letter-spacing: 0.03em;
+}
+
+.t-scroll .inv-ev-day {
+  font-size: 56px;
+}
+
+.t-scroll .inv-ev {
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--soft) 30%, var(--paper));
+}
+
+.t-scroll .inv-map {
+  border-radius: 2px;
+  box-shadow: 0 0 0 4px var(--paper), 0 0 0 5px var(--line);
+}
+
+.t-scroll .inv-btn {
+  border-radius: 3px;
+  border-color: color-mix(in srgb, var(--accent) 60%, transparent);
+  background: color-mix(in srgb, var(--accent) 6%, var(--paper));
+  color: color-mix(in srgb, var(--accent) 70%, var(--ink));
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.t-scroll .inv-btn.is-primary {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 80%, var(--bg)), var(--accent) 55%, color-mix(in srgb, var(--accent) 80%, var(--ink)));
+  border-color: color-mix(in srgb, var(--accent) 70%, var(--ink));
+  color: var(--on-accent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--accent) 50%, var(--bg));
+}
+
+.t-scroll .inv-sched li {
+  border-bottom: 1px solid var(--line);
+}
+
+.t-scroll .inv-sched time {
+  font-family: var(--f-display);
+  font-weight: 500;
+}
+
+.t-scroll .inv-cal-menu {
+  color: var(--ink);
+}
+
+.t-scroll .inv-closing {
+  margin-bottom: 24px;
+  padding: 60px 30px 52px;
+}
+
+.t-scroll .inv-closing-text {
+  font-size: 21px;
+  letter-spacing: 0.03em;
+}
+
+.t-scroll .inv-closing-names {
+  font-size: 44px;
+}
+
+.t-scroll .inv-closing-names .inv-amp {
+  font: 400 0.42em var(--f-display);
+}
+
+.t-scroll .inv-closing-meta {
+  text-wrap: balance;
+}
+
+.t-scroll .inv-credit {
+  color: var(--on-desk);
+}
+
+/* ── scripts that must not be letter-spaced or upper-cased ── */
+
+.t-scroll:is([lang="ur"], [lang="ar"], [lang="fa"], [lang="hi"], [lang="bn"]) :is(.sc-title, .sc-when span, .sc-mile span, .sc-cue, .sc-tap, .inv-btn) {
+  letter-spacing: 0;
+  text-transform: none;
+}

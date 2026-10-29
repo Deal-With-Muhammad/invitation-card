@@ -1,0 +1,712 @@
+/* Marigold: genda phool, mehndi green and paisley. Hero and cover sized in --u.
+   Flower tones come from the accent: orange is the accent itself, yellow is the
+   accent turned toward gold, and leaves are always a mehndi green. */
+
+.t-marigold {
+  --mg-o: var(--accent);
+  --mg-ol: color-mix(in srgb, var(--accent) 75%, var(--soft));
+  --mg-y: color-mix(in srgb, var(--accent) 55%, var(--soft));
+  --mg-yl: color-mix(in srgb, var(--accent) 35%, var(--soft));
+  --mg-d: color-mix(in srgb, var(--accent) 70%, var(--ink));
+  --leaf: var(--ink);
+  --leaf-d: color-mix(in srgb, var(--ink) 70%, var(--bg));
+  --line: color-mix(in srgb, var(--accent) 45%, transparent);
+  --card: var(--soft);
+}
+
+@supports (color: oklch(from red l c h)) {
+  .t-marigold {
+    --mg-ol: oklch(from var(--accent) calc(l + 0.05) c calc(h + 7));
+    --mg-y: oklch(from var(--accent) calc(l + 0.11) calc(c * 0.98) calc(h + 25));
+    --mg-yl: oklch(from var(--accent) calc(l + 0.17) calc(c * 0.9) calc(h + 31));
+    --mg-d: oklch(from var(--accent) calc(l - 0.13) c calc(h - 9));
+    --leaf: oklch(from var(--ink) clamp(0.42, l, 0.6) max(c, 0.1) 146);
+    --leaf-d: oklch(from var(--ink) clamp(0.3, calc(l - 0.12), 0.46) max(c, 0.09) 148);
+  }
+}
+
+/* ── backdrop: bandhani dots ── */
+
+.mg-bandhani {
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  opacity: 0.15;
+  -webkit-mask: var(--bandhani) 50% 0 / calc(34 * var(--u)) calc(34 * var(--u)) repeat;
+  mask: var(--bandhani) 50% 0 / calc(34 * var(--u)) calc(34 * var(--u)) repeat;
+}
+
+.mg-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 66% 50% at 50% 52%, var(--bg) 36%, transparent 86%);
+}
+
+/* ── flower and leaf paint ── */
+
+.t-marigold .mg-fo {
+  --A: var(--mg-o);
+  --B: var(--mg-ol);
+  --D: var(--mg-d);
+}
+
+.t-marigold .mg-fy {
+  --A: var(--mg-y);
+  --B: var(--mg-yl);
+  --D: var(--mg-o);
+}
+
+.t-marigold .mg-r1 {
+  fill: var(--A);
+}
+
+.t-marigold .mg-r2 {
+  fill: var(--B);
+}
+
+.t-marigold .mg-fold {
+  fill: none;
+  stroke: var(--D);
+  stroke-width: 0.6;
+  stroke-linecap: round;
+  opacity: 0.6;
+}
+
+.t-marigold .mg-c {
+  fill: var(--D);
+}
+
+.t-marigold .mg-leaf {
+  fill: var(--leaf);
+}
+
+.t-marigold .mg-rib {
+  fill: none;
+  stroke: var(--leaf-d);
+  stroke-width: 0.7;
+  stroke-linecap: round;
+}
+
+.t-marigold .mg-thread {
+  stroke: var(--mg-d);
+  stroke-width: 0.7;
+}
+
+.t-marigold .mg-thread-strong {
+  stroke: var(--accent);
+  stroke-width: 1;
+}
+
+.t-marigold .mg-bead {
+  fill: var(--mg-d);
+}
+
+.t-marigold .mg-tassel {
+  fill: none;
+  stroke: var(--mg-d);
+  stroke-width: 1.1;
+  stroke-linecap: round;
+}
+
+.t-marigold .mg-ml {
+  stroke: var(--leaf);
+  stroke-width: 0.9;
+}
+
+.t-marigold .mg-mt {
+  stroke: var(--leaf);
+  stroke-width: 0.6;
+}
+
+.t-marigold .mg-mf {
+  fill: var(--leaf);
+}
+
+.t-marigold :is(.mg-toran, .mg-ladi, .mg-divider, .mg-orn, .mg-mandala) {
+  overflow: visible;
+}
+
+/* ── hero ── */
+
+.mg-hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--sh);
+  padding: calc(112 * var(--u)) calc(56 * var(--u)) calc(72 * var(--u));
+}
+
+.mg-toran-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  z-index: 2;
+}
+
+.mg-ladi {
+  position: absolute;
+  top: 0;
+  width: calc(52 * var(--u));
+  height: auto;
+  z-index: 1;
+}
+
+.mg-ladi-l {
+  left: 0;
+}
+
+.mg-ladi-r {
+  right: 0;
+  transform: scaleX(-1);
+}
+
+.mg-in {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(calc(10 * var(--u)), calc(10 * var(--u) + (var(--sh) - 690 * var(--u)) * 0.06), calc(22 * var(--u)));
+  width: 100%;
+  max-width: calc(278 * var(--u));
+  text-align: center;
+  container-type: inline-size;
+}
+
+.mg-in .inv-bism {
+  width: calc(150 * var(--u));
+}
+
+.mg-in .inv-bism-text {
+  font-size: calc(21 * var(--u));
+}
+
+.mg-in .inv-blessing {
+  color: var(--ink);
+}
+
+.mg-title {
+  max-width: calc(200 * var(--u));
+  font: 400 calc(13.5 * var(--u)) / 1.4 var(--f-display);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.mg-namewrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: calc(8 * var(--u));
+  width: 100%;
+  min-height: calc(236 * var(--u));
+  margin-block: clamp(calc(16 * var(--u)), calc(16 * var(--u) + (var(--sh) - 690 * var(--u)) * 0.2), calc(48 * var(--u)));
+  container-type: inline-size;
+}
+
+.mg-mandala {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: -1;
+  width: calc(344 * var(--u));
+  height: calc(344 * var(--u));
+  translate: -50% -50%;
+  opacity: 0.32;
+}
+
+.mg-names {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: min(calc(64 * var(--u)), calc(100cqi / (var(--len) * 0.42)));
+  line-height: 1.02;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+.mg-names .inv-name {
+  padding-inline: 0.1em;
+}
+
+.mg-names .inv-amp {
+  font-size: 0.5em;
+  line-height: 1.1;
+  color: var(--accent);
+}
+
+.mg-milestone {
+  font: 400 calc(30 * var(--u)) / 1.1 var(--f-display);
+  color: var(--accent);
+}
+
+.mg-rule {
+  display: block;
+}
+
+.mg-rule .mg-orn {
+  width: calc(110 * var(--u));
+  height: calc(22 * var(--u));
+}
+
+.mg-when {
+  display: grid;
+  gap: calc(3 * var(--u));
+  font: 700 calc(11.5 * var(--u)) / 1.5 var(--f-body);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.mg-when strong {
+  font: 400 calc(23 * var(--u)) / 1.2 var(--f-display);
+  letter-spacing: 0.01em;
+  text-transform: none;
+}
+
+.mg-venue {
+  max-width: 24ch;
+  font: 700 calc(13 * var(--u)) / 1.4 var(--f-body);
+  letter-spacing: 0.04em;
+  color: var(--accent);
+}
+
+.mg-cue {
+  position: absolute;
+  left: 50%;
+  bottom: calc(18 * var(--u));
+  translate: -50% 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(6 * var(--u));
+  font: 700 calc(10.5 * var(--u)) / 1 var(--f-body);
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.mg-cue i {
+  width: calc(7 * var(--u));
+  height: calc(7 * var(--u));
+  border-radius: 50%;
+  background: var(--accent);
+  animation: mg-cue 2.2s ease-in-out infinite;
+}
+
+.inv[data-phase="closed"] .mg-cue {
+  visibility: hidden;
+}
+
+@keyframes mg-cue {
+  50% {
+    transform: translateY(calc(6 * var(--u)));
+    opacity: 0.45;
+  }
+}
+
+.inv[data-phase="opening"] :is(.mg-a1, .mg-a2, .mg-a3, .mg-a4, .mg-a5) {
+  animation: mg-rise 0.8s cubic-bezier(0.2, 0.75, 0.25, 1.15) both;
+}
+
+.inv[data-phase="opening"] .mg-a1 { animation-delay: 0.7s; }
+.inv[data-phase="opening"] .mg-a2 { animation-delay: 0.85s; }
+.inv[data-phase="opening"] .mg-a3 { animation-delay: 1.05s; }
+.inv[data-phase="opening"] .mg-a4 { animation-delay: 1.2s; }
+.inv[data-phase="opening"] .mg-a5 { animation-delay: 1.32s; }
+
+.inv[data-phase="opening"] .mg-a-ring {
+  animation: mg-ring 1.3s 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@keyframes mg-rise {
+  from {
+    opacity: 0;
+    transform: translateY(calc(16 * var(--u))) scale(0.97);
+  }
+}
+
+@keyframes mg-ring {
+  from {
+    opacity: 0;
+    rotate: -24deg;
+    scale: 0.86;
+  }
+}
+
+/* ── cover: the marigold curtain ── */
+
+.mg-cover {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mg-backing {
+  position: absolute;
+  inset: 0;
+  background: var(--leaf-d);
+}
+
+.mg-curtain {
+  position: absolute;
+  inset: 0;
+}
+
+.mg-strand {
+  position: absolute;
+  left: calc(50% + (var(--o) * 20.5 - 11) * var(--u));
+  top: calc(var(--sh) + 26 * var(--u) - 1375 * var(--u));
+  width: calc(22 * var(--u));
+}
+
+.mg-strand svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.mg-valance {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: max(100%, calc(390 * var(--u)));
+  translate: -50% 0;
+}
+
+.mg-valance .mg-toran {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.mg-badge {
+  position: absolute;
+  left: 50%;
+  top: 47%;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: calc(4 * var(--u));
+  width: calc(204 * var(--u));
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  text-align: center;
+}
+
+.mg-badge svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 calc(8 * var(--u)) calc(14 * var(--u)) color-mix(in srgb, var(--leaf-d) 55%, transparent));
+}
+
+.t-marigold .mg-badge-a {
+  fill: var(--mg-o);
+}
+
+.t-marigold .mg-badge-b {
+  fill: var(--mg-y);
+}
+
+.t-marigold .mg-badge-disc {
+  fill: var(--bg);
+}
+
+.t-marigold .mg-badge-line {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.2;
+}
+
+.t-marigold .mg-badge-dot {
+  fill: var(--leaf);
+}
+
+.mg-mono {
+  position: relative;
+  font: 400 calc(50 * var(--u)) / 1 var(--f-names);
+  color: var(--ink);
+  white-space: nowrap;
+  translate: 0 calc(4 * var(--u));
+}
+
+.mg-mono i {
+  font-style: normal;
+  font-size: 0.55em;
+  color: var(--accent);
+  margin: 0 0.06em;
+}
+
+.mg-tap {
+  position: relative;
+  font: 700 calc(9.5 * var(--u)) / 1 var(--f-body);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--accent);
+  white-space: nowrap;
+  padding-inline-start: 0.24em;
+}
+
+.mg-badge {
+  animation: mg-bob 2.6s ease-in-out infinite;
+}
+
+@keyframes mg-bob {
+  50% {
+    transform: translateY(calc(-4 * var(--u)));
+  }
+}
+
+.inv[data-phase="opening"] .mg-badge {
+  animation: mg-badge-out 0.5s cubic-bezier(0.4, 0, 0.7, 0.2) both;
+}
+
+.inv[data-phase="opening"] .mg-backing {
+  animation: mg-fade 0.7s 0.25s ease both;
+}
+
+.inv[data-phase="opening"] .mg-strand {
+  animation: mg-rise-up 1.05s calc(0.1s + min(var(--d), 14) * 0.04s) cubic-bezier(0.55, 0, 0.3, 1) both;
+}
+
+.inv[data-phase="opening"] .mg-valance {
+  animation: mg-lift 0.6s 0.95s cubic-bezier(0.5, 0, 0.75, 0) both;
+}
+
+.inv[data-phase="opening"] .mg-cover {
+  animation: mg-fade 0.45s 1.65s ease both;
+}
+
+@keyframes mg-badge-out {
+  30% {
+    scale: 1.06;
+  }
+  to {
+    scale: 0.5;
+    opacity: 0;
+  }
+}
+
+@keyframes mg-rise-up {
+  to {
+    transform: translateY(calc(-1 * var(--sh) - 120 * var(--u)));
+  }
+}
+
+@keyframes mg-lift {
+  to {
+    transform: translateY(-120%);
+  }
+}
+
+@keyframes mg-fade {
+  to {
+    opacity: 0;
+  }
+}
+
+/* ── sections ── */
+
+.t-marigold .inv-title {
+  font-size: 32px;
+  line-height: 1.15;
+}
+
+.t-marigold .inv-eyebrow {
+  font-weight: 700;
+  letter-spacing: 0.22em;
+}
+
+.t-marigold .inv-hosts {
+  font-size: 19px;
+}
+
+.t-marigold .inv-pname {
+  font: 400 44px/1.15 var(--f-names);
+}
+
+.t-marigold :is(.inv-people-amp, .inv-hosts-amp) {
+  font-size: 30px;
+}
+
+.t-marigold .inv-message {
+  font-size: 16.5px;
+  font-weight: 500;
+  line-height: 1.7;
+}
+
+.t-marigold .inv-milestone {
+  color: var(--accent);
+}
+
+/* scalloped cards in a bold colour, stitched just inside the edge */
+.t-marigold :is(.inv-ev, .inv-events:not(.is-many) .inv-ev, .inv-closing) {
+  --sc: 9px;
+  position: relative;
+  padding: 40px 26px 36px;
+  border: 0;
+  border-radius: 0;
+  background: var(--card);
+  -webkit-mask:
+    linear-gradient(#000 0 0) 50% 50% / calc(100% - 2 * var(--sc)) calc(100% - 2 * var(--sc)) no-repeat,
+    radial-gradient(closest-side, #000 94%, #0000) 0 0 / calc(2 * var(--sc)) calc(2 * var(--sc)) round no-repeat,
+    radial-gradient(closest-side, #000 94%, #0000) 0 100% / calc(2 * var(--sc)) calc(2 * var(--sc)) round no-repeat,
+    radial-gradient(closest-side, #000 94%, #0000) 0 0 / calc(2 * var(--sc)) calc(2 * var(--sc)) no-repeat round,
+    radial-gradient(closest-side, #000 94%, #0000) 100% 0 / calc(2 * var(--sc)) calc(2 * var(--sc)) no-repeat round;
+  mask:
+    linear-gradient(#000 0 0) 50% 50% / calc(100% - 2 * var(--sc)) calc(100% - 2 * var(--sc)) no-repeat,
+    radial-gradient(closest-side, #000 94%, #0000) 0 0 / calc(2 * var(--sc)) calc(2 * var(--sc)) round no-repeat,
+    radial-gradient(closest-side, #000 94%, #0000) 0 100% / calc(2 * var(--sc)) calc(2 * var(--sc)) round no-repeat,
+    radial-gradient(closest-side, #000 94%, #0000) 0 0 / calc(2 * var(--sc)) calc(2 * var(--sc)) no-repeat round,
+    radial-gradient(closest-side, #000 94%, #0000) 100% 0 / calc(2 * var(--sc)) calc(2 * var(--sc)) no-repeat round;
+}
+
+.t-marigold :is(.inv-ev, .inv-closing)::before {
+  content: "";
+  position: absolute;
+  inset: calc(var(--sc) + 6px);
+  border: 2px dashed color-mix(in srgb, var(--ink) 30%, transparent);
+  border-radius: 10px;
+  pointer-events: none;
+}
+
+.t-marigold .inv-ev-title {
+  font-size: 27px;
+}
+
+.t-marigold .inv-ev-day {
+  font-size: 68px;
+  color: var(--accent);
+}
+
+.t-marigold .inv-ev-time {
+  font-weight: 700;
+}
+
+.t-marigold .inv-venue-name {
+  font-size: 22px;
+}
+
+.t-marigold .inv-venue-addr {
+  font-weight: 500;
+}
+
+.t-marigold .inv-map {
+  border: 0;
+  border-radius: 22px;
+  box-shadow: 0 0 0 4px var(--bg), 0 0 0 6px var(--accent);
+}
+
+.t-marigold .inv-btn {
+  min-height: 46px;
+  padding: 12px 22px;
+  border: 2px solid var(--accent);
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--ink);
+  box-shadow: 0 3px 0 color-mix(in srgb, var(--accent) 55%, transparent);
+  font: 700 14.5px/1 var(--f-body);
+  letter-spacing: 0.02em;
+}
+
+.t-marigold .inv-btn.is-primary {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--on-accent);
+  box-shadow: 0 4px 0 var(--mg-d);
+}
+
+.t-marigold .inv-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 var(--mg-d);
+}
+
+.t-marigold .inv-btn svg {
+  stroke-width: 2.1;
+}
+
+/* countdown: each number on a marigold badge */
+.t-marigold .inv-cd {
+  gap: 8px;
+}
+
+.t-marigold .inv-cd-unit {
+  aspect-ratio: 1;
+  align-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: var(--mg-y);
+  color: color-mix(in oklab, var(--mg-d) 40%, var(--leaf-d));
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M85.7 50Q97.63 59.48 82.98 63.66Q90.73 77.22 75.24 75.24Q75.65 88.39 63.66 82.98Q59.41 97.3 50 85.7Q41.13 94.61 36.34 82.98Q23.29 89.97 24.76 75.24Q9.49 77.07 17.02 63.66Q3.52 59.24 14.3 50Q1.29 40.31 17.02 36.34Q11.57 24.32 24.76 24.76Q22.76 9.24 36.34 17.02Q40.47 2.11 50 14.3Q59.45 2.51 63.66 17.02Q75.07 12.48 75.24 24.76Q89.43 23.65 82.98 36.34Q95.69 40.91 85.7 50Z'/%3E%3C/svg%3E") 50% 50% / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M85.7 50Q97.63 59.48 82.98 63.66Q90.73 77.22 75.24 75.24Q75.65 88.39 63.66 82.98Q59.41 97.3 50 85.7Q41.13 94.61 36.34 82.98Q23.29 89.97 24.76 75.24Q9.49 77.07 17.02 63.66Q3.52 59.24 14.3 50Q1.29 40.31 17.02 36.34Q11.57 24.32 24.76 24.76Q22.76 9.24 36.34 17.02Q40.47 2.11 50 14.3Q59.45 2.51 63.66 17.02Q75.07 12.48 75.24 24.76Q89.43 23.65 82.98 36.34Q95.69 40.91 85.7 50Z'/%3E%3C/svg%3E") 50% 50% / contain no-repeat;
+}
+
+.t-marigold .inv-cd-unit:nth-child(even) {
+  background: var(--mg-o);
+  color: var(--on-accent);
+}
+
+.t-marigold .inv-cd-unit b {
+  font-size: 26px;
+}
+
+.t-marigold .inv-cd-unit span {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  opacity: 0.85;
+}
+
+.t-marigold .inv-sched li {
+  border-bottom: 2px dotted color-mix(in srgb, var(--accent) 55%, transparent);
+}
+
+.t-marigold .inv-sched time {
+  font-weight: 700;
+}
+
+.t-marigold .inv-swatches i {
+  box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px var(--accent);
+}
+
+.t-marigold .inv-contact-name {
+  font-size: 21px;
+}
+
+.t-marigold .inv-closing {
+  margin: 8px 18px 26px;
+  padding: 56px 26px 50px;
+}
+
+.t-marigold .inv-closing-names {
+  font-size: 42px;
+  color: var(--ink);
+}
+
+.t-marigold .inv-closing-names .inv-amp {
+  color: var(--accent);
+}
+
+.t-marigold .inv-divider svg {
+  width: 168px;
+  height: 41px;
+}
+
+.t-marigold .inv-orn .mg-orn {
+  width: 90px;
+  height: 18px;
+}

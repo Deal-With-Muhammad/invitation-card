@@ -1,0 +1,101 @@
+@import "tailwindcss";
+
+@source "../";
+
+@theme inline {
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-cormorant), ui-serif, Georgia, serif;
+  --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
+  --color-card: var(--card);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-brand: var(--brand);
+  --color-brand-ink: var(--brand-ink);
+  --color-gold: var(--gold);
+  --color-gold-light: var(--gold-light);
+  --color-gold-ink: var(--gold-ink);
+  --color-deep: var(--deep);
+  --color-ivory: var(--ivory);
+  --color-wax: var(--wax);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* DWM Invite: three colours, like a classic wedding suite.
+   Deep teal grounds it, antique gold warms it, ivory softens it.
+   Gold is too light for small text on ivory, so small gold text uses
+   --gold-ink, and buttons on the dark teal use the lighter --gold-light. */
+:root {
+  --ivory: #f5f0e6;
+  --paper: var(--ivory);
+  --paper-2: #ece4d3;
+  --card: #fffcf6;
+  --ink: #1e2a28;
+  --muted: #5d6965;
+  --line: rgb(30 42 40 / 0.13);
+  --brand: #1c5652;
+  --brand-ink: #154541;
+  --deep: #12403c;
+  --gold: #b08d57;
+  --gold-light: #d8be8a;
+  --gold-ink: #806235;
+  --wax: #a8452f;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  color-scheme: light;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background: var(--gold-light);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  /* Site headings (the grotesk). Weight utilities still override. */
+  .font-serif {
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  .btn {
+    @apply inline-flex h-11 items-center justify-center gap-2 rounded-xl px-5 text-[15px] font-medium transition-[background-color,border-color,color,transform] duration-150 ease-[var(--ease-out)] active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50;
+  }
+
+  .btn-primary {
+    @apply bg-brand text-ivory hover:bg-brand-ink;
+  }
+
+  .btn-ghost {
+    @apply border border-ink/15 bg-card text-ink hover:border-ink/30;
+  }
+
+  .field {
+    @apply block w-full rounded-xl border border-line bg-card px-3.5 py-2.5 text-[15px] text-ink outline-none transition-[border-color,box-shadow] placeholder:text-muted/70 focus:border-brand focus:ring-3 focus:ring-brand/15;
+  }
+
+  .label {
+    @apply mb-1.5 block text-[13px] font-medium text-muted;
+  }
+
+  .paper-grain {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.16 0 0 0 0 0.14 0 0 0 0 0.12 0 0 0 0.06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}

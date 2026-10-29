@@ -1,0 +1,849 @@
+/* Scrapbook: kraft paper, a polaroid, washi tape and pen doodles. --soft is the
+   white-ish paper of notes and photos; tape is striped accent, half see-through.
+   Hero units are --s: the phone unit, capped by screen height. */
+
+.t-scrapbook {
+  --shade-1: color-mix(in srgb, var(--ink) 14%, transparent);
+  --shade-2: color-mix(in srgb, var(--ink) 42%, transparent);
+  --tape: repeating-linear-gradient(
+    -48deg,
+    color-mix(in srgb, var(--accent) 58%, transparent) 0 5px,
+    color-mix(in srgb, var(--soft) 50%, transparent) 5px 10px
+  );
+  --tape-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 30' preserveAspectRatio='none'%3E%3Cpath d='M3 0H97L100 3.5 97 7.5 100 11 97 15 100 18.5 97 22.5 100 26 97 30H3L0 26.5 3 22.5 0 19 3 15 0 11.5 3 7.5 0 4Z'/%3E%3C/svg%3E");
+  --ruled: repeating-linear-gradient(to bottom, transparent 0 27px, color-mix(in srgb, var(--accent) 20%, transparent) 27px 28px);
+}
+
+/* ── backdrop: kraft grain and mottling ── */
+
+.sb-grain {
+  position: absolute;
+  inset: 0;
+  background: var(--ink);
+  opacity: 0.13;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2.4 0 0 0 -1.05'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E") 0 0 / 240px 240px repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2.4 0 0 0 -1.05'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E") 0 0 / 240px 240px repeat;
+}
+
+.sb-mottle {
+  opacity: 0.07;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.006' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2.6 0 0 0 -1.1'/%3E%3C/filter%3E%3Crect width='600' height='600' filter='url(%23m)'/%3E%3C/svg%3E") 0 0 / 600px 600px repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.006' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2.6 0 0 0 -1.1'/%3E%3C/filter%3E%3Crect width='600' height='600' filter='url(%23m)'/%3E%3C/svg%3E") 0 0 / 600px 600px repeat;
+}
+
+/* ── pen strokes ── */
+
+.t-scrapbook .sb-pen {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.t-scrapbook .sb-thin {
+  stroke-width: 1.8;
+}
+
+.t-scrapbook .sb-fill {
+  fill: var(--accent);
+}
+
+.t-scrapbook .sb-paper {
+  fill: color-mix(in srgb, var(--accent) 12%, var(--soft));
+}
+
+.t-scrapbook .sb-tint {
+  fill: var(--accent);
+  opacity: 0.78;
+}
+
+.t-scrapbook .sb-dot {
+  fill: var(--ink);
+}
+
+.sb-mark {
+  position: absolute;
+  overflow: visible;
+}
+
+/* washi tape */
+.sb-tape {
+  position: absolute;
+  width: calc(92 * var(--s));
+  height: calc(28 * var(--s));
+  background: var(--tape);
+  -webkit-mask: var(--tape-mask) 0 0 / 100% 100% no-repeat;
+  mask: var(--tape-mask) 0 0 / 100% 100% no-repeat;
+}
+
+/* ── hero ── */
+
+.sb-hero {
+  --s: min(var(--u), calc(var(--sh) / 800));
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: var(--sh);
+  padding: calc(52 * var(--s)) calc(22 * var(--u)) calc(80 * var(--s));
+}
+
+.sb-in {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(16 * var(--s));
+  width: 100%;
+  text-align: center;
+}
+
+.sb-bless {
+  color: var(--ink);
+}
+
+.sb-bless .inv-bism {
+  width: calc(140 * var(--s));
+}
+
+.sb-title {
+  max-width: 17ch;
+  font: 700 calc(33 * var(--s)) / 1.05 var(--f-display);
+  text-wrap: balance;
+  rotate: -2.5deg;
+}
+
+.sb-title::after {
+  content: "";
+  display: block;
+  width: 62%;
+  height: calc(10 * var(--s));
+  margin: calc(3 * var(--s)) auto 0;
+  background: var(--accent);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 12' preserveAspectRatio='none'%3E%3Cpath d='M3 8C24 3 40 10 62 6s38-4 55 2' fill='none' stroke='%23000' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 12' preserveAspectRatio='none'%3E%3Cpath d='M3 8C24 3 40 10 62 6s38-4 55 2' fill='none' stroke='%23000' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+}
+
+/* the polaroid */
+.t-scrapbook .sb-polaroid {
+  position: relative;
+  width: calc(266 * var(--s));
+  margin: calc(14 * var(--s)) 0 calc(10 * var(--s));
+  padding: calc(14 * var(--s)) calc(14 * var(--s)) calc(56 * var(--s));
+  background: var(--soft);
+  box-shadow:
+    0 1px 1px var(--shade-1),
+    0 calc(16 * var(--s)) calc(26 * var(--s)) calc(-12 * var(--s)) var(--shade-2);
+  rotate: -3deg;
+}
+
+.sb-photo {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 200 / 182;
+  background: color-mix(in srgb, var(--accent) 12%, var(--soft));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 9%, transparent);
+}
+
+.sb-doodle {
+  width: 90%;
+  height: auto;
+  overflow: visible;
+}
+
+/* physical sides: the caption may be Latin on an RTL page, so it follows the page */
+.sb-caption {
+  position: absolute;
+  left: calc(20 * var(--s));
+  right: calc(104 * var(--s));
+  bottom: calc(14 * var(--s));
+  font: 700 calc(min(30, 250 / var(--cl)) * var(--s)) / 1 var(--f-display);
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  rotate: -1.5deg;
+}
+
+.t-scrapbook[dir="rtl"] .sb-caption {
+  left: calc(104 * var(--s));
+  right: calc(20 * var(--s));
+  text-align: right;
+}
+
+.sb-tape-a {
+  top: calc(-12 * var(--s));
+  inset-inline-start: calc(-34 * var(--s));
+  rotate: -38deg;
+}
+
+.sb-tape-b {
+  top: calc(-10 * var(--s));
+  inset-inline-end: calc(-34 * var(--s));
+  rotate: 42deg;
+}
+
+/* a ticket stub stuck on the photo's corner */
+.t-scrapbook .sb-stub {
+  position: absolute;
+  inset-inline-end: calc(-20 * var(--s));
+  bottom: calc(-24 * var(--s));
+  display: grid;
+  justify-items: center;
+  gap: calc(4 * var(--s));
+  max-width: calc(150 * var(--s));
+  padding: calc(11 * var(--s)) calc(22 * var(--s)) calc(12 * var(--s));
+  background: var(--accent);
+  color: var(--on-accent);
+  rotate: 8deg;
+  -webkit-mask:
+    radial-gradient(circle calc(7 * var(--s)) at 0 50%, #0000 96%, #000) 0 0 / 51% 100% no-repeat,
+    radial-gradient(circle calc(7 * var(--s)) at 100% 50%, #0000 96%, #000) 100% 0 / 51% 100% no-repeat;
+  mask:
+    radial-gradient(circle calc(7 * var(--s)) at 0 50%, #0000 96%, #000) 0 0 / 51% 100% no-repeat,
+    radial-gradient(circle calc(7 * var(--s)) at 100% 50%, #0000 96%, #000) 100% 0 / 51% 100% no-repeat;
+}
+
+.sb-stub::before {
+  content: "";
+  position: absolute;
+  inset: calc(5 * var(--s)) calc(13 * var(--s));
+  border: 1.5px dashed color-mix(in srgb, var(--on-accent) 50%, transparent);
+}
+
+.sb-stub small {
+  font: 800 calc(8.5 * var(--s)) / 1 var(--f-body);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+
+.sb-stub b {
+  font: 800 calc(14 * var(--s)) / 1.15 var(--f-body);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+/* names and venue */
+.sb-who {
+  position: relative;
+  width: 100%;
+  margin-top: calc(22 * var(--s));
+  container-type: inline-size;
+}
+
+.sb-names {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: min(calc(40 * var(--s)), calc(100cqi / var(--nw)));
+  line-height: 1.55;
+  rotate: -2deg;
+}
+
+.sb-names.is-solo {
+  font-size: min(calc(54 * var(--s)), calc(100cqi / var(--nw)));
+}
+
+.sb-names .inv-amp {
+  margin: -0.28em 0 -0.12em;
+  font: 700 0.8em / 1 var(--f-display);
+  color: var(--accent);
+}
+
+.sb-arrow {
+  width: calc(40 * var(--s));
+  height: calc(46 * var(--s));
+  top: calc(-44 * var(--s));
+  inset-inline-start: 7%;
+  scale: -1 1;
+}
+
+.t-scrapbook[dir="rtl"] .sb-arrow {
+  scale: 1 1;
+}
+
+.t-scrapbook .sb-venue {
+  max-width: 22ch;
+  font: 600 calc(25 * var(--s)) / 1.15 var(--f-display);
+  text-wrap: balance;
+}
+
+.sb-star-a {
+  top: 6%;
+  inset-inline-start: 8%;
+  width: calc(32 * var(--s));
+  height: calc(32 * var(--s));
+  rotate: -14deg;
+}
+
+.sb-star-b {
+  bottom: 15%;
+  inset-inline-end: 9%;
+  width: calc(22 * var(--s));
+  height: calc(22 * var(--s));
+  rotate: 20deg;
+}
+
+.sb-loop {
+  bottom: 8.5%;
+  inset-inline-start: 7%;
+  width: calc(78 * var(--s));
+  height: calc(26 * var(--s));
+}
+
+.sb-cue {
+  position: absolute;
+  left: 50%;
+  bottom: calc(14 * var(--s));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(2 * var(--s));
+  font: 700 calc(19 * var(--s)) / 1 var(--f-display);
+  translate: -50% 0;
+}
+
+.sb-cue svg {
+  width: calc(16 * var(--s));
+  height: calc(22 * var(--s));
+  stroke: var(--ink);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  animation: sb-cue 2.4s ease-in-out infinite;
+}
+
+.inv[data-phase="closed"] .sb-cue {
+  visibility: hidden;
+}
+
+@keyframes sb-cue {
+  50% {
+    transform: translateY(calc(4 * var(--s)));
+  }
+}
+
+/* everything sticks down as the note slides away */
+.inv[data-phase="opening"] .sb-polaroid {
+  animation: sb-stick 0.55s 1s cubic-bezier(0.3, 1.3, 0.55, 1) both;
+}
+
+.inv[data-phase="opening"] .sb-tape {
+  animation: sb-tape-on 0.32s 1.28s cubic-bezier(0.3, 1.4, 0.6, 1) both;
+}
+
+.inv[data-phase="opening"] .sb-stub {
+  animation: sb-slap 0.34s 1.34s cubic-bezier(0.3, 1.5, 0.6, 1) both;
+}
+
+.inv[data-phase="opening"] :is(.sb-a1, .sb-a2, .sb-a3) {
+  animation: sb-in 0.5s 1.05s ease-out both;
+}
+
+.inv[data-phase="opening"] .sb-a2 {
+  animation-delay: 1.15s;
+}
+
+@keyframes sb-stick {
+  from {
+    opacity: 0;
+    transform: translateY(calc(-18 * var(--s))) scale(1.12) rotate(-6deg);
+  }
+}
+
+@keyframes sb-tape-on {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+}
+
+@keyframes sb-slap {
+  from {
+    opacity: 0;
+    transform: scale(1.4) rotate(14deg);
+  }
+}
+
+@keyframes sb-in {
+  from {
+    opacity: 0;
+    transform: translateY(calc(10 * var(--s)));
+  }
+}
+
+/* ── cover: a note folded in half and taped shut ── */
+
+.sb-cover {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: var(--bg);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.sb-cover-in {
+  --s: min(var(--u), calc(var(--sh) / 800));
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: calc(54 * var(--s));
+  width: min(100%, 480px);
+  height: 100%;
+  margin-inline: auto;
+  padding-top: calc(40 * var(--s));
+}
+
+.sb-note {
+  position: relative;
+  width: calc(292 * var(--s));
+  height: calc(212 * var(--s));
+  perspective: calc(1300 * var(--s));
+  rotate: -2deg;
+}
+
+.sb-note-inner,
+.sb-flap-face {
+  position: absolute;
+  inset: 0;
+  background: var(--soft);
+}
+
+.sb-note-inner {
+  display: grid;
+  place-items: center;
+  background: var(--ruled), var(--soft);
+  box-shadow:
+    0 1px 1px var(--shade-1),
+    0 calc(18 * var(--s)) calc(28 * var(--s)) calc(-14 * var(--s)) var(--shade-2);
+}
+
+.sb-note-names {
+  font: 400 calc(24 * var(--s)) / 1.6 var(--f-names);
+  rotate: -2deg;
+}
+
+.sb-flap {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 0;
+  transform-style: preserve-3d;
+}
+
+.sb-flap-face {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: calc(4 * var(--s));
+  backface-visibility: hidden;
+  box-shadow: 0 1px 1px var(--shade-1);
+}
+
+/* the fold along the top edge */
+.sb-flap-face::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: calc(14 * var(--s));
+  background: linear-gradient(color-mix(in srgb, var(--ink) 10%, transparent), transparent);
+}
+
+.sb-flap-back {
+  background: var(--ruled), var(--soft);
+  transform: rotateX(180deg);
+}
+
+.t-scrapbook .sb-flap-hello {
+  position: relative;
+  max-width: 12ch;
+  font: 700 calc(40 * var(--s)) / 1 var(--f-display);
+  text-wrap: balance;
+  rotate: -3deg;
+}
+
+.sb-flap-doodle {
+  width: calc(96 * var(--s));
+  height: auto;
+}
+
+.sb-flap-star {
+  top: calc(18 * var(--s));
+  inset-inline-end: calc(20 * var(--s));
+  width: calc(22 * var(--s));
+  height: calc(22 * var(--s));
+  rotate: 16deg;
+}
+
+.sb-tape-seal {
+  left: 50%;
+  bottom: calc(-26 * var(--s));
+  width: calc(36 * var(--s));
+  height: calc(80 * var(--s));
+  translate: -50% 0;
+  rotate: 5deg;
+  transform-origin: 50% 0;
+  background: repeating-linear-gradient(
+    42deg,
+    color-mix(in srgb, var(--accent) 58%, transparent) 0 5px,
+    color-mix(in srgb, var(--soft) 50%, transparent) 5px 10px
+  );
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 100' preserveAspectRatio='none'%3E%3Cpath d='M0 3L4 0 7.5 3 11 0 15 3 18.5 0 22.5 3 26 0 30 3V97L26 100 22.5 97 19 100 15 97 11.5 100 7.5 97 4 100 0 97Z'/%3E%3C/svg%3E") 0 0 / 100% 100% no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 100' preserveAspectRatio='none'%3E%3Cpath d='M0 3L4 0 7.5 3 11 0 15 3 18.5 0 22.5 3 26 0 30 3V97L26 100 22.5 97 19 100 15 97 11.5 100 7.5 97 4 100 0 97Z'/%3E%3C/svg%3E") 0 0 / 100% 100% no-repeat;
+}
+
+.t-scrapbook .sb-tap {
+  display: flex;
+  align-items: center;
+  gap: calc(10 * var(--s));
+  font: 700 calc(25 * var(--s)) / 1 var(--f-display);
+  rotate: -2deg;
+}
+
+.sb-tap svg {
+  width: calc(42 * var(--s));
+  height: calc(28 * var(--s));
+  overflow: visible;
+}
+
+.t-scrapbook[dir="rtl"] .sb-tap svg {
+  scale: -1 1;
+}
+
+.inv[data-phase="closed"] .sb-note {
+  animation: sb-wobble 3.6s ease-in-out infinite;
+}
+
+@keyframes sb-wobble {
+  50% {
+    transform: rotate(1.4deg) translateY(calc(-4 * var(--s)));
+  }
+}
+
+.inv[data-phase="opening"] .sb-tape-seal {
+  animation: sb-peel 0.5s cubic-bezier(0.4, 0, 0.6, 1) both;
+}
+
+.inv[data-phase="opening"] .sb-flap {
+  animation: sb-unfold 0.75s 0.36s cubic-bezier(0.45, 0, 0.2, 1) both;
+}
+
+.inv[data-phase="opening"] .sb-note {
+  animation: sb-away 0.55s 1.08s cubic-bezier(0.5, 0, 0.75, 0) both;
+}
+
+.inv[data-phase="opening"] .sb-tap {
+  animation: sb-gone 0.3s ease both;
+}
+
+.inv[data-phase="opening"] .sb-cover {
+  animation: sb-gone 0.45s 1.26s ease both;
+}
+
+@keyframes sb-peel {
+  40% {
+    transform: translateY(calc(-6 * var(--s))) rotate(-16deg);
+    opacity: 1;
+  }
+  to {
+    transform: translate(calc(30 * var(--s)), calc(-70 * var(--s))) rotate(-46deg);
+    opacity: 0;
+  }
+}
+
+@keyframes sb-unfold {
+  to {
+    transform: rotateX(180deg);
+  }
+}
+
+@keyframes sb-away {
+  to {
+    transform: translateY(calc(var(--sh) * -0.95)) rotate(-9deg);
+  }
+}
+
+@keyframes sb-gone {
+  to {
+    opacity: 0;
+  }
+}
+
+/* ── sections: taped notes ── */
+
+.t-scrapbook .inv-sec {
+  margin: 38px 20px;
+  padding: 48px 24px 40px;
+  background: var(--soft);
+  box-shadow:
+    0 1px 1px var(--shade-1),
+    0 12px 22px -14px var(--shade-2);
+  rotate: -1deg;
+}
+
+.t-scrapbook .inv-sec:nth-of-type(even) {
+  rotate: 0.9deg;
+}
+
+.t-scrapbook .inv-sec:nth-of-type(3n) {
+  background: var(--ruled), var(--soft);
+  background-position: 0 14px;
+}
+
+.t-scrapbook .inv-sec:nth-of-type(3n + 1) {
+  background:
+    radial-gradient(circle, color-mix(in srgb, var(--ink) 15%, transparent) 1px, transparent 1.5px) 0 0 / 18px 18px,
+    var(--soft);
+}
+
+.t-scrapbook .inv-sec::before {
+  content: "";
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  width: 104px;
+  height: 28px;
+  background: var(--tape);
+  translate: -50% 0;
+  rotate: -3deg;
+  -webkit-mask: var(--tape-mask) 0 0 / 100% 100% no-repeat;
+  mask: var(--tape-mask) 0 0 / 100% 100% no-repeat;
+}
+
+.t-scrapbook .inv-sec:nth-of-type(even)::before {
+  left: 74%;
+  rotate: 6deg;
+}
+
+.t-scrapbook .inv-sec:nth-of-type(3n)::before {
+  left: 24%;
+  rotate: -8deg;
+}
+
+.t-scrapbook .inv-divider {
+  padding: 0;
+}
+
+.t-scrapbook .sb-divider {
+  width: 180px;
+  height: 27px;
+  overflow: visible;
+}
+
+.t-scrapbook .inv-h {
+  gap: 4px;
+  margin-bottom: 24px;
+}
+
+.t-scrapbook .inv-eyebrow {
+  font: 800 11px/1.3 var(--f-body);
+  letter-spacing: 0.2em;
+}
+
+.t-scrapbook .inv-title {
+  font: 700 42px/1.02 var(--f-display);
+  rotate: -1.5deg;
+}
+
+.t-scrapbook .sb-orn {
+  display: block;
+  width: 104px;
+  height: 13px;
+  overflow: visible;
+  stroke: var(--accent);
+  stroke-width: 2.6;
+  stroke-linecap: round;
+}
+
+/* invite */
+.t-scrapbook .inv-hosts {
+  font: 600 26px/1.25 var(--f-display);
+}
+
+.t-scrapbook :is(.inv-hosts-amp, .inv-people-amp) {
+  font: 700 28px/1.2 var(--f-display);
+  color: var(--accent);
+}
+
+.t-scrapbook .inv-pname {
+  font: 400 27px/1.7 var(--f-names);
+}
+
+.t-scrapbook .inv-pline {
+  font-weight: 600;
+}
+
+.t-scrapbook .inv-milestone {
+  display: inline-block;
+  padding: 2px 22px 6px;
+  border: 2.5px solid var(--accent);
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  font: 700 50px/1.05 var(--f-display);
+  rotate: -3deg;
+}
+
+.t-scrapbook .inv-message {
+  font-size: 16.5px;
+}
+
+/* countdown: hand-drawn boxes */
+.t-scrapbook .inv-cd-unit {
+  padding: 14px 4px 10px;
+  border: 2px solid var(--ink);
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  background: none;
+}
+
+.t-scrapbook .inv-cd-unit:nth-child(even) {
+  border-radius: 15px 225px 15px 255px / 225px 15px 255px 15px;
+  rotate: 2deg;
+}
+
+.t-scrapbook .inv-cd-unit:nth-child(odd) {
+  rotate: -1.5deg;
+}
+
+.t-scrapbook .inv-cd-unit b {
+  font: 700 40px/0.9 var(--f-display);
+}
+
+.t-scrapbook .inv-cd-unit span {
+  font: 800 9.5px/1 var(--f-body);
+  letter-spacing: 0.12em;
+}
+
+.t-scrapbook .inv-cd-done {
+  font: 700 32px/1.2 var(--f-display);
+}
+
+/* events */
+.t-scrapbook .inv-ev {
+  border: 2px dashed color-mix(in srgb, var(--ink) 34%, transparent);
+  border-radius: 14px 4px 16px 6px;
+  background: none;
+}
+
+.t-scrapbook :is(.inv-ev-weekday, .inv-ev-month) {
+  font: 800 11px/1.3 var(--f-body);
+  letter-spacing: 0.18em;
+}
+
+.t-scrapbook .inv-ev-day {
+  font: 700 76px/0.85 var(--f-display);
+}
+
+.t-scrapbook .inv-ev-title {
+  font: 700 32px/1.05 var(--f-display);
+}
+
+.t-scrapbook .inv-ev-time {
+  font: 700 16px var(--f-body);
+}
+
+.t-scrapbook .inv-venue-name {
+  font: 700 28px/1.1 var(--f-display);
+}
+
+/* the map is a polaroid too */
+.t-scrapbook .inv-map {
+  margin-top: 18px;
+  padding: 9px 9px 34px;
+  border: 0;
+  border-radius: 0;
+  background: color-mix(in srgb, var(--bg) 25%, var(--soft));
+  box-shadow:
+    0 1px 1px var(--shade-1),
+    0 10px 18px -10px var(--shade-2);
+  rotate: 1.5deg;
+}
+
+/* hand-drawn buttons */
+.t-scrapbook .inv-btn {
+  min-height: 44px;
+  padding: 8px 20px 10px;
+  border: 2px solid var(--ink);
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  background: none;
+  color: var(--ink);
+  font: 700 21px/1 var(--f-display);
+  letter-spacing: 0;
+}
+
+.t-scrapbook .inv-btn:nth-child(even) {
+  border-radius: 15px 225px 15px 255px / 225px 15px 255px 15px;
+}
+
+.t-scrapbook .inv-btn.is-primary {
+  border-color: var(--ink);
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.t-scrapbook .inv-btn svg {
+  stroke-width: 2;
+}
+
+.t-scrapbook .inv-cal-menu {
+  border: 2px solid var(--ink);
+  border-radius: 16px 6px 18px 8px;
+  background: var(--soft);
+}
+
+/* programme */
+.t-scrapbook .inv-sched li {
+  align-items: baseline;
+  border-bottom: 2px dashed color-mix(in srgb, var(--ink) 28%, transparent);
+}
+
+.t-scrapbook .inv-sched time {
+  font: 700 24px/1 var(--f-display);
+}
+
+/* dress, contacts, prayer, gifts */
+.t-scrapbook .inv-dress-note,
+.t-scrapbook .inv-gifts-note {
+  font-size: 16px;
+}
+
+.t-scrapbook .inv-swatches i {
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  box-shadow: 0 0 0 3px var(--soft), 0 0 0 5px var(--ink);
+}
+
+.t-scrapbook .inv-contact-name {
+  font: 700 28px/1.2 var(--f-display);
+}
+
+.t-scrapbook .inv-prayer-text {
+  font: 600 22px/1.35 var(--f-display);
+  font-style: normal;
+}
+
+/* closing */
+.t-scrapbook .inv-closing {
+  margin-bottom: 30px;
+}
+
+.t-scrapbook .inv-closing-text {
+  font: 700 34px/1.1 var(--f-display);
+}
+
+.t-scrapbook .inv-closing-names {
+  margin-top: 14px !important;
+  font-size: 32px;
+  line-height: 1.7;
+}
+
+.t-scrapbook .inv-closing-names .inv-amp {
+  margin: 0 0.4em 0 0.2em;
+  font: 700 32px/1 var(--f-display);
+}
+
+.t-scrapbook .inv-closing-meta {
+  font-weight: 800;
+}

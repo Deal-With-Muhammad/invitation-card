@@ -1,0 +1,687 @@
+/* Songket: gold thread woven into silk. The hero is always 390 phone px wide, so the
+   kepala kain bands are one 390 × 120 drawing (flipped for the bottom). Bunga tabur
+   and the weave are CSS masks and gradients, so every palette colours them. */
+
+.inv.t-songket {
+  --line: color-mix(in srgb, var(--accent) 45%, transparent);
+  --card: color-mix(in srgb, var(--soft) 55%, var(--bg));
+  --sk-band-bg: color-mix(in srgb, var(--soft) 50%, var(--bg));
+  --sk-tabur: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56'%3E%3Cpath d='M14 7.21L15.96 10.09L14 12.96L12.04 10.09ZM14 15.04L15.96 17.91L14 20.79L12.04 17.91ZM10.09 12.04L12.96 14L10.09 15.96L7.21 14ZM17.91 12.04L20.79 14L17.91 15.96L15.04 14ZM14 12.8L15.2 14L14 15.2L12.8 14ZM42 37.6L43.6 42L42 46.4L40.4 42ZM42 40.4L46.4 42L42 43.6L37.6 42Z'/%3E%3Ccircle cx='9' cy='9' r='.8'/%3E%3Ccircle cx='19' cy='9' r='.8'/%3E%3Ccircle cx='9' cy='19' r='.8'/%3E%3Ccircle cx='19' cy='19' r='.8'/%3E%3C/svg%3E");
+  --sk-vb: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='36'%3E%3Cpath d='M1 0V36M70 0V36' stroke='%23000' stroke-width='2' fill='none'/%3E%3Cpath d='M5 0V36M66 0V36M36 0V36' stroke='%23000' stroke-width='.7' fill='none'/%3E%3Cpath d='M7 0L17 9L7 18ZM7 18L17 27L7 36ZM64 0L54 9L64 18ZM64 18L54 27L64 36Z'/%3E%3Cpath d='M36 0L44 9L36 18L28 9Z' fill='none' stroke='%23000' stroke-width='1'/%3E%3Cpath d='M36 5L39 9L36 13L33 9ZM36 20.51L37.87 23.26L36 26.01L34.13 23.26ZM36 27.99L37.87 30.74L36 33.49L34.13 30.74ZM32.26 25.13L35.01 27L32.26 28.87L29.51 27ZM39.74 25.13L42.49 27L39.74 28.87L36.99 27ZM24 24.8L25.6 27L24 29.2L22.4 27ZM48 24.8L49.6 27L48 29.2L46.4 27Z'/%3E%3C/svg%3E");
+  --sk-tri: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='10'%3E%3Cpath d='M1 10L6 1L11 10Z'/%3E%3C/svg%3E");
+}
+
+/* ── backdrop: the woven ground and scattered bunga ── */
+
+.sk-weave,
+.sk-tabur {
+  position: absolute;
+  inset: 0;
+}
+
+.sk-weave {
+  background:
+    repeating-linear-gradient(0deg, color-mix(in srgb, var(--ink) 3.5%, transparent) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(90deg, color-mix(in srgb, var(--soft) 30%, transparent) 0 1px, transparent 1px 4px);
+}
+
+.sk-tabur {
+  background: var(--accent);
+  opacity: 0.55;
+  -webkit-mask: var(--sk-tabur) 0 0 / 56px 56px repeat;
+  mask: var(--sk-tabur) 0 0 / 56px 56px repeat;
+}
+
+/* ── shared strokes ── */
+
+.t-songket :is(.sk-band, .sk-medal, .sk-shoots, .sk-orn) {
+  color: var(--accent);
+  overflow: visible;
+}
+
+.t-songket .sk-line {
+  stroke: currentColor;
+  stroke-width: 1.3;
+  stroke-linejoin: round;
+}
+
+.t-songket .sk-bold {
+  stroke-width: 2.4;
+}
+
+.t-songket .sk-thin {
+  stroke: currentColor;
+  stroke-width: 0.8;
+  opacity: 0.85;
+}
+
+.t-songket .sk-fill {
+  fill: currentColor;
+}
+
+.t-songket .sk-petal {
+  opacity: 0.9;
+}
+
+.t-songket .sk-medal-bg {
+  fill: var(--sk-band-bg);
+}
+
+/* ── hero ── */
+
+.sk-hero {
+  position: relative;
+  height: var(--sh);
+}
+
+.sk-clear {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 72% 40% at 50% 50%, color-mix(in srgb, var(--bg) 88%, transparent) 30%, transparent 100%);
+}
+
+.sk-band {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: calc(120 * var(--u));
+  background: var(--sk-band-bg);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+.sk-band-t {
+  top: 0;
+}
+
+.sk-band-b {
+  bottom: 0;
+  scale: 1 -1;
+}
+
+.sk-tepi {
+  position: absolute;
+  top: calc(120 * var(--u));
+  bottom: calc(120 * var(--u));
+  width: calc(11 * var(--u));
+  background: linear-gradient(
+    90deg,
+    var(--accent) 0 calc(1.6 * var(--u)),
+    transparent calc(1.6 * var(--u)) calc(4 * var(--u)),
+    color-mix(in srgb, var(--accent) 70%, transparent) calc(4 * var(--u)) calc(4.8 * var(--u)),
+    transparent calc(4.8 * var(--u)) calc(7.6 * var(--u)),
+    color-mix(in srgb, var(--accent) 70%, transparent) calc(7.6 * var(--u)) calc(8.4 * var(--u)),
+    transparent calc(8.4 * var(--u))
+  );
+}
+
+.sk-tepi-l {
+  left: calc(8 * var(--u));
+}
+
+.sk-tepi-r {
+  right: calc(8 * var(--u));
+  scale: -1 1;
+}
+
+.sk-body {
+  position: absolute;
+  inset: calc(126 * var(--u)) calc(34 * var(--u));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: calc(9 * var(--u));
+  text-align: center;
+  container-type: inline-size;
+}
+
+.sk-bless .inv-bism {
+  width: calc(132 * var(--u));
+}
+
+.sk-bless .inv-bism-text {
+  font-size: calc(22 * var(--u));
+}
+
+.sk-crest {
+  width: calc(50 * var(--u));
+  height: calc(50 * var(--u));
+}
+
+.sk-title {
+  font: 400 calc(12.5 * var(--u)) / 1.5 var(--f-display);
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--ink) 88%, transparent);
+  text-wrap: balance;
+}
+
+.sk-names {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: min(calc(60 * var(--u)), calc(100cqi / (var(--len) * 0.44)));
+  line-height: 1.06;
+  color: var(--accent);
+  overflow-wrap: anywhere;
+}
+
+.sk-names:not(:has(.inv-amp)) {
+  font-size: min(calc(70 * var(--u)), calc(100cqi / (var(--len) * 0.44)));
+}
+
+.sk-names .inv-amp {
+  font: italic 400 calc(23 * var(--u)) / 1.1 var(--f-display);
+  color: var(--ink);
+}
+
+.sk-milestone {
+  font: italic 400 calc(30 * var(--u)) / 1.1 var(--f-display);
+  color: var(--ink);
+}
+
+.sk-rule {
+  width: calc(150 * var(--u));
+  height: auto;
+  margin-block: calc(2 * var(--u));
+}
+
+.sk-when {
+  display: grid;
+  justify-items: center;
+  gap: calc(3 * var(--u));
+  font: 500 calc(10 * var(--u)) / 1.5 var(--f-body);
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.sk-when strong {
+  font: 400 calc(20 * var(--u)) / 1.25 var(--f-display);
+  letter-spacing: 0.01em;
+  text-transform: none;
+  color: var(--ink);
+}
+
+.sk-venue {
+  font: italic 400 calc(15 * var(--u)) / 1.35 var(--f-display);
+  opacity: 0.88;
+  max-width: 26ch;
+  text-wrap: balance;
+}
+
+.inv[data-phase="opening"] :is(.sk-a1, .sk-a2, .sk-a3, .sk-a4, .sk-a5) {
+  animation: sk-rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.inv[data-phase="opening"] .sk-a1 { animation-delay: 0.75s; }
+.inv[data-phase="opening"] .sk-a2 { animation-delay: 0.9s; }
+.inv[data-phase="opening"] .sk-a3 { animation-delay: 1.05s; }
+.inv[data-phase="opening"] .sk-a4 { animation-delay: 1.2s; }
+.inv[data-phase="opening"] .sk-a5 { animation-delay: 1.3s; }
+
+@keyframes sk-rise {
+  from {
+    opacity: 0;
+    transform: translateY(calc(12 * var(--u)));
+  }
+}
+
+/* ── cover: the cloth in two halves ── */
+
+.sk-cover {
+  position: absolute;
+  inset: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.sk-stage {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: min(100%, 480px);
+  height: var(--sh);
+  translate: -50% 0;
+}
+
+.sk-panel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: calc(50% + 0.5px);
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.sk-panel-l {
+  left: 0;
+  transform-origin: 0 50%;
+}
+
+.sk-panel-r {
+  right: 0;
+  transform-origin: 100% 50%;
+}
+
+.sk-cloth {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: calc(200% - 1px);
+}
+
+.sk-panel-l .sk-cloth {
+  left: 0;
+}
+
+.sk-panel-r .sk-cloth {
+  right: 0;
+}
+
+.sk-vband {
+  position: absolute;
+  top: calc(120 * var(--u));
+  bottom: calc(120 * var(--u));
+  left: 50%;
+  width: calc(72 * var(--u));
+  translate: -50% 0;
+  background: color-mix(in srgb, var(--accent) 14%, var(--sk-band-bg));
+}
+
+.sk-vband::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  -webkit-mask: var(--sk-vb) 50% 0 / calc(72 * var(--u)) calc(36 * var(--u)) repeat-y;
+  mask: var(--sk-vb) 50% 0 / calc(72 * var(--u)) calc(36 * var(--u)) repeat-y;
+}
+
+.sk-pleats {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: repeating-linear-gradient(90deg, transparent 0, color-mix(in srgb, var(--bg) 70%, transparent) calc(12 * var(--u)), transparent calc(15 * var(--u)), color-mix(in srgb, var(--ink) 10%, transparent) calc(21 * var(--u)), transparent calc(28 * var(--u)));
+}
+
+.sk-cmedal {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: calc(128 * var(--u));
+  aspect-ratio: 1;
+  translate: -50% -50%;
+}
+
+.sk-cmedal .sk-medal {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 calc(4 * var(--u)) calc(8 * var(--u)) color-mix(in srgb, var(--bg) 70%, transparent));
+}
+
+.sk-ini {
+  position: relative;
+  font: 400 calc(25 * var(--u)) / 1 var(--f-names);
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.sk-ini i {
+  font: italic 400 0.6em var(--f-display);
+  color: var(--ink);
+  margin: 0 0.12em;
+}
+
+.sk-tap {
+  position: absolute;
+  left: 50%;
+  bottom: calc(150 * var(--u));
+  z-index: 2;
+  translate: -50% 0;
+  padding: calc(8 * var(--u)) calc(18 * var(--u));
+  background: var(--sk-band-bg);
+  box-shadow:
+    inset 0 0 0 1px var(--accent),
+    inset 0 0 0 3px var(--sk-band-bg),
+    inset 0 0 0 4px color-mix(in srgb, var(--accent) 50%, transparent);
+  font: 500 calc(10 * var(--u)) / 1 var(--f-body);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.inv:is([data-phase="closed"], [data-phase="opening"]) .sk-cmedal .sk-medal {
+  animation: sk-turn 9s linear infinite;
+}
+
+@keyframes sk-turn {
+  to {
+    rotate: 90deg;
+  }
+}
+
+.inv[data-phase="opening"] .sk-cmedal {
+  animation: sk-medal-out 0.5s cubic-bezier(0.5, 0, 0.75, 0) both;
+}
+
+.inv[data-phase="opening"] .sk-tap {
+  animation: sk-fade-out 0.3s ease both;
+}
+
+.inv[data-phase="opening"] .sk-panel-l {
+  animation: sk-part-l 1.9s 0.15s both;
+}
+
+.inv[data-phase="opening"] .sk-panel-r {
+  animation: sk-part-r 1.9s 0.15s both;
+}
+
+.inv[data-phase="opening"] .sk-pleats {
+  animation: sk-pleats 1.9s 0.15s both;
+}
+
+@keyframes sk-medal-out {
+  to {
+    transform: rotate(45deg) scale(0.6);
+    opacity: 0;
+  }
+}
+
+@keyframes sk-part-l {
+  0% {
+    transform: none;
+    animation-timing-function: cubic-bezier(0.55, 0, 0.3, 1);
+  }
+  62% {
+    transform: translateX(-16%) scaleX(0.4);
+    opacity: 1;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+  }
+  100% {
+    transform: translateX(-46%) scaleX(0.1);
+    opacity: 0;
+  }
+}
+
+@keyframes sk-part-r {
+  0% {
+    transform: none;
+    animation-timing-function: cubic-bezier(0.55, 0, 0.3, 1);
+  }
+  62% {
+    transform: translateX(16%) scaleX(0.4);
+    opacity: 1;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+  }
+  100% {
+    transform: translateX(46%) scaleX(0.1);
+    opacity: 0;
+  }
+}
+
+@keyframes sk-pleats {
+  0% {
+    opacity: 0;
+  }
+  45%,
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes sk-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+/* ── sections: cards edged with songket stripes ── */
+
+.t-songket .inv-divider {
+  padding: 16px 0;
+}
+
+.t-songket .sk-divider {
+  width: 160px;
+  height: auto;
+}
+
+.t-songket .sk-divider.is-flip {
+  scale: 1 -1;
+}
+
+.t-songket .sk-orn {
+  width: 80px;
+  height: 14px;
+}
+
+.t-songket .inv-sec {
+  margin: 0 14px;
+  padding: 64px 26px 60px;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 50%, var(--card) 40%, transparent 100%),
+    var(--card);
+  box-shadow:
+    inset 0 0 0 2px var(--accent),
+    inset 0 0 0 4px var(--card),
+    inset 0 0 0 5px var(--accent),
+    inset 0 0 0 7px var(--card),
+    inset 0 0 0 7.8px color-mix(in srgb, var(--accent) 55%, transparent);
+}
+
+.t-songket .inv-sec::before,
+.t-songket .inv-sec::after {
+  content: "";
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  height: 10px;
+  background: var(--accent);
+  opacity: 0.85;
+  pointer-events: none;
+  -webkit-mask: var(--sk-tri) 50% 0 / 12px 10px repeat-x;
+  mask: var(--sk-tri) 50% 0 / 12px 10px repeat-x;
+}
+
+.t-songket .inv-sec::before {
+  top: 12px;
+  scale: 1 -1;
+}
+
+.t-songket .inv-sec::after {
+  bottom: 12px;
+}
+
+.t-songket .inv-closing {
+  margin-bottom: 22px;
+}
+
+.t-songket .inv-eyebrow {
+  font: 500 10.5px/1.4 var(--f-body);
+  letter-spacing: 0.3em;
+}
+
+.t-songket .inv-title {
+  font: 400 31px/1.2 var(--f-display);
+}
+
+.t-songket .inv-salam {
+  font-size: 23px;
+}
+
+.t-songket .inv-hosts {
+  font: 400 18px/1.5 var(--f-display);
+}
+
+.t-songket .inv-line {
+  font: italic 400 16px/1.6 var(--f-display);
+}
+
+.t-songket .inv-pname {
+  font: 400 42px/1.2 var(--f-names);
+  color: var(--accent);
+}
+
+.t-songket .inv-pline {
+  font-size: 12.5px;
+  letter-spacing: 0.05em;
+}
+
+.t-songket .inv-people-amp,
+.t-songket .inv-hosts-amp {
+  font: italic 400 22px/1.4 var(--f-display);
+  color: var(--ink);
+}
+
+.t-songket .inv-milestone {
+  font: italic 400 40px/1.1 var(--f-display);
+}
+
+.t-songket .inv-message {
+  font: italic 400 17px/1.65 var(--f-display);
+}
+
+.t-songket .inv-cd-unit {
+  border-radius: 0;
+  border: 0;
+  background: var(--sk-band-bg);
+  box-shadow: inset 0 0 0 1px var(--accent), inset 0 0 0 3px var(--sk-band-bg), inset 0 0 0 4px color-mix(in srgb, var(--accent) 45%, transparent);
+  padding: 16px 2px 13px;
+}
+
+.t-songket .inv-cd-unit b {
+  font: 400 31px/1 var(--f-display);
+  color: var(--accent);
+}
+
+.t-songket .inv-cd-unit span {
+  font-size: 9.5px;
+  letter-spacing: 0.18em;
+}
+
+.t-songket .inv-events.is-many .inv-ev {
+  border: 0;
+  border-top: 1px solid var(--line);
+  border-radius: 0;
+  background: none;
+  padding: 26px 4px 6px;
+}
+
+.t-songket .inv-events.is-many .inv-ev:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.t-songket .inv-ev-title {
+  font: 400 24px/1.25 var(--f-display);
+}
+
+.t-songket .inv-ev-weekday,
+.t-songket .inv-ev-month {
+  font-size: 11px;
+  letter-spacing: 0.26em;
+}
+
+.t-songket .inv-ev-day {
+  font: 400 60px/1 var(--f-display);
+}
+
+.t-songket .inv-venue-name {
+  font: 400 21px/1.3 var(--f-display);
+}
+
+.t-songket .inv-ev-shared {
+  padding-top: 30px;
+  border-top: 1px solid var(--line);
+}
+
+.t-songket .inv-map {
+  border-radius: 0;
+  border: 0;
+  padding: 5px;
+  background: var(--card);
+  box-shadow: inset 0 0 0 1px var(--accent), inset 0 0 0 3px var(--card), inset 0 0 0 4px color-mix(in srgb, var(--accent) 45%, transparent);
+}
+
+.t-songket .inv-btn {
+  min-height: 44px;
+  padding: 11px 20px;
+  border-radius: 2px;
+  border: 1px solid var(--accent);
+  background: transparent;
+  color: var(--accent);
+  font: 500 11.5px/1 var(--f-body);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.t-songket .inv-btn.is-primary {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.t-songket .inv-btn svg {
+  width: 15px;
+  height: 15px;
+}
+
+.t-songket .inv-cal-menu {
+  border-radius: 2px;
+  background: var(--card);
+}
+
+.t-songket .inv-sched li {
+  grid-template-columns: 96px 1fr;
+  border-bottom: 1px solid var(--line);
+}
+
+.t-songket .inv-sched li:last-child {
+  border-bottom: 0;
+}
+
+.t-songket .inv-sched time {
+  font: italic 400 16px/1.5 var(--f-display);
+}
+
+.t-songket .inv-dress-note,
+.t-songket .inv-gifts-note,
+.t-songket .inv-prayer-text {
+  font: italic 400 16.5px/1.6 var(--f-display);
+}
+
+.t-songket .inv-swatches i {
+  border-radius: 0;
+  rotate: 45deg;
+  width: 30px;
+  height: 30px;
+  margin: 4px;
+  box-shadow: 0 0 0 3px var(--card), 0 0 0 4px var(--accent);
+}
+
+.t-songket .inv-contact-name {
+  font: 400 20px/1.3 var(--f-display);
+}
+
+.t-songket .inv-closing-text {
+  font: italic 400 21px/1.4 var(--f-display);
+}
+
+.t-songket .inv-closing-names {
+  font-size: 50px;
+}
+
+.t-songket .inv-closing-names .inv-amp {
+  font: italic 400 24px var(--f-display);
+  color: var(--ink);
+}
+
+.inv:is([lang="ur"], [lang="ar"], [lang="fa"], [lang="hi"], [lang="bn"]) :is(.sk-title, .sk-when, .sk-tap) {
+  letter-spacing: 0;
+}

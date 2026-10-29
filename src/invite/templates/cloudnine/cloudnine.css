@@ -1,0 +1,635 @@
+/* Cloud Nine: a soft sky, a felt mobile on thread and layered paper clouds. The
+   hero is sized in --k, which follows the phone width but shrinks on short
+   screens so nothing overflows. */
+
+.t-cloudnine {
+  --line: color-mix(in srgb, var(--accent) 30%, transparent);
+  --sky-top: color-mix(in srgb, var(--soft) 72%, var(--accent));
+  --sky-low: color-mix(in srgb, var(--soft) 70%, var(--bg));
+  --c1: var(--bg);
+  --c2: color-mix(in srgb, var(--soft) 55%, var(--bg));
+  --c3: color-mix(in srgb, var(--soft) 84%, var(--accent));
+  --shade: color-mix(in srgb, var(--accent) 36%, var(--soft));
+  --f1: color-mix(in srgb, var(--accent) 88%, var(--bg));
+  --f2: color-mix(in srgb, var(--accent) 55%, var(--bg));
+  --fm: color-mix(in srgb, var(--accent) 52%, var(--bg));
+  --thread: color-mix(in srgb, var(--ink) 34%, transparent);
+  --lift: 0 16px 34px -22px color-mix(in srgb, var(--ink) 36%, transparent),
+    0 2px 6px -3px color-mix(in srgb, var(--ink) 12%, transparent);
+}
+
+/* ── paper and felt ── */
+
+.t-cloudnine .cn-cloud {
+  stroke: none;
+}
+
+.t-cloudnine .cn-c1 { fill: var(--c1); }
+.t-cloudnine .cn-c2 { fill: var(--c2); }
+.t-cloudnine .cn-c3 { fill: var(--c3); }
+
+.t-cloudnine .cn-shade {
+  fill: var(--shade);
+  fill-opacity: 0.75;
+}
+
+.t-cloudnine .cn-felt {
+  stroke-linejoin: round;
+}
+
+.t-cloudnine .cn-f1 { fill: var(--f1); stroke: var(--f1); }
+.t-cloudnine .cn-f2 { fill: var(--f2); stroke: var(--f2); }
+.t-cloudnine .cn-fm { fill: var(--fm); stroke: var(--fm); }
+
+.t-cloudnine .cn-stitch {
+  fill: none;
+  stroke: var(--bg);
+  stroke-width: 0.9;
+  stroke-dasharray: 2.1 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-opacity: 0.95;
+}
+
+.t-cloudnine .cn-twinkle {
+  fill: var(--f2);
+}
+
+.t-cloudnine .cn-thread {
+  stroke: var(--thread);
+  stroke-width: 0.8;
+}
+
+.t-cloudnine .cn-knot,
+.t-cloudnine .cn-dotfill {
+  fill: var(--thread);
+}
+
+.t-cloudnine .cn-dotfill {
+  fill: var(--f2);
+}
+
+/* ── backdrop ── */
+
+/* the sky is the backdrop, so the hero melts into it on a desktop too */
+.cn-bd-sky {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, var(--sky-top), var(--sky-low) 62%, var(--c2));
+}
+
+.cn-bd-stars {
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  opacity: 0.32;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='260'%3E%3Cg fill='%23000'%3E%3Cpath d='M40 30l1.6 3.4 3.7.5-2.7 2.6.7 3.7-3.3-1.8-3.3 1.8.7-3.7-2.7-2.6 3.7-.5z'/%3E%3Cpath d='M170 150l1.2 2.5 2.8.4-2 1.9.5 2.8-2.5-1.3-2.5 1.3.5-2.8-2-1.9 2.8-.4z'/%3E%3Ccircle cx='120' cy='60' r='1.2'/%3E%3Ccircle cx='196' cy='20' r='.9'/%3E%3Ccircle cx='24' cy='170' r='1'/%3E%3Ccircle cx='90' cy='220' r='1.3'/%3E%3Ccircle cx='150' cy='240' r='.8'/%3E%3C/g%3E%3C/svg%3E") 0 0 / 220px 260px repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='260'%3E%3Cg fill='%23000'%3E%3Cpath d='M40 30l1.6 3.4 3.7.5-2.7 2.6.7 3.7-3.3-1.8-3.3 1.8.7-3.7-2.7-2.6 3.7-.5z'/%3E%3Cpath d='M170 150l1.2 2.5 2.8.4-2 1.9.5 2.8-2.5-1.3-2.5 1.3.5-2.8-2-1.9 2.8-.4z'/%3E%3Ccircle cx='120' cy='60' r='1.2'/%3E%3Ccircle cx='196' cy='20' r='.9'/%3E%3Ccircle cx='24' cy='170' r='1'/%3E%3Ccircle cx='90' cy='220' r='1.3'/%3E%3Ccircle cx='150' cy='240' r='.8'/%3E%3C/g%3E%3C/svg%3E") 0 0 / 220px 260px repeat;
+}
+
+/* ── hero ── */
+
+.cn-hero {
+  --k: min(var(--u), calc(var(--sh) / 800));
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: var(--sh);
+  overflow: hidden;
+}
+
+
+
+.cn-mobile {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: calc(390 * var(--k));
+  aspect-ratio: 390 / 230;
+  translate: -50% 0;
+  overflow: visible;
+}
+
+.inv[dir="rtl"] .cn-mobile {
+  scale: -1 1;
+}
+
+.cn-hang {
+  transform-box: view-box;
+  filter: drop-shadow(0 3px 2.5px color-mix(in srgb, var(--ink) 16%, transparent));
+}
+
+.cn-drift {
+  position: absolute;
+  overflow: visible;
+}
+
+.cn-drift-l {
+  top: 36%;
+  left: calc(-46 * var(--u));
+  width: calc(112 * var(--k));
+}
+
+.cn-drift-r {
+  top: 60%;
+  right: calc(-40 * var(--u));
+  width: calc(98 * var(--k));
+}
+
+.cn-in {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: calc(12 * var(--k));
+  padding: calc(150 * var(--k)) calc(44 * var(--u)) calc(6 * var(--k));
+  text-align: center;
+  container-type: inline-size;
+}
+
+.cn-in .inv-bism {
+  width: calc(168 * var(--k));
+}
+
+.cn-in .inv-bism-text {
+  font-size: calc(22 * var(--k));
+}
+
+.cn-title {
+  font: 400 calc(18 * var(--k)) / 1.35 var(--f-display);
+  letter-spacing: 0.02em;
+  color: color-mix(in srgb, var(--accent) 70%, var(--ink));
+}
+
+.cn-names {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: min(calc(68 * var(--k)), calc(100cqi / (var(--len) * 0.5)));
+  line-height: 1.12;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+.cn-names .inv-amp {
+  font: italic 300 0.4em / 1 var(--f-display);
+  color: var(--accent);
+}
+
+.cn-milestone {
+  font: 400 calc(40 * var(--k)) / 1.05 var(--f-display);
+  color: var(--accent);
+}
+
+.cn-rule {
+  display: block;
+  line-height: 0;
+}
+
+.cn-rule .cn-orn {
+  width: calc(60 * var(--k));
+  height: calc(18 * var(--k));
+}
+
+.cn-when {
+  display: grid;
+  gap: calc(4 * var(--k));
+  font: 700 calc(10.5 * var(--k)) / 1.5 var(--f-body);
+  letter-spacing: 0.26em;
+  text-indent: 0.26em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--ink) 72%, transparent);
+}
+
+.cn-when strong {
+  font: 400 calc(22 * var(--k)) / 1.2 var(--f-display);
+  letter-spacing: 0;
+  text-indent: 0;
+  text-transform: none;
+  color: var(--ink);
+}
+
+.cn-venue {
+  font: italic 400 calc(16 * var(--k)) / 1.3 var(--f-display);
+  opacity: 0.85;
+}
+
+.inv:is([lang="ur"], [lang="ar"], [lang="fa"]) :is(.cn-when, .cn-tap) {
+  letter-spacing: 0;
+  text-indent: 0;
+}
+
+/* Naskh and Nastaliq read smaller than Latin caps at the same size */
+.inv:is([lang="ur"], [lang="ar"], [lang="fa"]) .cn-when {
+  font-size: calc(13 * var(--k));
+}
+
+.inv:is([lang="ur"], [lang="ar"], [lang="fa"]) .cn-tap {
+  font-size: calc(13 * var(--u));
+}
+
+.cn-bank {
+  position: relative;
+  display: block;
+  flex: none;
+  width: 100%;
+  height: calc(196 * var(--k));
+  margin-top: calc(-24 * var(--k));
+  overflow: visible;
+}
+
+/* the mobile drops in and settles, the clouds rise, the words follow */
+.inv[data-phase="opening"] .cn-hang {
+  animation: cn-drop 1.1s calc(0.5s + var(--i) * 80ms) cubic-bezier(0.34, 1.4, 0.64, 1) both;
+}
+
+.inv[data-phase="opening"] .cn-layer {
+  animation: cn-rise 1.2s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.inv[data-phase="opening"] .cn-l3 { animation-delay: 0.35s; }
+.inv[data-phase="opening"] .cn-l2 { animation-delay: 0.45s; }
+.inv[data-phase="opening"] .cn-l1 { animation-delay: 0.55s; }
+
+.inv[data-phase="opening"] .cn-drift {
+  animation: cn-float-in 1.2s 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.inv[data-phase="opening"] .cn-drift-r {
+  --from: 1;
+}
+
+.inv[data-phase="opening"] :is(.cn-a1, .cn-a2, .cn-a3, .cn-a4, .cn-a5) {
+  animation: cn-up 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.inv[data-phase="opening"] .cn-a1 { animation-delay: 0.55s; }
+.inv[data-phase="opening"] .cn-a2 { animation-delay: 0.7s; }
+.inv[data-phase="opening"] .cn-a3 { animation-delay: 0.84s; }
+.inv[data-phase="opening"] .cn-a4 { animation-delay: 0.98s; }
+.inv[data-phase="opening"] .cn-a5 { animation-delay: 1.1s; }
+
+/* once open, the mobile turns gently in the air */
+.inv[data-phase="open"] .cn-hang {
+  animation: cn-sway var(--sway) calc(var(--i) * 0.35s) ease-in-out infinite;
+}
+
+@keyframes cn-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-60px) rotate(-5deg);
+  }
+}
+
+@keyframes cn-rise {
+  from {
+    transform: translateY(36px);
+  }
+}
+
+@keyframes cn-float-in {
+  from {
+    opacity: 0;
+    translate: calc((var(--from, -1)) * 30 * var(--u)) 0;
+  }
+}
+
+@keyframes cn-up {
+  from {
+    opacity: 0;
+    transform: translateY(calc(12 * var(--k)));
+  }
+}
+
+@keyframes cn-sway {
+  25% {
+    transform: rotate(1.8deg);
+  }
+  75% {
+    transform: rotate(-1.8deg);
+  }
+}
+
+/* ── cover: banks of cloud ── */
+
+.cn-cover {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.cn-cv-sky {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, var(--sky-top), var(--sky-low));
+}
+
+.cn-cv-stage {
+  position: relative;
+  width: min(100%, 480px);
+  height: 100%;
+  margin-inline: auto;
+}
+
+/* on a desktop the column has sky either side: let the cloud banks melt into it */
+@media (min-width: 520px) {
+  .cn-cv-stage {
+    -webkit-mask: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+    mask: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+  }
+}
+
+.cn-mass {
+  position: absolute;
+  height: auto;
+  aspect-ratio: 300 / 700;
+  overflow: visible;
+}
+
+.cn-mass-l {
+  left: -14%;
+}
+
+.cn-mass-r {
+  right: -14%;
+  scale: -1 1;
+}
+
+.cn-cv-hang {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  height: calc(50% + 30 * var(--u));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  translate: -50% 0;
+  transform-origin: 50% 0;
+}
+
+.cn-cv-thread {
+  flex: 1;
+  width: 1px;
+  background: var(--thread);
+}
+
+.cn-cv-moon {
+  width: calc(96 * var(--u));
+  height: calc(90 * var(--u));
+  margin-top: calc(-12 * var(--u));
+  overflow: visible;
+  filter: drop-shadow(0 calc(8 * var(--u)) calc(8 * var(--u)) color-mix(in srgb, var(--ink) 16%, transparent));
+}
+
+.cn-tap {
+  margin-top: calc(16 * var(--u));
+  padding: calc(10 * var(--u)) calc(18 * var(--u));
+  border-radius: 999px;
+  background: var(--bg);
+  box-shadow: var(--lift);
+  font: 700 calc(10.5 * var(--u)) / 1 var(--f-body);
+  letter-spacing: 0.26em;
+  text-indent: 0.26em;
+  text-transform: uppercase;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.inv[data-phase="closed"] .cn-cv-hang {
+  animation: cn-sway-cv 6.5s ease-in-out infinite;
+}
+
+.inv[data-phase="opening"] .cn-cv-hang {
+  animation: cn-lift 0.7s ease-in both;
+}
+
+.inv[data-phase="opening"] .cn-mass-l {
+  animation: cn-part-l var(--ms) var(--delay) cubic-bezier(0.45, 0, 0.25, 1) both;
+}
+
+.inv[data-phase="opening"] .cn-mass-r {
+  animation: cn-part-r var(--ms) var(--delay) cubic-bezier(0.45, 0, 0.25, 1) both;
+}
+
+.inv[data-phase="opening"] .cn-cv-sky {
+  animation: cn-fade 0.8s 0.5s ease both;
+}
+
+@keyframes cn-sway-cv {
+  25% {
+    transform: rotate(0.8deg);
+  }
+  75% {
+    transform: rotate(-0.8deg);
+  }
+}
+
+@keyframes cn-lift {
+  to {
+    opacity: 0;
+    translate: -50% -18%;
+  }
+}
+
+@keyframes cn-part-l {
+  to {
+    translate: -112% 3%;
+  }
+}
+
+@keyframes cn-part-r {
+  to {
+    translate: 112% -3%;
+  }
+}
+
+@keyframes cn-fade {
+  to {
+    opacity: 0;
+  }
+}
+
+/* ── sections ── */
+
+.t-cloudnine .inv-title {
+  font: 400 32px/1.18 var(--f-display);
+}
+
+.t-cloudnine .inv-eyebrow {
+  font-weight: 700;
+  letter-spacing: 0.24em;
+}
+
+.t-cloudnine .cn-orn {
+  display: block;
+  width: 60px;
+  height: 18px;
+  overflow: visible;
+}
+
+.t-cloudnine .inv-hosts {
+  font: italic 400 20px/1.45 var(--f-display);
+}
+
+.t-cloudnine :is(.inv-hosts-amp, .inv-people-amp) {
+  font-size: 30px;
+}
+
+.t-cloudnine .inv-pname {
+  font: 400 44px/1.25 var(--f-names);
+}
+
+.t-cloudnine .inv-pline {
+  font-size: 13px;
+}
+
+.t-cloudnine .inv-message {
+  font: italic 300 19px/1.6 var(--f-display);
+}
+
+.t-cloudnine .inv-cd {
+  gap: 6px;
+  filter: drop-shadow(0 10px 10px color-mix(in srgb, var(--ink) 13%, transparent));
+}
+
+.t-cloudnine .inv-cd-unit {
+  aspect-ratio: 100 / 84;
+  align-content: center;
+  gap: 2px;
+  padding: 24% 0 6%;
+  border: 0;
+  border-radius: 0;
+  background: var(--bg);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 84'%3E%3Cpath d='M17 82C8 82 2 76 2 67C2 58 9 51 18 51C16 37 27 27 40 29C44 15 57 8 70 12C81 15 88 26 86 37C94 39 98 47 98 56V67C98 76 91 82 82 82Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 84'%3E%3Cpath d='M17 82C8 82 2 76 2 67C2 58 9 51 18 51C16 37 27 27 40 29C44 15 57 8 70 12C81 15 88 26 86 37C94 39 98 47 98 56V67C98 76 91 82 82 82Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+}
+
+.t-cloudnine .inv-cd-unit b {
+  font-size: 26px;
+  color: var(--accent);
+}
+
+.t-cloudnine .inv-cd-unit span {
+  font-weight: 700;
+  font-size: 8.5px;
+  letter-spacing: 0.12em;
+}
+
+.t-cloudnine .inv-ev-day {
+  font-weight: 300;
+}
+
+.t-cloudnine .inv-ev-weekday,
+.t-cloudnine .inv-ev-month {
+  font-weight: 700;
+  font-size: 11px;
+}
+
+.t-cloudnine .inv-ev-title,
+.t-cloudnine .inv-venue-name {
+  font-style: italic;
+}
+
+.t-cloudnine .inv-events .inv-ev,
+.t-cloudnine .inv-ev-shared,
+.t-cloudnine .inv-closing {
+  border: 0;
+  border-radius: 30px;
+  background: var(--bg);
+  box-shadow: var(--lift);
+}
+
+.t-cloudnine .inv-events .inv-ev,
+.t-cloudnine .inv-events:not(.is-many) .inv-ev {
+  padding: 32px 22px 30px;
+  border-radius: 30px;
+  background: var(--bg);
+  box-shadow: var(--lift);
+}
+
+.t-cloudnine .inv-ev-shared {
+  padding: 30px 20px 28px;
+}
+
+.t-cloudnine .inv-map {
+  border: 0;
+  border-radius: 22px;
+}
+
+.t-cloudnine .inv-btn {
+  border: 0;
+  background: color-mix(in srgb, var(--soft) 78%, var(--bg));
+  box-shadow: 0 6px 14px -10px color-mix(in srgb, var(--ink) 40%, transparent);
+  font-weight: 700;
+  font-size: 13.5px;
+}
+
+.t-cloudnine .inv-btn.is-primary {
+  background: var(--accent);
+}
+
+.t-cloudnine .inv-sched {
+  padding: 8px 22px;
+  border-radius: 26px;
+  background: var(--bg);
+  box-shadow: var(--lift);
+}
+
+.t-cloudnine .inv-sched li:last-child {
+  border-bottom: 0;
+}
+
+.t-cloudnine .inv-sched time {
+  font: italic 400 17px/1.4 var(--f-display);
+}
+
+.t-cloudnine .inv-swatches i {
+  box-shadow: 0 0 0 3px var(--bg), 0 6px 12px -6px color-mix(in srgb, var(--ink) 40%, transparent);
+}
+
+.t-cloudnine .inv-prayer-text {
+  font: italic 300 19px/1.6 var(--f-display);
+}
+
+.t-cloudnine .inv-closing {
+  margin: 8px 20px 26px;
+  padding: 52px 24px 46px;
+  container-type: inline-size;
+}
+
+.t-cloudnine .inv-closing-text {
+  font-style: italic;
+}
+
+.t-cloudnine .inv-closing-names {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: min(50px, calc(100cqi / (var(--len) * 0.5)));
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.t-cloudnine .inv-closing-names .inv-amp {
+  font: italic 300 22px/1.3 var(--f-display);
+  margin: 0;
+}
+
+.t-cloudnine .inv-closing-meta {
+  text-wrap: balance;
+}
+
+.t-cloudnine .cn-divider {
+  width: 122px;
+  height: 38px;
+  overflow: visible;
+}
+
+.t-cloudnine .cn-hair {
+  stroke: var(--line);
+  stroke-width: 1;
+}
