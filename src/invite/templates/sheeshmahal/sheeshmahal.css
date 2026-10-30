@@ -1,0 +1,31 @@
+/* Sheesh Mahal (painted kit, filmed opening). */
+
+.t-sheeshmahal .pt-title {
+  font-family: var(--f-display);
+  font-size: calc(13 * var(--u));
+  letter-spacing: 0.24em;
+}
+
+.t-sheeshmahal .pt-names {
+  line-height: 1.1;
+}
+
+.t-sheeshmahal .pt-date {
+  font-family: var(--f-display);
+  font-size: calc(21 * var(--u));
+}
+
+.t-sheeshmahal .pt-text.has-glow::before {
+  inset: calc(-58 * var(--u)) calc(-62 * var(--u));
+}
+
+/* busy art behind the text: a stronger, wider glow */
+.t-sheeshmahal .pt-text.has-glow::before {
+  inset: calc(-70 * var(--u)) calc(-70 * var(--u));
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--bg) 92%, transparent),
+    color-mix(in srgb, var(--bg) 74%, transparent) 55%,
+    transparent
+  );
+}

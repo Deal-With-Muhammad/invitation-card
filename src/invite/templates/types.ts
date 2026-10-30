@@ -51,6 +51,8 @@ export type TemplateMeta = {
   keywords: string[];
   /** false: sample invitations for this design start without Bismillah and salam. */
   islamic?: boolean;
+  /** true: the design opens with a filmed video (the painted kit's "film" opening). */
+  filmed?: boolean;
 };
 
 export type HeroProps = { r: Resolved; phase: Phase; thumb?: boolean };

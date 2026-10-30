@@ -55,7 +55,7 @@ export function Gallery({ items, occasion, showFilters = true }: { items: Galler
                   <svg viewBox="0 0 24 24" className="size-3" aria-hidden>
                     <path d="M8 5.5v13l10.5-6.5z" fill="currentColor" />
                   </svg>
-                  Preview
+                  {meta.filmed ? "Filmed opening" : "Preview"}
                 </span>
               </div>
               <div className="mt-3 flex items-start justify-between gap-2">

@@ -952,6 +952,17 @@
   animation-delay: calc(80ms + var(--d, 0ms));
 }
 
+/* the glow behind the names comes up with them, not before */
+.inv[data-phase="open"].pk-open-film .pt-text.has-glow::before {
+  animation: pt-glow-in 900ms ease-out both;
+}
+
+@keyframes pt-glow-in {
+  from {
+    opacity: 0;
+  }
+}
+
 .inv[data-phase="opening"] .is-film {
   animation: pt-film-out var(--open) linear both;
 }

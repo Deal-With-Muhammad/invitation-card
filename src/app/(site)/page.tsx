@@ -15,7 +15,11 @@ const FAN = ["velvetrose", "petals", "peony", "jharokha", "marigold"];
 export default function Home() {
   const all = galleryItems();
   const fan = FAN.map((id) => all.find((it) => it.meta.id === id)).filter((it): it is GalleryItem => !!it);
-  const rows = GROUPS.map((g) => ({ ...g, items: all.filter((it) => groupOf(it.meta.defaultOccasion) === g.id) })).filter((g) => g.items.length);
+  const filmed = all.filter((it) => it.meta.filmed);
+  const rows = [
+    { id: "filmed", title: "Filmed openings", blurb: "Tap one and the card opens like a film, then your names appear.", items: filmed },
+    ...GROUPS.map((g) => ({ ...g, items: all.filter((it) => !it.meta.filmed && groupOf(it.meta.defaultOccasion) === g.id) })),
+  ].filter((g) => g.items.length);
 
   return (
     <main className="mx-auto max-w-6xl px-4 sm:px-6">
@@ -32,7 +36,7 @@ export default function Home() {
         ]}
         lede="Pick a design, add your names and venues, and send one link on WhatsApp. Guests tap it open, the music starts, and every function and map is inside."
         secondary={{ href: "#try", label: "Try it with your names" }}
-        links={rows.map((g) => ({ id: g.id, label: g.title.split(",")[0].split(" &")[0] }))}
+        links={rows.map((g) => ({ id: g.id, label: g.id === "filmed" ? "Filmed" : g.title.split(",")[0].split(" &")[0] }))}
       />
 
       {rows.map((g) => (

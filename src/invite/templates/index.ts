@@ -27,12 +27,28 @@ import { velvetrose } from "./velvetrose";
 import { wildflower } from "./wildflower";
 import { zardozi } from "./zardozi";
 import { zellige } from "./zellige";
+import { ghoonghat } from "./ghoonghat";
+import { doli } from "./doli";
+import { sheeshmahal } from "./sheeshmahal";
+import { hilal } from "./hilal";
+import { chandelier } from "./chandelier";
+import { mangni } from "./mangni";
+import { ringbox } from "./ringbox";
+import { bagh } from "./bagh";
+import { lanterns } from "./lanterns";
+import { aatishbazi } from "./aatishbazi";
+import { shamiana } from "./shamiana";
+import { mor } from "./mor";
+import { gulab } from "./gulab";
+import { aarsi } from "./aarsi";
+import { blushletter } from "./blushletter";
 import type { Template } from "./types";
 import { TEMPLATE_ORDER } from "@/lib/groups";
 
 const ALL: Template[] = [
   boarding, botanica, celestial, cloudnine, confetti, deco, editorial, envelope, filigree, gilded, jharokha, kashi, lace, marigold,
   muguet, openhouse, orchid, peony, petals, rosestudy, scrapbook, scroll, seaside, velvet, velvetrose, wildflower, zellige, haveli, zardozi,
+  ghoonghat, doli, sheeshmahal, hilal, chandelier, mangni, ringbox, bagh, lanterns, aatishbazi, shamiana, mor, gulab, aarsi, blushletter,
 ];
 
 // Gallery order: see TEMPLATE_ORDER (the wedding functions first).

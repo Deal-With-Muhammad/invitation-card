@@ -32,6 +32,9 @@ for (const id of list.split(",")) {
   mkdirSync(dir, { recursive: true });
   await send("Page.navigate", { url: `${base}/preview/${id}` });
   await sleep(4500); // fonts and art
+  // Filmed openings run ~6 s: keep recording until the names have risen in after them.
+  const openMs = (await send("Runtime.evaluate", { expression: `parseInt(getComputedStyle(document.querySelector(".pt-hero") ?? document.body).getPropertyValue("--open")) || 0`, returnByValue: true })).result?.result?.value ?? 0;
+  const after = Math.max(5200, openMs + 1500);
 
   const frames = [];
   const onFrame = (m) => {
@@ -43,18 +46,18 @@ for (const id of list.split(",")) {
   await send("Page.startScreencast", { format: "jpeg", quality: 82, maxWidth: 540, maxHeight: 960, everyNthFrame: 1 });
   await sleep(900); // the closed card
   for (const type of ["mousePressed", "mouseReleased"]) await send("Input.dispatchMouseEvent", { type, x: W / 2, y: H * 0.55, button: "left", clickCount: 1 });
-  await sleep(5200); // opening, then the hero
+  await sleep(after); // opening, then the hero
   await send("Page.stopScreencast");
   listeners.delete(onFrame);
 
-  // Frames arrive irregularly: write a concat list with real durations, capped to 6.2 s.
+  // Frames arrive irregularly: write a concat list with real durations, capped to the recording.
   let list = "ffconcat version 1.0\n";
   const t0 = frames[0]?.t ?? 0;
   frames.forEach((f, i) => {
     const file = `${tmp}/f${String(i).padStart(4, "0")}.jpg`;
     writeFileSync(file, Buffer.from(f.data, "base64"));
     const next = frames[i + 1]?.t ?? f.t + 0.5;
-    if (f.t - t0 > 6.2) return;
+    if (f.t - t0 > 1 + after / 1000) return;
     list += `file '${file}'\nduration ${Math.max(0.016, next - f.t).toFixed(3)}\n`;
   });
   writeFileSync(`${tmp}/list.txt`, list);

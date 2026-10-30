@@ -20,11 +20,14 @@ export default function TemplatesPage() {
   const all = galleryItems();
   const loved = MOST_LOVED.map((id) => all.find((it) => it.meta.id === id)).filter((it): it is GalleryItem => !!it);
   const rest = all.filter((it) => !MOST_LOVED.includes(it.meta.id));
-  const grouped = GROUPS.map((g) => ({ ...g, items: rest.filter((it) => groupOf(it.meta.defaultOccasion) === g.id) })).filter((g) => g.items.length);
+  const grouped = [
+    { id: "filmed", title: "Filmed openings", blurb: "Tap one and the card opens like a film, then your names appear.", items: all.filter((it) => it.meta.filmed) },
+    ...GROUPS.map((g) => ({ ...g, items: rest.filter((it) => !it.meta.filmed && groupOf(it.meta.defaultOccasion) === g.id) })),
+  ].filter((g) => g.items.length);
 
   return (
     <main className="mx-auto max-w-6xl px-4 sm:px-6">
-      <TemplatesHero count={CATALOG.length} items={loved} links={grouped.map((g) => ({ id: g.id, label: g.title.split(",")[0].split(" &")[0] }))} />
+      <TemplatesHero count={CATALOG.length} items={loved} links={grouped.map((g) => ({ id: g.id, label: g.id === "filmed" ? "Filmed" : g.title.split(",")[0].split(" &")[0] }))} />
 
 
       {grouped.map((g) => (

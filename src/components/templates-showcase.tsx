@@ -197,7 +197,7 @@ function SpotlightCard({ item }: { item: FanItem }) {
           <svg viewBox="0 0 24 24" className="size-3" aria-hidden>
             <path d="M8 5.5v13l10.5-6.5z" fill="currentColor" />
           </svg>
-          Preview
+          {meta.filmed ? "Filmed opening" : "Preview"}
         </span>
         <div className="pointer-events-none absolute inset-x-3 bottom-3 flex items-center justify-between gap-3 rounded-2xl bg-white/88 py-2.5 pr-2.5 pl-4 shadow-[0_8px_24px_-10px_rgb(0_0_0/0.35)] backdrop-blur-md">
           <div className="min-w-0">
