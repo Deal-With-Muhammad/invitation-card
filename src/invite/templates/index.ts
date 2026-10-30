@@ -8,6 +8,7 @@ import { editorial } from "./editorial";
 import { envelope } from "./envelope";
 import { filigree } from "./filigree";
 import { gilded } from "./gilded";
+import { haveli } from "./haveli";
 import { jharokha } from "./jharokha";
 import { kashi } from "./kashi";
 import { lace } from "./lace";
@@ -24,13 +25,14 @@ import { seaside } from "./seaside";
 import { velvet } from "./velvet";
 import { velvetrose } from "./velvetrose";
 import { wildflower } from "./wildflower";
+import { zardozi } from "./zardozi";
 import { zellige } from "./zellige";
 import type { Template } from "./types";
 import { TEMPLATE_ORDER } from "@/lib/groups";
 
 const ALL: Template[] = [
   boarding, botanica, celestial, cloudnine, confetti, deco, editorial, envelope, filigree, gilded, jharokha, kashi, lace, marigold,
-  muguet, openhouse, orchid, peony, petals, rosestudy, scrapbook, scroll, seaside, velvet, velvetrose, wildflower, zellige,
+  muguet, openhouse, orchid, peony, petals, rosestudy, scrapbook, scroll, seaside, velvet, velvetrose, wildflower, zellige, haveli, zardozi,
 ];
 
 // Gallery order: see TEMPLATE_ORDER (the wedding functions first).

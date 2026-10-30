@@ -43,7 +43,10 @@ export type Opening =
   /** A scroll unrolls from the top down. */
   | "unroll"
   /** A wave of foam washes up the screen and back. */
-  | "wave";
+  | "wave"
+  /** A filmed opening (public/art/<id>/<film>.webm|mp4) that starts on the closed art
+   *  and ends on the hero art, so the card simply plays into itself. openMs = its length. */
+  | "film";
 
 export type Seal = {
   /** Centre of the seal in % of the screen. */
@@ -66,6 +69,8 @@ export type PaintedOpts = {
     pos?: string;
     /** Number of strips for "strips". */
     strips?: number;
+    /** Video name for "film" (default "open"). */
+    film?: string;
     seal?: Seal;
     /** Colour of the "tap to open" line. */
     hint?: "light" | "dark";
@@ -214,6 +219,18 @@ function Layers({ id, o, r }: { id: string; o: PaintedOpts; r: Resolved }) {
     }
     case "veil":
       return <span className="pt-veil">{img()}</span>;
+    case "film": {
+      const f = c.film ?? "open";
+      return (
+        <span className="pt-sheet">
+          {img()}
+          <video className="pt-img pt-film" muted playsInline preload="auto" poster={artUrl(id, name, 720)} aria-hidden>
+            <source src={`/art/${id}/${f}.webm`} type="video/webm" />
+            <source src={`/art/${id}/${f}.mp4`} type="video/mp4" />
+          </video>
+        </span>
+      );
+    }
     case "wave":
       return (
         <>
@@ -256,6 +273,8 @@ export function makePainted(id: string, o: PaintedOpts): Template {
     const Extra = c.Extra;
     const seal = c.seal;
     const go = (el: HTMLElement) => {
+      // A filmed opening starts inside the tap itself, so the browser lets it play.
+      if (c.kind === "film" && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) void el.querySelector("video")?.play().catch(() => {});
       const root = el.closest<HTMLElement>(".inv");
       if (root && c.onTap && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) c.onTap(root);
       onOpen();

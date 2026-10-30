@@ -1,0 +1,45 @@
+/* Red Velvet (painted kit). */
+
+.t-zardozi .pt-seal .pt-ini {
+  font-family: var(--f-display);
+  font-weight: 600;
+  font-size: 1.15em;
+}
+
+.t-zardozi .pt-title {
+  font-family: var(--f-display);
+  font-size: calc(13 * var(--u));
+  letter-spacing: 0.26em;
+}
+
+.t-zardozi .pt-names {
+  font-size: min(calc(60 * var(--u)), calc(100cqi / (var(--len) * 0.44)));
+  line-height: 1.12;
+}
+
+.t-zardozi .pt-date {
+  font-family: var(--f-display);
+  font-size: calc(19 * var(--u));
+  letter-spacing: 0.1em;
+}
+
+.t-zardozi .pt-venue {
+  font-family: var(--f-body);
+  font-style: normal;
+  font-size: calc(15 * var(--u));
+  letter-spacing: 0.06em;
+}
+
+.t-zardozi .inv-title {
+  font-family: var(--f-display);
+  font-size: 30px;
+  letter-spacing: 0.08em;
+}
+
+.t-zardozi .pt-backdrop {
+  background: #3d0b11;
+}
+
+.t-zardozi .pt-backdrop-art {
+  opacity: 0.55;
+}

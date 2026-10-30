@@ -1,0 +1,178 @@
+/* Jharokha (painted kit). The window opening is 24.5% of the screen height wide
+   (the art is height-fitted on phones), from 37% to 74% of the height. */
+
+.t-haveli {
+  --win: calc(var(--sh) * 0.245);
+}
+
+/* Tailwind's img { max-width: 100% } would squeeze each door to half the art */
+.t-haveli .pt-half .pt-img {
+  max-width: none;
+}
+
+/* ── light through the jali, and dust in it ── */
+
+.jk-light {
+  position: absolute;
+  left: 50%;
+  top: 36%;
+  z-index: 1;
+  width: var(--win);
+  height: 38%;
+  translate: -50% 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.jk-jali {
+  position: absolute;
+  inset: 0;
+  opacity: 0.7;
+  mix-blend-mode: soft-light;
+  -webkit-mask-image: radial-gradient(ellipse 62% 48% at 50% 64%, #000 25%, transparent 78%);
+  mask-image: radial-gradient(ellipse 62% 48% at 50% 64%, #000 25%, transparent 78%);
+}
+
+.jk-jali::before {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  background: #fff6dc;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cg fill='%23000'%3E%3Ccircle cx='13.5' cy='20' r='6'/%3E%3Ccircle cx='26.5' cy='20' r='6'/%3E%3Ccircle cx='20' cy='13.5' r='6'/%3E%3Ccircle cx='20' cy='26.5' r='6'/%3E%3Cpath d='M0 -4 4 0 0 4 -4 0ZM40 -4 44 0 40 4 36 0ZM0 36 4 40 0 44 -4 40ZM40 36 44 40 40 44 36 40Z'/%3E%3C/g%3E%3C/svg%3E")
+    0 0 / calc(30 * var(--u)) calc(30 * var(--u)) repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cg fill='%23000'%3E%3Ccircle cx='13.5' cy='20' r='6'/%3E%3Ccircle cx='26.5' cy='20' r='6'/%3E%3Ccircle cx='20' cy='13.5' r='6'/%3E%3Ccircle cx='20' cy='26.5' r='6'/%3E%3Cpath d='M0 -4 4 0 0 4 -4 0ZM40 -4 44 0 40 4 36 0ZM0 36 4 40 0 44 -4 40ZM40 36 44 40 40 44 36 40Z'/%3E%3C/g%3E%3C/svg%3E")
+    0 0 / calc(30 * var(--u)) calc(30 * var(--u)) repeat;
+  filter: blur(1px);
+  transform: rotate(-9deg) skewX(-16deg) scaleY(0.78);
+  animation: jk-drift 22s ease-in-out infinite alternate;
+}
+
+@keyframes jk-drift {
+  from {
+    translate: calc(-18 * var(--u)) calc(-6 * var(--u));
+  }
+  to {
+    translate: calc(20 * var(--u)) calc(12 * var(--u));
+  }
+}
+
+.jk-light i {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: calc(var(--s) * var(--u));
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #fff3cf;
+  box-shadow: 0 0 calc(5 * var(--u)) calc(1 * var(--u)) color-mix(in srgb, #ffe2a0 70%, transparent);
+  opacity: 0;
+  animation: jk-mote var(--d) linear var(--l) infinite;
+}
+
+@keyframes jk-mote {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0);
+  }
+  20% {
+    opacity: 0.9;
+  }
+  50% {
+    transform: translate(calc(10 * var(--u)), calc(-46 * var(--u)));
+  }
+  80% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(-6 * var(--u)), calc(-96 * var(--u)));
+  }
+}
+
+/* ── hero text inside the window ── */
+
+.t-haveli .pt-text {
+  gap: calc(6 * var(--u));
+}
+
+.t-haveli .pt-text.has-glow::before {
+  inset: calc(-30 * var(--u)) calc(-20 * var(--u));
+}
+
+.t-haveli .pt-bless .inv-bism {
+  width: calc(112 * var(--u));
+}
+
+.t-haveli .pt-title {
+  font-family: var(--f-display);
+  font-size: calc(14 * var(--u));
+  font-weight: 600;
+  letter-spacing: 0.2em;
+}
+
+.t-haveli .pt-names {
+  font-size: min(calc(52 * var(--u)), calc(100cqi / (var(--len) * 0.5)));
+  line-height: 1.08;
+  color: color-mix(in srgb, var(--ink) 88%, var(--accent));
+}
+
+.t-haveli .pt-names .inv-amp {
+  font-size: 0.7em;
+  line-height: 0.95;
+}
+
+.t-haveli .pt-when {
+  margin-top: calc(5 * var(--u));
+}
+
+.t-haveli .pt-sc {
+  font-size: calc(12 * var(--u));
+  letter-spacing: 0.2em;
+}
+
+.t-haveli .pt-date {
+  font-family: var(--f-body);
+  font-size: calc(18 * var(--u));
+  letter-spacing: 0.06em;
+}
+
+.t-haveli .pt-venue {
+  font-size: calc(17 * var(--u));
+  font-weight: 500;
+}
+
+.t-haveli .pt-scroll {
+  color: #fff4e2;
+  opacity: 0.9;
+}
+
+/* ── sections: marble panels, arched event cards ── */
+
+.t-haveli .inv-sec {
+  background:
+    radial-gradient(120% 60% at 0 0, color-mix(in srgb, #ffffff 40%, transparent), transparent 60%),
+    color-mix(in srgb, var(--bg) 95%, transparent);
+  outline-color: color-mix(in srgb, var(--accent) 48%, transparent);
+}
+
+.t-haveli .inv-title {
+  font-weight: 500;
+}
+
+.t-haveli .inv-ev {
+  padding-top: 46px;
+  border-radius: 50% 50% 8px 8px / 64px 64px 8px 8px;
+  border-color: color-mix(in srgb, var(--accent) 50%, transparent);
+}
+
+.t-haveli .inv-events:not(.is-many) .inv-ev {
+  padding-top: 0;
+}
+
+.t-haveli .pt-backdrop {
+  background: #7a2a17;
+}
+
+.t-haveli .pt-backdrop-art {
+  opacity: 0.4;
+}

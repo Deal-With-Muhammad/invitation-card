@@ -414,6 +414,36 @@ export const CATALOG: TemplateMeta[] = [
     keywords: ["housewarming invitation", "new home invitation", "griha pravesh invitation", "family dinner invitation"],
     islamic: false,
   },
+  {
+    id: "haveli",
+    name: "Haveli",
+    tagline: "Carved haveli doors swing open on a marble window",
+    description:
+      "Filmed opening: carved sheesham doors swing open, golden light pours through, and the film lands on a white marble jharokha where your names rise in.",
+    occasions: ["nikah", "wedding", "walima", "engagement"],
+    defaultOccasion: "nikah",
+    palettes: [p("marble", "Marble & sandstone", "#f7ead8", "#4e1c10", "#8f5a22", "#ecd3b4")],
+    fonts: { display: "cormorant", names: "pinyon", body: "marcellus" },
+    opening: "Carved doors swing open on film",
+    openMs: 5900,
+    keywords: ["nikah invitation card", "mughal wedding invitation", "video wedding invitation"],
+    islamic: true,
+  },
+  {
+    id: "zardozi",
+    name: "Zardozi Box",
+    tagline: "A velvet shaadi box that opens on film",
+    description:
+      "Filmed opening: the embroidered oxblood velvet lid lifts, warm light spills out, and the film lands on an ivory silk card edged in gold zardozi where your names rise in.",
+    occasions: ["walima", "wedding", "reception", "nikah"],
+    defaultOccasion: "walima",
+    palettes: [p("oxblood", "Oxblood & gold", "#f8f1e3", "#4b1219", "#9a7430", "#efe2c6")],
+    fonts: { display: "cinzel", names: "pinyon", body: "jost" },
+    opening: "The velvet lid lifts on film",
+    openMs: 5700,
+    keywords: ["walima invitation card", "luxury wedding invitation", "video wedding invitation"],
+    islamic: true,
+  },
 ];
 
 export const CATALOG_BY_ID: Record<string, TemplateMeta> = Object.fromEntries(CATALOG.map((m) => [m.id, m]));

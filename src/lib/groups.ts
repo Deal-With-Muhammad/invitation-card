@@ -2,6 +2,8 @@ import type { Occasion } from "@/invite/types";
 
 /** The order designs appear in everywhere: the wedding functions first, then the rest. */
 export const TEMPLATE_ORDER = [
+  "haveli",
+  "zardozi",
   "peony",
   "petals",
   "velvetrose",
