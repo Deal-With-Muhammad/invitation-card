@@ -1,0 +1,930 @@
+/* The painted kit (kit.tsx). Designs restyle any of this under .t-<id>.
+   --open is the design's opening length (meta.openMs), set on the cover and hero. */
+
+@property --pt-r {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+
+.pt-img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  max-width: none;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
+/* ── hero ── */
+
+.pt-hero {
+  --open: 2400ms;
+  position: relative;
+  height: max(var(--sh), calc(600 * var(--u)));
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.inv.is-thumb .pt-hero {
+  height: var(--sh);
+}
+
+.pt-hero-art {
+  z-index: -1;
+}
+
+.pt-text {
+  position: absolute;
+  left: 50%;
+  top: var(--top);
+  z-index: 2;
+  display: grid;
+  justify-items: center;
+  gap: calc(8 * var(--u));
+  width: calc(var(--tw) * var(--u));
+  max-width: 92%;
+  translate: -50% 0;
+  container-type: inline-size;
+  text-align: center;
+  color: var(--ink);
+}
+
+.pt-text.has-glow::before {
+  content: "";
+  position: absolute;
+  inset: calc(-54 * var(--u)) calc(-58 * var(--u));
+  z-index: -1;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--bg) 78%, transparent),
+    color-mix(in srgb, var(--bg) 52%, transparent) 52%,
+    transparent
+  );
+  pointer-events: none;
+}
+
+.pt-bless {
+  color: var(--accent);
+}
+
+.pt-bless .inv-bism {
+  width: calc(150 * var(--u));
+}
+
+.pt-bless .inv-bism-text {
+  font-size: calc(22 * var(--u));
+}
+
+.pt-title {
+  font: 500 calc(12.5 * var(--u)) / 1.45 var(--f-body);
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--accent);
+  text-wrap: balance;
+}
+
+.pt-names {
+  display: grid;
+  justify-items: center;
+  font-size: min(calc(60 * var(--u)), calc(100cqi / (var(--len) * 0.47)));
+  line-height: 1.04;
+  text-wrap: balance;
+}
+
+.pt-names .inv-amp {
+  font-size: 0.52em;
+  line-height: 1.25;
+  color: var(--accent);
+}
+
+.pt-milestone {
+  font: 400 calc(32 * var(--u)) / 1.1 var(--f-display);
+  color: var(--accent);
+}
+
+.pt-when {
+  display: grid;
+  justify-items: center;
+  gap: calc(3 * var(--u));
+  margin-top: calc(6 * var(--u));
+}
+
+.pt-sc {
+  font: 500 calc(12.5 * var(--u)) / 1.35 var(--f-body);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.pt-date {
+  font: 400 calc(24 * var(--u)) / 1.2 var(--f-display);
+}
+
+.pt-venue {
+  font: italic 400 calc(18 * var(--u)) / 1.35 var(--f-display);
+  opacity: 0.92;
+  text-wrap: balance;
+}
+
+.pt-scroll {
+  position: absolute;
+  left: 50%;
+  bottom: calc(20 * var(--u));
+  z-index: 2;
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  translate: -50% 0;
+  font: 500 calc(11 * var(--u)) / 1 var(--f-body);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink);
+  opacity: 0.78;
+}
+
+.pt-scroll::after {
+  content: "";
+  width: 1px;
+  height: calc(26 * var(--u));
+  background: currentColor;
+  transform-origin: top;
+  animation: pt-drip 2.6s ease-in-out infinite;
+}
+
+@keyframes pt-drip {
+  0%,
+  100% {
+    transform: scaleY(0.25);
+    opacity: 0.4;
+  }
+  50% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+/* the hero settles and its text rises in while the cover leaves */
+.inv[data-phase="opening"] .pt-hero-art {
+  animation: pt-settle var(--open) cubic-bezier(0.2, 0.6, 0.2, 1) both;
+}
+
+.inv[data-phase="opening"] .pt-text > * {
+  animation: pt-rise 1000ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: calc(var(--open) * 0.42 + var(--d, 0ms));
+}
+
+.pt-text > :nth-child(2) {
+  --d: 90ms;
+}
+.pt-text > :nth-child(3) {
+  --d: 180ms;
+}
+.pt-text > :nth-child(4) {
+  --d: 270ms;
+}
+.pt-text > :nth-child(5) {
+  --d: 360ms;
+}
+.pt-text > :nth-child(6) {
+  --d: 450ms;
+}
+
+.inv[data-phase="closed"] .pt-scroll {
+  opacity: 0;
+}
+
+.inv[data-phase="opening"] .pt-scroll {
+  animation: pt-fade 600ms ease both;
+  animation-delay: var(--open);
+}
+
+@keyframes pt-settle {
+  from {
+    transform: scale(1.08);
+  }
+}
+
+@keyframes pt-rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+@keyframes pt-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+/* envelope designs: the card rises out as the envelope drops */
+.inv[data-phase="opening"].pk-open-envelope .pt-hero {
+  animation: pt-card-rise var(--open) cubic-bezier(0.25, 0.7, 0.2, 1) both;
+}
+
+@keyframes pt-card-rise {
+  from {
+    transform: translateY(34%) scale(0.84);
+  }
+  30% {
+    transform: translateY(30%) scale(0.84);
+  }
+}
+
+/* unrolling designs: the hero is revealed from the top down */
+.inv[data-phase="opening"].pk-open-unroll .pt-hero {
+  animation: pt-unroll var(--open) cubic-bezier(0.45, 0.05, 0.25, 1) both;
+}
+
+@keyframes pt-unroll {
+  0%,
+  22% {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* ── cover ── */
+
+.pk .inv-cover {
+  left: 50%;
+  width: min(100%, 480px);
+  translate: -50% 0;
+}
+
+.pt-cover {
+  --open: 2400ms;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  cursor: pointer;
+  perspective: 1300px;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+
+.pt-cover:focus-visible .pt-tap {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+
+.pt-sheet,
+.pt-half,
+.pt-strip,
+.pt-tear,
+.pt-veil {
+  position: absolute;
+  overflow: hidden;
+  backface-visibility: hidden;
+}
+
+.pt-sheet,
+.pt-veil {
+  inset: 0;
+}
+
+.pt-half {
+  top: 0;
+  bottom: 0;
+  width: 50%;
+}
+
+.pt-half.is-l {
+  left: 0;
+  transform-origin: left center;
+}
+
+.pt-half.is-r {
+  right: 0;
+  transform-origin: right center;
+}
+
+.pt-half .pt-img {
+  width: 200%;
+}
+
+.pt-half.is-r .pt-img {
+  left: -100%;
+}
+
+.pt-strip {
+  top: 0;
+  bottom: 0;
+  left: calc(var(--i) * 100% / var(--n));
+  width: calc(100% / var(--n) + 1px);
+  transform-origin: 50% 0;
+}
+
+.pt-strip .pt-img {
+  width: calc(var(--n) * 100%);
+  left: calc(var(--i) * -100%);
+}
+
+.pt-tear {
+  left: 0;
+  right: 0;
+  height: 50%;
+}
+
+.pt-tear.is-t {
+  top: 0;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 95% 97%, 90% 100%, 85% 97%, 80% 100%, 75% 97%, 70% 100%, 65% 97%, 60% 100%, 55% 97%, 50% 100%, 45% 97%, 40% 100%, 35% 97%, 30% 100%, 25% 97%, 20% 100%, 15% 97%, 10% 100%, 5% 97%, 0 100%);
+}
+
+.pt-tear.is-b {
+  bottom: 0;
+  clip-path: polygon(0 3%, 5% 0, 10% 3%, 15% 0, 20% 3%, 25% 0, 30% 3%, 35% 0, 40% 3%, 45% 0, 50% 3%, 55% 0, 60% 3%, 65% 0, 70% 3%, 75% 0, 80% 3%, 85% 0, 90% 3%, 95% 0, 100% 3%, 100% 100%, 0 100%);
+}
+
+.pt-tear .pt-img {
+  height: 200%;
+}
+
+.pt-tear.is-b .pt-img {
+  top: -100%;
+}
+
+/* a see-through veil over the hero: the cover blends onto it */
+.pk .inv-cover:has(.pt-cover.is-veil) {
+  mix-blend-mode: multiply;
+}
+
+.pt-veil {
+  opacity: 0.94;
+}
+
+.pt-bloom {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: radial-gradient(ellipse 34% 62% at 50% 50%, color-mix(in srgb, #fff3d6 92%, transparent), transparent 72%);
+  pointer-events: none;
+}
+
+.pt-foam {
+  position: absolute;
+  left: -10%;
+  right: -10%;
+  top: 0;
+  height: 135%;
+  translate: 0 100%;
+  background:
+    radial-gradient(ellipse 22% 3% at 20% 0, #fffdf8 60%, transparent 62%),
+    radial-gradient(ellipse 26% 3.5% at 62% 1%, #fffdf8 60%, transparent 62%),
+    radial-gradient(ellipse 20% 3% at 92% 0, #fffdf8 60%, transparent 62%),
+    linear-gradient(to bottom, #fffdf8 2%, color-mix(in srgb, #bfe9e4 85%, transparent) 14%, color-mix(in srgb, #6cc7c0 80%, transparent) 60%);
+  pointer-events: none;
+}
+
+/* the initials laid over a seal in the art */
+.pt-seal {
+  position: absolute;
+  left: var(--sx);
+  top: var(--sy);
+  display: grid;
+  place-items: center;
+  width: calc(var(--ss) * var(--u));
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  font: 500 calc(var(--ss) * 0.3 * var(--u)) / 1 var(--f-display);
+  letter-spacing: 0.02em;
+  pointer-events: none;
+}
+
+.pt-ini i {
+  font-family: var(--f-names);
+  font-style: normal;
+  font-size: 0.66em;
+  margin: 0 0.06em;
+}
+
+.pt-seal.is-foil .pt-ini,
+.pt-seal.is-thread .pt-ini {
+  background: linear-gradient(140deg, #7d5d26, #f1dc9f 38%, #a8803b 56%, #f6e7bb 74%, #8e6a2c);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 1px 0 color-mix(in srgb, #fff8e6 40%, transparent)) drop-shadow(0 -1px 0 color-mix(in srgb, #3b2a10 45%, transparent));
+}
+
+.pt-seal.is-thread .pt-ini {
+  background: repeating-linear-gradient(115deg, #a7803a 0 1.5px, #f2dc9c 1.5px 3px, #c39b52 3px 4.5px), linear-gradient(#e7cf8f, #9a7432);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.pt-seal.is-wax .pt-ini {
+  color: color-mix(in srgb, #5d1712 88%, transparent);
+  text-shadow:
+    0 1px 0 color-mix(in srgb, #ffb4a4 35%, transparent),
+    0 -1px 0 color-mix(in srgb, #2a0806 55%, transparent);
+}
+
+.pt-seal.is-emboss .pt-ini {
+  color: color-mix(in srgb, var(--bg) 90%, var(--ink));
+  text-shadow:
+    -1px -1px 0 color-mix(in srgb, #ffffff 75%, transparent),
+    1px 1px 1.5px color-mix(in srgb, var(--ink) 34%, transparent);
+}
+
+.pt-seal.is-ink .pt-ini {
+  color: var(--accent);
+}
+
+.pt-seal.is-plain .pt-ini {
+  color: var(--ink);
+}
+
+.pt-tap {
+  position: absolute;
+  left: 50%;
+  bottom: calc(30 * var(--u) + env(safe-area-inset-bottom, 0px));
+  z-index: 3;
+  translate: -50% 0;
+  padding: calc(10 * var(--u)) calc(20 * var(--u));
+  border-radius: 999px;
+  font: 500 calc(12 * var(--u)) / 1 var(--f-body);
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  animation: pt-breathe 3s ease-in-out infinite;
+}
+
+.pt-tap.is-light {
+  color: #fffaf0;
+  background: color-mix(in srgb, #24170f 30%, transparent);
+}
+
+.pt-tap.is-dark {
+  color: color-mix(in srgb, var(--ink) 92%, transparent);
+  background: color-mix(in srgb, #fffaf2 58%, transparent);
+}
+
+@keyframes pt-breathe {
+  0%,
+  100% {
+    opacity: 0.78;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* ── openings ── */
+
+.inv[data-phase="opening"] .pt-tap,
+.inv[data-phase="opening"] .pt-seal {
+  animation: pt-gone 360ms ease both;
+}
+
+@keyframes pt-gone {
+  to {
+    opacity: 0;
+  }
+}
+
+/* every cover fades out at the very end */
+.inv[data-phase="opening"] .pt-cover {
+  animation: pt-cover-out var(--open) linear both;
+}
+
+@keyframes pt-cover-out {
+  0%,
+  86% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* doors swing open */
+.inv[data-phase="opening"] .is-doors .pt-half.is-l {
+  animation: pt-door-l calc(var(--open) * 0.82) cubic-bezier(0.55, 0.05, 0.3, 1) both;
+}
+.inv[data-phase="opening"] .is-doors .pt-half.is-r {
+  animation: pt-door-r calc(var(--open) * 0.82) cubic-bezier(0.55, 0.05, 0.3, 1) both;
+}
+.inv[data-phase="opening"] .is-doors .pt-bloom,
+.inv[data-phase="opening"] .is-slide .pt-bloom {
+  animation: pt-bloom var(--open) ease both;
+}
+
+@keyframes pt-door-l {
+  0% {
+    transform: rotateY(0);
+  }
+  12% {
+    transform: rotateY(-4deg);
+  }
+  100% {
+    transform: rotateY(-102deg);
+  }
+}
+
+@keyframes pt-door-r {
+  0% {
+    transform: rotateY(0);
+  }
+  12% {
+    transform: rotateY(4deg);
+  }
+  100% {
+    transform: rotateY(102deg);
+  }
+}
+
+@keyframes pt-bloom {
+  0% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* lift doors slide apart */
+.inv[data-phase="opening"] .is-slide .pt-half.is-l {
+  animation: pt-slide-l calc(var(--open) * 0.8) cubic-bezier(0.65, 0, 0.3, 1) both;
+  animation-delay: calc(var(--open) * 0.12);
+}
+.inv[data-phase="opening"] .is-slide .pt-half.is-r {
+  animation: pt-slide-r calc(var(--open) * 0.8) cubic-bezier(0.65, 0, 0.3, 1) both;
+  animation-delay: calc(var(--open) * 0.12);
+}
+
+@keyframes pt-slide-l {
+  to {
+    transform: translateX(-102%);
+  }
+}
+
+@keyframes pt-slide-r {
+  to {
+    transform: translateX(102%);
+  }
+}
+
+/* lifts up and away */
+.inv[data-phase="opening"] .is-lift .pt-sheet {
+  animation: pt-lift calc(var(--open) * 0.85) cubic-bezier(0.6, 0, 0.3, 1) both;
+}
+
+@keyframes pt-lift {
+  12% {
+    transform: translateY(1.5%);
+  }
+  to {
+    transform: translateY(-112%) rotate(-3deg);
+  }
+}
+
+/* grows toward you and fades */
+.inv[data-phase="opening"] .is-zoom .pt-sheet {
+  animation: pt-zoom calc(var(--open) * 0.9) cubic-bezier(0.5, 0, 0.3, 1) both;
+}
+
+@keyframes pt-zoom {
+  20% {
+    transform: scale(0.97) rotate(calc(var(--zr, 0deg) * -0.1));
+    opacity: 1;
+  }
+  to {
+    transform: scale(1.9) rotate(var(--zr, 0deg));
+    opacity: 0;
+  }
+}
+
+/* a lid hinged at the top */
+.inv[data-phase="opening"] .is-hinge .pt-sheet {
+  transform-origin: 50% 0;
+  animation: pt-hinge calc(var(--open) * 0.85) cubic-bezier(0.55, 0, 0.3, 1) both;
+}
+
+@keyframes pt-hinge {
+  10% {
+    transform: rotateX(4deg);
+  }
+  to {
+    transform: rotateX(96deg) translateY(-8%);
+    opacity: 0.2;
+  }
+}
+
+/* a cover hinged at the left edge */
+.inv[data-phase="opening"] .is-swing .pt-sheet {
+  transform-origin: 0 50%;
+  animation: pt-swing calc(var(--open) * 0.85) cubic-bezier(0.55, 0, 0.3, 1) both;
+}
+
+@keyframes pt-swing {
+  10% {
+    transform: rotateY(-4deg);
+  }
+  to {
+    transform: rotateY(-112deg);
+  }
+}
+
+/* a veil drifts up and off */
+.inv[data-phase="opening"] .is-veil .pt-veil {
+  transform-origin: 50% 0;
+  animation: pt-veil calc(var(--open) * 0.9) cubic-bezier(0.5, 0, 0.35, 1) both;
+}
+
+@keyframes pt-veil {
+  0% {
+    transform: none;
+  }
+  25% {
+    transform: translateY(-3%) skewY(1.5deg) scaleY(0.97);
+  }
+  100% {
+    transform: translateY(-115%) skewY(-6deg) scaleY(0.82);
+    opacity: 0.35;
+  }
+}
+
+/* strips swing apart from the middle */
+.inv[data-phase="opening"] .is-strips .pt-strip {
+  animation: pt-strip calc(var(--open) * 0.8) cubic-bezier(0.45, 0, 0.3, 1) both;
+  animation-delay: calc((var(--n) / 2 - var(--far)) * 45ms);
+}
+
+@keyframes pt-strip {
+  25% {
+    transform: rotate(calc(var(--side) * -6deg));
+  }
+  to {
+    transform: translateX(calc(var(--side) * var(--n) * 105%)) rotate(calc(var(--side) * 22deg));
+  }
+}
+
+/* a ticket tears in two */
+.inv[data-phase="opening"] .is-tear .pt-tear.is-t {
+  animation: pt-tear-t calc(var(--open) * 0.8) cubic-bezier(0.5, 0, 0.3, 1) both;
+}
+.inv[data-phase="opening"] .is-tear .pt-tear.is-b {
+  animation: pt-tear-b calc(var(--open) * 0.8) cubic-bezier(0.5, 0, 0.3, 1) both;
+}
+
+@keyframes pt-tear-t {
+  15% {
+    transform: translateY(-1%) rotate(-1deg);
+  }
+  to {
+    transform: translateY(-80%) rotate(-11deg);
+    opacity: 0;
+  }
+}
+
+@keyframes pt-tear-b {
+  15% {
+    transform: translateY(1%) rotate(1deg);
+  }
+  to {
+    transform: translateY(80%) rotate(8deg);
+    opacity: 0;
+  }
+}
+
+/* the envelope drops away */
+.inv[data-phase="opening"] .is-envelope .pt-sheet {
+  animation: pt-env calc(var(--open) * 0.9) cubic-bezier(0.55, 0, 0.35, 1) both;
+}
+
+@keyframes pt-env {
+  0%,
+  18% {
+    transform: none;
+  }
+  to {
+    transform: translateY(96%) scale(0.92);
+    opacity: 0.5;
+  }
+}
+
+/* light burns the cover away from the middle */
+.inv[data-phase="opening"] .is-glow .pt-sheet {
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, transparent var(--pt-r), #000 calc(var(--pt-r) + 22%));
+  mask-image: radial-gradient(circle at 50% 50%, transparent var(--pt-r), #000 calc(var(--pt-r) + 22%));
+  animation: pt-glow var(--open) cubic-bezier(0.5, 0, 0.4, 1) both;
+}
+
+@keyframes pt-glow {
+  0%,
+  10% {
+    --pt-r: 0%;
+  }
+  to {
+    --pt-r: 130%;
+  }
+}
+
+/* a scroll's cover fades, then the hero unrolls (see .pk-open-unroll) */
+.inv[data-phase="opening"] .is-unroll .pt-sheet {
+  animation: pt-unroll-cover var(--open) ease both;
+}
+
+@keyframes pt-unroll-cover {
+  0% {
+    opacity: 1;
+  }
+  22% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* a wave washes up and back */
+.inv[data-phase="opening"] .is-wave .pt-foam {
+  animation: pt-wave var(--open) cubic-bezier(0.45, 0, 0.35, 1) both;
+}
+
+.inv[data-phase="opening"] .is-wave .pt-sheet {
+  animation: pt-unroll-cover calc(var(--open) * 1.4) ease both;
+  animation-delay: calc(var(--open) * 0.12);
+}
+
+@keyframes pt-wave {
+  0% {
+    translate: 0 100%;
+  }
+  45% {
+    translate: 0 -6%;
+  }
+  100% {
+    translate: 0 105%;
+  }
+}
+
+/* ── backdrop and sections ── */
+
+.pt-backdrop {
+  position: absolute;
+  inset: 0;
+  background: var(--bg);
+}
+
+.pt-backdrop-art {
+  opacity: 0.3;
+}
+
+.pk .inv-sec {
+  margin: 14px 12px;
+  padding: 54px 24px 58px;
+  background: color-mix(in srgb, var(--bg) 93%, transparent);
+  border-radius: 4px;
+  outline: 1px solid color-mix(in srgb, var(--accent) 36%, transparent);
+  outline-offset: -9px;
+  box-shadow: 0 26px 50px -32px color-mix(in srgb, var(--ink) 55%, transparent);
+}
+
+.pk-clear .inv-sec {
+  background: none;
+  outline: 0;
+  box-shadow: none;
+}
+
+.pk .inv-divider {
+  padding: 0;
+  margin: -6px 0;
+}
+
+.pt-strip-div {
+  display: block;
+  width: 100%;
+  height: var(--sh-h);
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 24%, #000 76%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 24%, #000 76%, transparent);
+}
+
+.pk .inv-title {
+  font-size: 37px;
+}
+
+.pk .inv-line,
+.pk .inv-message,
+.pk .inv-dress-note,
+.pk .inv-prayer-text,
+.pk .inv-gifts-note,
+.pk .inv-closing-text {
+  font-size: 16.5px;
+  line-height: 1.65;
+}
+
+.pk .inv-hosts {
+  font-size: 21px;
+}
+
+.pk .inv-pname {
+  font-size: 29px;
+}
+
+.pk .inv-pline {
+  font-size: 13.5px;
+}
+
+.pk .inv-cd-unit {
+  border-color: color-mix(in srgb, var(--accent) 42%, transparent);
+  background: color-mix(in srgb, var(--accent) 9%, var(--bg));
+  border-radius: 6px;
+}
+
+.pk .inv-cd-unit b {
+  font-size: 34px;
+  color: var(--accent);
+}
+
+.pk .inv-ev {
+  border-radius: 6px;
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+  background: color-mix(in srgb, var(--accent) 6%, var(--bg));
+}
+
+.pk .inv-ev-title {
+  font-size: 29px;
+}
+
+.pk .inv-ev-day {
+  font-size: 70px;
+}
+
+.pk .inv-venue-name {
+  font-size: 23px;
+}
+
+.pk .inv-venue-addr {
+  font-size: 15px;
+}
+
+.pk .inv-btn {
+  border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  font-size: 13.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.pk .inv-btn.is-primary {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.pk .inv-closing {
+  padding-bottom: 72px;
+}
+
+.pk .inv-closing-names {
+  font-size: 50px;
+}
+
+/* ── painted effects (fx.ts) ── */
+
+.pt-fx {
+  position: fixed;
+  inset: 0;
+  z-index: 35;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.pt-fx i {
+  position: absolute;
+  display: block;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  animation: pt-fall linear both;
+}
+
+@keyframes pt-fall {
+  from {
+    transform: translate(0, 0) rotate(0);
+    opacity: var(--o0, 1);
+  }
+  to {
+    transform: translate(var(--dx), var(--dy)) rotate(var(--spin));
+    opacity: 0.15;
+  }
+}
+
+.pt-fx i.is-gold {
+  background: linear-gradient(135deg, #8d6a2b, #f3dfa2 40%, #b48a3e 62%, #f7e9be);
+  border-radius: 60% 10% 60% 10%;
+}

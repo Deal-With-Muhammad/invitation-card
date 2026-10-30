@@ -1,853 +1,331 @@
-/* Gatsby: art deco in gold. The hero frame is a 300 × 540 SVG; everything inside it
-   is in --a (1/300 of the frame width). Section cards get stepped corners and gold
-   double rules from two clipped layers behind their content. */
+/* Gatsby (painted kit).
+   A point (X, Y) of the art sits at 50cqw + (X - 0.5) * --dw, 50cqh + (Y - 0.5) * --dh
+   (object-fit: cover), which places the dial and the door opening on any screen. */
 
-.inv.t-deco {
-  --dc-panel: color-mix(in srgb, var(--soft) 72%, var(--bg));
-  --dc-gate: color-mix(in srgb, var(--soft) 94%, var(--accent));
-  --line: color-mix(in srgb, var(--accent) 40%, transparent);
-  --card: var(--dc-panel);
-  --dc-scales: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cg fill='none' stroke='%23000' stroke-width='1'%3E%3Cpath d='M0 20A20 20 0 0 1 40 20M7 20A13 13 0 0 1 33 20M13.5 20A6.5 6.5 0 0 1 26.5 20M20 13.5V0M-20 40A20 20 0 0 1 20 40M-13 40A13 13 0 0 1 13 40M-6.5 40A6.5 6.5 0 0 1 6.5 40M0 33.5V20M20 40A20 20 0 0 1 60 40M27 40A13 13 0 0 1 53 40M33.5 40A6.5 6.5 0 0 1 46.5 40M40 33.5V20'/%3E%3C/g%3E%3C/svg%3E");
+.t-deco .pt-cover {
+  container-type: size;
 }
 
-/* ── backdrop: fan scales ── */
+/* the halves' art is 200% wide; the global img { max-width: 100% } would squash it */
+.t-deco .pt-half .pt-img {
+  max-width: none;
+}
 
-.dc-scales {
+.dc-frame,
+.dc-dial {
+  --dw: max(100cqw, 56.25cqh);
+  --dh: max(100cqh, 177.78cqw);
+}
+
+/* the lift frame stays while the doors slide into the wall: the same art with the
+   door opening cut out, laid over the sliding halves */
+.dc-frame {
+  --hx: calc(50cqw + (0.148 - 0.5) * var(--dw));
+  --hy: calc(50cqh + (0.188 - 0.5) * var(--dh));
+  --hw: calc(0.702 * var(--dw));
   position: absolute;
   inset: 0;
-  background: var(--accent);
-  opacity: 0.1;
-  -webkit-mask: var(--dc-scales) 0 0 / 34px 34px repeat;
-  mask: var(--dc-scales) 0 0 / 34px 34px repeat;
+  pointer-events: none;
+  -webkit-mask:
+    linear-gradient(#000 0 0),
+    linear-gradient(#000 0 0) var(--hx) var(--hy) / var(--hw) 100cqh no-repeat;
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0),
+    linear-gradient(#000 0 0) var(--hx) var(--hy) / var(--hw) 100cqh no-repeat;
+  mask-composite: exclude;
 }
 
-.dc-vignette {
+/* the doors wait for the needle */
+.inv.t-deco[data-phase="opening"] .is-slide .pt-half {
+  animation-delay: calc(var(--open) * 0.27);
+  animation-duration: calc(var(--open) * 0.64);
+}
+
+/* ── the floor dial, printed over the art's blank dial ── */
+
+.dc-dial {
+  --rx: calc(0.176 * var(--dw));
+  --ry: calc(0.089 * var(--dh));
+  --px: 50cqw;
+  --py: calc(50cqh + (0.1365 - 0.5) * var(--dh));
+  position: absolute;
+  left: calc(var(--px) - var(--rx));
+  top: calc(var(--py) - var(--ry));
+  width: calc(var(--rx) * 2);
+  height: calc(var(--ry) + 0.004 * var(--dh));
+  pointer-events: none;
+}
+
+.dc-face {
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse 60% 52% at 50% 46%, var(--bg) 40%, color-mix(in srgb, var(--bg) 40%, transparent) 85%);
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  background: radial-gradient(120% 140% at 50% 100%, #f7ecd0 0 40%, #ead7a8 70%, #cfae6b);
+  box-shadow:
+    inset 0 calc(4 * var(--u)) calc(8 * var(--u)) color-mix(in srgb, #4a3008 45%, transparent),
+    0 0 0 calc(2.5 * var(--u)) #9c7228;
 }
 
-/* ── shared strokes ── */
-
-.t-deco :is(.dc-frame, .dc-fan, .dc-divider, .dc-orn, .dc-gate-burst, .dc-gate-steps, .dc-gate-medal) {
-  color: var(--accent);
-  overflow: visible;
+/* tick marks round the rim */
+.dc-face::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-conic-gradient(from -90deg at 50% 100%, color-mix(in srgb, #3b2a10 70%, transparent) 0 0.5deg, transparent 0.5deg 7.5deg);
+  -webkit-mask: radial-gradient(var(--rx) var(--ry) at 50% 100%, transparent 82%, #000 83% 93%, transparent 94%);
+  mask: radial-gradient(var(--rx) var(--ry) at 50% 100%, transparent 82%, #000 83% 93%, transparent 94%);
 }
 
-.t-deco .dc-line {
-  stroke: currentColor;
-  stroke-width: 1.2;
-  stroke-linejoin: miter;
+.dc-face b {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: calc(30 * var(--u));
+  margin-left: calc(-15 * var(--u));
+  text-align: center;
+  font: 600 calc(13.5 * var(--u)) / 1 var(--f-display);
+  color: #1d2638;
+  transform-origin: 50% 100%;
+  transform: rotate(var(--a)) translateY(calc(var(--ry) * -0.66)) rotate(calc(var(--a) * -1));
 }
 
-.t-deco .dc-bold {
-  stroke-width: 1.6;
+.dc-needle {
+  position: absolute;
+  left: calc(50% - 2.5 * var(--u));
+  bottom: 0;
+  width: calc(5 * var(--u));
+  height: calc(var(--ry) * 0.84);
+  background: linear-gradient(90deg, #6d4b14, #f3d58e 45%, #8a6020);
+  clip-path: polygon(50% 0, 100% 86%, 50% 100%, 0 86%);
+  transform-origin: 50% 100%;
+  rotate: var(--to);
+  filter: drop-shadow(0 1px 1px color-mix(in srgb, #2b1a04 60%, transparent));
 }
 
-.t-deco .dc-thin {
-  stroke: currentColor;
-  stroke-width: 0.7;
-  opacity: 0.8;
+.dc-pin {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: calc(13 * var(--u));
+  aspect-ratio: 1;
+  translate: -50% 50%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fbe7b0, #b38532 55%, #6c4a12);
+  box-shadow: 0 1px 2px color-mix(in srgb, #2b1a04 55%, transparent);
 }
 
-.t-deco .dc-fill {
-  fill: currentColor;
+/* at rest the needle waits at the far left; on the tap it swings to the day */
+.inv[data-phase="closed"] .dc-needle {
+  rotate: -80deg;
+}
+
+.inv[data-phase="opening"] .dc-needle {
+  animation: dc-swing calc(var(--open) * 0.3) cubic-bezier(0.35, 0, 0.25, 1) both;
+}
+
+@keyframes dc-swing {
+  from {
+    rotate: -80deg;
+  }
+  72% {
+    rotate: calc(var(--to) + 9deg);
+  }
+  86% {
+    rotate: calc(var(--to) - 3deg);
+  }
+  to {
+    rotate: var(--to);
+  }
 }
 
 /* ── hero ── */
 
-.dc-hero {
-  --dw: min(calc(344 * var(--u)), calc((var(--sh) - 96 * var(--u)) * 0.5556));
-  --a: calc(var(--dw) / 300);
-  position: relative;
-  display: grid;
-  place-items: center;
-  min-height: var(--sh);
-  padding: calc(14 * var(--u)) 0 calc(54 * var(--u));
+.t-deco .pt-text.has-glow::before {
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--bg) 60%, transparent), transparent);
 }
 
-.dc-box {
-  position: relative;
-  width: var(--dw);
-  aspect-ratio: 300 / 540;
-}
-
-.dc-frame,
-.dc-fan {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.dc-fan {
-  transform-origin: 50% 56.3%;
-  -webkit-mask: radial-gradient(ellipse 40% 14% at 50% 45%, rgb(0 0 0 / 0.2) 35%, #000 100%);
-  mask: radial-gradient(ellipse 40% 14% at 50% 45%, rgb(0 0 0 / 0.2) 35%, #000 100%);
-}
-
-.dc-in {
-  position: absolute;
-  inset: 0;
-  text-align: center;
-  text-shadow:
-    0 0 calc(2 * var(--a)) var(--bg),
-    0 0 calc(7 * var(--a)) var(--bg);
-}
-
-.dc-in > * {
-  position: absolute;
-  left: 11%;
-  right: 11%;
-}
-
-.dc-bless {
-  top: 5%;
-  height: 10%;
-  display: grid;
-  place-items: center;
-}
-
-.dc-bless .inv-bism {
-  width: calc(112 * var(--a));
-}
-
-.dc-bless .inv-bism-text {
-  font-size: calc(20 * var(--a));
-}
-
-.dc-title {
-  top: 16.2%;
-  font: 400 calc(10.5 * var(--a)) / 1.5 var(--f-display);
-  letter-spacing: 0.32em;
-  text-transform: uppercase;
+.t-deco .pt-title {
+  font-family: var(--f-display);
+  font-size: calc(13 * var(--u));
+  font-weight: 600;
+  letter-spacing: 0.3em;
   color: var(--accent);
-  text-wrap: balance;
 }
 
-.dc-names-box {
-  top: 27%;
-  bottom: 47%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  gap: calc(6 * var(--a));
-  container-type: inline-size;
-}
-
-.dc-names {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-size: min(calc(33 * var(--a)), calc(100cqi / (var(--len) * 0.98)));
+.t-deco .pt-names {
+  font-size: min(calc(54 * var(--u)), calc(100cqi / (var(--len) * 0.8)));
   line-height: 1.12;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.1em;
+  text-indent: 0.1em;
   text-transform: uppercase;
-  overflow-wrap: anywhere;
+  background: linear-gradient(170deg, #fff1cc 10%, #e8c473 45%, #b98a35 62%, #f6dd9c 85%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
-.dc-names .inv-name {
-  margin-inline-end: -0.16em;
-}
-
-.dc-names:not(:has(.inv-amp)) {
-  font-size: min(calc(40 * var(--a)), calc(100cqi / (var(--len) * 0.98)));
-}
-
-.dc-names .inv-amp {
-  font: 400 0.62em / 1.2 var(--f-names);
-  color: var(--accent);
+.t-deco .pt-names .inv-amp {
+  font-family: var(--f-display);
+  font-size: 0.42em;
   letter-spacing: 0;
-  margin: calc(1 * var(--a)) 0;
+  text-indent: 0;
+  line-height: 1.8;
+  -webkit-text-fill-color: var(--accent);
 }
 
-.dc-milestone {
-  font: 400 calc(21 * var(--a)) / 1.2 var(--f-display);
-  letter-spacing: 0.14em;
+/* the date in a stepped brass frame */
+.t-deco .pt-when {
+  --st: calc(9 * var(--u));
+  position: relative;
+  isolation: isolate;
+  margin-top: calc(12 * var(--u));
+  padding: calc(13 * var(--u)) calc(26 * var(--u)) calc(14 * var(--u));
+}
+
+.t-deco .pt-when::before,
+.t-deco .pt-when::after {
+  content: "";
+  position: absolute;
+  clip-path: polygon(
+    var(--st) 0,
+    calc(100% - var(--st)) 0,
+    calc(100% - var(--st)) var(--st),
+    100% var(--st),
+    100% calc(100% - var(--st)),
+    calc(100% - var(--st)) calc(100% - var(--st)),
+    calc(100% - var(--st)) 100%,
+    var(--st) 100%,
+    var(--st) calc(100% - var(--st)),
+    0 calc(100% - var(--st)),
+    0 var(--st),
+    var(--st) var(--st)
+  );
+}
+
+.t-deco .pt-when::before {
+  inset: 0;
+  z-index: -2;
+  background: linear-gradient(135deg, #8d6624, #f1d48b 40%, #a77b30 60%, #e9c87c);
+}
+
+.t-deco .pt-when::after {
+  inset: 1.5px;
+  z-index: -1;
+  background: var(--bg);
+}
+
+.t-deco .pt-sc {
+  font-family: var(--f-body);
+  font-size: calc(12.5 * var(--u));
+  letter-spacing: 0.3em;
   color: var(--accent);
-  text-transform: uppercase;
 }
 
-.dc-lower {
-  top: 59.5%;
-  bottom: 16.5%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: calc(16 * var(--a));
-}
-
-.dc-when {
-  display: grid;
-  justify-items: center;
-  gap: calc(5 * var(--a));
-  font: 400 calc(9.5 * var(--a)) / 1.4 var(--f-body);
-  letter-spacing: 0.34em;
-  text-transform: uppercase;
-  color: var(--accent);
-}
-
-.dc-when strong {
-  font: 400 calc(17.5 * var(--a)) / 1.25 var(--f-display);
+.t-deco .pt-date {
+  font-family: var(--f-display);
+  font-size: calc(21 * var(--u));
+  font-weight: 600;
   letter-spacing: 0.08em;
-  color: var(--ink);
-  text-wrap: balance;
 }
 
-.dc-venue {
-  font: 400 calc(9.5 * var(--a)) / 1.5 var(--f-body);
-  letter-spacing: 0.24em;
+.t-deco .pt-venue {
+  font-family: var(--f-body);
+  font-style: normal;
+  font-size: calc(15 * var(--u));
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  opacity: 0.85;
-  text-wrap: balance;
 }
 
-.dc-cue {
-  position: absolute;
-  left: 50%;
-  bottom: calc(14 * var(--u));
-  translate: -50% 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: calc(8 * var(--u));
-  font: 400 calc(10 * var(--u)) / 1 var(--f-body);
-  letter-spacing: 0.34em;
-  text-transform: uppercase;
-  color: var(--accent);
-  white-space: nowrap;
+/* ── sections ── */
+
+.t-deco .pt-backdrop {
+  background: #0b1728;
 }
 
-.dc-cue i {
-  width: calc(7 * var(--u));
-  height: calc(7 * var(--u));
-  border-inline-end: 1px solid currentColor;
-  border-bottom: 1px solid currentColor;
-  rotate: 45deg;
-  animation: dc-cue 2.4s ease-in-out infinite;
-}
-
-.inv[data-phase="closed"] .dc-cue {
-  visibility: hidden;
-}
-
-.inv[data-phase="opening"] .dc-cue {
-  animation: dc-fade-in 0.6s 1.5s ease both;
-}
-
-@keyframes dc-fade-in {
-  from {
-    opacity: 0;
-  }
-}
-
-@keyframes dc-cue {
-  50% {
-    transform: translate(calc(3 * var(--u)), calc(3 * var(--u)));
-    opacity: 0.4;
-  }
-}
-
-/* the sunburst grows and turns into place behind the parting gates */
-.inv[data-phase="opening"] .dc-fan {
-  animation: dc-fan 1.5s 0.4s cubic-bezier(0.2, 0.65, 0.2, 1) both;
-}
-
-@keyframes dc-fan {
-  from {
-    opacity: 0;
-    transform: scale(0.55) rotate(-14deg);
-  }
-}
-
-.inv[data-phase="opening"] :is(.dc-a1, .dc-a2, .dc-a3, .dc-a4, .dc-a5) {
-  animation: dc-rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-}
-
-.inv[data-phase="opening"] .dc-a1 { animation-delay: 0.7s; }
-.inv[data-phase="opening"] .dc-a2 { animation-delay: 0.85s; }
-.inv[data-phase="opening"] .dc-a3 { animation-delay: 1s; }
-.inv[data-phase="opening"] .dc-a4 { animation-delay: 1.15s; }
-.inv[data-phase="opening"] .dc-a5 { animation-delay: 1.25s; }
-
-@keyframes dc-rise {
-  from {
-    opacity: 0;
-    transform: translateY(calc(10 * var(--a)));
-  }
-}
-
-/* ── cover: two deco gates ── */
-
-.dc-cover {
-  position: absolute;
-  inset: 0;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.dc-stage {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: min(100%, 480px);
-  height: var(--sh);
-  translate: -50% 0;
-}
-
-.dc-gate {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  z-index: 2;
-  width: calc(50% + 0.5px);
-  overflow: hidden;
-  background:
-    radial-gradient(ellipse 120% 60% at 100% 50%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 70%),
-    linear-gradient(90deg, color-mix(in srgb, var(--dc-gate) 88%, var(--bg)), var(--dc-gate));
-}
-
-.dc-gate-l {
-  left: 0;
-  box-shadow: inset calc(-1 * var(--u)) 0 0 color-mix(in srgb, var(--accent) 60%, transparent);
-}
-
-.dc-gate-r {
-  right: 0;
-  scale: -1 1;
-  box-shadow: inset calc(-1 * var(--u)) 0 0 color-mix(in srgb, var(--accent) 60%, transparent);
-}
-
-.dc-gate::before,
-.dc-gate::after {
-  content: "";
-  position: absolute;
-  pointer-events: none;
-}
-
-.dc-gate::before {
-  inset: calc(12 * var(--u)) calc(10 * var(--u)) calc(12 * var(--u)) calc(12 * var(--u));
-  border: 1px solid color-mix(in srgb, var(--accent) 80%, transparent);
-}
-
-.dc-gate::after {
-  inset: calc(17 * var(--u)) calc(15 * var(--u)) calc(17 * var(--u)) calc(17 * var(--u));
-  border: 1px solid color-mix(in srgb, var(--accent) 38%, transparent);
-}
-
-.dc-gate-art {
-  position: absolute;
-  inset: 0;
-}
-
-.dc-gate-stripes {
-  position: absolute;
-  top: 24%;
-  bottom: 24%;
-  left: calc(28 * var(--u));
-  width: calc(10 * var(--u));
-  background: repeating-linear-gradient(90deg, color-mix(in srgb, var(--accent) 70%, transparent) 0 1px, transparent 1px calc(4.5 * var(--u)));
-}
-
-.dc-gate-steps {
-  position: absolute;
-  right: calc(10 * var(--u));
-  width: calc(100% - 28 * var(--u));
-  height: auto;
-}
-
-.dc-gate-steps-t {
-  top: calc(30 * var(--u));
-}
-
-.dc-gate-steps-b {
-  bottom: calc(30 * var(--u));
-  scale: 1 -1;
-}
-
-.dc-gate-burst {
-  position: absolute;
-  right: 0;
-  top: 50%;
-  width: calc(200 * var(--u));
-  height: calc(400 * var(--u));
-  margin-top: calc(-200 * var(--u));
-  transform-origin: 100% 50%;
-}
-
-.dc-gate-medal {
-  position: absolute;
-  right: 0;
-  top: 50%;
-  width: calc(74 * var(--u));
-  height: calc(148 * var(--u));
-  margin-top: calc(-74 * var(--u));
-}
-
-.t-deco .dc-medal-fill {
-  fill: var(--dc-gate);
-}
-
-.t-deco .dc-medal-core {
-  fill: color-mix(in srgb, var(--accent) 16%, var(--dc-gate));
-}
-
-.dc-gate-ini {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  z-index: 3;
-  translate: -50% -50%;
-  font: 400 calc(23 * var(--u)) / 1 var(--f-display);
-  letter-spacing: 0.04em;
-  color: var(--accent);
-  white-space: nowrap;
-}
-
-.dc-gate-ini i {
-  font: normal 400 0.7em var(--f-names);
-  margin: 0 0.1em;
-}
-
-.dc-seam-light {
-  position: absolute;
-  left: 50%;
-  top: 0;
-  bottom: 0;
-  z-index: 1;
-  width: calc(90 * var(--u));
-  translate: -50% 0;
-  background: radial-gradient(ellipse 50% 46% at 50% 50%, color-mix(in srgb, var(--accent) 55%, transparent), transparent 72%);
-  opacity: 0;
-}
-
-.dc-seam-light::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 8%;
-  bottom: 8%;
-  width: calc(2 * var(--u));
-  translate: -50% 0;
-  background: linear-gradient(transparent, color-mix(in srgb, var(--accent) 60%, var(--ink)), transparent);
-}
-
-.dc-tap {
-  position: absolute;
-  left: 50%;
-  bottom: calc(44 * var(--u));
-  z-index: 3;
-  translate: -50% 0;
-  display: flex;
-  align-items: center;
-  gap: calc(12 * var(--u));
-  padding: calc(9 * var(--u)) calc(16 * var(--u));
-  background: var(--dc-gate);
-  border: 1px solid color-mix(in srgb, var(--accent) 70%, transparent);
-  font: 400 calc(10.5 * var(--u)) / 1 var(--f-body);
-  letter-spacing: 0.34em;
-  text-transform: uppercase;
-  color: var(--accent);
-  white-space: nowrap;
-}
-
-.dc-tap i {
-  width: calc(5 * var(--u));
-  height: calc(5 * var(--u));
-  background: currentColor;
-  rotate: 45deg;
-}
-
-.inv[data-phase="closed"] .dc-gate-ini {
-  animation: dc-glint 3.2s ease-in-out infinite;
-}
-
-@keyframes dc-glint {
-  50% {
-    opacity: 0.7;
-  }
-}
-
-.inv[data-phase="opening"] :is(.dc-gate-ini, .dc-tap) {
-  animation: dc-fade-out 0.35s ease both;
-}
-
-.inv[data-phase="opening"] .dc-seam-light {
-  animation: dc-seam 1.1s 0.1s ease-out both;
-}
-
-.inv[data-phase="opening"] .dc-gate-l {
-  animation: dc-gate-l 1.95s both;
-}
-
-.inv[data-phase="opening"] .dc-gate-r {
-  animation: dc-gate-r 1.95s both;
-}
-
-.inv[data-phase="opening"] .dc-gate-burst {
-  animation: dc-burst 1.95s both;
-}
-
-@keyframes dc-gate-l {
-  0% {
-    transform: translateX(0);
-    animation-timing-function: cubic-bezier(0.3, 0, 0.2, 1);
-  }
-  9% {
-    transform: translateX(-1.6%);
-  }
-  20% {
-    transform: translateX(-1.6%);
-    animation-timing-function: cubic-bezier(0.62, 0, 0.24, 1);
-  }
-  88% {
-    transform: translateX(-101%);
-    opacity: 1;
-  }
-  100% {
-    transform: translateX(-101%);
-    opacity: 0;
-  }
-}
-
-/* the right gate is mirrored (scale -1 1), so the same keyframes push it right */
-@keyframes dc-gate-r {
-  0% {
-    transform: translateX(0);
-    animation-timing-function: cubic-bezier(0.3, 0, 0.2, 1);
-  }
-  9% {
-    transform: translateX(-1.6%);
-  }
-  20% {
-    transform: translateX(-1.6%);
-    animation-timing-function: cubic-bezier(0.62, 0, 0.24, 1);
-  }
-  88% {
-    transform: translateX(-101%);
-    opacity: 1;
-  }
-  100% {
-    transform: translateX(-101%);
-    opacity: 0;
-  }
-}
-
-@keyframes dc-burst {
-  0%,
-  20% {
-    transform: rotate(0deg);
-    animation-timing-function: cubic-bezier(0.62, 0, 0.24, 1);
-  }
-  88%,
-  100% {
-    transform: rotate(-42deg);
-  }
-}
-
-@keyframes dc-seam {
-  30% {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-}
-
-@keyframes dc-fade-out {
-  to {
-    opacity: 0;
-  }
-}
-
-/* ── sections: stepped cards with gold double rules ── */
-
-.t-deco .inv-divider {
-  padding: 18px 0;
-}
-
-.t-deco .dc-divider {
-  width: 200px;
-  height: 20px;
-}
-
-.t-deco .dc-orn {
-  width: 110px;
-  height: 13px;
+.t-deco .pt-backdrop-art {
+  opacity: 0.38;
 }
 
 .t-deco .inv-sec {
-  margin: 0 14px;
-  padding: 60px 30px 56px;
-  isolation: isolate;
-}
-
-.t-deco .inv-sec::before,
-.t-deco .inv-sec::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-}
-
-.t-deco .inv-sec::before {
-  background: var(--dc-panel);
-  clip-path: polygon(0 12px, 6px 12px, 6px 6px, 12px 6px, 12px 0, calc(100% - 12px) 0, calc(100% - 12px) 6px, calc(100% - 6px) 6px, calc(100% - 6px) 12px, 100% 12px, 100% calc(100% - 12px), calc(100% - 6px) calc(100% - 12px), calc(100% - 6px) calc(100% - 6px), calc(100% - 12px) calc(100% - 6px), calc(100% - 12px) 100%, 12px 100%, 12px calc(100% - 6px), 6px calc(100% - 6px), 6px calc(100% - 12px), 0 calc(100% - 12px));
-}
-
-.t-deco .inv-sec::after {
-  background: var(--accent);
-  opacity: 0.9;
-  clip-path: polygon(evenodd, 0 12px, 6px 12px, 6px 6px, 12px 6px, 12px 0, calc(100% - 12px) 0, calc(100% - 12px) 6px, calc(100% - 6px) 6px, calc(100% - 6px) 12px, 100% 12px, 100% calc(100% - 12px), calc(100% - 6px) calc(100% - 12px), calc(100% - 6px) calc(100% - 6px), calc(100% - 12px) calc(100% - 6px), calc(100% - 12px) 100%, 12px 100%, 12px calc(100% - 6px), 6px calc(100% - 6px), 6px calc(100% - 12px), 0 calc(100% - 12px), 0 12px, 1px 13px, 7px 13px, 7px 7px, 13px 7px, 13px 1px, calc(100% - 13px) 1px, calc(100% - 13px) 7px, calc(100% - 7px) 7px, calc(100% - 7px) 13px, calc(100% - 1px) 13px, calc(100% - 1px) calc(100% - 13px), calc(100% - 7px) calc(100% - 13px), calc(100% - 7px) calc(100% - 7px), calc(100% - 13px) calc(100% - 7px), calc(100% - 13px) calc(100% - 1px), 13px calc(100% - 1px), 13px calc(100% - 7px), 7px calc(100% - 7px), 7px calc(100% - 13px), 1px calc(100% - 13px), 1px 13px, 6px 18px, 12px 18px, 12px 12px, 18px 12px, 18px 6px, calc(100% - 18px) 6px, calc(100% - 18px) 12px, calc(100% - 12px) 12px, calc(100% - 12px) 18px, calc(100% - 6px) 18px, calc(100% - 6px) calc(100% - 18px), calc(100% - 12px) calc(100% - 18px), calc(100% - 12px) calc(100% - 12px), calc(100% - 18px) calc(100% - 12px), calc(100% - 18px) calc(100% - 6px), 18px calc(100% - 6px), 18px calc(100% - 12px), 12px calc(100% - 12px), 12px calc(100% - 18px), 6px calc(100% - 18px), 6px 18px, 7px 19px, 13px 19px, 13px 13px, 19px 13px, 19px 7px, calc(100% - 19px) 7px, calc(100% - 19px) 13px, calc(100% - 13px) 13px, calc(100% - 13px) 19px, calc(100% - 7px) 19px, calc(100% - 7px) calc(100% - 19px), calc(100% - 13px) calc(100% - 19px), calc(100% - 13px) calc(100% - 13px), calc(100% - 19px) calc(100% - 13px), calc(100% - 19px) calc(100% - 7px), 19px calc(100% - 7px), 19px calc(100% - 13px), 13px calc(100% - 13px), 13px calc(100% - 19px), 7px calc(100% - 19px), 7px 19px);
-}
-
-.t-deco .inv-closing {
-  margin-bottom: 22px;
-}
-
-.t-deco .inv-eyebrow {
-  font: 400 10.5px/1.4 var(--f-body);
-  letter-spacing: 0.36em;
+  outline: 1px solid color-mix(in srgb, var(--accent) 60%, transparent);
+  outline-offset: -9px;
+  box-shadow:
+    inset 0 0 0 13px var(--bg),
+    inset 0 0 0 14px color-mix(in srgb, var(--accent) 35%, transparent),
+    0 26px 50px -30px #050b14;
 }
 
 .t-deco .inv-title {
-  font: 400 27px/1.25 var(--f-display);
+  font-size: 27px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.t-deco .inv-pname,
+.t-deco .inv-closing-names {
+  text-transform: uppercase;
   letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.t-deco .inv-h {
-  gap: 12px;
-}
-
-.t-deco .inv-salam {
-  font-size: 22px;
-}
-
-.t-deco .inv-hosts {
-  font: 400 16px/1.6 var(--f-display);
-  letter-spacing: 0.06em;
-}
-
-.t-deco .inv-hosts-amp,
-.t-deco .inv-people-amp {
-  font: 400 22px/1.4 var(--f-names);
-  color: var(--accent);
-}
-
-.t-deco .inv-line {
-  font: 300 15.5px/1.7 var(--f-body);
-  letter-spacing: 0.04em;
-}
-
-.t-deco .inv-pname {
-  font: 400 27px/1.25 var(--f-names);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-
-.t-deco .inv-pline {
-  font: 300 13px/1.5 var(--f-body);
-  letter-spacing: 0.08em;
-}
-
-.t-deco .inv-milestone {
-  font: 400 40px/1.1 var(--f-names);
-  letter-spacing: 0.1em;
-}
-
-.t-deco .inv-message {
-  font: 300 16px/1.75 var(--f-body);
-  letter-spacing: 0.02em;
-}
-
-.t-deco .inv-cd-unit {
-  border: 1px solid var(--accent);
-  border-radius: 0;
-  background: transparent;
-  box-shadow: inset 0 0 0 3px var(--dc-panel), inset 0 0 0 4px color-mix(in srgb, var(--accent) 35%, transparent);
-  padding: 16px 2px 13px;
-}
-
-.t-deco .inv-cd-unit b {
-  font: 400 32px/1 var(--f-names);
-  color: var(--accent);
-}
-
-.t-deco .inv-cd-unit span {
-  font-size: 9.5px;
-  letter-spacing: 0.22em;
-}
-
-.t-deco .inv-cd-done {
-  font-family: var(--f-display);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
-
-.t-deco .inv-events.is-many .inv-ev {
-  border: 0;
-  border-top: 1px solid var(--line);
-  border-radius: 0;
-  background: none;
-  padding: 26px 4px 6px;
-}
-
-.t-deco .inv-events.is-many .inv-ev:first-child {
-  border-top: 0;
-  padding-top: 0;
-}
-
-.t-deco .inv-ev-title {
-  font: 400 21px/1.25 var(--f-display);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.t-deco .inv-ev-weekday,
-.t-deco .inv-ev-month {
-  font-size: 11px;
-  letter-spacing: 0.34em;
-}
-
-.t-deco .inv-ev-day {
-  font: 400 62px/1 var(--f-names);
-}
-
-.t-deco .inv-ev-year {
-  letter-spacing: 0.3em;
-}
-
-.t-deco .inv-ev-time {
-  font: 400 14px var(--f-body);
-  letter-spacing: 0.1em;
-}
-
-.t-deco .inv-venue-name {
-  font: 400 19px/1.35 var(--f-display);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.t-deco .inv-venue-addr {
-  font: 300 14px/1.6 var(--f-body);
-}
-
-.t-deco .inv-ev-shared {
-  padding-top: 30px;
-  border-top: 1px solid var(--line);
-}
-
-.t-deco .inv-map {
-  border-radius: 0;
-  border: 1px solid var(--accent);
-  padding: 4px;
-  background: var(--dc-panel);
 }
 
 .t-deco .inv-btn {
-  min-height: 44px;
-  padding: 12px 20px;
-  border-radius: 0;
-  border: 1px solid var(--accent);
-  background: transparent;
-  box-shadow: inset 0 0 0 3px var(--dc-panel), inset 0 0 0 4px color-mix(in srgb, var(--accent) 35%, transparent);
   color: var(--accent);
-  font: 400 11px/1 var(--f-body);
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
+  background: transparent;
 }
 
 .t-deco .inv-btn.is-primary {
-  background: var(--accent);
   color: var(--on-accent);
-  box-shadow: inset 0 0 0 3px var(--accent), inset 0 0 0 4px color-mix(in srgb, var(--on-accent) 45%, transparent);
+  background: var(--accent);
 }
 
-.t-deco .inv-btn svg {
-  width: 15px;
-  height: 15px;
-  stroke-width: 1.4;
+/* every event is a floor, with a little dial; tap it and the needle swings */
+.t-deco .inv-ev {
+  position: relative;
+  cursor: pointer;
 }
 
-.t-deco .inv-cal-menu {
-  border-radius: 0;
-  border-color: var(--accent);
-  background: var(--dc-panel);
+.t-deco .inv-ev::before,
+.t-deco .inv-ev::after {
+  content: "";
+  position: absolute;
+  top: 16px;
+  right: 18px;
+  pointer-events: none;
 }
 
-.t-deco .inv-cal-menu > * {
-  border-radius: 0;
+.t-deco .inv-ev::before {
+  width: 34px;
+  height: 17px;
+  border-radius: 17px 17px 0 0;
+  background: radial-gradient(120% 140% at 50% 100%, #f7ecd0 0 45%, #d8bd80);
+  box-shadow: 0 0 0 1.5px #a77b30;
 }
 
-.t-deco .inv-sched li {
-  grid-template-columns: 96px 1fr;
-  border-bottom: 1px solid var(--line);
+.t-deco .inv-ev::after {
+  top: 19px;
+  right: 34px;
+  width: 2px;
+  height: 14px;
+  background: #3a2a10;
+  transform-origin: 50% 100%;
+  rotate: var(--fl, -40deg);
+  transition: rotate 700ms cubic-bezier(0.3, 1.5, 0.4, 1);
 }
 
-.t-deco .inv-sched li:last-child {
-  border-bottom: 0;
+.t-deco .inv-ev:nth-child(2)::after {
+  --fl: 0deg;
 }
 
-.t-deco .inv-sched time {
-  font: 400 15px/1.5 var(--f-display);
-  letter-spacing: 0.04em;
+.t-deco .inv-ev:nth-child(3)::after {
+  --fl: 40deg;
 }
 
-.t-deco .inv-sched span {
-  font-weight: 300;
-  letter-spacing: 0.03em;
+.t-deco .inv-ev:nth-child(n + 4)::after {
+  --fl: 62deg;
 }
 
-.t-deco .inv-dress-note,
-.t-deco .inv-gifts-note,
-.t-deco .inv-prayer-text {
-  font-weight: 300;
-  letter-spacing: 0.02em;
-  font-style: normal;
-}
-
-.t-deco .inv-swatches {
-  gap: 20px;
-}
-
-.t-deco .inv-swatches i {
-  width: 30px;
-  height: 30px;
-  border-radius: 0;
-  rotate: 45deg;
-  box-shadow: 0 0 0 3px var(--dc-panel), 0 0 0 4px var(--accent);
-}
-
-.t-deco .inv-contact-name {
-  font: 400 18px/1.35 var(--f-display);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.t-deco .inv-closing-text {
-  font: 400 19px/1.45 var(--f-display);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.t-deco .inv-closing-names {
-  font-size: 34px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-
-.t-deco .inv-closing-names .inv-amp {
-  font-size: 0.7em;
-}
-
-.t-deco .inv-closing-meta {
-  letter-spacing: 0.3em;
-}
-
-.inv:is([lang="ur"], [lang="ar"], [lang="fa"], [lang="hi"], [lang="bn"]) :is(.dc-title, .dc-when, .dc-venue, .dc-names, .dc-tap, .dc-cue) {
-  letter-spacing: 0;
+.t-deco .inv-ev:hover::after,
+.t-deco .inv-ev:active::after {
+  rotate: calc(var(--fl, -40deg) + 30deg);
 }

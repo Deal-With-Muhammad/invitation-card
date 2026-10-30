@@ -1,114 +1,126 @@
-/* Gilded Blossom: foil blossoms on a watercolour wash. */
+/* Gilded Blossom (painted kit). */
 
-.t-gilded {
-  --st-env: #f8f6f1;
+/* the seal: a gold disc over the art's seal, with the initials pressed into it */
+.t-gilded .pt-seal {
+  border-radius: 50%;
+  background: radial-gradient(circle at 36% 30%, #ecd08e, #c9a35a 48%, #9d7a40 100%);
+  box-shadow:
+    0 0 0 calc(1.5 * var(--u)) color-mix(in srgb, #7b5b2b 55%, transparent),
+    inset 0 calc(1.5 * var(--u)) calc(2 * var(--u)) color-mix(in srgb, #fff2cc 60%, transparent),
+    inset 0 calc(-2 * var(--u)) calc(4 * var(--u)) color-mix(in srgb, #4d3410 45%, transparent);
 }
 
-.t-gilded .st-card {
-  background:
-    radial-gradient(120% 70% at 70% 100%, color-mix(in srgb, var(--bg) 82%, var(--ink)), transparent 70%),
-    radial-gradient(90% 60% at 20% 20%, color-mix(in srgb, var(--bg) 80%, var(--soft)), transparent 70%),
-    var(--bg);
+.t-gilded .pt-seal .pt-ini {
+  font: 600 calc(23 * var(--u)) / 1 var(--f-display);
+  color: #6d4e1f;
+  text-shadow:
+    0 1px 0 color-mix(in srgb, #fff0c4 70%, transparent),
+    0 -1px 0 color-mix(in srgb, #3f2a0c 40%, transparent);
 }
 
-.gb-wash {
+/* one glint over the gold leaf as the card comes out, then every so often */
+.gd-glint {
   position: absolute;
-  inset: 0;
-  background: color-mix(in srgb, var(--soft) 60%, var(--ink));
-  opacity: 0.2;
-  -webkit-mask: var(--st-cloud) 0 0 / calc(300 * var(--k, 1px)) calc(300 * var(--k, 1px)) repeat;
-  mask: var(--st-cloud) 0 0 / calc(300 * var(--k, 1px)) calc(300 * var(--k, 1px)) repeat;
+  inset: 0 0 50% 0;
+  z-index: 1;
+  overflow: hidden;
+  mix-blend-mode: color-dodge;
+  pointer-events: none;
 }
 
-.gb-wash-2 {
-  background: color-mix(in srgb, var(--bg) 70%, #0d0f1c);
-  opacity: 0.28;
-  -webkit-mask-position: calc(140 * var(--k, 1px)) calc(90 * var(--k, 1px));
-  mask-position: calc(140 * var(--k, 1px)) calc(90 * var(--k, 1px));
+.gd-glint::before {
+  content: "";
+  position: absolute;
+  inset: -20% -60%;
+  background: linear-gradient(105deg, transparent 38%, color-mix(in srgb, #fff3d0 55%, transparent) 50%, transparent 62%);
+  translate: -70% 0;
+  animation: gd-glint 11s cubic-bezier(0.4, 0, 0.3, 1) 1.4s infinite;
 }
 
-.gb-art {
-  inset: 0;
+@keyframes gd-glint {
+  0% {
+    translate: -70% 0;
+  }
+  22%,
+  100% {
+    translate: 70% 0;
+  }
 }
 
-.gb-dots {
-  background: color-mix(in srgb, var(--accent) 62%, #3a2a14);
+/* ── hero text ── */
+
+.t-gilded .pt-text.has-glow::before {
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--bg) 55%, transparent),
+    color-mix(in srgb, var(--bg) 30%, transparent) 55%,
+    transparent
+  );
 }
 
-.gb-text {
-  inset: calc(186 * var(--k)) calc(26 * var(--k)) calc(22 * var(--k));
-  gap: calc(6 * var(--k));
-  color: var(--ink);
+.t-gilded .pt-title {
+  font-family: var(--f-display);
+  font-size: calc(15 * var(--u));
+  font-weight: 600;
+  letter-spacing: 0.24em;
 }
 
-.gb-text .st-bless {
+.t-gilded .pt-names {
+  font-size: min(calc(60 * var(--u)), calc(100cqi / (var(--len) * 0.44)));
+  line-height: 1.1;
+  text-shadow: 0 2px 14px color-mix(in srgb, var(--bg) 70%, transparent);
+}
+
+.t-gilded .pt-names .inv-amp {
+  font-size: 0.62em;
+}
+
+.t-gilded .pt-when::before {
+  content: "";
+  width: calc(70 * var(--u));
+  height: 1px;
+  margin-bottom: calc(8 * var(--u));
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+}
+
+.t-gilded .pt-date {
+  font-family: var(--f-display);
+  font-size: calc(24 * var(--u));
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+.t-gilded .pt-sc {
   color: var(--accent);
 }
 
-.gb-text .inv-bism {
-  width: calc(78 * var(--k));
+.t-gilded .pt-venue {
+  font-size: calc(18 * var(--u));
 }
 
-.gb-text .st-title {
-  font: 400 calc(10.5 * var(--k)) / 1.4 var(--f-display);
-  font-style: italic;
-  letter-spacing: 0.06em;
-  text-transform: none;
-  opacity: 0.9;
-}
+/* ── sections: indigo panels, gold-foil numerals ── */
 
-.gb-text .st-names {
-  font-size: min(calc(31 * var(--k)), calc(100cqi / (var(--len) * 0.58)));
-  line-height: 1.05;
-  letter-spacing: 0.01em;
-}
-
-.gb-text .st-names .inv-amp {
-  font-size: 0.72em;
-  margin: calc(1 * var(--k)) 0;
-}
-
-.gb-text .st-when {
-  margin-top: calc(6 * var(--k));
-}
-
-.gb-text .st-sc {
-  font: 400 calc(9.5 * var(--k)) / 1.45 var(--f-display);
-  letter-spacing: 0.14em;
-  text-transform: lowercase;
-}
-
-.gb-text .st-when strong {
-  font: 400 calc(10.5 * var(--k)) / 1.45 var(--f-display);
-  letter-spacing: 0.14em;
-  text-transform: lowercase;
-}
-
-.gb-text .st-venue {
-  font: 400 calc(9.5 * var(--k)) / 1.45 var(--f-display);
-  font-style: normal;
-  letter-spacing: 0.14em;
-  text-transform: lowercase;
-  opacity: 0.9;
-}
-
-/* liner: the same wash with a looser repeat of foil blossoms */
-.gb-liner {
-  background: var(--bg);
-}
-
-.gb-liner-foil {
-  position: absolute;
-  inset: 0;
-  -webkit-mask-size: calc(118 * var(--k)) calc(118 * var(--k));
-  mask-size: calc(118 * var(--k)) calc(118 * var(--k));
-  -webkit-mask-repeat: repeat;
-  mask-repeat: repeat;
-}
-
-/* enclosure cards share the card's wash */
 .t-gilded .inv-sec {
-  background:
-    radial-gradient(120% 60% at 20% 0%, color-mix(in srgb, var(--bg) 82%, var(--soft)), transparent 70%),
-    var(--bg);
+  background: color-mix(in srgb, var(--bg) 90%, transparent);
+  outline-color: color-mix(in srgb, var(--accent) 45%, transparent);
+  box-shadow: 0 26px 50px -30px color-mix(in srgb, #0b1220 80%, transparent);
+}
+
+.t-gilded .inv-title {
+  font-weight: 500;
+}
+
+.t-gilded :is(.inv-cd-unit b, .inv-ev-day) {
+  background: linear-gradient(160deg, #a77f3c, #f3dea2 40%, #c29a52 60%, #f6e6b8 80%, #9b7535);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.t-gilded .pt-backdrop {
+  background: #1b2638;
+}
+
+.t-gilded .pt-backdrop-art {
+  opacity: 0.5;
 }

@@ -5,7 +5,7 @@ import { galleryItems } from "@/components/gallery-items";
 import { OccasionLinks } from "@/components/sections";
 import { Reveal, TemplateRow, TemplatesHero } from "@/components/templates-showcase";
 import { CATALOG } from "@/invite/templates/catalog";
-import type { Occasion } from "@/invite/types";
+import { GROUPS, groupOf } from "@/lib/groups";
 
 export const metadata: Metadata = {
   title: "Invitation Templates: Wedding, Nikah, Mehndi, Birthday & More",
@@ -13,28 +13,14 @@ export const metadata: Metadata = {
   alternates: { canonical: "/templates" },
 };
 
-/** The designs people open most, in the order they are shown. */
-const MOST_LOVED = ["marigold", "jharokha", "sehra", "botanica", "deco"];
-
-/** Browse sections; a design lands in the first one that lists its main occasion, everything else goes to the last. */
-const GROUPS: { id: string; title: string; blurb: string; occasions: Occasion[] }[] = [
-  { id: "weddings", title: "Weddings & receptions", blurb: "For the big day and the dinner after it.", occasions: ["wedding", "reception"] },
-  { id: "nikah", title: "Nikah, walima & engagement", blurb: "Quieter, warmer, made for family.", occasions: ["nikah", "walima", "engagement"] },
-  { id: "festive", title: "Mehndi & festive nights", blurb: "Colour, music and a little noise.", occasions: ["mehndi", "eid"] },
-  { id: "celebrate", title: "Birthdays & every other reason", blurb: "Baby showers, graduations, housewarmings and parties.", occasions: [] },
-];
+/** The designs shown in the fan, in order; the middle one plays its opening. */
+const MOST_LOVED = ["velvetrose", "petals", "peony", "jharokha", "marigold"];
 
 export default function TemplatesPage() {
   const all = galleryItems();
   const loved = MOST_LOVED.map((id) => all.find((it) => it.meta.id === id)).filter((it): it is GalleryItem => !!it);
   const rest = all.filter((it) => !MOST_LOVED.includes(it.meta.id));
-  const grouped = GROUPS.map((g, gi) => ({
-    ...g,
-    items: rest.filter((it) => {
-      const own = GROUPS.findIndex((x) => x.occasions.includes(it.meta.defaultOccasion));
-      return (own === -1 ? GROUPS.length - 1 : own) === gi;
-    }),
-  })).filter((g) => g.items.length);
+  const grouped = GROUPS.map((g) => ({ ...g, items: rest.filter((it) => groupOf(it.meta.defaultOccasion) === g.id) })).filter((g) => g.items.length);
 
   return (
     <main className="mx-auto max-w-6xl px-4 sm:px-6">

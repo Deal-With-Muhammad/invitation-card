@@ -141,7 +141,7 @@ export function Invitation({ data, replay = 0, credit = true, focus = null }: Pr
   return (
     <div
       ref={root}
-      className={`inv t-${tpl.meta.id} ${FONT_VARS}`}
+      className={`inv t-${tpl.meta.id} ${tpl.rootClass ?? ""} ${FONT_VARS}`}
       data-phase={phase}
       data-occasion={data.occasion}
       lang={guestLang}

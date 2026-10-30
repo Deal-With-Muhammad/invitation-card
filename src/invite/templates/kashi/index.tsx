@@ -1,18 +1,24 @@
-import { petals } from "../../runtime/effects";
-import { metaFor } from "../catalog";
-import type { Template } from "../types";
-import { Backdrop, Divider, Hero, Ornament } from "./art";
-import { Cover } from "./cover";
+import { makePainted } from "../painted/kit";
 
 import "./kashi.css";
 
-export const kashi: Template = {
-  meta: metaFor("kashi"),
-  Hero,
-  Cover,
-  Divider,
-  Ornament,
-  Backdrop,
-  celebrate: (root) =>
-    petals(root, { count: 30, colors: ["var(--ink)", "var(--accent)", "color-mix(in srgb, var(--accent) 55%, var(--bg))", "var(--soft)"] }),
-};
+// Kashi: Multani blue pottery. Closed, a hand-painted plate hangs on a wall of white
+// glazed tiles with the couple's initials brushed into its plain centre in cobalt; it
+// turns a quarter and lifts toward you, revealing an arch of kashi tiles. A slow
+// highlight slides across the glaze like daylight on a shrine wall.
+
+function Glaze() {
+  return (
+    <span className="ks-glaze" aria-hidden>
+      <i />
+    </span>
+  );
+}
+
+export const kashi = makePainted("kashi", {
+  cover: { kind: "zoom", art: "closed", hint: "dark", seal: { x: "49.6%", y: "49.5%", size: 156, look: "ink" } },
+  text: { top: "27%", width: 262 },
+  HeroArt: Glaze,
+  stripY: "100%",
+  stripH: 52,
+});

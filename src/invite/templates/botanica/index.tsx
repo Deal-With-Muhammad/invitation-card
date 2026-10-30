@@ -1,26 +1,22 @@
-import { petals } from "../../runtime/effects";
-import { metaFor } from "../catalog";
-import type { Template } from "../types";
-import { Backdrop, Divider, Hero, Ornament } from "./art";
-import { Cover } from "./cover";
+import { Art, makePainted } from "../painted/kit";
 
 import "./botanica.css";
 
-// Falling leaves in the painted greens. The effect elements live inside the
-// invitation root, so the palette variables resolve.
-const LEAVES = [
-  "color-mix(in srgb, var(--accent) 76%, var(--ink))",
-  "var(--accent)",
-  "color-mix(in srgb, var(--accent) 58%, var(--soft))",
-  "color-mix(in srgb, var(--accent) 55%, var(--bg))",
-];
+// Botanica: walking into a garden. Watercolour olive, eucalyptus and white
+// ranunculus cover the screen; the near leaves (soft, out of focus) rush past while
+// the garden behind parts like a gate, and the names wait in the light clearing.
 
-export const botanica: Template = {
-  meta: metaFor("botanica"),
-  Hero,
-  Cover,
-  Divider,
-  Ornament,
-  Backdrop,
-  celebrate: (root) => petals(root, { count: 24, colors: LEAVES }),
-};
+function NearLeaves() {
+  return (
+    <span className="bt-near" aria-hidden>
+      <Art id="botanica" name="closed" />
+    </span>
+  );
+}
+
+export const botanica = makePainted("botanica", {
+  cover: { kind: "slide", art: "closed", hint: "dark", Extra: NearLeaves },
+  text: { top: "27%", width: 286 },
+  stripY: "99%",
+  stripH: 110,
+});

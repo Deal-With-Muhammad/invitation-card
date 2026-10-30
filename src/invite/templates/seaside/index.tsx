@@ -1,26 +1,20 @@
-import { petals } from "../../runtime/effects";
-import { metaFor } from "../catalog";
-import type { Template } from "../types";
-import { Backdrop, Divider, Hero, Ornament } from "./art";
-import { Cover } from "./cover";
+import { makePainted } from "../painted/kit";
 
 import "./seaside.css";
 
-// Little bubbles in sea-glass tones. The effect elements live inside the
-// invitation root, so the palette variables resolve.
-const BUBBLES = [
-  "color-mix(in srgb, var(--accent) 45%, var(--bg))",
-  "var(--soft)",
-  "color-mix(in srgb, var(--accent) 70%, var(--bg))",
-  "color-mix(in srgb, var(--accent) 25%, var(--bg))",
-];
+// Seaside: a message in a bottle on a beach. A wave washes up over it and, as it
+// slides back, your names are left written in the sand of an aerial watercolour
+// beach, where the foam keeps lapping gently at the shoreline.
 
-export const seaside: Template = {
-  meta: metaFor("seaside"),
-  Hero,
-  Cover,
-  Divider,
-  Ornament,
-  Backdrop,
-  celebrate: (root) => petals(root, { count: 30, colors: BUBBLES, shape: "dot" }),
-};
+/** The foam at the waterline, lapping slowly. */
+function Foam() {
+  return <span className="ss-foam" aria-hidden />;
+}
+
+export const seaside = makePainted("seaside", {
+  cover: { kind: "wave", art: "closed", hint: "dark" },
+  text: { top: "7%", width: 300 },
+  HeroArt: Foam,
+  stripY: "65%",
+  stripH: 112,
+});

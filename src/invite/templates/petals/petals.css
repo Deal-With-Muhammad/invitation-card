@@ -1,74 +1,36 @@
-/* Rose Shower: roses and petals tossed from the top of the card. */
+/* Rose Shower (painted kit). */
 
-.t-petals {
-  --st-env: #fbf9f4;
-  --f1: color-mix(in oklab, var(--accent) 45%, #fffaf6);
-  --f2: color-mix(in oklab, var(--accent) 75%, #fffaf6);
-  --f3: var(--accent);
-  --f4: color-mix(in oklab, var(--accent) 68%, #3a1018);
-  --g1: color-mix(in oklab, #7f9b62 85%, var(--ink));
-  --g2: color-mix(in oklab, #4e6a3e 80%, var(--ink));
+.t-petals .pt-cover {
+  --zr: 14deg;
 }
 
-.ps-art {
-  inset: 0;
-  width: 100%;
-  height: 100%;
+.t-petals .pt-title {
+  font-family: var(--f-display);
+  font-size: calc(13 * var(--u));
+  letter-spacing: 0.24em;
 }
 
-.ps-art :is(.fa, .fb, .fc, .fd, .la, .lb),
-.ps-liner-art :is(.fa, .fb, .fc, .fd, .la, .lb) {
-  mix-blend-mode: multiply;
+.t-petals .pt-names {
+  font-size: min(calc(58 * var(--u)), calc(100cqi / (var(--len) * 0.44)));
+  line-height: 1.1;
 }
 
-.ps-text {
-  inset: calc(176 * var(--k)) calc(34 * var(--k)) calc(26 * var(--k));
-  gap: calc(6 * var(--k));
-  color: var(--ink);
+.t-petals .pt-when::before {
+  content: "";
+  width: calc(64 * var(--u));
+  height: 1px;
+  margin-bottom: calc(8 * var(--u));
+  background: linear-gradient(90deg, transparent, #b08d57, transparent);
 }
 
-.ps-text .st-bless {
-  color: var(--accent);
+.t-petals .pt-date {
+  font-family: var(--f-display);
+  font-size: calc(19 * var(--u));
+  letter-spacing: 0.08em;
 }
 
-.ps-text .inv-bism {
-  width: calc(72 * var(--k));
-}
-
-.ps-text .st-title {
-  font: italic 400 calc(11 * var(--k)) / 1.4 var(--f-display);
-  letter-spacing: 0.04em;
-  text-transform: none;
-}
-
-.ps-text .st-names {
-  font-size: min(calc(34 * var(--k)), calc(100cqi / (var(--len) * 0.48)));
-  line-height: 1.12;
-}
-
-.ps-text .st-names .inv-amp {
-  font-size: 0.55em;
-  color: var(--accent);
-}
-
-.ps-text .st-sc {
-  font-size: calc(7.6 * var(--k));
-}
-
-.ps-text .st-when strong {
-  font: 500 calc(11.5 * var(--k)) / 1.4 var(--f-display);
-}
-
-.ps-text .st-venue {
-  font-size: calc(10.5 * var(--k));
-}
-
-.ps-liner {
-  background: color-mix(in oklab, var(--accent) 18%, #fffaf6);
-}
-
-.ps-liner-art {
-  inset: 0;
-  width: 100%;
-  height: 100%;
+.t-petals .inv-title {
+  font-family: var(--f-display);
+  font-size: 31px;
+  letter-spacing: 0.06em;
 }

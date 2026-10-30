@@ -1,651 +1,239 @@
-/* Celestial: a night (or dawn) sky. The hero is sized in --k, which follows the
-   phone width but shrinks on short screens so the sky never overflows. */
+/* Celestial (painted kit). The astrolabe's centre is at 49.7% / 52.6% of the screen;
+   its face is about 0.27 × the screen height in radius (height-fitted art). */
 
 .t-celestial {
-  --line: color-mix(in srgb, var(--accent) 30%, transparent);
-  --glow: color-mix(in srgb, var(--accent) 34%, transparent);
-  --zenith: var(--bg);
-  --horizon: color-mix(in srgb, var(--soft) 82%, var(--bg));
-  --card: color-mix(in srgb, var(--soft) 55%, var(--bg));
-  --moon-x: 15%;
+  --c-x: 49.7%;
+  --c-y: 52.6%;
 }
 
-.inv[dir="rtl"].t-celestial {
-  --moon-x: 85%;
+/* ── the astrolabe: the plate and the star rete turn against each other, then the
+   whole instrument grows and dissolves ── */
+
+.t-celestial .pt-cover .pt-sheet,
+.cl-ring {
+  transform-origin: var(--c-x) var(--c-y);
 }
 
-/* ── shared marks ── */
-
-.t-celestial .cl-dot {
-  fill: var(--ink);
-}
-
-.t-celestial .cl-gold {
-  fill: var(--accent);
-}
-
-.t-celestial .cl-halo {
-  fill: var(--accent);
-  fill-opacity: 0.13;
-}
-
-.t-celestial .cl-bridge {
-  fill: var(--ink);
-  fill-opacity: 0.55;
-}
-
-.t-celestial .cl-ln {
-  fill: none;
-  stroke: var(--accent);
-  stroke-width: 0.75;
-  stroke-opacity: 0.7;
-  stroke-linecap: round;
-  stroke-dasharray: 1;
-}
-
-.t-celestial :is(.cl-tw, .cl-bridge) {
-  transform-box: fill-box;
-  transform-origin: center;
-}
-
-/* ── backdrop ── */
-
-.cl-bd-sky {
+.cl-ring {
+  --r: calc(var(--sh) * 0.25);
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, var(--zenith) 25%, var(--horizon));
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(circle var(--r) at var(--c-x) var(--c-y), #000 98%, transparent 100%);
+  mask-image: radial-gradient(circle var(--r) at var(--c-x) var(--c-y), #000 98%, transparent 100%);
 }
 
-.cl-bd-stars {
-  position: absolute;
-  inset: 0;
-  background: var(--ink);
-  opacity: 0.4;
-  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='230' height='230'%3E%3Cg fill='%23000'%3E%3Ccircle cx='18' cy='30' r='.9'/%3E%3Ccircle cx='96' cy='12' r='.6'/%3E%3Ccircle cx='150' cy='64' r='1.1'/%3E%3Ccircle cx='212' cy='40' r='.6'/%3E%3Ccircle cx='60' cy='104' r='.7'/%3E%3Ccircle cx='182' cy='132' r='.8'/%3E%3Ccircle cx='120' cy='170' r='.6'/%3E%3Ccircle cx='30' cy='196' r='1'/%3E%3Ccircle cx='206' cy='206' r='.6'/%3E%3Ccircle cx='86' cy='222' r='.5'/%3E%3C/g%3E%3C/svg%3E") 0 0 / 230px 230px repeat;
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='230' height='230'%3E%3Cg fill='%23000'%3E%3Ccircle cx='18' cy='30' r='.9'/%3E%3Ccircle cx='96' cy='12' r='.6'/%3E%3Ccircle cx='150' cy='64' r='1.1'/%3E%3Ccircle cx='212' cy='40' r='.6'/%3E%3Ccircle cx='60' cy='104' r='.7'/%3E%3Ccircle cx='182' cy='132' r='.8'/%3E%3Ccircle cx='120' cy='170' r='.6'/%3E%3Ccircle cx='30' cy='196' r='1'/%3E%3Ccircle cx='206' cy='206' r='.6'/%3E%3Ccircle cx='86' cy='222' r='.5'/%3E%3C/g%3E%3C/svg%3E") 0 0 / 230px 230px repeat;
+.cl-ring.is-rete {
+  --r: calc(var(--sh) * 0.196);
 }
 
-/* ── hero ── */
-
-.cl-hero {
-  --k: min(var(--u), calc(var(--sh) / 800));
-  position: relative;
-  min-height: var(--sh);
-  overflow: hidden;
+.inv.t-celestial[data-phase="opening"] .pt-cover .pt-sheet {
+  animation: cl-out calc(var(--open) * 0.92) cubic-bezier(0.45, 0, 0.3, 1) both;
 }
 
-/* the sky itself is the backdrop, so the hero melts into it on a desktop too */
-.cl-sky {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse 62% 30% at 50% 104%, color-mix(in srgb, var(--accent) 15%, transparent), transparent);
+.inv.t-celestial[data-phase="opening"] .pt-cover .cl-ring {
+  animation: cl-plate calc(var(--open) * 0.92) cubic-bezier(0.45, 0, 0.3, 1) both;
 }
 
-.cl-field {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+.inv.t-celestial[data-phase="opening"] .pt-cover .cl-ring.is-rete {
+  animation-name: cl-rete;
 }
 
-.cl-moon {
-  position: absolute;
-  top: calc(34 * var(--k));
-  inset-inline-start: calc(22 * var(--u));
-  width: calc(82 * var(--k));
-  height: calc(82 * var(--k));
-  overflow: visible;
-  filter: drop-shadow(0 0 calc(9 * var(--u)) var(--glow));
-}
-
-.cl-moon-ghost {
-  fill: none;
-  stroke: var(--accent);
-  stroke-width: 0.6;
-  stroke-opacity: 0.3;
-}
-
-.cl-moon-lit {
-  fill: var(--accent);
-}
-
-.cl-moon-edge {
-  fill: none;
-  stroke: color-mix(in srgb, var(--accent) 55%, var(--bg));
-  stroke-width: 0.8;
-  stroke-linecap: round;
-}
-
-.cl-in {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: calc(12 * var(--k));
-  min-height: var(--sh);
-  padding: calc(80 * var(--k)) calc(36 * var(--u)) calc(96 * var(--k));
-  text-align: center;
-  container-type: inline-size;
-}
-
-.cl-in .inv-bism {
-  width: calc(160 * var(--k));
-}
-
-.cl-in .inv-bism-text {
-  font-size: calc(22 * var(--k));
-}
-
-.cl-const {
-  position: relative;
-  width: calc(300 * var(--k));
-  aspect-ratio: 320 / 150;
-  margin-bottom: calc(-6 * var(--k));
-}
-
-.cl-const svg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-}
-
-.inv[dir="rtl"] .cl-const svg {
-  transform: scaleX(-1);
-}
-
-.cl-ini {
-  position: absolute;
-  top: 66%;
-  width: 40%;
-  font: 400 calc(50 * var(--k)) / 1 var(--f-names);
-  color: var(--accent);
-  text-align: center;
-}
-
-.cl-ini-a {
-  inset-inline-start: 1%;
-}
-
-.cl-ini-b {
-  inset-inline-end: 0;
-}
-
-.cl-const.is-solo .cl-ini-a {
-  inset-inline-start: 30%;
-}
-
-.cl-title {
-  font: 500 calc(12.5 * var(--k)) / 1.6 var(--f-display);
-  letter-spacing: 0.5em;
-  text-indent: 0.5em;
-  text-transform: uppercase;
-  color: var(--accent);
-}
-
-.cl-names {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-size: min(calc(80 * var(--k)), calc(100cqi / (var(--len) * 0.42)));
-  line-height: 0.98;
-  color: var(--ink);
-  overflow-wrap: anywhere;
-}
-
-.cl-names .inv-amp {
-  font: italic 400 0.36em / 1 var(--f-display);
-  color: var(--accent);
-  margin: 0.06em 0 0.12em;
-}
-
-.cl-milestone {
-  font: 500 calc(26 * var(--k)) / 1.1 var(--f-display);
-  letter-spacing: 0.12em;
-  color: var(--accent);
-}
-
-.cl-rule {
-  display: block;
-  line-height: 0;
-}
-
-.cl-rule .cl-orn {
-  width: calc(96 * var(--k));
-  height: calc(19 * var(--k));
-}
-
-.cl-when {
-  display: grid;
-  gap: calc(4 * var(--k));
-  font: 400 calc(10.5 * var(--k)) / 1.5 var(--f-body);
-  letter-spacing: 0.34em;
-  text-indent: 0.34em;
-  text-transform: uppercase;
-  color: color-mix(in srgb, var(--ink) 80%, transparent);
-}
-
-.cl-when strong {
-  font: 500 calc(23 * var(--k)) / 1.2 var(--f-display);
-  letter-spacing: 0.04em;
-  text-indent: 0;
-  text-transform: none;
-  color: var(--ink);
-}
-
-.cl-venue {
-  font: italic 400 calc(17 * var(--k)) / 1.3 var(--f-display);
-  opacity: 0.85;
-}
-
-.inv:is([lang="ur"], [lang="ar"], [lang="fa"]) :is(.cl-title, .cl-when, .cl-tap, .cl-cue) {
-  letter-spacing: 0;
-  text-indent: 0;
-}
-
-/* Naskh and Nastaliq read smaller than Latin caps at the same size */
-.inv:is([lang="ur"], [lang="ar"], [lang="fa"]) .cl-title {
-  font-size: calc(17 * var(--k));
-}
-
-.inv:is([lang="ur"], [lang="ar"], [lang="fa"]) .cl-when {
-  font-size: calc(13 * var(--k));
-}
-
-.inv:is([lang="ur"], [lang="ar"], [lang="fa"]) :is(.cl-tap, .cl-cue) {
-  font-size: calc(13 * var(--u));
-}
-
-.cl-cue,
-.cl-tap {
-  display: flex;
-  align-items: center;
-  gap: calc(10 * var(--u));
-  font: 400 calc(10.5 * var(--u)) / 1 var(--f-body);
-  letter-spacing: 0.36em;
-  text-transform: uppercase;
-  color: var(--accent);
-  white-space: nowrap;
-}
-
-.cl-cue {
-  position: absolute;
-  left: 50%;
-  bottom: calc(22 * var(--u));
-  translate: -50% 0;
-  flex-direction: column;
-  opacity: 0.85;
-}
-
-.cl-cue i {
-  width: 1px;
-  height: calc(24 * var(--u));
-  background: linear-gradient(var(--accent), transparent);
-  animation: cl-cue 2.4s ease-in-out infinite;
-}
-
-.inv[data-phase="closed"] .cl-cue {
-  visibility: hidden;
-}
-
-@keyframes cl-cue {
-  50% {
-    transform: translateY(calc(6 * var(--u)));
-    opacity: 0.4;
-  }
-}
-
-/* stars come on in a sweep, then the constellations draw themselves */
-.inv[data-phase="opening"] .cl-tw {
-  animation: cl-tw 0.8s var(--d) cubic-bezier(0.2, 0.7, 0.3, 1) both;
-}
-
-.inv[data-phase="opening"] .cl-bridge {
-  animation: cl-tw 0.4s var(--d) ease-out both;
-}
-
-.inv[data-phase="opening"] .cl-ln {
-  animation: cl-draw 0.55s var(--d) ease-in-out both;
-}
-
-.inv[data-phase="opening"] .cl-moon {
-  animation: cl-moon 1.3s 0.2s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-}
-
-.inv[data-phase="opening"] .cl-ini {
-  animation: cl-rise 0.8s 1.4s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-}
-
-.inv[data-phase="opening"] :is(.cl-a1, .cl-a2, .cl-a3, .cl-a4, .cl-a5) {
-  animation: cl-rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-}
-
-.inv[data-phase="opening"] .cl-a1 { animation-delay: 0.5s; }
-.inv[data-phase="opening"] .cl-a2 { animation-delay: 0.7s; }
-.inv[data-phase="opening"] .cl-a3 { animation-delay: 0.85s; }
-.inv[data-phase="opening"] .cl-a4 { animation-delay: 1s; }
-.inv[data-phase="opening"] .cl-a5 { animation-delay: 1.12s; }
-
-/* after opening, a few sparkles glint slowly */
-.inv[data-phase="open"] .cl-sp {
-  animation: cl-glint 6s var(--g) ease-in-out infinite;
-}
-
-@keyframes cl-tw {
-  from {
-    opacity: 0;
-    transform: scale(0.2);
-  }
-  55% {
+@keyframes cl-out {
+  0%,
+  46% {
+    transform: none;
     opacity: 1;
-    transform: scale(1.3);
   }
-}
-
-@keyframes cl-draw {
-  from {
-    stroke-dashoffset: 1;
-  }
-}
-
-@keyframes cl-moon {
-  from {
+  100% {
+    transform: scale(2.3);
     opacity: 0;
-    transform: translateY(calc(10 * var(--u))) rotate(-8deg);
   }
 }
 
-@keyframes cl-rise {
-  from {
+@keyframes cl-plate {
+  0% {
+    transform: none;
+  }
+  46% {
+    transform: rotate(-40deg);
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(-58deg) scale(2.3);
     opacity: 0;
-    transform: translateY(calc(12 * var(--k)));
-    filter: blur(2px);
   }
 }
 
-@keyframes cl-glint {
-  50% {
-    opacity: 0.4;
-    transform: scale(0.75);
+@keyframes cl-rete {
+  0% {
+    transform: none;
+  }
+  46% {
+    transform: rotate(120deg);
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(150deg) scale(2.3);
+    opacity: 0;
   }
 }
 
-/* ── cover ── */
+/* ── the sky ── */
 
-.cl-cover {
+.cl-stars {
   position: absolute;
   inset: 0;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  background:
-    radial-gradient(circle calc(170 * var(--u)) at 50% 50%, color-mix(in srgb, var(--accent) 8%, transparent), transparent),
-    linear-gradient(180deg, var(--zenith) 30%, color-mix(in srgb, var(--horizon) 60%, var(--bg)));
+  z-index: 1;
+  pointer-events: none;
 }
 
-.cl-cv-stars {
+.cl-stars i {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  left: var(--x);
+  top: var(--y);
+  width: calc(var(--s) * var(--u));
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #fff6dc;
+  box-shadow:
+    0 0 calc(4 * var(--u)) calc(1 * var(--u)) color-mix(in srgb, #ffe7a8 75%, transparent),
+    0 0 calc(12 * var(--u)) calc(2 * var(--u)) color-mix(in srgb, #f3d27e 30%, transparent);
+  animation: cl-twinkle var(--d) ease-in-out var(--l) infinite;
 }
 
-.cl-cv-faint {
-  opacity: 0.45;
-}
-
-.cl-cv-mid {
+.cl-stars i::before,
+.cl-stars i::after {
+  content: "";
   position: absolute;
   left: 50%;
   top: 50%;
-  translate: -50% -50%;
-  display: grid;
-  justify-items: center;
-  gap: calc(22 * var(--u));
-}
-
-.cl-cv-star {
-  width: calc(64 * var(--u));
-  height: calc(64 * var(--u));
-  overflow: visible;
-  filter: drop-shadow(0 0 calc(10 * var(--u)) var(--glow));
-  animation: cl-breathe 3.6s ease-in-out infinite;
-}
-
-.cl-cv-ring {
-  fill: none;
-  stroke: var(--accent);
-  stroke-width: 0.6;
-  stroke-opacity: 0.4;
-  stroke-dasharray: 1 3.2;
-  stroke-linecap: round;
-}
-
-.cl-tap i {
-  width: calc(26 * var(--u));
+  width: calc(var(--s) * 4.5 * var(--u));
   height: 1px;
-  background: var(--line);
+  translate: -50% -50%;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, #fff6dc 80%, transparent), transparent);
 }
 
-@keyframes cl-breathe {
+.cl-stars i::after {
+  rotate: 90deg;
+}
+
+@keyframes cl-twinkle {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.7);
+  }
   50% {
-    transform: scale(0.9);
-    opacity: 0.8;
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
-.inv[data-phase="opening"] .cl-cover {
-  animation: cl-fade 1s 0.15s ease both;
+/* shooting stars (sky.ts) */
+.cl-fx {
+  position: fixed;
+  inset: 0;
+  z-index: 35;
+  overflow: hidden;
+  pointer-events: none;
 }
 
-.inv[data-phase="opening"] .cl-cv-mid {
-  animation: cl-flare 0.6s ease-in both;
+.cl-fx i {
+  position: absolute;
+  width: calc(130 * var(--u));
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, #fff3cf 85%, transparent) 80%, #ffffff);
+  box-shadow: 0 0 6px color-mix(in srgb, #ffe6a3 60%, transparent);
+  transform-origin: 100% 50%;
+  animation: cl-shoot 1.1s cubic-bezier(0.3, 0, 0.5, 1) both;
 }
 
-@keyframes cl-flare {
-  to {
+@keyframes cl-shoot {
+  0% {
     opacity: 0;
-    transform: scale(1.5);
+    transform: translateX(-100%) rotate(var(--a)) translateX(0) scaleX(0.2);
   }
-}
-
-@keyframes cl-fade {
-  to {
+  25% {
+    opacity: 1;
+  }
+  100% {
     opacity: 0;
+    transform: translateX(-100%) rotate(var(--a)) translateX(var(--len)) scaleX(1);
   }
 }
 
-/* ── sections ── */
+/* ── hero text ── */
 
-.t-celestial .inv-title {
-  font: 500 36px/1.15 var(--f-display);
-  letter-spacing: 0.01em;
+.t-celestial .pt-text.has-glow::before {
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--bg) 45%, transparent), transparent);
 }
 
-.t-celestial .inv-eyebrow {
-  font-weight: 400;
-  letter-spacing: 0.38em;
+.t-celestial .pt-title {
+  font-family: var(--f-display);
+  font-size: calc(14 * var(--u));
+  letter-spacing: 0.26em;
 }
 
-.t-celestial .cl-orn {
-  display: block;
-  width: 88px;
-  height: 18px;
-  overflow: visible;
+.t-celestial .pt-names {
+  font-size: min(calc(60 * var(--u)), calc(100cqi / (var(--len) * 0.46)));
+  line-height: 1.1;
+  text-shadow: 0 0 calc(18 * var(--u)) color-mix(in srgb, #f4d991 22%, transparent);
 }
 
-.t-celestial .cl-orn-line {
-  stroke: var(--line);
-  stroke-width: 1;
+.t-celestial .pt-names .inv-amp {
+  font-size: 0.6em;
 }
 
-.t-celestial .inv-hosts {
-  font: 500 21px/1.45 var(--f-display);
-}
-
-.t-celestial :is(.inv-hosts-amp, .inv-people-amp) {
-  font: italic 400 22px/1.5 var(--f-display);
-}
-
-.t-celestial .inv-pname {
-  font: 400 50px/1.15 var(--f-names);
-}
-
-.t-celestial .inv-pline {
-  font-size: 12px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-
-.t-celestial .inv-milestone {
-  font-weight: 500;
-}
-
-.t-celestial .inv-message {
-  font: italic 400 20px/1.6 var(--f-display);
-}
-
-.t-celestial .inv-cd {
-  gap: 10px;
-}
-
-.t-celestial .inv-cd-unit {
+.t-celestial .pt-when::before {
+  content: "";
+  width: calc(9 * var(--u));
   aspect-ratio: 1;
-  place-content: center;
-  gap: 2px;
-  padding: 0;
-  border: 1px solid color-mix(in srgb, var(--accent) 28%, transparent);
-  border-radius: 50%;
-  background: radial-gradient(circle at 34% 30%, color-mix(in srgb, var(--accent) 22%, var(--soft)), var(--soft) 70%);
-  box-shadow: 0 0 24px -6px var(--glow);
+  margin-bottom: calc(8 * var(--u));
+  background: var(--accent);
+  clip-path: polygon(50% 0, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0 50%, 39% 39%);
 }
 
-.t-celestial .inv-cd-unit b {
-  font: 500 28px/1 var(--f-display);
+.t-celestial .pt-date {
+  font-family: var(--f-display);
+  font-size: calc(21 * var(--u));
+  letter-spacing: 0.06em;
 }
 
-.t-celestial .inv-cd-unit span {
-  font-size: 8.5px;
-  letter-spacing: 0.16em;
+.t-celestial .pt-sc {
+  color: var(--accent);
 }
 
-.t-celestial .inv-ev-day {
-  font-weight: 500;
-  font-size: 66px;
-}
-
-.t-celestial .inv-ev-weekday,
-.t-celestial .inv-ev-month {
-  letter-spacing: 0.3em;
-}
-
-.t-celestial .inv-events.is-many .inv-ev,
-.t-celestial .inv-ev-shared,
-.t-celestial .inv-closing {
-  border: 1px solid color-mix(in srgb, var(--accent) 26%, transparent);
-  border-radius: 26px;
-  background: var(--card);
-  box-shadow:
-    0 0 0 5px color-mix(in srgb, var(--accent) 5%, transparent),
-    0 0 44px -14px var(--glow);
-}
-
-.t-celestial .inv-events.is-many .inv-ev {
-  padding: 32px 22px 30px;
-}
-
-.t-celestial .inv-ev-shared {
-  padding: 30px 20px 28px;
-}
-
-.t-celestial .inv-ev-title {
-  font-weight: 500;
-}
-
-.t-celestial .inv-venue-name {
-  font-weight: 500;
-}
-
-.t-celestial .inv-map {
-  border-radius: 20px;
-  box-shadow: 0 0 30px -12px var(--glow);
-}
-
-.t-celestial .inv-btn {
-  border-radius: 999px;
-  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
-  background: color-mix(in srgb, var(--soft) 60%, transparent);
-  font-size: 14px;
+.t-celestial .pt-venue {
+  font-family: var(--f-body);
+  font-style: normal;
+  font-size: calc(16 * var(--u));
   letter-spacing: 0.04em;
 }
 
-.t-celestial .inv-btn.is-primary {
-  background: var(--accent);
-  box-shadow: 0 0 22px -6px var(--glow);
+/* ── sections: midnight panels ── */
+
+.t-celestial .inv-sec {
+  background:
+    radial-gradient(1.5px 1.5px at 18% 22%, color-mix(in srgb, #fff3cf 70%, transparent), transparent),
+    radial-gradient(1px 1px at 78% 14%, color-mix(in srgb, #fff3cf 60%, transparent), transparent),
+    radial-gradient(1.5px 1.5px at 88% 72%, color-mix(in srgb, #fff3cf 55%, transparent), transparent),
+    radial-gradient(1px 1px at 9% 84%, color-mix(in srgb, #fff3cf 60%, transparent), transparent),
+    color-mix(in srgb, var(--bg) 90%, transparent);
+  outline-color: color-mix(in srgb, var(--accent) 40%, transparent);
+  box-shadow: 0 26px 50px -30px color-mix(in srgb, #050826 80%, transparent);
 }
 
-.t-celestial .inv-sched li {
-  border-bottom-color: var(--line);
+.t-celestial .inv-title {
+  font-size: 33px;
+  letter-spacing: 0.04em;
 }
 
-.t-celestial .inv-sched time {
-  font: 500 18px/1.4 var(--f-display);
+.t-celestial .pt-backdrop {
+  background: #10164a;
 }
 
-.t-celestial .inv-swatches i {
-  box-shadow: 0 0 0 3px var(--bg), 0 0 0 4px var(--line), 0 0 18px -4px var(--glow);
-}
-
-.t-celestial .inv-prayer-text {
-  font: italic 400 19px/1.6 var(--f-display);
-}
-
-.t-celestial .inv-closing {
-  margin: 8px 20px 26px;
-  padding: 56px 24px 46px;
-  container-type: inline-size;
-}
-
-.t-celestial .inv-closing-text {
-  font-weight: 500;
-}
-
-.t-celestial .inv-closing-names {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-size: min(60px, calc(100cqi / (var(--len) * 0.42)));
-  line-height: 1;
-  overflow-wrap: anywhere;
-}
-
-.t-celestial .inv-closing-names .inv-amp {
-  font: italic 400 24px/1.3 var(--f-display);
-  margin: 0;
-}
-
-.t-celestial .inv-closing-meta {
-  text-wrap: balance;
-}
-
-.t-celestial .inv-divider {
-  padding: 6px 0;
-}
-
-.t-celestial .cl-divider {
-  width: 150px;
-  height: 24px;
-  overflow: visible;
-}
-
-.t-celestial .cl-ph-ring {
-  fill: none;
-  stroke: var(--accent);
-  stroke-width: 0.6;
-  stroke-opacity: 0.45;
-}
-
-.t-celestial .cl-ph-lit {
-  fill: var(--accent);
+.t-celestial .pt-backdrop-art {
+  opacity: 0.6;
 }

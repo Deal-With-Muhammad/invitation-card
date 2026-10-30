@@ -26,38 +26,15 @@ import { velvetrose } from "./velvetrose";
 import { wildflower } from "./wildflower";
 import { zellige } from "./zellige";
 import type { Template } from "./types";
+import { TEMPLATE_ORDER } from "@/lib/groups";
 
-// Gallery order: the stationery wedding cards first, then the rest grouped loosely
-// by occasion.
-export const TEMPLATE_LIST: Template[] = [
-  gilded,
-  rosestudy,
-  orchid,
-  wildflower,
-  lace,
-  filigree,
-  muguet,
-  peony,
-  petals,
-  velvetrose,
-  jharokha,
-  envelope,
-  marigold,
-  confetti,
-  celestial,
-  botanica,
-  editorial,
-  zellige,
-  cloudnine,
-  deco,
-  kashi,
-  velvet,
-  boarding,
-  seaside,
-  scrapbook,
-  scroll,
-  openhouse,
+const ALL: Template[] = [
+  boarding, botanica, celestial, cloudnine, confetti, deco, editorial, envelope, filigree, gilded, jharokha, kashi, lace, marigold,
+  muguet, openhouse, orchid, peony, petals, rosestudy, scrapbook, scroll, seaside, velvet, velvetrose, wildflower, zellige,
 ];
+
+// Gallery order: see TEMPLATE_ORDER (the wedding functions first).
+export const TEMPLATE_LIST: Template[] = TEMPLATE_ORDER.map((id) => ALL.find((t) => t.meta.id === id)).filter((t): t is Template => !!t);
 
 export const TEMPLATES: Record<string, Template> = Object.fromEntries(TEMPLATE_LIST.map((t) => [t.meta.id, t]));
 

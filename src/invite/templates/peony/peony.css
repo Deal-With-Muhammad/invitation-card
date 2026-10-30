@@ -1,86 +1,39 @@
-/* Peony Arch: a watercolour arch of peonies and roses. */
+/* Peony Arch (painted kit). */
 
-.t-peony {
-  --st-env: #fbf9f4;
-  --f1: color-mix(in oklab, var(--accent) 38%, #fffaf6);
-  --f2: color-mix(in oklab, var(--accent) 66%, #fffaf6);
-  --f3: var(--accent);
-  --f4: color-mix(in oklab, var(--accent) 70%, #5a2030);
-  --g1: color-mix(in oklab, #8fa877 85%, var(--ink));
-  --g2: color-mix(in oklab, #5d7a55 80%, var(--ink));
+.t-peony .pt-title {
+  font-family: var(--f-display);
+  font-size: calc(15 * var(--u));
+  font-weight: 500;
+  letter-spacing: 0.2em;
 }
 
-.pa-art {
-  inset: 0;
-  width: 100%;
-  height: 100%;
+.t-peony .pt-names {
+  font-size: min(calc(56 * var(--u)), calc(100cqi / (var(--len) * 0.43)));
+  line-height: 1.12;
 }
 
-.pa-art :is(.fa, .fb, .fc, .fd, .la, .lb),
-.pa-liner-art :is(.fa, .fb, .fc, .fd, .la, .lb) {
-  mix-blend-mode: multiply;
+.t-peony .pt-names .inv-amp {
+  font-size: 0.6em;
 }
 
-.pa-art .pa-euc {
-  fill: color-mix(in oklab, #9fb5a6 85%, var(--ink));
-  fill-opacity: 0.75;
+.t-peony .pt-date {
+  font-size: calc(22 * var(--u));
+  font-weight: 500;
 }
 
-.pa-text {
-  inset: calc(118 * var(--k)) calc(64 * var(--k)) calc(30 * var(--k));
-  gap: calc(7 * var(--k));
-  color: var(--ink);
+.t-peony .pt-bless .inv-bism {
+  width: calc(132 * var(--u));
 }
 
-.pa-text .st-bless {
-  color: color-mix(in oklab, var(--accent) 60%, var(--ink));
+/* with the couple, keep the text above their heads */
+.t-peony .pt-text {
+  gap: calc(6 * var(--u));
 }
 
-.pa-text .inv-bism {
-  width: calc(76 * var(--k));
+.t-peony .inv-title {
+  font-weight: 500;
 }
 
-.pa-text .st-title {
-  font: 500 calc(7.8 * var(--k)) / 1.5 var(--f-body);
-  letter-spacing: 0.26em;
-}
-
-.pa-text .st-names {
-  font-size: min(calc(34 * var(--k)), calc(100cqi / (var(--len) * 0.48)));
-  line-height: 1.15;
-}
-
-.pa-text .st-names .inv-amp {
-  font-size: 0.55em;
-  color: color-mix(in oklab, var(--accent) 70%, var(--ink));
-}
-
-.pa-text .st-sc {
-  font-size: calc(7.6 * var(--k));
-}
-
-.pa-text .st-when strong {
-  font: 500 calc(11.5 * var(--k)) / 1.4 var(--f-display);
-}
-
-.pa-text .st-venue {
-  font-size: calc(10.5 * var(--k));
-}
-
-.pa-liner {
-  background: color-mix(in oklab, var(--accent) 22%, #fffaf6);
-}
-
-.pa-liner-art {
-  inset: 0;
-  width: 60%;
-  height: auto;
-}
-
-.pa-liner-art.is-2 {
-  left: auto;
-  right: -6%;
-  top: 30%;
-  width: 55%;
-  rotate: 160deg;
+.t-peony .inv-sec {
+  outline-color: color-mix(in srgb, var(--accent) 45%, transparent);
 }

@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useState, type ReactNode } from "react";
 
+import { LiveThumb } from "@/components/live-thumb";
+import { PreviewButton } from "@/components/preview-sheet";
 import type { TemplateMeta } from "@/invite/templates/types";
 import type { Occasion } from "@/invite/types";
 import { FILTERS } from "@/lib/filters";
@@ -37,18 +39,25 @@ export function Gallery({ items, occasion, showFilters = true }: { items: Galler
           </div>
         </div>
       )}
-      <ul className="grid grid-cols-2 gap-x-4 gap-y-9 sm:grid-cols-3 lg:grid-cols-4 lg:gap-x-6">
+      <ul className="grid grid-cols-2 gap-x-3 gap-y-8 sm:grid-cols-3 sm:gap-x-5 lg:grid-cols-4 lg:gap-x-6">
         {shown.map(({ meta, thumb }) => {
           const q = occasion && meta.occasions.includes(occasion) ? `?occasion=${occasion}` : "";
           return (
             <li key={meta.id} className="group">
-              <Link href={`/templates/${meta.id}${q}`} className="block rounded-[22px]" aria-label={`${meta.name}: ${meta.tagline}`}>
-                <div className="rounded-2xl bg-paper-2 px-[13%] py-[9%] transition-colors duration-200 group-hover:bg-[#ebe6dd]">
-                  <div className="overflow-hidden rounded-[10px] shadow-[0_18px_36px_-20px_rgb(31_28_25/0.55)] ring-1 ring-black/5 transition-transform duration-300 ease-[var(--ease-out)] group-hover:-translate-y-1">
-                    {thumb}
-                  </div>
-                </div>
-              </Link>
+              <div className="relative">
+                <LiveThumb id={meta.id} className="overflow-hidden rounded-[16px] shadow-[0_18px_36px_-20px_rgb(31_28_25/0.55)] ring-1 ring-black/5 transition-transform duration-300 ease-[var(--ease-out)] group-hover:-translate-y-1">
+                  {thumb}
+                </LiveThumb>
+                <PreviewButton id={meta.id} className="absolute inset-0 rounded-[16px]">
+                  <span className="sr-only">Preview {meta.name}</span>
+                </PreviewButton>
+                <span className="pointer-events-none absolute bottom-2.5 left-2.5 inline-flex items-center gap-1 rounded-full bg-black/40 px-2.5 py-1 text-[12px] font-medium text-white backdrop-blur-md">
+                  <svg viewBox="0 0 24 24" className="size-3" aria-hidden>
+                    <path d="M8 5.5v13l10.5-6.5z" fill="currentColor" />
+                  </svg>
+                  Preview
+                </span>
+              </div>
               <div className="mt-3 flex items-start justify-between gap-2">
                 <div className="min-w-0">
                   <h3 className="text-[16px] leading-tight font-medium">{meta.name}</h3>
@@ -60,9 +69,14 @@ export function Gallery({ items, occasion, showFilters = true }: { items: Galler
                   ))}
                 </span>
               </div>
-              <Link href={`/create/${meta.id}${q}`} className="mt-2 inline-flex text-[14px] font-medium text-brand underline-offset-4 hover:underline">
-                Use this design
-              </Link>
+              <div className="mt-2 flex gap-4 text-[14px] font-medium">
+                <Link href={`/create/${meta.id}${q}`} className="text-brand underline-offset-4 hover:underline">
+                  Use this design
+                </Link>
+                <Link href={`/templates/${meta.id}${q}`} className="text-muted underline-offset-4 hover:text-ink hover:underline max-sm:hidden">
+                  Details
+                </Link>
+              </div>
             </li>
           );
         })}

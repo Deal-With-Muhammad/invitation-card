@@ -44,8 +44,20 @@ function Frame({ p, children }: { p: Pick<Palette, "bg" | "ink" | "accent">; chi
   );
 }
 
-/** The link preview for a shared invitation: title, names, date. */
-export async function renderInviteOg({ p, title, names, date, venue, tap }: { p: Palette; title: string; names: string; date: string; venue: string; tap: string }) {
+/** The design's art for share cards: a 420×630 JPEG slice of its painting (public/art/<id>/og.jpg). */
+export async function ogArt(origin: string | null, id: string): Promise<string | null> {
+  if (!origin) return null;
+  try {
+    const res = await fetch(`${origin}/art/${id}/og.jpg`, { cache: "force-cache" });
+    if (!res.ok) return null;
+    return `data:image/jpeg;base64,${Buffer.from(await res.arrayBuffer()).toString("base64")}`;
+  } catch {
+    return null;
+  }
+}
+
+/** The link preview for a shared invitation: the design's painting beside the title, names and date. */
+export async function renderInviteOg({ p, title, names, date, venue, tap, art = null }: { p: Palette; title: string; names: string; date: string; venue: string; tap: string; art?: string | null }) {
   const showNames = latin(names);
   const showText = latin(title + date + venue);
   const textAll = `${title}${date}${venue}${tap}${site.host}`;
@@ -53,12 +65,12 @@ export async function renderInviteOg({ p, title, names, date, venue, tap }: { p:
     ["Great Vibes", names || "x", 400, false],
     ["Cormorant Garamond", showText ? textAll : site.host, 500, false],
   ]);
-  return new ImageResponse(
+  const card = (
     <Frame p={p}>
       {showText && title && (
         <div style={{ display: "flex", fontFamily: "Cormorant Garamond", fontSize: 30, letterSpacing: 6, textTransform: "uppercase", color: p.accent }}>{title}</div>
       )}
-      <div style={{ display: "flex", fontFamily: showNames ? "Great Vibes" : "Cormorant Garamond", fontSize: names.length > 22 ? 96 : 128, lineHeight: 1.15, marginTop: 6, padding: "0 60px" }}>
+      <div style={{ display: "flex", fontFamily: showNames ? "Great Vibes" : "Cormorant Garamond", fontSize: art ? (names.length > 18 ? 72 : 96) : names.length > 22 ? 96 : 128, lineHeight: 1.15, marginTop: 6, padding: art ? "0 36px" : "0 60px" }}>
         {showNames ? names : "♥"}
       </div>
       {showText && (date || venue) && (
@@ -67,7 +79,18 @@ export async function renderInviteOg({ p, title, names, date, venue, tap }: { p:
       <div style={{ display: "flex", fontFamily: "Cormorant Garamond", fontSize: 22, marginTop: 34, color: p.accent, letterSpacing: 3 }}>
         {showText ? `${tap.toUpperCase()}  ·  ${site.host}` : site.host}
       </div>
-    </Frame>,
+    </Frame>
+  );
+  return new ImageResponse(
+    art ? (
+      <div style={{ display: "flex", width: "100%", height: "100%", background: p.bg }}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={art} width={420} height={630} alt="" style={{ width: 420, height: 630, objectFit: "cover" }} />
+        <div style={{ display: "flex", flex: 1 }}>{card}</div>
+      </div>
+    ) : (
+      card
+    ),
     { ...OG_SIZE, fonts: f },
   );
 }

@@ -7,13 +7,13 @@ import { newInvite } from "@/invite/defaults";
 import { Thumb } from "@/invite/runtime/thumb";
 import { metaFor } from "@/invite/templates/catalog";
 
-const DESIGNS = ["envelope", "jharokha", "marigold"] as const;
+const DESIGNS = ["peony", "velvetrose", "petals"] as const;
 
 /** Type two names and see a real design update: the product, on the home page. */
 export function TryIt() {
   const [a, setA] = useState("Zara");
   const [b, setB] = useState("Ibrahim");
-  const [id, setId] = useState<(typeof DESIGNS)[number]>("envelope");
+  const [id, setId] = useState<(typeof DESIGNS)[number]>("peony");
   const meta = metaFor(id);
 
   const data = useMemo(() => {

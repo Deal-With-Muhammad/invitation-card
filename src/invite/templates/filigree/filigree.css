@@ -1,101 +1,183 @@
-/* Gilded Wreath: a gold-foil line-art wreath and monogram. */
+/* Gilded Wreath (painted kit). The gold wreath in the art is centred at 50% / 29.5%
+   of the screen and about 0.34 × the screen height across (height-fitted art). */
 
 .t-filigree {
-  --st-env: color-mix(in srgb, var(--bg) 25%, #fbf8f1);
+  --wr: calc(var(--sh) * 0.3);
 }
 
-.t-filigree .st-card {
-  background:
-    radial-gradient(110% 70% at 30% 15%, color-mix(in srgb, #fffdf8 16%, transparent), transparent 70%),
-    var(--bg);
+/* the blind-embossed initials on the envelope flap */
+.t-filigree .pt-seal .pt-ini {
+  font: 600 calc(23 * var(--u)) / 1 var(--f-names);
+  letter-spacing: 0.04em;
+  color: #d6d0c6;
+  text-shadow:
+    -1px -1px 0 color-mix(in srgb, #ffffff 85%, transparent),
+    1px 1px 1px color-mix(in srgb, #5d5340 45%, transparent);
 }
 
-.fg-art {
-  inset: 0;
+.t-filigree .pt-seal .pt-ini i {
+  font-family: var(--f-display);
+  font-style: italic;
+  font-size: 0.7em;
 }
 
-.fg-border {
-  position: absolute;
-  inset: calc(9 * var(--k));
-  border: calc(0.8 * var(--k)) solid color-mix(in srgb, var(--accent) 80%, transparent);
-}
+/* ── the monogram inside the gold wreath ── */
 
-.fg-mono {
+.fl-wreath {
   position: absolute;
   left: 50%;
-  top: calc(40 * var(--k));
+  top: 29.5%;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: var(--wr);
+  aspect-ratio: 1;
   translate: -50% -50%;
-  font: 500 calc(17 * var(--k)) / 1 var(--f-display);
-  letter-spacing: 0.04em;
-  color: var(--accent);
-  white-space: nowrap;
+  border-radius: 50%;
+  overflow: hidden;
+  pointer-events: none;
 }
 
-.fg-text {
-  inset: calc(72 * var(--k)) calc(56 * var(--k)) calc(64 * var(--k));
-  gap: calc(7 * var(--k));
-  color: var(--ink);
+.fl-mono {
+  display: flex;
+  align-items: center;
+  font: 500 calc(var(--sh) * 0.088) / 1 var(--f-names);
+  letter-spacing: 0.02em;
+  background: linear-gradient(150deg, #7f5f27 8%, #e6c983 34%, #a9823f 50%, #f0dca4 66%, #8b6a2c 92%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 1px 0 color-mix(in srgb, #fff9ea 70%, transparent)) drop-shadow(0 -1px 0 color-mix(in srgb, #4f3a15 35%, transparent));
 }
 
-.fg-text .st-bless {
-  color: var(--accent);
-}
-
-.fg-text .inv-bism {
-  width: calc(76 * var(--k));
-}
-
-.fg-text .st-title {
-  font: italic 400 calc(11 * var(--k)) / 1.4 var(--f-display);
-  letter-spacing: 0.04em;
-  text-transform: none;
-}
-
-.fg-text .st-names {
-  font-size: min(calc(24 * var(--k)), calc(100cqi / (var(--len) * 0.72)));
+.fl-mono i {
+  margin: 0 0.12em;
+  font-family: var(--f-display);
+  font-size: 0.56em;
+  font-style: italic;
   font-weight: 500;
-  line-height: 1.15;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
 }
 
-.fg-text.is-script .st-names {
-  text-transform: none;
-  letter-spacing: 0;
-  font-size: min(calc(34 * var(--k)), calc(100cqi / (var(--len) * 0.48)));
+.fl-glint {
+  position: absolute;
+  inset: -30%;
+  background: linear-gradient(112deg, transparent 40%, color-mix(in srgb, #fff6dc 70%, transparent) 50%, transparent 60%);
+  mix-blend-mode: soft-light;
+  translate: -75% 0;
+  animation: fl-glint 12s cubic-bezier(0.45, 0, 0.35, 1) 1.8s infinite;
 }
 
-.fg-text .st-names .inv-amp {
-  font: italic 400 0.66em / 1.4 var(--f-display);
-  letter-spacing: 0;
-  text-transform: lowercase;
+@keyframes fl-glint {
+  0% {
+    translate: -75% 0;
+  }
+  26%,
+  100% {
+    translate: 75% 0;
+  }
+}
+
+.inv[data-phase="opening"] .fl-mono {
+  animation: fl-press 1400ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: calc(var(--open) * 0.4);
+}
+
+@keyframes fl-press {
+  from {
+    opacity: 0;
+    transform: scale(1.12);
+  }
+}
+
+/* ── hero text ── */
+
+.t-filigree .pt-text {
+  gap: calc(9 * var(--u));
+}
+
+.t-filigree .pt-bless {
   color: var(--accent);
 }
 
-.fg-rule {
-  width: calc(30 * var(--k));
-  height: calc(0.8 * var(--k));
-  background: var(--accent);
+.t-filigree .pt-title {
+  font-family: var(--f-display);
+  font-size: calc(15 * var(--u));
+  font-weight: 700;
+  letter-spacing: 0.26em;
+  color: color-mix(in srgb, var(--accent) 45%, var(--ink));
 }
 
-.fg-text .st-sc {
-  font-size: calc(7.6 * var(--k));
+.t-filigree .pt-names {
+  gap: calc(2 * var(--u));
+  font-size: min(calc(46 * var(--u)), calc(100cqi / (var(--len) * 0.8)));
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: 0.06em;
 }
 
-.fg-text .st-when strong {
-  font: 500 calc(12 * var(--k)) / 1.4 var(--f-display);
+.t-filigree .pt-names .inv-amp {
+  font-family: var(--f-display);
+  font-style: italic;
+  font-size: 0.78em;
+  line-height: 1;
+  letter-spacing: 0;
 }
 
-.fg-text .st-venue {
-  font-size: calc(11 * var(--k));
-}
-
-.fg-liner::after {
+.t-filigree .pt-when::before {
   content: "";
-  position: absolute;
-  inset: 0;
-  background: color-mix(in srgb, var(--accent) 55%, #3a2a14);
-  opacity: 0.28;
-  -webkit-mask: var(--st-cloud) 0 0 / calc(150 * var(--k)) calc(150 * var(--k)) repeat;
-  mask: var(--st-cloud) 0 0 / calc(150 * var(--k)) calc(150 * var(--k)) repeat;
+  width: calc(56 * var(--u));
+  height: 1px;
+  margin-bottom: calc(8 * var(--u));
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+}
+
+.t-filigree .pt-date {
+  font-size: calc(25 * var(--u));
+  font-weight: 500;
+}
+
+.t-filigree .pt-venue {
+  font-size: calc(19 * var(--u));
+}
+
+/* ── sections: debossed card, foil numerals, laurel dividers ── */
+
+.t-filigree .inv-sec {
+  background: color-mix(in srgb, var(--bg) 96%, transparent);
+  outline: 0;
+  box-shadow:
+    inset 0 2px 5px color-mix(in srgb, #6b5d45 26%, transparent),
+    inset 0 -1px 0 color-mix(in srgb, #ffffff 70%, transparent),
+    0 22px 40px -32px color-mix(in srgb, var(--ink) 50%, transparent);
+}
+
+.t-filigree .inv-title {
+  font-weight: 500;
+}
+
+.t-filigree :is(.inv-cd-unit b, .inv-ev-day) {
+  background: linear-gradient(160deg, #6f5220, #c9a45a 42%, #8a6830 62%, #d4b46f 82%, #6f5220);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.fl-laurel {
+  display: block;
+  width: 240px;
+  height: 78px;
+  margin: 0 auto;
+  background: url(/art/filigree/hero-720.webp) no-repeat;
+  background-size: 480px auto;
+  background-position: -120px -366px;
+  -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 55%, transparent 100%);
+  mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 55%, transparent 100%);
+}
+
+.t-filigree .pt-backdrop {
+  background: #d9d1c4;
+}
+
+.t-filigree .pt-backdrop-art {
+  opacity: 0.6;
 }

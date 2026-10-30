@@ -1,3 +1,4 @@
+import { metaFor } from "./templates/catalog";
 import { addDays, guessTimeZone, sampleDate } from "./time";
 import type { EventItem, InviteData, Lang, Occasion, Person } from "./types";
 
@@ -242,7 +243,9 @@ export function sampleFor(occasion: Occasion): Sample {
 const MUSIC_OFF: Occasion[] = ["nikah", "aqiqah"];
 
 export function newInvite(template: string, occasion: Occasion, palette: string, lang: Lang = "en"): InviteData {
-  const s = sampleFor(occasion);
+  const sample = sampleFor(occasion);
+  // Designs that aren't Islamic in style start without the Bismillah; the host can add it.
+  const s = metaFor(template).islamic === false ? { ...sample, bismillah: "none" as const, salam: false } : sample;
   return {
     v: 1,
     template,

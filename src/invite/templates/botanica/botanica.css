@@ -1,703 +1,137 @@
-/* Botanica: a clean paper card on a soft table, with watercolour eucalyptus and
-   olive sprays in two corners. Hero text is sized in --k, which follows the
-   phone width but also shrinks on short screens so the card never overflows. */
+/* Botanica (painted kit). */
 
-.t-botanica {
-  --line: color-mix(in srgb, var(--accent) 30%, transparent);
-  --table: color-mix(in srgb, var(--soft) 48%, var(--bg));
-  --t1: color-mix(in srgb, var(--accent) 76%, var(--ink));
-  --t2: var(--accent);
-  --t3: color-mix(in srgb, var(--accent) 58%, var(--soft));
-  --t4: color-mix(in srgb, var(--accent) 36%, var(--soft));
-  --pigment: color-mix(in srgb, var(--accent) 52%, var(--ink));
-  --vein: color-mix(in srgb, var(--accent) 34%, var(--ink));
-  --lift: 0 1px 0 color-mix(in srgb, var(--ink) 5%, transparent),
-    0 22px 44px -30px color-mix(in srgb, var(--ink) 38%, transparent);
+/* Tailwind's img { max-width: 100% } would squeeze each half to half the art */
+.t-botanica .pt-half .pt-img {
+  max-width: none;
 }
 
-/* ── watercolour ── */
+/* ── the walk in: near leaves (a soft, larger copy round the edges) rush past
+   while the garden behind slides apart ── */
 
-.t-botanica .bt-wash {
-  stroke: var(--pigment);
-  stroke-width: 0.45;
-  stroke-opacity: 0.3;
-}
-
-.t-botanica .bt-w1 { fill: var(--t1); }
-.t-botanica .bt-w2 { fill: var(--t2); }
-.t-botanica .bt-w3 { fill: var(--t3); }
-.t-botanica .bt-w4 { fill: var(--t4); }
-
-.t-botanica .bt-pool {
-  fill: var(--pigment);
-  fill-opacity: 0.22;
-}
-
-.t-botanica .bt-vein {
-  fill: none;
-  stroke: var(--vein);
-  stroke-width: 0.6;
-  stroke-opacity: 0.55;
-  stroke-linecap: round;
-}
-
-.t-botanica .bt-stem {
-  fill: var(--pigment);
-  fill-opacity: 0.78;
-}
-
-.t-botanica .bt-twig {
-  fill: none;
-  stroke: var(--pigment);
-  stroke-width: 0.7;
-  stroke-opacity: 0.7;
-  stroke-linecap: round;
-}
-
-.t-botanica .bt-berry {
-  fill: var(--t3);
-  fill-opacity: 0.9;
-  stroke: var(--pigment);
-  stroke-width: 0.5;
-  stroke-opacity: 0.45;
-}
-
-.t-botanica .bt-olive {
-  fill: color-mix(in srgb, var(--accent) 42%, var(--ink));
-  fill-opacity: 0.82;
-}
-
-.t-botanica .bt-shine {
-  fill: var(--bg);
-  fill-opacity: 0.5;
-}
-
-/* ── backdrop: the table the cards sit on, with two soft blooms ── */
-
-.bt-bloom {
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(ellipse 60% 40% at 0% 0%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 70%),
-    radial-gradient(ellipse 60% 40% at 100% 100%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 70%),
-    var(--table);
-}
-
-/* ── hero ── */
-
-.bt-hero {
-  --k: min(var(--u), calc(var(--sh) / 800));
-  position: relative;
-  display: grid;
-  min-height: var(--sh);
-  padding: calc(16 * var(--u));
-  background: var(--table);
-}
-
-.bt-card {
-  position: relative;
-  display: grid;
-  place-items: center;
-  background: var(--bg);
-  box-shadow: var(--lift);
-}
-
-.bt-frame {
-  position: absolute;
-  inset: calc(9 * var(--u));
-  border: 1px solid var(--line);
-  pointer-events: none;
-}
-
-.bt-in {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: calc(12 * var(--k));
-  width: 100%;
-  padding: calc(140 * var(--k)) calc(40 * var(--u)) calc(132 * var(--k));
-  text-align: center;
-  container-type: inline-size;
-}
-
-.bt-in .inv-bism {
-  width: calc(168 * var(--k));
-}
-
-.bt-in .inv-bism-text {
-  font-size: calc(22 * var(--k));
-}
-
-.bt-title {
-  font: 400 calc(14.5 * var(--k)) / 1.5 var(--f-display);
-  letter-spacing: 0.38em;
-  text-indent: 0.38em;
-  text-transform: uppercase;
-  color: color-mix(in srgb, var(--accent) 82%, var(--ink));
-}
-
-.bt-names {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-size: min(calc(70 * var(--k)), calc(100cqi / (var(--len) * 0.46)));
-  line-height: 1.04;
-  color: var(--ink);
-  overflow-wrap: anywhere;
-}
-
-.bt-names .inv-amp {
-  font-size: 0.5em;
-  line-height: 1;
-  color: var(--accent);
-  margin: 0.04em 0 0.1em;
-}
-
-.bt-milestone {
-  font: 400 calc(30 * var(--k)) / 1.1 var(--f-display);
-  letter-spacing: 0.08em;
-  color: var(--accent);
-}
-
-.bt-rule {
-  display: block;
-  line-height: 0;
-  margin-block: calc(2 * var(--k));
-}
-
-.bt-rule .bt-orn {
-  width: calc(64 * var(--k));
-  height: calc(18 * var(--k));
-}
-
-.bt-when {
-  display: grid;
-  gap: calc(4 * var(--k));
-  font: 500 calc(10.5 * var(--k)) / 1.5 var(--f-body);
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: color-mix(in srgb, var(--ink) 78%, transparent);
-}
-
-.bt-when strong {
-  font: 400 calc(23 * var(--k)) / 1.2 var(--f-display);
-  letter-spacing: 0.06em;
-  text-transform: none;
-  color: var(--ink);
-}
-
-.bt-venue {
-  font: 400 calc(15.5 * var(--k)) / 1.35 var(--f-display);
-  letter-spacing: 0.05em;
-  opacity: 0.85;
-}
-
-.inv:is([lang="ur"], [lang="ar"], [lang="fa"]) :is(.bt-title, .bt-when, .bt-tag-tap) {
-  letter-spacing: 0;
-  text-indent: 0;
-}
-
-/* Naskh and Nastaliq read smaller than Latin caps at the same size */
-.inv:is([lang="ur"], [lang="ar"], [lang="fa"]) .bt-title {
-  font-size: calc(18 * var(--k));
-}
-
-.inv:is([lang="ur"], [lang="ar"], [lang="fa"]) .bt-when {
-  font-size: calc(13 * var(--k));
-}
-
-.bt-spray {
-  position: absolute;
-  aspect-ratio: 270 / 330;
-  overflow: visible;
-  pointer-events: none;
-}
-
-.bt-tl {
-  left: calc(-4 * var(--u));
-  top: calc(-6 * var(--u));
-  width: calc(322 * var(--k));
-  transform-origin: 0 0;
-}
-
-.bt-br {
-  right: calc(-4 * var(--u));
-  bottom: calc(-6 * var(--u));
-  width: calc(292 * var(--k));
-  transform-origin: 100% 100%;
-}
-
-/* the card settles in behind the leaves as they part */
-.inv[data-phase="opening"] .bt-spray {
-  animation: bt-unfurl 1.3s 0.4s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-}
-
-.inv[data-phase="opening"] :is(.bt-a1, .bt-a2, .bt-a3, .bt-a4, .bt-a5) {
-  animation: bt-rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-}
-
-.inv[data-phase="opening"] .bt-a1 { animation-delay: 0.6s; }
-.inv[data-phase="opening"] .bt-a2 { animation-delay: 0.74s; }
-.inv[data-phase="opening"] .bt-a3 { animation-delay: 0.86s; }
-.inv[data-phase="opening"] .bt-a4 { animation-delay: 0.98s; }
-.inv[data-phase="opening"] .bt-a5 { animation-delay: 1.08s; }
-
-@keyframes bt-unfurl {
-  from {
-    opacity: 0;
-    transform: rotate(-6deg) scale(0.93);
-  }
-}
-
-@keyframes bt-rise {
-  from {
-    opacity: 0;
-    transform: translateY(calc(12 * var(--k)));
-  }
-}
-
-/* ── cover ── */
-
-.bt-cover {
+.bt-near {
   position: absolute;
   inset: 0;
   overflow: hidden;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 48%, transparent 72%, #000 100%);
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 48%, transparent 72%, #000 100%);
 }
 
-.bt-cv-paper {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse 80% 55% at 50% 50%, var(--bg), var(--table));
+.bt-near .pt-img {
+  transform: scale(1.5) rotate(180deg);
+  filter: blur(2.5px) saturate(1.1) brightness(0.95);
 }
 
-.bt-cv-stage {
-  position: relative;
-  width: min(100%, 480px);
-  height: 100%;
-  margin-inline: auto;
+.inv[data-phase="opening"] .bt-near {
+  animation: bt-near calc(var(--open) * 0.7) cubic-bezier(0.5, 0, 0.4, 1) both;
 }
 
-/* on a desktop the column has paper either side: let the bouquets dissolve into it */
-@media (min-width: 520px) {
-  .bt-cv-stage {
-    -webkit-mask: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
-    mask: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
+@keyframes bt-near {
+  to {
+    transform: scale(1.9);
+    opacity: 0;
   }
 }
 
-.bt-bq {
-  position: absolute;
-  top: 50%;
-  width: calc(300 * var(--u));
-  height: calc(900 * var(--u));
-  translate: 0 -50%;
-  overflow: visible;
+.inv.t-botanica[data-phase="opening"] .pt-cover.is-slide .pt-half {
+  animation-duration: calc(var(--open) * 0.86);
+  animation-delay: calc(var(--open) * 0.06);
 }
 
-.bt-bq-l {
-  left: 0;
-  transform-origin: 0 50%;
+.inv.t-botanica[data-phase="opening"] .pt-cover .pt-half .pt-img {
+  animation: bt-back calc(var(--open) * 0.9) ease-out both;
 }
 
-.bt-bq-r {
-  right: 0;
-  transform-origin: 100% 50%;
+@keyframes bt-back {
+  to {
+    transform: scale(1.12);
+  }
 }
 
-.bt-bq-stem {
-  transform-box: view-box;
+.t-botanica .pt-bloom {
+  background: radial-gradient(ellipse 40% 60% at 50% 50%, color-mix(in srgb, #fbfaf2 95%, transparent), transparent 75%);
 }
 
-.bt-tag {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: calc(150 * var(--u));
-  aspect-ratio: 150 / 250;
-  translate: -50% -56%;
-  transform-origin: 50% 0;
-  filter: drop-shadow(0 calc(12 * var(--u)) calc(12 * var(--u)) color-mix(in srgb, var(--ink) 20%, transparent));
+/* the hero leaves drift a little as you scroll away */
+.t-botanica .pt-hero-art {
+  scale: 1.05;
 }
 
-.bt-tag svg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
+@supports (animation-timeline: view()) {
+  .inv.t-botanica[data-phase="open"] .pt-hero .pt-hero-art {
+    animation: bt-drift linear both;
+    animation-timeline: view();
+    animation-range: exit 0% exit 100%;
+  }
 }
 
-.bt-tag-card {
-  fill: var(--bg);
+@keyframes bt-drift {
+  to {
+    translate: 0 calc(46 * var(--u));
+    scale: 1.1;
+  }
 }
 
-.bt-tag-line {
-  stroke: var(--line);
-  stroke-width: 0.8;
-}
+/* ── hero text ── */
 
-.bt-tag-ring {
-  fill: var(--bg);
-  stroke: var(--accent);
-  stroke-width: 0.9;
-}
-
-.bt-tag-hole {
-  fill: color-mix(in srgb, var(--soft) 60%, var(--accent));
-}
-
-.bt-bow {
-  fill: color-mix(in srgb, var(--accent) 58%, var(--soft));
-}
-
-.bt-bow-dk {
-  fill: color-mix(in srgb, var(--accent) 80%, var(--ink));
-}
-
-.bt-bow-crease {
-  fill: none;
-  stroke: color-mix(in srgb, var(--accent) 60%, var(--ink));
-  stroke-width: 0.8;
-  stroke-opacity: 0.6;
-  stroke-linecap: round;
-}
-
-.bt-tag-in {
-  position: absolute;
-  inset: 41% 12% 7%;
-  display: grid;
-  place-content: center;
-  justify-items: center;
+.t-botanica .pt-text {
   gap: calc(10 * var(--u));
-  text-align: center;
 }
 
-.bt-tag-ini {
-  font: 400 calc(46 * var(--u)) / 1 var(--f-names);
-  color: var(--ink);
-  white-space: nowrap;
+.t-botanica .pt-title {
+  font-family: var(--f-display);
+  font-size: calc(17 * var(--u));
+  font-weight: 400;
+  letter-spacing: 0.22em;
 }
 
-.bt-tag-ini i {
-  font: 400 0.5em var(--f-display);
-  font-style: normal;
-  color: var(--accent);
-  margin: 0 0.16em;
-  vertical-align: 0.18em;
+.t-botanica .pt-names {
+  font-size: min(calc(70 * var(--u)), calc(100cqi / (var(--len) * 0.42)));
+  line-height: 1.02;
 }
 
-.bt-tag-tap {
-  padding-top: calc(9 * var(--u));
-  border-top: 1px solid var(--line);
-  font: 500 calc(8.5 * var(--u)) / 1.3 var(--f-body);
-  letter-spacing: 0.26em;
-  text-indent: 0.26em;
+.t-botanica .pt-names .inv-amp {
+  font-size: 0.55em;
+  line-height: 1.2;
+}
+
+.t-botanica .pt-when {
+  gap: calc(5 * var(--u));
+  margin-top: calc(8 * var(--u));
+}
+
+.t-botanica .pt-sc {
+  font-size: calc(12 * var(--u));
+  letter-spacing: 0.32em;
+}
+
+.t-botanica .pt-date {
+  font: 500 calc(15 * var(--u)) / 1.3 var(--f-body);
+  letter-spacing: 0.28em;
   text-transform: uppercase;
-  color: var(--accent);
-  white-space: nowrap;
 }
 
-.inv[data-phase="closed"] .bt-tag {
-  animation: bt-swing 5s ease-in-out infinite;
-}
-
-.inv[data-phase="closed"] .bt-bq {
-  animation: bt-breeze 7s ease-in-out infinite;
-}
-
-.inv[data-phase="closed"] .bt-bq-r {
-  animation-delay: -3.5s;
-}
-
-.inv[data-phase="opening"] .bt-tag {
-  animation: bt-tag-out 0.5s ease-in both;
-}
-
-.inv[data-phase="opening"] .bt-bq-stem {
-  animation: bt-stem 1.25s var(--d) cubic-bezier(0.45, 0.05, 0.3, 1) both;
-}
-
-.inv[data-phase="opening"] .bt-bq-l {
-  animation: bt-away-l 1.5s 0.12s cubic-bezier(0.5, 0, 0.3, 1) both;
-}
-
-.inv[data-phase="opening"] .bt-bq-r {
-  animation: bt-away-r 1.5s 0.12s cubic-bezier(0.5, 0, 0.3, 1) both;
-}
-
-.inv[data-phase="opening"] .bt-cv-paper {
-  animation: bt-fade 0.8s 0.65s ease both;
-}
-
-@keyframes bt-swing {
-  50% {
-    transform: rotate(1.4deg);
-  }
-}
-
-@keyframes bt-breeze {
-  50% {
-    transform: rotate(0.8deg);
-  }
-}
-
-@keyframes bt-tag-out {
-  to {
-    opacity: 0;
-    transform: translateY(calc(-14 * var(--u))) scale(0.96);
-  }
-}
-
-@keyframes bt-stem {
-  25% {
-    transform: rotate(calc(var(--turn) * -2.5deg));
-  }
-  to {
-    transform: rotate(calc(var(--turn) * 24deg));
-  }
-}
-
-@keyframes bt-away-l {
-  25% {
-    transform: rotate(1.5deg);
-    opacity: 1;
-  }
-  65% {
-    opacity: 1;
-  }
-  to {
-    transform: translateX(-70%) rotate(-8deg);
-    opacity: 0;
-  }
-}
-
-@keyframes bt-away-r {
-  25% {
-    transform: rotate(-1.5deg);
-    opacity: 1;
-  }
-  65% {
-    opacity: 1;
-  }
-  to {
-    transform: translateX(70%) rotate(8deg);
-    opacity: 0;
-  }
-}
-
-@keyframes bt-fade {
-  to {
-    opacity: 0;
-  }
+.t-botanica .pt-venue {
+  font: 400 calc(21 * var(--u)) / 1.3 var(--f-display);
+  letter-spacing: 0.06em;
 }
 
 /* ── sections ── */
 
 .t-botanica .inv-sec {
-  padding: 72px 30px;
+  border-radius: 14px;
+  outline-color: color-mix(in srgb, var(--accent) 30%, transparent);
 }
 
 .t-botanica .inv-title {
-  font: 400 34px/1.15 var(--f-display);
+  font-size: 38px;
   letter-spacing: 0.04em;
 }
 
-.t-botanica .inv-eyebrow {
-  font-weight: 500;
-  font-size: 10.5px;
-  letter-spacing: 0.34em;
-}
-
-.t-botanica .inv-h {
-  gap: 10px;
-  margin-bottom: 32px;
-}
-
-.t-botanica .bt-orn {
-  display: block;
-  width: 64px;
-  height: 18px;
-}
-
-.t-botanica .inv-hosts {
-  gap: 4px;
-  font: 500 12.5px/1.6 var(--f-body);
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-}
-
-.t-botanica :is(.inv-hosts-amp, .inv-people-amp) {
-  font: 400 30px/1.2 var(--f-names);
-  letter-spacing: 0;
-  text-transform: none;
-}
-
-.t-botanica .inv-pname {
-  font: 400 46px/1.2 var(--f-names);
-}
-
-.t-botanica .inv-pline {
-  font-size: 11.5px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-}
-
-.t-botanica .inv-milestone {
-  font-family: var(--f-display);
-  letter-spacing: 0.06em;
-}
-
-.t-botanica .inv-message {
-  font: 400 19px/1.65 var(--f-display);
-  letter-spacing: 0.02em;
-}
-
-.t-botanica .inv-cd {
-  gap: 12px;
-}
-
-.t-botanica .inv-cd-unit {
-  padding: 18px 4px 14px;
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  background: var(--bg);
-  box-shadow: var(--lift);
-}
-
-.t-botanica .inv-cd-unit b {
-  font-size: 34px;
-}
-
-.t-botanica .inv-cd-unit span {
-  font-size: 9.5px;
-  letter-spacing: 0.2em;
-}
-
 .t-botanica .inv-ev-day {
-  font-size: 68px;
+  font-family: var(--f-display);
 }
 
-.t-botanica .inv-ev-weekday,
-.t-botanica .inv-ev-month {
-  font-size: 11px;
-  letter-spacing: 0.3em;
-}
-
-.t-botanica .inv-ev-title {
-  font-size: 28px;
-  letter-spacing: 0.03em;
-}
-
-.t-botanica .inv-events.is-many .inv-ev,
-.t-botanica .inv-ev-shared,
-.t-botanica .inv-closing {
-  position: relative;
-  border: 0;
-  border-radius: 0;
-  background: var(--bg);
-  box-shadow: var(--lift);
-}
-
-.t-botanica .inv-events.is-many .inv-ev {
-  padding: 40px 24px 32px;
-}
-
-.t-botanica .inv-ev-shared {
-  padding: 40px 22px 30px;
-}
-
-.t-botanica .inv-events.is-many .inv-ev::before,
-.t-botanica .inv-ev-shared::before,
-.t-botanica .inv-closing::before {
-  content: "";
-  position: absolute;
-  inset: 8px;
-  border: 1px solid var(--line);
-  pointer-events: none;
-}
-
-.t-botanica .inv-venue-name {
-  font-size: 23px;
-  letter-spacing: 0.03em;
-}
-
-.t-botanica .inv-map {
-  border-radius: 2px;
-  border: 0;
-  box-shadow: 0 0 0 6px var(--bg), 0 0 0 7px var(--line);
-  margin-top: 20px;
-}
-
-.t-botanica .inv-btn {
-  position: relative;
-  z-index: 1;
-  border: 0;
-  background: color-mix(in srgb, var(--soft) 82%, var(--accent));
-  font-size: 13px;
-  letter-spacing: 0.05em;
-}
-
-.t-botanica .inv-btn.is-primary {
-  background: var(--accent);
-}
-
-.t-botanica .inv-sched li {
-  grid-template-columns: 96px 1fr;
-  border-bottom: 1px solid var(--line);
-}
-
-.t-botanica .inv-sched time {
-  font: 400 18px/1.4 var(--f-display);
-}
-
-.t-botanica .inv-swatches i {
-  box-shadow: 0 0 0 3px var(--table), 0 0 0 4px var(--line);
-}
-
-.t-botanica .inv-prayer-text,
-.t-botanica .inv-gifts-note,
-.t-botanica .inv-dress-note {
-  font: 400 18px/1.65 var(--f-display);
-  font-style: normal;
-}
-
-.t-botanica .inv-closing {
-  margin: 8px 20px 26px;
-  padding: 70px 26px 54px;
-  container-type: inline-size;
-}
-
-.t-botanica .inv-closing-text {
-  font-size: 24px;
-  letter-spacing: 0.02em;
-}
-
-.t-botanica .inv-closing-names {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-size: min(54px, calc(100cqi / (var(--len) * 0.5)));
-  line-height: 1.1;
-  overflow-wrap: anywhere;
-}
-
-.t-botanica .inv-closing-names .inv-amp {
-  font-size: 0.55em;
-  margin: 0;
-}
-
-.t-botanica .inv-closing-meta {
-  text-wrap: balance;
-}
-
-.t-botanica .inv-divider {
-  padding: 2px 0;
-}
-
-.t-botanica .bt-divider {
-  width: 176px;
-  height: 39px;
-  overflow: visible;
+.t-botanica .pt-backdrop-art {
+  opacity: 0.5;
 }

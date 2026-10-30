@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { LiveThumb } from "@/components/live-thumb";
 import { Eyebrow } from "@/components/sections";
 import { Thumb } from "@/invite/runtime/thumb";
 import { TEMPLATE_LIST, TEMPLATES } from "@/invite/templates";
@@ -64,18 +65,22 @@ export default async function TemplatePage(props: PageProps<"/templates/[id]">) 
             </Link>
           </div>
 
-          <h2 className="mt-12 mb-4 text-[15px] font-medium">Colour palettes</h2>
-          <ul className="grid max-w-lg grid-cols-3 gap-3">
-            {meta.palettes.map((p) => (
-              <li key={p.id}>
-                <Link href={`/create/${meta.id}?occasion=${occasion}&palette=${p.id}`} className="block overflow-hidden rounded-2xl ring-1 ring-line transition-transform hover:-translate-y-0.5" aria-label={`Use ${meta.name} in ${p.name}`}>
-                  <Thumb id={meta.id} palette={p.id} occasion={occasion} />
-                </Link>
-                <p className="mt-1.5 text-[13px] text-muted">{p.name}</p>
-              </li>
-            ))}
-          </ul>
-          <p className="mt-4 max-w-lg text-[14px] text-muted">Or pick your own colours in the editor. Opening: {meta.opening.toLowerCase()}.</p>
+          {meta.palettes.length > 1 && (
+            <>
+              <h2 className="mt-12 mb-4 text-[15px] font-medium">Colourways</h2>
+              <ul className="grid max-w-lg grid-cols-3 gap-3">
+                {meta.palettes.map((p) => (
+                  <li key={p.id}>
+                    <Link href={`/create/${meta.id}?occasion=${occasion}&palette=${p.id}`} className="block overflow-hidden rounded-2xl ring-1 ring-line transition-transform hover:-translate-y-0.5" aria-label={`Use ${meta.name} in ${p.name}`}>
+                      <Thumb id={meta.id} palette={p.id} occasion={occasion} />
+                    </Link>
+                    <p className="mt-1.5 text-[13px] text-muted">{p.name}</p>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+          <p className="mt-6 max-w-lg text-[14px] text-muted">Opening: {meta.opening.toLowerCase()}. Your names, dates and venues are printed as real text, in any of the supported languages.</p>
         </div>
         <DemoPhone src={`/preview/${meta.id}?occasion=${occasion}`} title={`${meta.name} invitation, live`} />
       </div>
@@ -87,7 +92,9 @@ export default async function TemplatePage(props: PageProps<"/templates/[id]">) 
             {related.map((x) => (
               <li key={x.meta.id}>
                 <Link href={`/templates/${x.meta.id}`} className="block overflow-hidden rounded-[20px] ring-1 ring-line transition-transform hover:-translate-y-1">
-                  <Thumb id={x.meta.id} />
+                  <LiveThumb id={x.meta.id}>
+                    <Thumb id={x.meta.id} />
+                  </LiveThumb>
                 </Link>
                 <p className="mt-2 font-serif text-[17px]">{x.meta.name}</p>
               </li>

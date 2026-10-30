@@ -1,7 +1,9 @@
 # Writing an invitation template
 
 Every design lives in `src/invite/templates/<id>/` and plugs into one shared
-invitation engine. The engine owns the data, languages, dates, sections, music,
+invitation engine. **New designs use the painted kit** (`templates/painted/`, see
+`painted/KIT.md`): generated painted or photographed art in `public/art/<id>/`, with the
+code doing the motion and printing all text live on top. The engine owns the data, languages, dates, sections, music,
 auto-scroll and controls; a template owns how it looks and how it opens.
 
 Read these first:
@@ -63,10 +65,11 @@ page, with all animation switched off. So:
   hidden (`animation-fill-mode: both`) and only run under `.inv[data-phase="opening"]`,
   finishing before `openMs`.
 
-**Look.** It has to look like a stationery designer made it: hand-built SVG with
-consistent stroke weights and real detail, a clear typographic hierarchy, generous
-spacing. Avoid the generic "AI" look: no glassmorphism, no rainbow gradients, no
-emoji, no stock icons as decoration.
+**Look.** It has to look like a premium stationery designer made it. Florals, textures,
+foil, lace and velvet come from painted art images (`public/art/<id>/`, 1080×1920 WebP
+plus a 720 copy), never from flat shapes drawn in code; code-drawn SVG is only for crisp
+lines and small ornaments. No text baked into art. Avoid the generic "AI" look: no
+glassmorphism, no rainbow gradients, no emoji, no stock icons as decoration.
 
 **Sections.** Restyle the shared sections (headings, countdown, event cards,
 venue and map, buttons, programme, swatches, contacts, prayer, closing) under
@@ -76,19 +79,18 @@ venue and map, buttons, programme, swatches, contacts, prayer, closing) under
 **Motion.** Transform and opacity only, eased, nothing that loops fast. Reduced
 motion is handled globally.
 
-## Stationery wedding cards
+## Painted designs
 
-The wedding cards modelled on printed stationery (Gilded Blossom, Rose Study,
-Midnight Orchid, Wildflower Lane, Ivory Lace, Gilded Wreath, Lily of the Valley,
-Peony Arch, Rose Shower, Red Velvet) share one kit in `templates/stationery/`:
+All 27 designs are built on `templates/painted/` (`makePainted(id, opts)`): full-bleed art
+for the closed and opened screens, one of thirteen openings (doors, slide, lift, zoom,
+hinge, swing, veil, strips, tear, envelope, glow, unroll, wave), initials laid over a seal
+in the art, painted strips cut from the hero art between sections, and effects in
+`painted/fx.ts` (falling petals and gold leaf, tap to throw). `painted/KIT.md` has the
+options and rules; `peony/`, `petals/` and `velvetrose/` are the reference designs.
 
-| File | What it gives you |
-| --- | --- |
-| `stationery/kit.tsx` | `makeStationery(id, { Card, Liner, surface, seal })`: the envelope, the opening, the marble / linen / velvet surface and the enclosure cards below |
-| `stationery/flora.ts` | Seeded botanical drawing: roses, peonies, blossoms, orchids, lily-of-the-valley bells, wildflowers, leaves, stems, and `svgUrl` for foil masks |
-| `stationery/stationery.css` | Scene geometry, the opening timeline, painted-tone classes (`fa`…`fd`, `la`, `lb`, `lv`, `sm`) and `.st-foil` |
+Each colourway is its own painting: list it in the catalog palettes and map it to its art
+with `variants` (Peony Arch's "With the couple").
 
-A new card only draws its face (`Card`, sized in `calc(N * var(--k))` on a 280 × 392
-card) and its envelope liner (`Liner`). Painted art is inline SVG coloured by
-`--f1…--f4` and `--g1…--g3`; foil and lace are CSS masks made with `svgUrl`, so
-thumbnails never carry SVG ids.
+Gallery previews: `public/previews/<id>/loop.webm|mp4` (a 6-second silent recording of the
+opening) and `poster.webp`. Re-record a design after changing it (the recorder drives the
+real card in headless Chrome and encodes with ffmpeg).

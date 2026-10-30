@@ -1,633 +1,181 @@
-/* Zellige: Islamic geometry in quiet gold. The panel is drawn in arch units: --b is
-   1/300 of the panel width, so the CSS bands line up with the SVG arch exactly. */
+/* Zellige (painted kit). */
 
-.t-zellige {
-  --card: color-mix(in srgb, var(--soft) 48%, var(--bg));
-  --bandfill: color-mix(in srgb, var(--soft) 24%, var(--bg));
-  --line: color-mix(in srgb, var(--accent) 50%, transparent);
-  --hair-c: color-mix(in srgb, var(--accent) 58%, transparent);
-  --petal: color-mix(in srgb, var(--ink) 90%, var(--soft));
+.t-zellige .pt-cover {
+  --zr: 180deg;
 }
 
-/* ── backdrop: the star-and-cross tiling, fading toward the middle ── */
-
-.zl-tess {
-  position: absolute;
-  inset: 0;
-}
-
-.zl-tess::before,
-.zl-tess::after {
+/* the initials in gold at the heart of the star, on a small plaster disc */
+.t-zellige .pt-seal::before {
   content: "";
   position: absolute;
-  inset: 0;
+  inset: 12%;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, #123f3e 88%, transparent) 55%, color-mix(in srgb, #123f3e 0%, transparent) 72%);
 }
 
-.zl-tess::before {
-  background: var(--soft);
-  opacity: 0.6;
-  -webkit-mask: var(--tess-f) 50% 50% / calc(62 * var(--u)) calc(62 * var(--u)) repeat;
-  mask: var(--tess-f) 50% 50% / calc(62 * var(--u)) calc(62 * var(--u)) repeat;
+.t-zellige .pt-seal .pt-ini {
+  font-family: var(--f-display);
+  font-weight: 600;
+  font-size: 1.08em;
+  letter-spacing: 0.04em;
 }
 
-.zl-tess::after {
-  background: var(--accent);
-  opacity: 0.55;
-  -webkit-mask: var(--tess-l) 50% 50% / calc(62 * var(--u)) calc(62 * var(--u)) repeat;
-  mask: var(--tess-l) 50% 50% / calc(62 * var(--u)) calc(62 * var(--u)) repeat;
+.inv.t-zellige[data-phase="opening"] .pt-seal {
+  animation: zl-seal calc(var(--open) * 0.9) cubic-bezier(0.5, 0, 0.3, 1) both;
 }
 
-.zl-fade {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse 62% 50% at 50% 50%, var(--bg) 38%, color-mix(in srgb, var(--bg) 72%, transparent) 68%, transparent 100%);
+@keyframes zl-seal {
+  20% {
+    transform: scale(0.97) rotate(-18deg);
+    opacity: 1;
+  }
+  55% {
+    opacity: 0;
+  }
+  to {
+    transform: scale(1.9) rotate(180deg);
+    opacity: 0;
+  }
 }
 
-/* ── svg paint ── */
-
-.t-zellige :is(.zl-arch, .zl-mark, .zl-rule, .zl-divider, .zl-orn, .zl-rose svg, .zl-tap svg) {
-  overflow: visible;
+.t-zellige .pt-bless .inv-bism {
+  width: calc(124 * var(--u));
 }
 
-.t-zellige .zl-edge {
-  stroke: var(--accent);
-  stroke-width: 1;
-  stroke-linejoin: miter;
+.t-zellige .pt-text {
+  gap: calc(7 * var(--u));
 }
 
-.t-zellige .zl-star {
-  stroke: var(--accent);
-  stroke-width: 0.8;
+.t-zellige .pt-title {
+  font-family: var(--f-display);
+  font-size: calc(12.5 * var(--u));
+  font-weight: 600;
+  letter-spacing: 0.2em;
 }
 
-.t-zellige .zl-hair {
-  stroke: var(--hair-c);
-  stroke-width: 0.55;
-}
-
-.t-zellige .zl-gold {
-  fill: var(--accent);
-}
-
-.t-zellige .zl-bandfill {
-  fill: var(--bandfill);
-}
-
-.t-zellige .zl-cardfill {
-  fill: var(--card);
-}
-
-.t-zellige .zl-bgfill {
-  fill: var(--bg);
-}
-
-/* ── hero: the arched panel ── */
-
-.zl-hero {
-  position: relative;
-  display: grid;
-  place-items: center;
-  min-height: var(--sh);
-  padding: calc(44 * var(--u)) 0 calc(60 * var(--u));
-}
-
-.zl-panel {
-  --pw: min(calc(312 * var(--u)), calc((var(--sh) - 150 * var(--u)) * 0.6));
-  --b: calc(var(--pw) / 300);
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: var(--pw);
-  min-height: clamp(calc(var(--pw) * 1.5), calc(var(--sh) - 170 * var(--u)), calc(var(--pw) * 1.9));
-  padding: calc(92 * var(--b)) calc(36 * var(--b)) calc(46 * var(--b));
-}
-
-.zl-arch {
-  position: absolute;
-  left: 0;
-  top: calc(-22 * var(--b));
-  width: 100%;
-  height: auto;
-}
-
-.zl-body {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: calc(200 * var(--b));
-  bottom: 0;
-  background: var(--bandfill);
-}
-
-.zl-body::before {
-  content: "";
-  position: absolute;
-  inset: 0 calc(16 * var(--b)) calc(16 * var(--b));
-  background: var(--card);
-}
-
-.zl-body::after {
-  content: "";
-  position: absolute;
-  inset: 0 calc(21 * var(--b)) calc(21 * var(--b));
-  border: calc(0.55 * var(--b)) solid var(--hair-c);
-  border-top: 0;
-}
-
-.zl-band {
-  position: absolute;
-  background: var(--accent);
-}
-
-/* straight sides: a column of khatams between two edge lines */
-.zl-band-s,
-.zl-band-e {
-  top: 0;
-  bottom: calc(-0.5 * var(--b));
-  width: calc(17 * var(--b));
-  padding: 0 calc(0.5 * var(--b)) calc(16.5 * var(--b));
-  -webkit-mask:
-    var(--band) 0 0 / calc(16 * var(--b)) calc(16 * var(--b)) no-repeat round content-box,
-    linear-gradient(#000 0 0) 0 0 / calc(1 * var(--b)) 100% no-repeat border-box,
-    linear-gradient(#000 0 0) 100% 0 / calc(1 * var(--b)) calc(100% - 16.5 * var(--b)) no-repeat border-box;
-  mask:
-    var(--band) 0 0 / calc(16 * var(--b)) calc(16 * var(--b)) no-repeat round content-box,
-    linear-gradient(#000 0 0) 0 0 / calc(1 * var(--b)) 100% no-repeat border-box,
-    linear-gradient(#000 0 0) 100% 0 / calc(1 * var(--b)) calc(100% - 16.5 * var(--b)) no-repeat border-box;
-}
-
-.zl-band-s {
-  left: calc(-0.5 * var(--b));
-}
-
-.zl-band-e {
-  right: calc(-0.5 * var(--b));
-  transform: scaleX(-1);
-}
-
-.zl-band-b {
-  left: calc(-0.5 * var(--b));
-  right: calc(-0.5 * var(--b));
-  bottom: calc(-0.5 * var(--b));
-  height: calc(17 * var(--b));
-  padding: calc(0.5 * var(--b));
-  -webkit-mask:
-    var(--band) 0 0 / calc(16 * var(--b)) calc(16 * var(--b)) round no-repeat content-box,
-    linear-gradient(#000 0 0) calc(16.5 * var(--b)) 0 / calc(100% - 33 * var(--b)) calc(1 * var(--b)) no-repeat border-box,
-    linear-gradient(#000 0 0) 0 100% / 100% calc(1 * var(--b)) no-repeat border-box;
-  mask:
-    var(--band) 0 0 / calc(16 * var(--b)) calc(16 * var(--b)) round no-repeat content-box,
-    linear-gradient(#000 0 0) calc(16.5 * var(--b)) 0 / calc(100% - 33 * var(--b)) calc(1 * var(--b)) no-repeat border-box,
-    linear-gradient(#000 0 0) 0 100% / 100% calc(1 * var(--b)) no-repeat border-box;
-}
-
-.zl-in {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: calc(10 * var(--b));
-  text-align: center;
-  container-type: inline-size;
-}
-
-.zl-in .inv-bism {
-  width: calc(150 * var(--b));
-}
-
-.zl-in .inv-bism-text {
-  font-size: calc(21 * var(--b));
-}
-
-.zl-mark {
-  width: calc(26 * var(--b));
-  height: calc(26 * var(--b));
-}
-
-.zl-title {
-  font: 400 calc(12 * var(--b)) / 1.5 var(--f-display);
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-top: calc(4 * var(--b)) !important;
-}
-
-.zl-names {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-size: min(calc(50 * var(--b)), calc(100cqi / (var(--len) * 0.44)));
+.t-zellige .pt-names {
+  font-size: min(calc(56 * var(--u)), calc(100cqi / (var(--len) * 0.42)));
   line-height: 1.12;
-  color: var(--ink);
-  overflow-wrap: anywhere;
 }
 
-.zl-names .inv-amp {
+.t-zellige .pt-names .inv-amp {
   font-family: var(--f-display);
   font-size: 0.34em;
-  letter-spacing: 0.12em;
-  color: var(--accent);
-  margin: 0.1em 0 0.15em;
+  line-height: 1.8;
 }
 
-.zl-milestone {
-  font: 400 calc(24 * var(--b)) / 1.2 var(--f-display);
-  color: var(--accent);
+.t-zellige .pt-when {
+  margin-top: calc(10 * var(--u));
 }
 
-.zl-rule {
-  width: calc(140 * var(--b));
-  height: auto;
-}
-
-.zl-when {
-  display: grid;
-  gap: calc(2 * var(--b));
-  font: 500 calc(10 * var(--b)) / 1.5 var(--f-body);
-  letter-spacing: 0.26em;
-  text-transform: uppercase;
-}
-
-.zl-when strong {
-  font: 400 calc(18.5 * var(--b)) / 1.25 var(--f-display);
-  letter-spacing: 0.04em;
-  text-transform: none;
-}
-
-.zl-venue {
-  max-width: 24ch;
-  font: 400 calc(12.5 * var(--b)) / 1.4 var(--f-body);
-  letter-spacing: 0.06em;
-  opacity: 0.85;
-}
-
-.zl-cue,
-.zl-tap {
-  position: absolute;
-  left: 50%;
-  translate: -50% 0;
-  display: flex;
-  align-items: center;
-  gap: calc(10 * var(--u));
-  font: 400 calc(10.5 * var(--u)) / 1 var(--f-display);
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--accent);
-  white-space: nowrap;
-}
-
-.zl-cue {
-  bottom: calc(16 * var(--u));
-  flex-direction: column;
-  gap: calc(6 * var(--u));
-}
-
-.zl-cue i {
-  width: 1px;
-  height: calc(22 * var(--u));
-  background: linear-gradient(var(--accent), transparent);
-  animation: zl-cue 2.2s ease-in-out infinite;
-}
-
-.inv[data-phase="closed"] .zl-cue {
-  visibility: hidden;
-}
-
-@keyframes zl-cue {
-  50% {
-    transform: translateY(calc(5 * var(--u)));
-    opacity: 0.45;
-  }
-}
-
-.inv[data-phase="opening"] :is(.zl-a1, .zl-a2, .zl-a3, .zl-a4, .zl-a5) {
-  animation: zl-rise 0.75s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-}
-
-.inv[data-phase="opening"] .zl-a1 { animation-delay: 0.8s; }
-.inv[data-phase="opening"] .zl-a2 { animation-delay: 0.95s; }
-.inv[data-phase="opening"] .zl-a3 { animation-delay: 1.1s; }
-.inv[data-phase="opening"] .zl-a4 { animation-delay: 1.25s; }
-.inv[data-phase="opening"] .zl-a5 { animation-delay: 1.38s; }
-
-@keyframes zl-rise {
-  from {
-    opacity: 0;
-    transform: translateY(calc(12 * var(--b)));
-  }
-}
-
-/* ── cover: the rosette ── */
-
-.zl-cover {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.zl-backing {
-  position: absolute;
-  inset: 0;
-  background: var(--bg);
-}
-
-.zl-rose {
-  position: absolute;
-  left: 50%;
-  top: 45%;
-  display: grid;
-  place-items: center;
-  width: min(calc(360 * var(--u)), 94vw);
+.t-zellige .pt-when::before {
+  content: "";
+  width: calc(16 * var(--u));
   aspect-ratio: 1;
-  translate: -50% -50%;
+  margin-bottom: calc(8 * var(--u));
+  background: var(--accent);
+  clip-path: polygon(50% 0, 61% 26%, 85% 15%, 74% 39%, 100% 50%, 74% 61%, 85% 85%, 61% 74%, 50% 100%, 39% 74%, 15% 85%, 26% 61%, 0 50%, 26% 39%, 15% 15%, 39% 26%);
 }
 
-.zl-rose svg {
+.t-zellige .pt-sc {
+  font-family: var(--f-display);
+  font-size: calc(12 * var(--u));
+  font-weight: 600;
+}
+
+.t-zellige .pt-date {
+  font-family: var(--f-display);
+  font-size: calc(19 * var(--u));
+  font-weight: 500;
+}
+
+.t-zellige .pt-venue {
+  font-family: var(--f-body);
+  font-style: normal;
+  font-size: calc(15.5 * var(--u));
+}
+
+/* water light from the fountain, moving slowly over the plaster inside the arch */
+.zl-water {
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  mix-blend-mode: soft-light;
+  -webkit-mask-image: linear-gradient(to right, transparent 19%, #000 27%, #000 73%, transparent 81%), linear-gradient(to bottom, transparent 22%, #000 36%, #000 92%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(to right, transparent 19%, #000 27%, #000 73%, transparent 81%), linear-gradient(to bottom, transparent 22%, #000 36%, #000 92%, transparent);
+  mask-composite: intersect;
 }
 
-.t-zellige .zl-piece {
-  stroke: var(--bg);
-  stroke-width: 1.7;
-  stroke-linejoin: round;
-  transform-box: fill-box;
-  transform-origin: center;
+.zl-water i {
+  position: absolute;
+  inset: -25%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='420'%3E%3Cfilter id='c' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='turbulence' baseFrequency='0.014 0.028' numOctaves='2' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 0.99 0 0 0 0 0.94 -7 0 0 0 1.35'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23c)'/%3E%3C/svg%3E");
+  background-size: 420px 420px;
+  opacity: 0.5;
+  animation: zl-drift-a 16s ease-in-out infinite alternate;
 }
 
-.t-zellige .zl-ring0 {
-  fill: var(--accent);
+.zl-water i + i {
+  background-size: 520px 520px;
+  opacity: 0.32;
+  transform: scaleX(-1);
+  animation-name: zl-drift-b;
+  animation-duration: 21s;
 }
 
-.t-zellige .zl-ring1 {
-  fill: var(--petal);
-}
-
-.t-zellige .zl-ring2 {
-  fill: var(--soft);
-}
-
-.zl-mono {
-  position: relative;
-  font: 400 calc(40 * var(--u)) / 1 var(--f-names);
-  color: var(--ink);
-  white-space: nowrap;
-}
-
-.zl-mono i {
-  font: 400 0.42em var(--f-display);
-  color: var(--accent);
-  margin: 0 0.18em;
-  vertical-align: 0.3em;
-}
-
-.zl-tap {
-  top: calc(45% + min(calc(180 * var(--u)), 47vw) + 10 * var(--u));
-}
-
-.zl-tap svg {
-  width: calc(10 * var(--u));
-  height: calc(10 * var(--u));
-}
-
-.inv[data-phase="opening"] :is(.zl-heart, .zl-mono) {
-  animation: zl-out 0.45s cubic-bezier(0.5, 0, 0.75, 0) both;
-}
-
-.inv[data-phase="opening"] .zl-heart {
-  transform-box: fill-box;
-  transform-origin: center;
-}
-
-.inv[data-phase="opening"] .zl-tap {
-  animation: zl-fade 0.3s ease both;
-}
-
-.inv[data-phase="opening"] .zl-rim {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: zl-rim 0.8s 0.05s ease-in both;
-}
-
-.inv[data-phase="opening"] .zl-piece {
-  animation: zl-fly 1.05s var(--dl) cubic-bezier(0.45, 0, 0.35, 1) both;
-}
-
-.inv[data-phase="opening"] .zl-backing {
-  animation: zl-fade 0.8s 0.55s ease both;
-}
-
-.inv[data-phase="opening"] .zl-cover {
-  animation: zl-fade 0.4s 1.7s ease both;
-}
-
-@keyframes zl-out {
+@keyframes zl-drift-a {
+  from {
+    transform: translate(-3%, -2%);
+  }
   to {
-    transform: scale(0.6);
-    opacity: 0;
+    transform: translate(3%, 2.5%);
   }
 }
 
-@keyframes zl-rim {
+@keyframes zl-drift-b {
+  from {
+    transform: scaleX(-1) translate(3%, 2%);
+  }
   to {
-    transform: scale(1.18);
-    opacity: 0;
+    transform: scaleX(-1) translate(-2.5%, -3%);
   }
 }
 
-@keyframes zl-fly {
-  to {
-    transform: translate(var(--tx), var(--ty)) rotate(var(--rot)) scale(0.85);
-    opacity: 0;
-  }
+.inv.is-thumb .zl-water {
+  display: none;
 }
 
-@keyframes zl-fade {
-  to {
-    opacity: 0;
-  }
+/* sections: plaster panels edged in zellige colours */
+.t-zellige .inv-sec {
+  outline: 1.5px solid color-mix(in srgb, var(--ink) 50%, transparent);
+  outline-offset: -10px;
+  box-shadow:
+    inset 0 0 0 14px var(--bg),
+    inset 0 0 0 15px color-mix(in srgb, var(--accent) 55%, transparent),
+    0 26px 50px -32px color-mix(in srgb, var(--ink) 55%, transparent);
 }
-
-/* ── sections: chamfered cards with a thin double border ── */
 
 .t-zellige .inv-title {
-  font-size: 30px;
-  letter-spacing: 0.04em;
-}
-
-.t-zellige .inv-eyebrow {
-  font-weight: 500;
-  letter-spacing: 0.3em;
-}
-
-.t-zellige .inv-hosts {
-  font-size: 18px;
-  letter-spacing: 0.02em;
-}
-
-.t-zellige .inv-pname {
-  font: 400 38px/1.25 var(--f-names);
-}
-
-.t-zellige :is(.inv-people-amp, .inv-hosts-amp) {
   font-family: var(--f-display);
-  font-size: 15px;
-  letter-spacing: 0.14em;
-}
-
-.t-zellige .inv-message {
-  font-size: 16px;
-  line-height: 1.75;
-}
-
-.t-zellige :is(.inv-ev, .inv-events:not(.is-many) .inv-ev, .inv-closing, .inv-cd-unit) {
-  --k: 20px;
-  position: relative;
-  border: 0;
-  border-radius: 0;
-  background: var(--card);
-  clip-path: polygon(var(--k) 0, calc(100% - var(--k)) 0, 100% var(--k), 100% calc(100% - var(--k)), calc(100% - var(--k)) 100%, var(--k) 100%, 0 calc(100% - var(--k)), 0 var(--k));
-}
-
-.t-zellige :is(.inv-ev, .inv-events:not(.is-many) .inv-ev, .inv-closing) {
-  padding: 40px 24px 36px;
-}
-
-.t-zellige :is(.inv-ev, .inv-closing, .inv-cd-unit)::before,
-.t-zellige :is(.inv-ev, .inv-closing)::after {
-  content: "";
-  position: absolute;
-  pointer-events: none;
-}
-
-.t-zellige :is(.inv-ev, .inv-closing, .inv-cd-unit)::before {
-  inset: 0;
-  background: var(--accent);
-  opacity: 0.7;
-  clip-path: polygon(evenodd, var(--k) 0, calc(100% - var(--k)) 0, 100% var(--k), 100% calc(100% - var(--k)), calc(100% - var(--k)) 100%, var(--k) 100%, 0 calc(100% - var(--k)), 0 var(--k), var(--k) 0, calc(var(--k) + 0.414px) 1px, 1px calc(var(--k) + 0.414px), 1px calc(100% - var(--k) - 0.414px), calc(var(--k) + 0.414px) calc(100% - 1px), calc(100% - var(--k) - 0.414px) calc(100% - 1px), calc(100% - 1px) calc(100% - var(--k) - 0.414px), calc(100% - 1px) calc(var(--k) + 0.414px), calc(100% - var(--k) - 0.414px) 1px, calc(var(--k) + 0.414px) 1px);
-}
-
-.t-zellige :is(.inv-ev, .inv-closing)::after {
-  --k: calc(20px - 3.52px);
-  inset: 6px;
-  background: var(--accent);
-  opacity: 0.38;
-  clip-path: polygon(evenodd, var(--k) 0, calc(100% - var(--k)) 0, 100% var(--k), 100% calc(100% - var(--k)), calc(100% - var(--k)) 100%, var(--k) 100%, 0 calc(100% - var(--k)), 0 var(--k), var(--k) 0, calc(var(--k) + 0.414px) 1px, 1px calc(var(--k) + 0.414px), 1px calc(100% - var(--k) - 0.414px), calc(var(--k) + 0.414px) calc(100% - 1px), calc(100% - var(--k) - 0.414px) calc(100% - 1px), calc(100% - 1px) calc(100% - var(--k) - 0.414px), calc(100% - 1px) calc(var(--k) + 0.414px), calc(100% - var(--k) - 0.414px) 1px, calc(var(--k) + 0.414px) 1px);
+  font-size: 28px;
+  letter-spacing: 0.06em;
 }
 
 .t-zellige .inv-cd-unit {
-  --k: 10px;
+  background: var(--ink);
+  color: var(--bg);
+  border-color: color-mix(in srgb, var(--accent) 70%, transparent);
+  border-radius: 2px;
 }
 
 .t-zellige .inv-cd-unit b {
-  font-size: 28px;
-  color: var(--accent);
-}
-
-.t-zellige .inv-ev-title {
-  font-size: 24px;
-  letter-spacing: 0.04em;
-}
-
-.t-zellige .inv-ev-day {
-  font-size: 58px;
-}
-
-.t-zellige .inv-venue-name {
-  font-size: 20px;
-  letter-spacing: 0.03em;
-}
-
-.t-zellige .inv-map {
-  --k: 16px;
-  border: 0;
-  border-radius: 0;
-  clip-path: polygon(var(--k) 0, calc(100% - var(--k)) 0, 100% var(--k), 100% calc(100% - var(--k)), calc(100% - var(--k)) 100%, var(--k) 100%, 0 calc(100% - var(--k)), 0 var(--k));
-}
-
-.t-zellige .inv-btn {
-  --k: 9px;
-  position: relative;
-  min-height: 44px;
-  padding: 10px 20px;
-  border: 0;
-  border-radius: 0;
-  background: color-mix(in srgb, var(--soft) 40%, var(--bg));
-  color: var(--ink);
-  clip-path: polygon(var(--k) 0, calc(100% - var(--k)) 0, 100% var(--k), 100% calc(100% - var(--k)), calc(100% - var(--k)) 100%, var(--k) 100%, 0 calc(100% - var(--k)), 0 var(--k));
-  font: 500 12px/1 var(--f-body);
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-}
-
-.t-zellige .inv-btn::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: var(--accent);
-  clip-path: polygon(evenodd, var(--k) 0, calc(100% - var(--k)) 0, 100% var(--k), 100% calc(100% - var(--k)), calc(100% - var(--k)) 100%, var(--k) 100%, 0 calc(100% - var(--k)), 0 var(--k), var(--k) 0, calc(var(--k) + 0.414px) 1px, 1px calc(var(--k) + 0.414px), 1px calc(100% - var(--k) - 0.414px), calc(var(--k) + 0.414px) calc(100% - 1px), calc(100% - var(--k) - 0.414px) calc(100% - 1px), calc(100% - 1px) calc(100% - var(--k) - 0.414px), calc(100% - 1px) calc(var(--k) + 0.414px), calc(100% - var(--k) - 0.414px) 1px, calc(var(--k) + 0.414px) 1px);
-  pointer-events: none;
-}
-
-.t-zellige .inv-btn.is-primary {
-  background: var(--accent);
-  color: var(--on-accent);
-}
-
-.t-zellige .inv-sched li {
-  border-bottom: 1px solid var(--line);
-}
-
-.t-zellige .inv-sched time {
-  font-family: var(--f-display);
-  font-weight: 400;
-  letter-spacing: 0.04em;
-}
-
-.t-zellige .inv-swatches i {
-  border-radius: 0;
-  clip-path: polygon(50% 0, 64.6% 14.6%, 85.4% 14.6%, 85.4% 35.4%, 100% 50%, 85.4% 64.6%, 85.4% 85.4%, 64.6% 85.4%, 50% 100%, 35.4% 85.4%, 14.6% 85.4%, 14.6% 64.6%, 0 50%, 14.6% 35.4%, 14.6% 14.6%, 35.4% 14.6%);
-  box-shadow: none;
-  width: 42px;
-  height: 42px;
-}
-
-.t-zellige .inv-contact-name {
-  font-size: 19px;
-  letter-spacing: 0.03em;
-}
-
-.t-zellige .inv-closing {
-  margin: 8px 20px 24px;
-  padding: 54px 24px 48px;
-}
-
-.t-zellige .inv-closing-text {
-  font-size: 21px;
-  letter-spacing: 0.02em;
+  color: color-mix(in srgb, var(--accent) 60%, #f4e3bd);
 }
 
 .t-zellige .inv-closing-names {
-  font-size: 44px;
-}
-
-.t-zellige .inv-closing-names .inv-amp {
-  font-family: var(--f-display);
-  font-size: 0.4em;
-}
-
-.t-zellige .inv-divider svg {
-  width: 210px;
-  height: 27px;
-}
-
-.t-zellige .zl-orn {
-  width: 90px;
-  height: 16px;
+  font-size: 54px;
 }

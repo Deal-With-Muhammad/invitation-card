@@ -1,520 +1,178 @@
-/* Jharokha: a carved Mughal arch. Arch art is a 300 × 520 SVG; everything inside
-   the arch is sized in --a (1/330 of the arch width) so it scales with the arch. */
+/* Jharokha (painted kit). The window opening is 24.5% of the screen height wide
+   (the art is height-fitted on phones), from 37% to 74% of the height. */
 
 .t-jharokha {
-  --wood: color-mix(in srgb, var(--soft) 82%, var(--bg));
-  --line: color-mix(in srgb, var(--accent) 38%, transparent);
-  --card: color-mix(in srgb, var(--soft) 55%, var(--bg));
+  --win: calc(var(--sh) * 0.245);
 }
 
-/* ── backdrop ── */
-
-.jh-jali {
-  position: absolute;
-  inset: 0;
-  background: var(--accent);
-  opacity: 0.1;
-  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cg fill='none' stroke='%23000' stroke-width='1.1'%3E%3Ccircle cx='0' cy='0' r='20'/%3E%3Ccircle cx='40' cy='0' r='20'/%3E%3Ccircle cx='0' cy='40' r='20'/%3E%3Ccircle cx='40' cy='40' r='20'/%3E%3Ccircle cx='20' cy='20' r='20'/%3E%3C/g%3E%3C/svg%3E") 0 0 / 36px 36px repeat;
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cg fill='none' stroke='%23000' stroke-width='1.1'%3E%3Ccircle cx='0' cy='0' r='20'/%3E%3Ccircle cx='40' cy='0' r='20'/%3E%3Ccircle cx='0' cy='40' r='20'/%3E%3Ccircle cx='40' cy='40' r='20'/%3E%3Ccircle cx='20' cy='20' r='20'/%3E%3C/g%3E%3C/svg%3E") 0 0 / 36px 36px repeat;
+/* Tailwind's img { max-width: 100% } would squeeze each door to half the art */
+.t-jharokha .pt-half .pt-img {
+  max-width: none;
 }
 
-.jh-vignette {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse 62% 55% at 50% 46%, var(--bg) 35%, transparent 80%);
-}
+/* ── light through the jali, and dust in it ── */
 
-/* ── shared svg strokes ── */
-
-.t-jharokha :is(.jh-frame, .jh-divider, .jh-orn, .jh-star) {
-  color: var(--accent);
-  overflow: visible;
-}
-
-.t-jharokha .jh-line {
-  stroke: currentColor;
-  stroke-width: 1.3;
-}
-
-.t-jharokha .jh-bold {
-  stroke-width: 1.7;
-}
-
-.t-jharokha .jh-thin {
-  stroke: currentColor;
-  stroke-width: 0.8;
-  opacity: 0.75;
-}
-
-.t-jharokha .jh-fill,
-.t-jharokha .jh-rosette ellipse {
-  fill: currentColor;
-}
-
-.t-jharokha .jh-rosette ellipse {
-  opacity: 0.85;
-}
-
-/* ── hero ── */
-
-.jh-hero {
-  --aw: min(calc(330 * var(--u)), calc((var(--sh) - 130 * var(--u)) * 0.5769));
-  --a: calc(var(--aw) / 330);
-  position: relative;
-  display: grid;
-  place-items: center;
-  min-height: var(--sh);
-  padding: calc(20 * var(--u)) 0 calc(64 * var(--u));
-}
-
-.jh-arch {
-  position: relative;
-  width: var(--aw);
-  aspect-ratio: 300 / 520;
-  perspective: calc(1100 * var(--a));
-}
-
-.jh-frame {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.jh-in {
-  position: absolute;
-  inset: 20% 17.5% 6.5%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: calc(9 * var(--a));
-  text-align: center;
-  container-type: inline-size;
-}
-
-.jh-in .inv-bism {
-  width: calc(150 * var(--a));
-}
-
-.jh-in .inv-bism-text {
-  font-size: calc(22 * var(--a));
-}
-
-.jh-star {
-  width: calc(36 * var(--a));
-  height: calc(36 * var(--a));
-}
-
-.jh-title {
-  font: 400 calc(10.5 * var(--a)) / 1.5 var(--f-body);
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-top: calc(4 * var(--a)) !important;
-}
-
-.jh-names {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-size: min(calc(48 * var(--a)), calc(100cqi / (var(--len) * 0.5)));
-  line-height: 1.08;
-  overflow-wrap: anywhere;
-}
-
-.jh-names .inv-amp {
-  font-family: var(--f-display);
-  font-style: italic;
-  font-size: 0.48em;
-  color: var(--accent);
-  margin: 0.08em 0 0.02em;
-}
-
-.jh-milestone {
-  font: 500 calc(22 * var(--a)) / 1.2 var(--f-display);
-  color: var(--accent);
-}
-
-.jh-rule {
-  display: block;
-  width: calc(110 * var(--a));
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--accent), transparent);
-  position: relative;
-}
-
-.jh-rule i {
+.jk-light {
   position: absolute;
   left: 50%;
-  top: 50%;
-  width: calc(6 * var(--a));
-  height: calc(6 * var(--a));
-  background: var(--accent);
-  transform: translate(-50%, -50%) rotate(45deg);
-}
-
-.jh-when {
-  display: grid;
-  gap: calc(2 * var(--a));
-  font: 400 calc(10.5 * var(--a)) / 1.5 var(--f-body);
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-}
-
-.jh-when strong {
-  font: 500 calc(20 * var(--a)) / 1.2 var(--f-display);
-  letter-spacing: 0.02em;
-  text-transform: none;
-}
-
-.jh-venue {
-  font: italic 400 calc(14.5 * var(--a)) / 1.3 var(--f-display);
-  opacity: 0.85;
-}
-
-.jh-cue,
-.jh-tap {
-  position: absolute;
-  left: 50%;
-  bottom: calc(20 * var(--u));
+  top: 36%;
+  z-index: 1;
+  width: var(--win);
+  height: 38%;
   translate: -50% 0;
-  display: flex;
-  align-items: center;
-  gap: calc(10 * var(--u));
-  font: 400 calc(11 * var(--u)) / 1 var(--f-body);
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--accent);
-  white-space: nowrap;
-}
-
-.jh-cue {
-  flex-direction: column;
-}
-
-.jh-cue i {
-  width: 1px;
-  height: calc(26 * var(--u));
-  background: linear-gradient(var(--accent), transparent);
-  animation: jh-cue 2.2s ease-in-out infinite;
-}
-
-.jh-tap i {
-  width: calc(28 * var(--u));
-  height: 1px;
-  background: var(--accent);
-}
-
-.inv[data-phase="closed"] .jh-cue {
-  visibility: hidden;
-}
-
-@keyframes jh-cue {
-  50% {
-    transform: translateY(calc(6 * var(--u)));
-    opacity: 0.5;
-  }
-}
-
-/* hero content rises in behind the opening doors */
-.inv[data-phase="opening"] :is(.jh-a1, .jh-a2, .jh-a3, .jh-a4, .jh-a5) {
-  animation: jh-rise 1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-}
-
-.inv[data-phase="opening"] .jh-a1 { animation-delay: 0.7s; }
-.inv[data-phase="opening"] .jh-a2 { animation-delay: 0.95s; }
-.inv[data-phase="opening"] .jh-a3 { animation-delay: 1.15s; }
-.inv[data-phase="opening"] .jh-a4 { animation-delay: 1.35s; }
-.inv[data-phase="opening"] .jh-a5 { animation-delay: 1.5s; }
-
-@keyframes jh-rise {
-  from {
-    opacity: 0;
-    transform: translateY(calc(14 * var(--a)));
-    filter: blur(3px);
-  }
-}
-
-/* ── cover: the doors ── */
-
-.jh-cover {
-  position: absolute;
-  inset: 0;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.jh-hero-cover {
-  width: min(100%, 480px);
-  margin-inline: auto;
-}
-
-.jh-door {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 36.6667%;
-  transform-style: preserve-3d;
-}
-
-.jh-door svg {
-  display: block;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-}
-
-.jh-door-l {
-  left: 13.3333%;
-  transform-origin: 0 50%;
-}
-
-.jh-door-r {
-  left: 50%;
-  transform-origin: 100% 50%;
-}
-
-.jh-wood {
-  fill: var(--wood);
-}
-
-.jh-panel {
-  fill: color-mix(in srgb, var(--wood) 86%, var(--accent));
-}
-
-.jh-carve {
-  fill: none;
-  stroke: var(--accent);
-  stroke-width: 1.1;
-}
-
-.jh-lattice {
-  fill: none;
-  stroke: var(--accent);
-  stroke-width: 0.8;
-  opacity: 0.75;
-}
-
-.jh-stud {
-  fill: var(--accent);
-}
-
-.jh-ring {
-  fill: none;
-  stroke: var(--accent);
-  stroke-width: 2.2;
-}
-
-.jh-seam {
-  stroke: color-mix(in srgb, var(--ink) 30%, transparent);
-  stroke-width: 1.4;
-}
-
-.jh-seal {
-  position: absolute;
-  left: 50%;
-  top: 68%;
-  translate: -50% -50%;
-  display: grid;
-  place-items: center;
-  width: calc(66 * var(--a));
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: var(--accent);
-  color: var(--on-accent);
-  box-shadow:
-    0 0 0 calc(3 * var(--a)) var(--wood),
-    0 0 0 calc(4.5 * var(--a)) var(--accent),
-    0 calc(10 * var(--a)) calc(24 * var(--a)) calc(-8 * var(--a)) color-mix(in srgb, var(--ink) 50%, transparent);
-  animation: jh-pulse 2.6s ease-in-out infinite;
-}
-
-.jh-mono {
-  font: 400 calc(26 * var(--a)) / 1 var(--f-names);
-  white-space: nowrap;
-}
-
-.jh-mono i {
-  font: italic 400 0.55em var(--f-display);
-  margin: 0 0.12em;
-}
-
-.jh-glow {
-  position: absolute;
-  inset: 12% 13.3% 0;
-  background: radial-gradient(ellipse 60% 50% at 50% 55%, color-mix(in srgb, var(--accent) 70%, var(--bg)), transparent 75%);
-  opacity: 0;
-}
-
-@keyframes jh-pulse {
-  50% {
-    scale: 1.04;
-  }
-}
-
-.inv[data-phase="opening"] .jh-seal {
-  animation: jh-seal-out 0.5s ease-in both;
-}
-
-.inv[data-phase="opening"] .jh-door-l {
-  animation: jh-open-l 1.9s 0.35s cubic-bezier(0.55, 0.05, 0.25, 1) both;
-}
-
-.inv[data-phase="opening"] .jh-door-r {
-  animation: jh-open-r 1.9s 0.35s cubic-bezier(0.55, 0.05, 0.25, 1) both;
-}
-
-.inv[data-phase="opening"] .jh-glow {
-  animation: jh-glow 1.8s 0.4s ease-out both;
-}
-
-.inv[data-phase="opening"] .jh-tap {
-  animation: jh-fade-out 0.4s ease both;
-}
-
-.inv[data-phase="opening"] .jh-cover {
-  animation: jh-fade-out 0.6s 1.95s ease both;
-}
-
-@keyframes jh-seal-out {
-  to {
-    scale: 0.6;
-    opacity: 0;
-  }
-}
-
-@keyframes jh-open-l {
-  to {
-    transform: rotateY(-108deg);
-    filter: brightness(0.7);
-  }
-}
-
-@keyframes jh-open-r {
-  to {
-    transform: rotateY(108deg);
-    filter: brightness(0.7);
-  }
-}
-
-@keyframes jh-glow {
-  35% {
-    opacity: 0.9;
-  }
-  to {
-    opacity: 0;
-  }
-}
-
-@keyframes jh-fade-out {
-  to {
-    opacity: 0;
-  }
-}
-
-/* ── sections ── */
-
-.t-jharokha .inv-title {
-  font-weight: 500;
-  font-size: 36px;
-}
-
-.t-jharokha .inv-eyebrow {
-  letter-spacing: 0.3em;
-}
-
-.t-jharokha .inv-hosts {
-  font-size: 21px;
-}
-
-.t-jharokha .inv-pname {
-  font: 400 38px/1.25 var(--f-names);
-}
-
-.t-jharokha .inv-people-amp {
-  font-family: var(--f-display);
-  font-style: italic;
-  font-size: 24px;
-}
-
-.t-jharokha .inv-message {
-  font: italic 400 19px/1.65 var(--f-display);
-}
-
-.t-jharokha .inv-cd-unit {
-  border-radius: 50% 50% 10px 10px / 34px 34px 10px 10px;
-  padding-top: 22px;
-}
-
-.t-jharokha .inv-ev,
-.t-jharokha .inv-events:not(.is-many) .inv-ev {
-  position: relative;
-  padding: 64px 22px 30px;
-  border: 1px solid var(--line);
-  border-radius: 50% 50% 16px 16px / 110px 110px 16px 16px;
-  background: var(--card);
-}
-
-.t-jharokha .inv-ev::before {
-  content: "";
-  position: absolute;
-  inset: 7px;
-  border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
-  border-radius: 50% 50% 11px 11px / 104px 104px 11px 11px;
+  overflow: hidden;
   pointer-events: none;
 }
 
-.t-jharokha .inv-ev-day {
+.jk-jali {
+  position: absolute;
+  inset: 0;
+  opacity: 0.7;
+  mix-blend-mode: soft-light;
+  -webkit-mask-image: radial-gradient(ellipse 62% 48% at 50% 64%, #000 25%, transparent 78%);
+  mask-image: radial-gradient(ellipse 62% 48% at 50% 64%, #000 25%, transparent 78%);
+}
+
+.jk-jali::before {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  background: #fff6dc;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cg fill='%23000'%3E%3Ccircle cx='13.5' cy='20' r='6'/%3E%3Ccircle cx='26.5' cy='20' r='6'/%3E%3Ccircle cx='20' cy='13.5' r='6'/%3E%3Ccircle cx='20' cy='26.5' r='6'/%3E%3Cpath d='M0 -4 4 0 0 4 -4 0ZM40 -4 44 0 40 4 36 0ZM0 36 4 40 0 44 -4 40ZM40 36 44 40 40 44 36 40Z'/%3E%3C/g%3E%3C/svg%3E")
+    0 0 / calc(30 * var(--u)) calc(30 * var(--u)) repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cg fill='%23000'%3E%3Ccircle cx='13.5' cy='20' r='6'/%3E%3Ccircle cx='26.5' cy='20' r='6'/%3E%3Ccircle cx='20' cy='13.5' r='6'/%3E%3Ccircle cx='20' cy='26.5' r='6'/%3E%3Cpath d='M0 -4 4 0 0 4 -4 0ZM40 -4 44 0 40 4 36 0ZM0 36 4 40 0 44 -4 40ZM40 36 44 40 40 44 36 40Z'/%3E%3C/g%3E%3C/svg%3E")
+    0 0 / calc(30 * var(--u)) calc(30 * var(--u)) repeat;
+  filter: blur(1px);
+  transform: rotate(-9deg) skewX(-16deg) scaleY(0.78);
+  animation: jk-drift 22s ease-in-out infinite alternate;
+}
+
+@keyframes jk-drift {
+  from {
+    translate: calc(-18 * var(--u)) calc(-6 * var(--u));
+  }
+  to {
+    translate: calc(20 * var(--u)) calc(12 * var(--u));
+  }
+}
+
+.jk-light i {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: calc(var(--s) * var(--u));
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #fff3cf;
+  box-shadow: 0 0 calc(5 * var(--u)) calc(1 * var(--u)) color-mix(in srgb, #ffe2a0 70%, transparent);
+  opacity: 0;
+  animation: jk-mote var(--d) linear var(--l) infinite;
+}
+
+@keyframes jk-mote {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0);
+  }
+  20% {
+    opacity: 0.9;
+  }
+  50% {
+    transform: translate(calc(10 * var(--u)), calc(-46 * var(--u)));
+  }
+  80% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(-6 * var(--u)), calc(-96 * var(--u)));
+  }
+}
+
+/* ── hero text inside the window ── */
+
+.t-jharokha .pt-text {
+  gap: calc(6 * var(--u));
+}
+
+.t-jharokha .pt-text.has-glow::before {
+  inset: calc(-30 * var(--u)) calc(-20 * var(--u));
+}
+
+.t-jharokha .pt-bless .inv-bism {
+  width: calc(112 * var(--u));
+}
+
+.t-jharokha .pt-title {
+  font-family: var(--f-display);
+  font-size: calc(14 * var(--u));
+  font-weight: 600;
+  letter-spacing: 0.2em;
+}
+
+.t-jharokha .pt-names {
+  font-size: min(calc(52 * var(--u)), calc(100cqi / (var(--len) * 0.5)));
+  line-height: 1.08;
+  color: color-mix(in srgb, var(--ink) 88%, var(--accent));
+}
+
+.t-jharokha .pt-names .inv-amp {
+  font-size: 0.7em;
+  line-height: 0.95;
+}
+
+.t-jharokha .pt-when {
+  margin-top: calc(5 * var(--u));
+}
+
+.t-jharokha .pt-sc {
+  font-size: calc(12 * var(--u));
+  letter-spacing: 0.2em;
+}
+
+.t-jharokha .pt-date {
+  font-family: var(--f-body);
+  font-size: calc(18 * var(--u));
+  letter-spacing: 0.06em;
+}
+
+.t-jharokha .pt-venue {
+  font-size: calc(17 * var(--u));
   font-weight: 500;
 }
 
-.t-jharokha .inv-map {
-  border-radius: 6px;
-  box-shadow: 0 0 0 5px var(--bg), 0 0 0 6px var(--line);
+.t-jharokha .pt-scroll {
+  color: #fff4e2;
+  opacity: 0.9;
 }
 
-.t-jharokha .inv-btn {
-  border-radius: 6px;
-  font-size: 12.5px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+/* ── sections: marble panels, arched event cards ── */
+
+.t-jharokha .inv-sec {
+  background:
+    radial-gradient(120% 60% at 0 0, color-mix(in srgb, #ffffff 40%, transparent), transparent 60%),
+    color-mix(in srgb, var(--bg) 95%, transparent);
+  outline-color: color-mix(in srgb, var(--accent) 48%, transparent);
 }
 
-.t-jharokha .inv-sched li {
-  border-bottom-style: solid;
+.t-jharokha .inv-title {
+  font-weight: 500;
 }
 
-.t-jharokha .inv-closing {
-  margin: 8px 22px 22px;
-  padding: 96px 24px 48px;
-  border: 1px solid var(--line);
-  border-radius: 50% 50% 18px 18px / 150px 150px 18px 18px;
-  background: var(--card);
+.t-jharokha .inv-ev {
+  padding-top: 46px;
+  border-radius: 50% 50% 8px 8px / 64px 64px 8px 8px;
+  border-color: color-mix(in srgb, var(--accent) 50%, transparent);
 }
 
-.t-jharokha .inv-divider svg {
-  width: 200px;
-  height: 26px;
+.t-jharokha .inv-events:not(.is-many) .inv-ev {
+  padding-top: 0;
 }
 
-.t-jharokha .jh-orn {
-  width: 90px;
-  height: 16px;
+.t-jharokha .pt-backdrop {
+  background: #7a2a17;
 }
 
-/* Nastaliq and Arabic need more size and no tracking */
-.inv:is([lang="ur"], [lang="ar"], [lang="fa"]) :is(.jh-title, .jh-when, .jh-cue, .jh-tap) {
-  letter-spacing: 0;
-  text-transform: none;
-}
-
-.inv[lang="ur"] .jh-title,
-.inv[lang="ur"] .jh-when {
-  font-size: calc(15 * var(--a));
-  line-height: 2;
-}
-
-.inv[lang="ur"] .jh-when strong {
-  font-size: calc(19 * var(--a));
+.t-jharokha .pt-backdrop-art {
+  opacity: 0.4;
 }

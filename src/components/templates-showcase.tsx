@@ -4,6 +4,8 @@ import { motion, useMotionValue, useReducedMotion, useSpring, useTransform, type
 import Link from "next/link";
 import { useRef, useSyncExternalStore, type ReactNode } from "react";
 
+import { LiveThumb } from "@/components/live-thumb";
+import { usePreview } from "@/components/preview-sheet";
 import type { TemplateMeta } from "@/invite/templates/types";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
@@ -41,6 +43,7 @@ function useIsSmall() {
 function FanCard({ item, i, n, mx, my, still }: { item: FanItem; i: number; n: number; mx: MotionValue<number>; my: MotionValue<number>; still: boolean | null }) {
   const s = (n === 3 ? SLOTS_SMALL : SLOTS)[i];
   const mid = (n - 1) / 2;
+  const { open } = usePreview();
   const px = useTransform(mx, (v) => v * 18 * s.depth);
   const py = useTransform(my, (v) => v * 8 * s.depth);
   return (
@@ -51,32 +54,52 @@ function FanCard({ item, i, n, mx, my, still }: { item: FanItem; i: number; n: n
         whileHover={{ y: `${s.y - 6}%`, scale: 1.05, zIndex: 20, transition: { duration: 0.35, ease: EASE } }}
         transition={{ duration: 1.2, ease: EASE, delay: 0.5 + Math.abs(i - mid) * 0.1 }}
       >
-        <Link href={`/templates/${item.meta.id}`} className="group relative block" aria-label={`${item.meta.name}: ${item.meta.tagline}`}>
-          <div className="overflow-hidden rounded-[12px] shadow-[0_34px_50px_-26px_rgb(18_64_60/0.55)] ring-1 ring-black/10">{item.thumb}</div>
+        <button type="button" onClick={() => open(item.meta.id)} className="group relative block w-full text-left" aria-label={`Preview ${item.meta.name}: ${item.meta.tagline}`}>
+          <LiveThumb id={item.meta.id} autoplay={i === Math.floor(mid)} className="overflow-hidden rounded-[12px] shadow-[0_34px_50px_-26px_rgb(18_64_60/0.55)] ring-1 ring-black/10">
+            {item.thumb}
+          </LiveThumb>
           <span className="pointer-events-none absolute -bottom-9 left-1/2 -translate-x-1/2 rounded-full bg-ink px-3 py-1 text-[12.5px] font-medium whitespace-nowrap text-ivory opacity-0 transition-opacity duration-200 group-hover:opacity-100">
             {item.meta.name}
           </span>
-        </Link>
+        </button>
       </motion.div>
     </motion.div>
   );
 }
 
 /** The page's opening: a big centred headline, two buttons, then a fan of real designs that follows the pointer. */
-export function TemplatesHero({ count, items, links }: { count: number; items: FanItem[]; links: { id: string; label: string }[] }) {
+export function TemplatesHero({
+  count,
+  items,
+  links,
+  lines = [
+    ["Invitations", "worth"],
+    ["opening", "twice."],
+  ],
+  lede = "Every design opens with its own little ceremony. Pick one, make it yours in a minute, send it as a link.",
+  kicker,
+  secondary = { href: "/custom", label: "Custom design" },
+}: {
+  count: number;
+  items: FanItem[];
+  links: { id: string; label: string }[];
+  lines?: string[][];
+  lede?: string;
+  kicker?: string;
+  secondary?: { href: string; label: string };
+}) {
   const still = useReducedMotion();
   const mx = useSpring(useMotionValue(0), { stiffness: 60, damping: 18 });
   const my = useSpring(useMotionValue(0), { stiffness: 60, damping: 18 });
   const small = useIsSmall();
   const fan = small ? items.slice(1, 4) : items.slice(0, 5);
-  const lines = [["Invitations", "worth"], ["opening", "twice."]];
   let n = 0;
   return (
-    <header className="pt-12 pb-6 text-center sm:pt-20">
-      <motion.p initial={still ? false : { opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: EASE }} className="mb-5 text-[14px] font-medium text-brand">
-        {count} designs · all free
+    <header className="pt-6 pb-6 text-center sm:pt-20">
+      <motion.p initial={still ? false : { opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: EASE }} className="mb-3 text-[13.5px] font-medium text-brand sm:mb-5 sm:text-[14px]">
+        {kicker ?? `${count} designs · all free`}
       </motion.p>
-      <h1 className="mx-auto max-w-4xl font-serif text-[46px] leading-[0.92] font-medium tracking-[-0.02em] sm:text-[88px]" aria-label="Invitations worth opening twice.">
+      <h1 className="mx-auto max-w-4xl font-serif text-[42px] leading-[0.94] font-medium tracking-[-0.02em] sm:text-[84px]" aria-label={lines.flat().join(" ")}>
         {lines.map((line) => (
           <span key={line[0]} className="block" aria-hidden>
             {line.map((w) => {
@@ -92,19 +115,19 @@ export function TemplatesHero({ count, items, links }: { count: number; items: F
           </span>
         ))}
       </h1>
-      <motion.p initial={still ? false : { opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: EASE, delay: 0.6 }} className="mx-auto mt-9 max-w-md text-[17px] leading-[1.55] text-balance text-ink/70">
-        Every design opens with its own little ceremony. Pick one, make it yours in a minute, send it as a link.
+      <motion.p initial={still ? false : { opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: EASE, delay: 0.6 }} className="mx-auto mt-5 max-w-md text-[15.5px] leading-[1.5] text-balance text-ink/70 sm:mt-9 sm:text-[17px] sm:leading-[1.55]">
+        {lede}
       </motion.p>
-      <motion.div initial={still ? false : { opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: EASE, delay: 0.75 }} className="mt-8 flex flex-wrap justify-center gap-3">
-        <a href={`#${links[0]?.id ?? "weddings"}`} className="btn btn-primary h-12 px-6 text-[16px]">
+      <motion.div initial={still ? false : { opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: EASE, delay: 0.75 }} className="mt-6 flex flex-wrap justify-center gap-2.5 sm:mt-8 sm:gap-3">
+        <a href={`#${links[0]?.id ?? "weddings"}`} className="btn btn-primary h-11 px-4 text-[15px] sm:h-12 sm:px-6 sm:text-[16px]">
           Browse designs
         </a>
-        <Link href="/custom" className="btn h-12 bg-paper-2 px-6 text-[16px] text-ink hover:bg-[#e4dac4]">
-          Custom design
+        <Link href={secondary.href} className="btn h-11 bg-paper-2 px-4 text-[15px] text-ink hover:bg-[#e4dac4] sm:h-12 sm:px-6 sm:text-[16px]">
+          {secondary.label}
         </Link>
       </motion.div>
       <div
-        className="relative mx-auto mt-8 h-[390px] w-full max-w-[900px] sm:h-[420px] lg:h-[470px]"
+        className="relative mx-auto mt-3 h-[340px] w-full max-w-[900px] sm:mt-8 sm:h-[420px] lg:h-[470px]"
         onPointerMove={(e) => {
           const b = e.currentTarget.getBoundingClientRect();
           mx.set((e.clientX - b.left) / b.width - 0.5);
@@ -150,6 +173,7 @@ export function Reveal({ children, delay = 0, className }: { children: ReactNode
 function SpotlightCard({ item }: { item: FanItem }) {
   const { meta, thumb } = item;
   const still = useReducedMotion();
+  const { open } = usePreview();
   const rx = useSpring(useMotionValue(0), { stiffness: 140, damping: 16 });
   const ry = useSpring(useMotionValue(0), { stiffness: 140, damping: 16 });
   return (
@@ -167,8 +191,14 @@ function SpotlightCard({ item }: { item: FanItem }) {
       }}
     >
       <motion.div style={{ rotateX: rx, rotateY: ry }} className="relative overflow-hidden rounded-[22px] shadow-[0_1px_3px_rgb(0_0_0/0.08),0_16px_28px_-14px_rgb(0_0_0/0.4)] ring-1 ring-black/5 transition-shadow duration-500 group-hover:shadow-[0_1px_3px_rgb(0_0_0/0.1),0_24px_36px_-16px_rgb(0_0_0/0.5)]">
-        {thumb}
-        <Link href={`/templates/${meta.id}`} className="absolute inset-0" aria-label={`${meta.name}: ${meta.tagline}`} />
+        <LiveThumb id={meta.id}>{thumb}</LiveThumb>
+        <button type="button" onClick={() => open(meta.id)} className="absolute inset-0" aria-label={`Preview ${meta.name}: ${meta.tagline}`} />
+        <span className="pointer-events-none absolute top-3 left-3 inline-flex items-center gap-1 rounded-full bg-black/40 px-2.5 py-1 text-[12px] font-medium text-white backdrop-blur-md">
+          <svg viewBox="0 0 24 24" className="size-3" aria-hidden>
+            <path d="M8 5.5v13l10.5-6.5z" fill="currentColor" />
+          </svg>
+          Preview
+        </span>
         <div className="pointer-events-none absolute inset-x-3 bottom-3 flex items-center justify-between gap-3 rounded-2xl bg-white/88 py-2.5 pr-2.5 pl-4 shadow-[0_8px_24px_-10px_rgb(0_0_0/0.35)] backdrop-blur-md">
           <div className="min-w-0">
             <h3 className="truncate text-[16px] leading-tight font-medium text-ink">{meta.name}</h3>

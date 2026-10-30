@@ -1,11 +1,13 @@
 import Script from "next/script";
 
 import { SiteFooter } from "@/components/site-footer";
+import { PreviewProvider } from "@/components/preview-sheet";
 import { SiteHeader } from "@/components/site-header";
 import { DWM_ORIGIN } from "@/lib/dwm";
 
 export default function SiteLayout({ children }: { children: React.ReactNode }) {
   return (
+    <PreviewProvider>
     <div className="flex min-h-dvh flex-col">
       <SiteHeader />
       <div className="flex-1">{children}</div>
@@ -13,5 +15,6 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
       {/* The 9-dot DWM app launcher, defined as <dwm-apps> by this script. */}
       <Script src={`${DWM_ORIGIN}/dwm-apps.js`} strategy="afterInteractive" />
     </div>
+    </PreviewProvider>
   );
 }

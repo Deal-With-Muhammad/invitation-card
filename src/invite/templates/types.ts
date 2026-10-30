@@ -49,6 +49,8 @@ export type TemplateMeta = {
   openMs: number;
   /** Search phrases this design suits, e.g. "mughal wedding card". */
   keywords: string[];
+  /** false: sample invitations for this design start without Bismillah and salam. */
+  islamic?: boolean;
 };
 
 export type HeroProps = { r: Resolved; phase: Phase; thumb?: boolean };
@@ -70,6 +72,8 @@ export type TemplateParts = {
   sections?: Partial<Record<SectionId, FC<SectionProps>>>;
   /** Runs once when the invitation opens (confetti, petals…). */
   celebrate?: (root: HTMLElement) => void;
+  /** Extra class on the invitation root, for a kit's shared styles. */
+  rootClass?: string;
 };
 
 export type Template = { meta: TemplateMeta } & TemplateParts;

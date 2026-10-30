@@ -28,7 +28,7 @@ export function Thumb({
   return (
     <div className={`inv-thumb ${className}`}>
       <div
-        className={`inv is-thumb t-${tpl.meta.id} ${FONT_VARS}`}
+        className={`inv is-thumb t-${tpl.meta.id} ${tpl.rootClass ?? ""} ${FONT_VARS}`}
         data-phase="open"
         data-occasion={d.occasion}
         lang={d.lang}
