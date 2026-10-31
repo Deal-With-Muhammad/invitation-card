@@ -7,6 +7,8 @@ import { join } from "node:path";
 import type { InviteData } from "@/invite/types";
 import { db, hasDb } from "@/lib/supabase/server";
 
+import type { VisitInfo } from "./visitor";
+
 // Where shared invitations live: the Supabase "invites" table in production
 // (schema in supabase/schema.sql). In development without Supabase keys, a JSON
 // file in .data/ so links survive restarts.
@@ -22,6 +24,9 @@ export type InviteRecord = {
   ownerId: string | null;
   views: number;
   maxViews: number;
+  /** Where it was made (from the request's location headers), if known. */
+  country?: string | null;
+  city?: string | null;
   createdAt: number;
   updatedAt: number;
 };
@@ -43,8 +48,8 @@ export type Store = {
   update(slug: string, data: InviteData): Promise<void>;
   remove(slug: string): Promise<void>;
   exists(slug: string): Promise<boolean>;
-  /** Counts a visit if any are left. Null if the invitation doesn't exist. */
-  registerView(slug: string): Promise<ViewResult | null>;
+  /** Counts a visit (and where it came from) if any are left. Null if the invitation doesn't exist. */
+  registerView(slug: string, info: VisitInfo): Promise<ViewResult | null>;
   /** Invitations saved to an account, newest first. */
   listByOwner(ownerId: string): Promise<InviteSummary[]>;
   /** Moves a guest invitation into an account. False if it already has one. */
@@ -60,6 +65,8 @@ type Row = {
   owner_id: string | null;
   views: number;
   max_views: number;
+  country: string | null;
+  city: string | null;
   created_at: string;
   updated_at: string;
 };
@@ -70,6 +77,8 @@ const fromRow = (r: Row): InviteRecord => ({
   ownerId: r.owner_id,
   views: r.views,
   maxViews: r.max_views,
+  country: r.country,
+  city: r.city,
   createdAt: Date.parse(r.created_at),
   updatedAt: Date.parse(r.updated_at),
 });
@@ -96,6 +105,8 @@ function supabaseStore(): Store {
         owner_id: rec.ownerId,
         views: rec.views,
         max_views: rec.maxViews,
+        country: rec.country ?? null,
+        city: rec.city ?? null,
         created_at: new Date(rec.createdAt).toISOString(),
         updated_at: new Date(rec.updatedAt).toISOString(),
       });
@@ -121,8 +132,15 @@ function supabaseStore(): Store {
       if (error) fail("count", error);
       return (count ?? 0) > 0;
     },
-    async registerView(slug) {
-      const { data, error } = await db().rpc("register_view", { p_slug: slug });
+    async registerView(slug, info) {
+      const { data, error } = await db().rpc("register_view", {
+        p_slug: slug,
+        p_country: info.country,
+        p_region: info.region,
+        p_city: info.city,
+        p_device: info.device,
+        p_source: info.source,
+      });
       if (error) fail("register_view", error);
       const row = (data as { counted: boolean; views: number; max_views: number }[] | null)?.[0];
       return row ? { counted: row.counted, views: row.views, maxViews: row.max_views } : null;

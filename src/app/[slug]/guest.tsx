@@ -14,7 +14,13 @@ export function Guest({ slug, data }: { slug: string; data: InviteData }) {
       if (localStorage.getItem(key) || tokenFor(slug)) return;
       localStorage.setItem(key, "1");
     } catch {}
-    fetch(`/api/invites/${slug}/view`, { method: "POST", keepalive: true }).catch(() => {});
+    // The referrer says where the link was tapped (only its host is kept).
+    fetch(`/api/invites/${slug}/view`, {
+      method: "POST",
+      keepalive: true,
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ ref: document.referrer }),
+    }).catch(() => {});
   }, [slug]);
   return <Invitation data={data} />;
 }

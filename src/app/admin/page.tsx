@@ -7,6 +7,7 @@ import { db } from "@/lib/supabase/server";
 
 import { addVisits, deleteInvite, resetVisits, signOut } from "./actions";
 import { ConfirmButton } from "./confirm-button";
+import { InsightsTab, PERIODS } from "./insights";
 
 export const dynamic = "force-dynamic";
 
@@ -30,14 +31,15 @@ type InviteRow = {
 
 const FILTERS = { all: "All", account: "Accounts", guest: "Guests", full: "Full" } as const;
 type Filter = keyof typeof FILTERS;
-const TABS = { invites: "Invitations", users: "Accounts", log: "Admin log" } as const;
+const TABS = { insights: "Insights", invites: "Invitations", users: "Accounts", log: "Admin log" } as const;
 type Tab = keyof typeof TABS;
 
 export default async function AdminPage(props: PageProps<"/admin">) {
   const admin = await requireAdmin();
   const sp = await props.searchParams;
   const one = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v) ?? "";
-  const tab: Tab = one(sp.tab) in TABS ? (one(sp.tab) as Tab) : "invites";
+  const tab: Tab = one(sp.tab) in TABS ? (one(sp.tab) as Tab) : "insights";
+  const days = (PERIODS as readonly number[]).includes(Number(one(sp.days))) ? Number(one(sp.days)) : 30;
   const filter: Filter = one(sp.filter) in FILTERS ? (one(sp.filter) as Filter) : "all";
   const q = one(sp.q).trim().toLowerCase().replace(/[^a-z0-9-]/g, "").slice(0, 48);
   const page = Math.max(1, Math.floor(Number(one(sp.page)) || 1));
@@ -49,8 +51,9 @@ export default async function AdminPage(props: PageProps<"/admin">) {
 
   const href = (patch: Record<string, string | number | undefined>) => {
     const p = new URLSearchParams();
-    const merged = { tab, filter, q, page, ...patch };
-    for (const [k, v] of Object.entries(merged)) if (v !== undefined && v !== "" && !(k === "page" && v === 1) && !(k === "filter" && v === "all") && !(k === "tab" && v === "invites")) p.set(k, String(v));
+    const merged = { tab, filter, q, page, days, ...patch };
+    const defaults: Record<string, unknown> = { page: 1, filter: "all", tab: "insights", days: 30 };
+    for (const [k, v] of Object.entries(merged)) if (v !== undefined && v !== "" && defaults[k] !== v) p.set(k, String(v));
     const str = p.toString();
     return str ? `/admin?${str}` : "/admin";
   };
@@ -87,7 +90,7 @@ export default async function AdminPage(props: PageProps<"/admin">) {
           {nf.format(s.invites - s.guest)} saved to accounts, {nf.format(s.guest)} made as guests.
         </p>
 
-        <nav className="mt-8 flex gap-1 border-b border-line" aria-label="Admin sections">
+        <nav className="mt-8 flex gap-1 overflow-x-auto border-b border-line whitespace-nowrap" aria-label="Admin sections">
           {(Object.keys(TABS) as Tab[]).map((t) => (
             <Link
               key={t}
@@ -100,6 +103,7 @@ export default async function AdminPage(props: PageProps<"/admin">) {
           ))}
         </nav>
 
+        {tab === "insights" && <InsightsTab days={days} href={href} />}
         {tab === "invites" && <Invites filter={filter} q={q} page={page} emailOf={emailOf} href={href} />}
         {tab === "users" && <Users users={users} />}
         {tab === "log" && <Log />}
@@ -144,6 +148,7 @@ async function Invites({ filter, q, page, emailOf, href }: { filter: Filter; q: 
           </Link>
         ))}
         <form className="ms-auto flex gap-2" action="/admin">
+          <input type="hidden" name="tab" value="invites" />
           {filter !== "all" && <input type="hidden" name="filter" value={filter} />}
           <input
             name="q"

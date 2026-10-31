@@ -39,7 +39,7 @@ Handy dev pages: `/dev` (every template in every palette) and
 | `src/components/editor/` | The editor, live preview (iframe at `/frame`), publish and share |
 | `src/app/[slug]` | A shared invitation (noindex, with its own WhatsApp preview image) |
 | `src/app/api/` | Publish, edit (edit token or the owner's account), delete, view counter, link check, sign-in |
-| `src/app/admin` | Admin dashboard (admin emails only, fresh email code every 12 hours) |
+| `src/app/admin` | Admin dashboard: insights (where guests and makers are, how guests arrive, devices, designs), invitations, accounts, log. Admin emails only, fresh email code every 12 hours |
 | `src/lib/server/store.ts` | Supabase store (and the dev file store), visit limit, signed "seen" cookies |
 | `src/lib/site.ts`, `pages.ts`, `seo.ts` | Site copy, keyword landing pages and JSON-LD |
 
