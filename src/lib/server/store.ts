@@ -1,88 +1,151 @@
 import "server-only";
 
-import { createHash, randomBytes, timingSafeEqual } from "node:crypto";
+import { createHash, createHmac, randomBytes, timingSafeEqual } from "node:crypto";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
-import { Redis } from "@upstash/redis";
-
 import type { InviteData } from "@/invite/types";
+import { db, hasDb } from "@/lib/supabase/server";
 
-// Where shared invitations live. Upstash Redis in production (the database is
-// shared with the other DWM sites, so every key starts with "inv:"). In
-// development without Redis credentials, a JSON file in .data/ so links survive
-// restarts.
+// Where shared invitations live: the Supabase "invites" table in production
+// (schema in supabase/schema.sql). In development without Supabase keys, a JSON
+// file in .data/ so links survive restarts.
+
+/** Guest visits each invitation includes. Each phone counts once. */
+export const VISIT_LIMIT = 100;
 
 export type InviteRecord = {
   data: InviteData;
   /** sha256 (hex) of the edit token. The token itself is never stored. */
   tokenHash: string;
+  /** The account it belongs to, or null if it was made as a guest. */
+  ownerId: string | null;
+  views: number;
+  maxViews: number;
   createdAt: number;
   updatedAt: number;
 };
 
+export type InviteSummary = Pick<InviteRecord, "views" | "maxViews" | "createdAt" | "updatedAt"> & {
+  slug: string;
+  names: string;
+  template: string;
+  occasion: string;
+};
+
+export type ViewResult = { counted: boolean; views: number; maxViews: number };
+
 export type Store = {
-  kind: "redis" | "file";
+  kind: "supabase" | "file";
   /** Saves a new invitation. Returns false if the slug is taken. */
   create(slug: string, rec: InviteRecord): Promise<boolean>;
   get(slug: string): Promise<InviteRecord | null>;
-  put(slug: string, rec: InviteRecord): Promise<void>;
+  update(slug: string, data: InviteData): Promise<void>;
   remove(slug: string): Promise<void>;
   exists(slug: string): Promise<boolean>;
-  views(slug: string): Promise<number>;
-  addView(slug: string): Promise<number>;
+  /** Counts a visit if any are left. Null if the invitation doesn't exist. */
+  registerView(slug: string): Promise<ViewResult | null>;
+  /** Invitations saved to an account, newest first. */
+  listByOwner(ownerId: string): Promise<InviteSummary[]>;
+  /** Moves a guest invitation into an account. False if it already has one. */
+  claim(slug: string, ownerId: string): Promise<boolean>;
   /** Counter that resets after `windowSeconds`; returns the new count. */
   hit(key: string, windowSeconds: number): Promise<number>;
 };
 
-const doc = (slug: string) => `inv:doc:${slug}`;
-const viewKey = (slug: string) => `inv:views:${slug}`;
-const COUNT = "inv:count";
-const LIST = "inv:list";
+type Row = {
+  slug: string;
+  data: InviteData;
+  token_hash: string;
+  owner_id: string | null;
+  views: number;
+  max_views: number;
+  created_at: string;
+  updated_at: string;
+};
 
-function redisStore(redis: Redis): Store {
+const fromRow = (r: Row): InviteRecord => ({
+  data: r.data,
+  tokenHash: r.token_hash,
+  ownerId: r.owner_id,
+  views: r.views,
+  maxViews: r.max_views,
+  createdAt: Date.parse(r.created_at),
+  updatedAt: Date.parse(r.updated_at),
+});
+
+/** The parts of an invitation a list needs, without its full contents. */
+export function summarise(slug: string, rec: InviteRecord): InviteSummary {
+  const names = rec.data.people.map((p) => p.name).filter(Boolean).join(" & ");
+  return { slug, names, template: rec.data.template, occasion: rec.data.occasion, views: rec.views, maxViews: rec.maxViews, createdAt: rec.createdAt, updatedAt: rec.updatedAt };
+}
+
+function fail(what: string, error: { message: string }): never {
+  throw new Error(`Supabase ${what} failed: ${error.message}`);
+}
+
+function supabaseStore(): Store {
+  const t = () => db().from("invites");
   return {
-    kind: "redis",
+    kind: "supabase",
     async create(slug, rec) {
-      const ok = await redis.set(doc(slug), rec, { nx: true });
-      if (ok !== "OK") return false;
-      const p = redis.pipeline();
-      p.incr(COUNT);
-      p.zadd(LIST, { score: rec.createdAt, member: slug });
-      await p.exec();
+      const { error } = await t().insert({
+        slug,
+        data: rec.data,
+        token_hash: rec.tokenHash,
+        owner_id: rec.ownerId,
+        views: rec.views,
+        max_views: rec.maxViews,
+        created_at: new Date(rec.createdAt).toISOString(),
+        updated_at: new Date(rec.updatedAt).toISOString(),
+      });
+      if (error?.code === "23505") return false; // slug already taken
+      if (error) fail("insert", error);
       return true;
     },
     async get(slug) {
-      return (await redis.get<InviteRecord>(doc(slug))) ?? null;
+      const { data, error } = await t().select("*").eq("slug", slug).maybeSingle<Row>();
+      if (error) fail("select", error);
+      return data ? fromRow(data) : null;
     },
-    async put(slug, rec) {
-      await redis.set(doc(slug), rec);
+    async update(slug, data) {
+      const { error } = await t().update({ data, updated_at: new Date().toISOString() }).eq("slug", slug);
+      if (error) fail("update", error);
     },
     async remove(slug) {
-      const p = redis.pipeline();
-      p.del(doc(slug));
-      p.del(viewKey(slug));
-      p.zrem(LIST, slug);
-      await p.exec();
+      const { error } = await t().delete().eq("slug", slug);
+      if (error) fail("delete", error);
     },
     async exists(slug) {
-      return (await redis.exists(doc(slug))) === 1;
+      const { count, error } = await t().select("slug", { count: "exact", head: true }).eq("slug", slug);
+      if (error) fail("count", error);
+      return (count ?? 0) > 0;
     },
-    async views(slug) {
-      return Number((await redis.get<number>(viewKey(slug))) ?? 0);
+    async registerView(slug) {
+      const { data, error } = await db().rpc("register_view", { p_slug: slug });
+      if (error) fail("register_view", error);
+      const row = (data as { counted: boolean; views: number; max_views: number }[] | null)?.[0];
+      return row ? { counted: row.counted, views: row.views, maxViews: row.max_views } : null;
     },
-    async addView(slug) {
-      return redis.incr(viewKey(slug));
+    async listByOwner(ownerId) {
+      const { data, error } = await t().select("*").eq("owner_id", ownerId).order("created_at", { ascending: false }).limit(200).overrideTypes<Row[], { merge: false }>();
+      if (error) fail("select", error);
+      return (data ?? []).map((r) => summarise(r.slug, fromRow(r)));
+    },
+    async claim(slug, ownerId) {
+      const { data, error } = await t().update({ owner_id: ownerId }).eq("slug", slug).is("owner_id", null).select("slug");
+      if (error) fail("claim", error);
+      return (data?.length ?? 0) > 0;
     },
     async hit(key, windowSeconds) {
-      const n = await redis.incr(key);
-      if (n === 1) await redis.expire(key, windowSeconds);
-      return n;
+      const { data, error } = await db().rpc("hit_rate", { p_key: key, p_window: windowSeconds });
+      if (error) fail("hit_rate", error);
+      return Number(data);
     },
   };
 }
 
-type FileState = { docs: Record<string, InviteRecord>; views: Record<string, number>; count: number };
+type FileState = { docs: Record<string, InviteRecord> };
 
 function fileStore(): Store {
   const dir = join(process.cwd(), ".data");
@@ -90,9 +153,16 @@ function fileStore(): Store {
   const counters = new Map<string, { n: number; until: number }>();
   const load = (): FileState => {
     try {
-      return JSON.parse(readFileSync(file, "utf8")) as FileState;
+      const s = JSON.parse(readFileSync(file, "utf8")) as FileState & { views?: Record<string, number> };
+      // Older files kept views separately and had no owner or limit.
+      for (const [slug, rec] of Object.entries(s.docs)) {
+        rec.ownerId ??= null;
+        rec.views ??= s.views?.[slug] ?? 0;
+        rec.maxViews ??= VISIT_LIMIT;
+      }
+      return { docs: s.docs };
     } catch {
-      return { docs: {}, views: {}, count: 0 };
+      return { docs: {} };
     }
   };
   const save = (s: FileState) => {
@@ -105,35 +175,48 @@ function fileStore(): Store {
       const s = load();
       if (s.docs[slug]) return false;
       s.docs[slug] = rec;
-      s.count += 1;
       save(s);
       return true;
     },
     async get(slug) {
       return load().docs[slug] ?? null;
     },
-    async put(slug, rec) {
+    async update(slug, data) {
       const s = load();
-      s.docs[slug] = rec;
+      if (!s.docs[slug]) return;
+      s.docs[slug] = { ...s.docs[slug], data, updatedAt: Date.now() };
       save(s);
     },
     async remove(slug) {
       const s = load();
       delete s.docs[slug];
-      delete s.views[slug];
       save(s);
     },
     async exists(slug) {
       return Boolean(load().docs[slug]);
     },
-    async views(slug) {
-      return load().views[slug] ?? 0;
-    },
-    async addView(slug) {
+    async registerView(slug) {
       const s = load();
-      s.views[slug] = (s.views[slug] ?? 0) + 1;
+      const rec = s.docs[slug];
+      if (!rec) return null;
+      if (rec.views >= rec.maxViews) return { counted: false, views: rec.views, maxViews: rec.maxViews };
+      rec.views += 1;
       save(s);
-      return s.views[slug];
+      return { counted: true, views: rec.views, maxViews: rec.maxViews };
+    },
+    async listByOwner(ownerId) {
+      return Object.entries(load().docs)
+        .filter(([, r]) => r.ownerId === ownerId)
+        .map(([slug, r]) => summarise(slug, r))
+        .sort((a, b) => b.createdAt - a.createdAt);
+    },
+    async claim(slug, ownerId) {
+      const s = load();
+      const rec = s.docs[slug];
+      if (!rec || rec.ownerId) return false;
+      rec.ownerId = ownerId;
+      save(s);
+      return true;
     },
     async hit(key, windowSeconds) {
       const now = Date.now();
@@ -150,13 +233,11 @@ function fileStore(): Store {
 
 let cached: Store | null | undefined;
 
-/** The configured store, or null in production without Redis (sharing is then unavailable). */
+/** The configured store, or null in production without Supabase (sharing is then unavailable). */
 export function getStore(): Store | null {
   if (cached !== undefined) return cached;
-  const url = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
-  if (url && token) cached = redisStore(new Redis({ url, token }));
-  // DWM_INVITE_FILE_STORE=1 lets a local production build run without Redis.
+  if (hasDb()) cached = supabaseStore();
+  // DWM_INVITE_FILE_STORE=1 lets a local production build run without Supabase.
   else if (process.env.NODE_ENV !== "production" || process.env.DWM_INVITE_FILE_STORE === "1") cached = fileStore();
   else cached = null;
   return cached;
@@ -174,4 +255,23 @@ export function tokenMatches(token: string | null, hash: string) {
 
 export function clientIp(headers: Headers) {
   return headers.get("x-forwarded-for")?.split(",")[0]?.trim() || headers.get("x-real-ip") || "local";
+}
+
+// A device that has been counted for an invitation (or made it) gets a signed
+// cookie, so it isn't counted twice and can still open it after the limit.
+
+const seenSecret = () =>
+  createHash("sha256")
+    .update(`dwm-invite:seen:${process.env.INVITE_COOKIE_SECRET || process.env.SUPABASE_SERVICE_ROLE || process.env.SUPABASE_SERVICE_ROLE_KEY || "dev"}`)
+    .digest();
+
+export const seenCookieName = (slug: string) => `seen_${slug}`;
+export const seenCookieValue = (slug: string) => createHmac("sha256", seenSecret()).update(slug).digest("base64url").slice(0, 32);
+export const seenCookieOptions = { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "lax" as const, path: "/", maxAge: 60 * 60 * 24 * 400 };
+
+export function hasSeen(slug: string, value: string | undefined) {
+  if (!value) return false;
+  const a = Buffer.from(value);
+  const b = Buffer.from(seenCookieValue(slug));
+  return a.length === b.length && timingSafeEqual(a, b);
 }

@@ -1,10 +1,12 @@
 import { NextResponse } from "next/server";
 
 import { parseInvite } from "@/invite/schema";
-import { getStore, tokenMatches } from "@/lib/server/store";
+import { getStore, seenCookieName, seenCookieOptions, seenCookieValue, tokenMatches } from "@/lib/server/store";
+import { currentUser } from "@/lib/supabase/server";
 
 // Reading an invitation for editing, saving changes and deleting it. All three
-// need the private edit token from publishing (header x-edit-token).
+// need either the private edit token from publishing (header x-edit-token) or
+// the signed-in account the invitation is saved to.
 
 type Ctx = { params: Promise<{ slug: string }> };
 
@@ -13,17 +15,30 @@ async function authorised(req: Request, slug: string) {
   if (!store) return { error: NextResponse.json({ error: "Sharing is not available right now." }, { status: 503 }) };
   const rec = await store.get(slug);
   if (!rec) return { error: NextResponse.json({ error: "This invitation doesn't exist any more." }, { status: 404 }) };
-  if (!tokenMatches(req.headers.get("x-edit-token"), rec.tokenHash))
-    return { error: NextResponse.json({ error: "This edit link isn't valid." }, { status: 403 }) };
-  return { store, rec };
+  if (tokenMatches(req.headers.get("x-edit-token"), rec.tokenHash)) return { store, rec };
+  if (rec.ownerId) {
+    const user = await currentUser();
+    if (user?.id === rec.ownerId) return { store, rec };
+  }
+  return { error: NextResponse.json({ error: "This edit link isn't valid." }, { status: 403 }) };
 }
 
 export async function GET(req: Request, ctx: Ctx) {
   const { slug } = await ctx.params;
   const a = await authorised(req, slug);
   if ("error" in a) return a.error;
-  const views = await a.store.views(slug);
-  return NextResponse.json({ data: a.rec.data, createdAt: a.rec.createdAt, updatedAt: a.rec.updatedAt, views });
+  const { rec } = a;
+  const res = NextResponse.json({
+    data: rec.data,
+    createdAt: rec.createdAt,
+    updatedAt: rec.updatedAt,
+    views: rec.views,
+    maxViews: rec.maxViews,
+    saved: Boolean(rec.ownerId),
+  });
+  // Whoever can edit it can always open it, without using up a visit.
+  res.cookies.set(seenCookieName(slug), seenCookieValue(slug), seenCookieOptions);
+  return res;
 }
 
 export async function PUT(req: Request, ctx: Ctx) {
@@ -40,7 +55,7 @@ export async function PUT(req: Request, ctx: Ctx) {
   }
   const parsed = parseInvite(body.data);
   if (!parsed.ok) return NextResponse.json({ error: `Please check the details (${parsed.error}).` }, { status: 400 });
-  await a.store.put(slug, { ...a.rec, data: parsed.data, updatedAt: Date.now() });
+  await a.store.update(slug, parsed.data);
   return NextResponse.json({ ok: true });
 }
 

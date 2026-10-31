@@ -1,14 +1,16 @@
 import type { Metadata, Viewport } from "next";
+import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { cache } from "react";
 
 import { paletteFor } from "@/invite/look";
 import { resolve } from "@/invite/resolve";
 import { getTemplate } from "@/invite/templates";
-import { getStore } from "@/lib/server/store";
+import { getStore, hasSeen, seenCookieName } from "@/lib/server/store";
 import { SLUG_RE } from "@/lib/slug";
 
 import { Guest } from "./guest";
+import { VisitsUsedUp } from "./used-up";
 
 const load = cache(async (slug: string) => {
   if (!SLUG_RE.test(slug)) return null;
@@ -43,5 +45,7 @@ export default async function InvitePage(props: PageProps<"/[slug]">) {
   const { slug } = await props.params;
   const rec = await load(slug);
   if (!rec) notFound();
+  // Once every visit is used, only devices that already opened it (or made it) get in.
+  if (rec.views >= rec.maxViews && !hasSeen(slug, (await cookies()).get(seenCookieName(slug))?.value)) return <VisitsUsedUp />;
   return <Guest slug={slug} data={rec.data} />;
 }

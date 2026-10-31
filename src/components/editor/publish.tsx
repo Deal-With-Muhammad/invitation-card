@@ -2,6 +2,7 @@
 
 import { Button, InputGroup, Label, Modal, TextField, buttonVariants } from "@heroui/react";
 import { Check, Copy, ExternalLink, Share2, X } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useState, type ReactNode } from "react";
 
 import { SAMPLE_NAMES } from "@/invite/defaults";
@@ -12,6 +13,7 @@ import { suggestSlug, validSlug } from "@/lib/slug";
 import { QrCode } from "./qr";
 import { groupLabel } from "./fields";
 import { rememberInvite } from "./storage";
+import { VISIT_LIMIT, visitsLeft } from "./visits";
 
 const HOST = "invite.dealwithmuhammad.com";
 
@@ -87,7 +89,7 @@ export function ShareCard({ data, slug, token }: { data: InviteData; slug: strin
   );
 }
 
-type State = { step: "form" } | { step: "saving" } | { step: "done"; slug: string; token: string };
+type State = { step: "form" } | { step: "saving" } | { step: "done"; slug: string; token: string; saved: boolean; maxViews: number };
 
 export function PublishDialog({ data, onClose, onPublished, onFix }: { data: InviteData; onClose: () => void; onPublished: (slug: string, token: string) => void; onFix: (panel: string) => void }) {
   const r = resolve(data);
@@ -129,7 +131,7 @@ export function PublishDialog({ data, onClose, onPublished, onFix }: { data: Inv
       const j = await res.json();
       if (!res.ok) throw new Error(j.error || "Couldn't publish. Please try again.");
       rememberInvite({ slug: j.slug, token: j.token, names: r.names, template: data.template, occasion: data.occasion, createdAt: Date.now() });
-      setState({ step: "done", slug: j.slug, token: j.token });
+      setState({ step: "done", slug: j.slug, token: j.token, saved: Boolean(j.saved), maxViews: j.maxViews ?? VISIT_LIMIT });
       onPublished(j.slug, j.token);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Couldn't publish. Please try again.");
@@ -142,7 +144,16 @@ export function PublishDialog({ data, onClose, onPublished, onFix }: { data: Inv
       {state.step === "done" ? (
         <>
           <p className="text-[12px] font-semibold tracking-[0.2em] text-gold-ink uppercase">Published</p>
-          <Modal.Heading className="mt-2 mb-5 font-serif text-[28px] leading-tight font-medium">Your invitation is live</Modal.Heading>
+          <Modal.Heading className="mt-2 font-serif text-[28px] leading-tight font-medium">Your invitation is live</Modal.Heading>
+          <p className="mt-1.5 mb-5 text-[14px] text-muted">
+            {visitsLeft(0, state.maxViews)}. Each guest&apos;s phone counts once, and yours never does.{" "}
+            {state.saved ? "It's saved to your account." : (
+              <>
+                Made as a guest, so it&apos;s kept on this device.{" "}
+                <Link href="/login?next=/my" className="text-brand underline underline-offset-4">Sign in</Link> to save it to an account.
+              </>
+            )}
+          </p>
           <ShareCard data={data} slug={state.slug} token={state.token} />
         </>
       ) : (
@@ -199,7 +210,9 @@ export function PublishDialog({ data, onClose, onPublished, onFix }: { data: Inv
           >
             {state.step === "saving" ? "Publishing…" : samples.length ? "Publish anyway" : "Publish invitation"}
           </Button>
-          <p className="mt-3 text-center text-[12.5px] text-muted">Anyone with the link can see it. It isn&apos;t listed anywhere or shown in search results.</p>
+          <p className="mt-3 text-center text-[12.5px] text-muted">
+            Anyone with the link can see it, up to {VISIT_LIMIT} guest visits. It isn&apos;t listed anywhere or shown in search results.
+          </p>
         </>
       )}
     </Sheet>

@@ -20,10 +20,11 @@ import { DesignPicker, EventsPanel, ExtrasPanel, FaithPanel, LanguagePanel, Look
 import { Phone, PreviewFrame } from "./preview";
 import { PublishDialog, ShareDialog } from "./publish";
 import { clearDraft, forgetInvite, loadDraft, saveDraft } from "./storage";
+import { VISIT_LIMIT, visitsLeft } from "./visits";
 
 type Props =
   | { mode: "create"; template: string; occasion?: Occasion; palette?: string; lang?: Lang }
-  | { mode: "edit"; slug: string; token: string; initial: InviteData; views: number };
+  | { mode: "edit"; slug: string; token: string; initial: InviteData; views: number; maxViews: number };
 
 // Which part of the invitation each panel edits, so the preview can jump there.
 const FOCUS: Record<string, string> = {
@@ -200,8 +201,8 @@ export function Editor(props: Props) {
           <p className="truncate text-[12.5px] text-muted">
             {published
               ? props.mode === "edit"
-                ? `Opened ${props.views} ${props.views === 1 ? "time" : "times"} · ${dirty ? "unsaved changes" : "all changes saved"}`
-                : dirty ? "Unsaved changes" : "Published"
+                ? `${visitsLeft(props.views, props.maxViews)} · ${dirty ? "unsaved changes" : "all changes saved"}`
+                : dirty ? "Unsaved changes" : `Published · ${visitsLeft(0, VISIT_LIMIT)}`
               : restored
                 ? "Your details from last time are back"
                 : "Changes show in the preview as you type"}

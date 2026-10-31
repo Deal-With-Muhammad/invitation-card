@@ -5,7 +5,7 @@ export const SLUG_RE = /^[a-z0-9](?:[a-z0-9-]{1,46}[a-z0-9])$/;
 
 /** Top-level paths the site uses, plus words that would make confusing links. */
 export const RESERVED = new Set([
-  "api", "preview", "frame", "dev", "templates", "template", "create", "edit", "my", "custom", "about", "privacy",
+  "api", "auth", "preview", "frame", "dev", "templates", "template", "create", "edit", "my", "custom", "about", "privacy",
   "terms", "help", "faq", "contact", "pricing", "admin", "login", "signup", "account", "settings", "stats", "www",
   "invite", "invites", "dwm", "app", "static", "assets", "public", "icon", "apple-icon", "opengraph-image",
   "sitemap", "robots", "manifest", "llms", "favicon", "new", "demo", "examples", "blog",

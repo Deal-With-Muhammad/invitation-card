@@ -17,10 +17,12 @@ npm run build        # production build
 npm run typecheck && npm run lint
 ```
 
-Without Redis credentials, `next dev` saves published invitations to
-`.data/invites.json`. In production set `KV_REST_API_URL` / `KV_REST_API_TOKEN`
-(Upstash, see `.env.example`). Keys are prefixed `inv:` because the database is
-shared with the other DWM sites.
+Without Supabase keys, `next dev` saves published invitations to
+`.data/invites.json` and accounts are switched off. With them (see
+`.env.example`), invitations, visit counts and rate limits live in Supabase and
+people can sign in with an emailed code. Set up the database once by running
+`supabase/schema.sql` in the Supabase SQL editor; `SUPABASE.md` lists the
+dashboard settings (email code template, SMTP, redirect URLs).
 
 Handy dev pages: `/dev` (every template in every palette) and
 `/preview/<template>?palette=<id>&occasion=<occasion>`.
@@ -36,7 +38,9 @@ Handy dev pages: `/dev` (every template in every palette) and
 | `src/invite/runtime/` | The player: cover/opening phases, shared sections, music, auto-scroll, calendar |
 | `src/components/editor/` | The editor, live preview (iframe at `/frame`), publish and share |
 | `src/app/[slug]` | A shared invitation (noindex, with its own WhatsApp preview image) |
-| `src/app/api/` | Publish, edit (needs the private edit token), delete, view counter, link check |
+| `src/app/api/` | Publish, edit (edit token or the owner's account), delete, view counter, link check, sign-in |
+| `src/app/admin` | Admin dashboard (admin emails only, fresh email code every 12 hours) |
+| `src/lib/server/store.ts` | Supabase store (and the dev file store), visit limit, signed "seen" cookies |
 | `src/lib/site.ts`, `pages.ts`, `seo.ts` | Site copy, keyword landing pages and JSON-LD |
 
 Text fields set to `null` use the occasion's default wording in the guest's
@@ -48,6 +52,7 @@ language, so untouched invitations read naturally in every language they offer.
   and in their private edit link (`/edit/<slug>#k=<token>`).
 - The only links a guest can follow from an invitation are map links on known
   map hosts and WhatsApp/phone links, so invitations can't be used for phishing.
+- Each invitation includes 100 guest visits (one per phone; the maker's own
+  devices don't count). After that, new visitors see "This invitation is full";
+  phones that already opened it still can. Admins can add visits.
 - Not built yet: RSVP and photo uploads.
-# wedding-invitation
-# wedding-invitation

@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { site } from "@/lib/site";
 
+import { AccountMenu } from "./account-menu";
 import { Logo } from "./logo";
 
 const nav = [
@@ -37,6 +38,7 @@ export function SiteHeader() {
             ))}
           </div>
         </details>
+        <AccountMenu />
         {/* Google-style launcher for every DWM app, served by the portfolio. */}
         <dwm-apps current={site.id} />
       </nav>
