@@ -33,7 +33,12 @@ Authentication → **URL Configuration**
 
 ## 4. Put the code in the emails
 
-By default Supabase emails only a link. Authentication → **Emails** → Templates.
+By default Supabase emails only a link ("Your sign-in link"), and it only lets
+you edit templates once custom SMTP (step 5) is on, so do step 5 first. Until
+then, the link in the email still signs you in, as long as you open it in the
+same browser you asked for it from.
+
+Authentication → **Emails** → Templates.
 Replace both **Magic Link** and **Confirm signup** with this (subject:
 `Your DWM Invite code: {{ .Token }}`):
 
