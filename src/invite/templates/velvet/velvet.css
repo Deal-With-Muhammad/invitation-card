@@ -491,3 +491,34 @@
   text-transform: uppercase;
   text-align: end;
 }
+
+/* the two halves of the ticket fly fully off screen; nothing fades */
+.inv.t-velvet[data-phase="opening"] .pv-half.is-t {
+  animation-name: pv-tear-t;
+}
+
+.inv.t-velvet[data-phase="opening"] .pv-half.is-b {
+  animation-name: pv-tear-b;
+}
+
+.inv.t-velvet[data-phase="opening"] .pt-cover {
+  animation: none;
+}
+
+@keyframes pv-tear-t {
+  15% {
+    transform: translateY(-1%) rotate(-1deg);
+  }
+  to {
+    transform: translateY(-125%) rotate(-11deg);
+  }
+}
+
+@keyframes pv-tear-b {
+  15% {
+    transform: translateY(1%) rotate(1deg);
+  }
+  to {
+    transform: translateY(125%) rotate(8deg);
+  }
+}

@@ -29,7 +29,11 @@ Delete the design's old `art.tsx` / `cover.tsx` if it has them; nothing else imp
   `strips` (vertical strips swing apart from the middle; `strips: 12`), `tear` (top and
   bottom halves tear apart), `envelope` (drops away while the card rises out of it),
   `glow` (light burns the cover away from the middle), `unroll` (the hero unrolls from the
-  top), `wave` (foam washes up and back).
+  top), `wave` (foam washes up and back), `film` (a Veo first+last-frame video,
+  public/art/<id>/open.webm|mp4, plays from the closed art into the hero; `openMs` = its length).
+  Prefer `film` for weddings: no opening may crossfade between two different pictures. Make the
+  first frame from the closed state and the last from the open state with text hidden, trim the
+  still start, cut at the frame that best matches the hero, and check for one-frame jumps.
 - `cover.art`: closed-state art name. `cover.pos`: object-position.
 - `cover.seal`: initials laid over a seal/medallion in the art: `{ x: "50%", y: "48%", size: 90,
   look: "foil" | "wax" | "emboss" | "thread" | "ink" | "plain" }`. Measure x/y on the art.
@@ -40,7 +44,8 @@ Delete the design's old `art.tsx` / `cover.tsx` if it has them; nothing else imp
   in phone px). Put it in the art's calm area. A soft radial glow of `--bg` sits behind it.
 - `HeroArt`: component drawn over the hero art, under the text (lights, stars, stamps).
 - `HeroAfter`: extra content after the date. `heroShow`: `{ title, venue, blessing }` toggles.
-- `variants`: `{ <paletteId>: { hero?, cover? } }` — a colourway that swaps the art.
+- `variants`: `{ <paletteId>: { hero?, cover?, film? } }` — a colourway that swaps the art (and,
+  for a filmed opening, its own video, e.g. `film: "open-couple"`).
 - `stripY`: background-position-y of a band of the hero art used as the painted divider between
   sections (e.g. `"97%"` = the bottom band, `"3%"` = the top band); `null` for no strip. `stripH`.
 - `panels`: `"paper"` (default, translucent panels with a fine inner rule) or `"clear"`.

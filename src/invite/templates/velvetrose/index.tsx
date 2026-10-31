@@ -8,7 +8,7 @@ import "./velvetrose.css";
 // the invitation. Gold flakes fall when it opens.
 
 export const velvetrose = makePainted("velvetrose", {
-  cover: { kind: "hinge", art: "lid", hint: "light", seal: { x: "50%", y: "48.5%", size: 112, look: "thread" } },
+  cover: { kind: "film", art: "fclosed", hint: "light", seal: { x: "50%", y: "48.5%", size: 112, look: "thread" } },
   text: { top: "24%", width: 286 },
   stripY: "2%",
   stripH: 104,

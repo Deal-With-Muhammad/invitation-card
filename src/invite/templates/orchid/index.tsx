@@ -29,8 +29,8 @@ function Light() {
 
 export const orchid = makePainted("orchid", {
   cover: {
-    kind: "glow",
-    art: "closed",
+    kind: "film",
+    art: "fclosed",
     hint: "light",
     seal: { x: "50.1%", y: "53.4%", size: 56, look: "foil" },
     Extra: Candle,

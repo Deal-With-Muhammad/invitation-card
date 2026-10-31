@@ -13,7 +13,7 @@ function Glint() {
 }
 
 export const gilded = makePainted("gilded", {
-  cover: { kind: "envelope", art: "closed", hint: "light", seal: { x: "50.1%", y: "54.1%", size: 62, look: "plain" } },
+  cover: { kind: "film", art: "fclosed", hint: "light", seal: { x: "50.1%", y: "54.1%", size: 62, look: "plain" } },
   text: { top: "46.5%", width: 300, tone: "light" },
   HeroArt: Glint,
   stripY: "3%",

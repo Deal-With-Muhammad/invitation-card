@@ -17,7 +17,7 @@ function WaterLight() {
 }
 
 export const zellige = makePainted("zellige", {
-  cover: { kind: "zoom", art: "closed", hint: "light", seal: { x: "50%", y: "48.4%", size: 124, look: "foil" } },
+  cover: { kind: "film", art: "fclosed", hint: "light", seal: { x: "50%", y: "48.4%", size: 124, look: "foil" } },
   text: { top: "24.5%", width: 224 },
   HeroArt: WaterLight,
   stripY: "2%",

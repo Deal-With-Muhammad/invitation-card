@@ -4,7 +4,7 @@
   container-type: size;
 }
 
-/* ── cover: the same painting, out of focus; the glow brings it into focus ── */
+/* ── cover: the same painting behind a frosted pane, which lifts away ── */
 
 .t-cloudnine .pt-sheet .pt-img {
   filter: blur(6px) saturate(1.05);

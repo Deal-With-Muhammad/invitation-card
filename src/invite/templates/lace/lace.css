@@ -77,3 +77,8 @@
   outline-color: color-mix(in srgb, #fffaf6 80%, transparent);
   outline-width: 1.5px;
 }
+
+/* filmed opening: the names showing through the lace fade with the tap label */
+.inv.pk-open-film[data-phase="opening"] .lc-through {
+  animation: pt-gone 360ms ease both;
+}

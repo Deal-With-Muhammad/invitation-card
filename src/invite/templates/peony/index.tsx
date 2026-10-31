@@ -8,8 +8,8 @@ import "./peony.css";
 // same arch with the bride and groom seen from behind.
 
 export const peony = makePainted("peony", {
-  cover: { kind: "veil", art: "veil", hint: "dark" },
-  variants: { couple: { hero: "couple" } },
+  cover: { kind: "film", art: "fclosed", hint: "dark" },
+  variants: { couple: { hero: "couple", film: "open-couple" } },
   text: { top: "25%", width: 236 },
   stripY: "97%",
   celebrate: (root) => {

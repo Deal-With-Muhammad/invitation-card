@@ -976,3 +976,9 @@
     opacity: 0;
   }
 }
+
+/* on a filmed opening the live seal fades as the film starts, whatever motion the card's
+   own CSS gave it for an older opening (doubled class for specificity) */
+.inv.inv.pk-open-film[data-phase="opening"] .pt-seal {
+  animation: pt-gone 360ms ease both;
+}

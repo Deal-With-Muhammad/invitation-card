@@ -16,7 +16,7 @@ function Glaze() {
 }
 
 export const kashi = makePainted("kashi", {
-  cover: { kind: "zoom", art: "closed", hint: "dark", seal: { x: "49.6%", y: "49.5%", size: 156, look: "ink" } },
+  cover: { kind: "film", art: "fclosed", hint: "dark", seal: { x: "49.6%", y: "49.5%", size: 156, look: "ink" } },
   text: { top: "27%", width: 262 },
   HeroArt: Glaze,
   stripY: "100%",

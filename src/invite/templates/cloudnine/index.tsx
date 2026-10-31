@@ -6,8 +6,8 @@ import { makePainted } from "../painted/kit";
 import "./cloudnine.css";
 
 // Cloud Nine: a watercolour nursery mobile of felt clouds, a crescent moon and little
-// stars. It starts soft and dreamy (the same painting, out of focus); light grows
-// from the middle and brings it into focus. The gold stars glint now and then, and
+// stars. It starts behind a frosted pane (the same painting, out of focus) that lifts
+// away and leaves it sharp. The gold stars glint now and then, and
 // tapping the card makes a star twinkle where you tapped.
 
 /** The gold stars on the mobile (fractions of the art). */
@@ -55,7 +55,7 @@ function tapToTwinkle(root: HTMLElement) {
 }
 
 export const cloudnine = makePainted("cloudnine", {
-  cover: { kind: "glow", hint: "dark" },
+  cover: { kind: "lift", hint: "dark" },
   text: { top: "50%", width: 290 },
   HeroArt: Glints,
   stripY: "97%",

@@ -1,28 +1,14 @@
 import type { CSSProperties } from "react";
 
-import { Art, makePainted } from "../painted/kit";
+import { makePainted } from "../painted/kit";
 import { shootingStars } from "./sky";
 
 import "./celestial.css";
 
 // Celestial: a brass astrolabe, the instrument Muslim astronomers perfected, on
-// midnight velvet. Its star rete and plate turn against each other, then it grows
-// and dissolves into a painted night sky over the dunes. Stars twinkle, and a tap
-// on the sky sends a shooting star across it.
-
-/** The plate and the star rete: round cut-outs of the astrolabe that turn against each other. */
-function Rete() {
-  return (
-    <>
-      <span className="cl-ring is-plate" aria-hidden>
-        <Art id="celestial" name="closed" />
-      </span>
-      <span className="cl-ring is-rete" aria-hidden>
-        <Art id="celestial" name="closed" />
-      </span>
-    </>
-  );
-}
+// midnight velvet. A filmed opening (public/art/celestial/open.*): its rings turn
+// and open, and the camera passes through into a painted night sky over the dunes.
+// Stars twinkle, and a tap on the sky sends a shooting star across it.
 
 // left %, top %, size (u), seconds, delay (s)
 const STARS: [number, number, number, number, number][] = [
@@ -51,7 +37,7 @@ function Stars() {
 }
 
 export const celestial = makePainted("celestial", {
-  cover: { kind: "zoom", art: "closed", hint: "light", Extra: Rete },
+  cover: { kind: "film", art: "fclosed", hint: "light" },
   text: { top: "24%", width: 290, tone: "light" },
   HeroArt: Stars,
   stripY: "99%",

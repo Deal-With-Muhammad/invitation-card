@@ -1,0 +1,21 @@
+/* Silk Ribbon (painted kit, filmed opening). */
+
+.t-silkribbon .pt-title {
+  font-family: var(--f-display);
+  font-size: calc(12 * var(--u));
+  letter-spacing: 0.28em;
+}
+
+.t-silkribbon .pt-names {
+  line-height: 1.12;
+}
+
+.t-silkribbon .pt-date {
+  font-family: var(--f-display);
+  font-size: calc(19 * var(--u));
+  letter-spacing: 0.04em;
+}
+
+.t-silkribbon .pt-text.has-glow::before {
+  inset: calc(-56 * var(--u)) calc(-60 * var(--u));
+}

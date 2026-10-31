@@ -31,7 +31,7 @@ function Laurel({ index }: { index: number }) {
 }
 
 export const filigree = makePainted("filigree", {
-  cover: { kind: "envelope", art: "closed", hint: "dark", seal: { x: "49.2%", y: "53.6%", size: 66, look: "emboss" } },
+  cover: { kind: "film", art: "fclosed", hint: "dark", seal: { x: "49.2%", y: "53.6%", size: 66, look: "emboss" } },
   text: { top: "53.5%", width: 320, glow: false },
   HeroArt: Monogram,
   Divider: Laurel,

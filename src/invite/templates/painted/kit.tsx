@@ -82,7 +82,7 @@ export type PaintedOpts = {
     onTap?: (root: HTMLElement) => void;
   };
   /** Palette id → different art for that colourway (each colourway is its own painting). */
-  variants?: Record<string, { hero?: string; cover?: string }>;
+  variants?: Record<string, { hero?: string; cover?: string; film?: string }>;
   /** Where the hero text sits, in % of the screen height, and how wide it is (phone px). */
   text?: { top?: string; width?: number; tone?: "dark" | "light"; glow?: boolean };
   /** Optional decoration drawn over the hero art (under the text). */
@@ -220,11 +220,11 @@ function Layers({ id, o, r }: { id: string; o: PaintedOpts; r: Resolved }) {
     case "veil":
       return <span className="pt-veil">{img()}</span>;
     case "film": {
-      const f = c.film ?? "open";
+      const f = variant(o, r)?.film ?? c.film ?? "open";
       return (
         <span className="pt-sheet">
           {img()}
-          <video className="pt-img pt-film" muted playsInline preload="auto" poster={artUrl(id, name, 720)} aria-hidden>
+          <video key={f} className="pt-img pt-film" muted playsInline preload="auto" poster={artUrl(id, name, 720)} aria-hidden>
             <source src={`/art/${id}/${f}.webm`} type="video/webm" />
             <source src={`/art/${id}/${f}.mp4`} type="video/mp4" />
           </video>

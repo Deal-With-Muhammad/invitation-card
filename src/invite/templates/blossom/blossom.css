@@ -1,0 +1,21 @@
+/* Blossom (painted kit, filmed opening). */
+
+.t-blossom .pt-title {
+  font-family: var(--f-display);
+  font-size: calc(13 * var(--u));
+  letter-spacing: 0.3em;
+}
+
+.t-blossom .pt-names {
+  line-height: 1.12;
+}
+
+.t-blossom .pt-date {
+  font-family: var(--f-display);
+  font-size: calc(21 * var(--u));
+  letter-spacing: 0.04em;
+}
+
+.t-blossom .pt-text.has-glow::before {
+  inset: calc(-56 * var(--u)) calc(-60 * var(--u));
+}

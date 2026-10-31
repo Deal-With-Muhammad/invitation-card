@@ -283,3 +283,18 @@
     0 14px 24px -10px color-mix(in srgb, #3a1d06 60%, transparent);
   margin: 10px 6px;
 }
+
+/* walk on through: the doorway grows until it fills the screen; nothing fades */
+@keyframes oh-walk {
+  0%,
+  42% {
+    transform: none;
+  }
+  100% {
+    transform: scale(7);
+  }
+}
+
+.inv.t-openhouse[data-phase="opening"] .pt-cover {
+  animation: none;
+}

@@ -21,7 +21,7 @@ function Through({ r }: { r: Resolved }) {
 }
 
 export const lace = makePainted("lace", {
-  cover: { kind: "envelope", art: "closed", hint: "dark", Extra: Through },
+  cover: { kind: "film", art: "fclosed", hint: "dark", Extra: Through },
   text: { top: "29%", width: 290 },
   stripY: "3%",
   stripH: 104,

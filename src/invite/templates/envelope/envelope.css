@@ -369,3 +369,15 @@
   -webkit-mask-image: radial-gradient(closest-side, #000 55%, transparent);
   mask-image: radial-gradient(closest-side, #000 55%, transparent);
 }
+
+/* filmed opening: only the hand-written greeting stays live, over the film's poster;
+   it lifts away with the flap as the film starts */
+.t-envelope.pk-open-film .env-table,
+.t-envelope.pk-open-film .env-back {
+  display: none;
+}
+
+.inv.t-envelope.pk-open-film[data-phase="opening"] .env-addr {
+  animation: pt-gone 500ms ease both;
+  animation-delay: 300ms;
+}

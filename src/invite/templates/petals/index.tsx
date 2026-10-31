@@ -9,8 +9,8 @@ import "./petals.css";
 
 export const petals = makePainted("petals", {
   cover: {
-    kind: "zoom",
-    art: "heap",
+    kind: "film",
+    art: "fclosed",
     hint: "light",
     onTap: (root) =>
       fall(root, { pieces: RED_PETALS, count: 46, spread: 0.25, dur: [1.8, 3.2], from: { x: window.innerWidth / 2, y: window.innerHeight * 0.48 } }),

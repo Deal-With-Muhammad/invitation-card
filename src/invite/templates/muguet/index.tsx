@@ -30,7 +30,7 @@ function sway(root: HTMLElement) {
 }
 
 export const muguet = makePainted("muguet", {
-  cover: { kind: "envelope", art: "closed", hint: "dark" },
+  cover: { kind: "film", art: "fclosed", hint: "dark" },
   text: { top: "7.5%", width: 276 },
   HeroArt: Sprays,
   stripY: "97%",

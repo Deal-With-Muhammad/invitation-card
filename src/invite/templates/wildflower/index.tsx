@@ -49,7 +49,7 @@ function Specimen() {
 }
 
 export const wildflower = makePainted("wildflower", {
-  cover: { kind: "envelope", art: "closed", hint: "dark" },
+  cover: { kind: "film", art: "fclosed", hint: "dark" },
   text: { top: "19%", width: 256 },
   HeroArt: Settle,
   HeroAfter: Note,
