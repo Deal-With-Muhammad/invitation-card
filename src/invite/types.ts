@@ -57,7 +57,7 @@ export type Contact = { name: string; phone: string };
 
 export type Bismillah = "none" | "calligraphy" | "arabic";
 
-export const MUSIC_TRACKS = ["harp", "piano", "musicbox"] as const;
+export const MUSIC_TRACKS = ["harp", "piano", "musicbox", "strings", "oud", "dholki", "softkeys", "celebrate"] as const;
 export type MusicTrack = (typeof MUSIC_TRACKS)[number];
 
 export type InviteData = {

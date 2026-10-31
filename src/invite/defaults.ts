@@ -1,3 +1,4 @@
+import { trackFor } from "./music-tracks";
 import { metaFor } from "./templates/catalog";
 import { addDays, guessTimeZone, sampleDate } from "./time";
 import type { EventItem, InviteData, Lang, Occasion, Person } from "./types";
@@ -281,7 +282,7 @@ export function newInvite(template: string, occasion: Occasion, palette: string,
       hijri: false,
       ...s.show,
     },
-    music: { on: s.music ?? !MUSIC_OFF.includes(occasion), track: "harp" },
+    music: { on: s.music ?? !MUSIC_OFF.includes(occasion), track: trackFor(template) },
     autoScroll: { on: false, speed: 2 },
   };
 }

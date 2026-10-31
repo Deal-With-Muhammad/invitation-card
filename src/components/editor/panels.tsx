@@ -10,11 +10,13 @@ import { paletteFor } from "@/invite/look";
 import { defaultArabicPrayer, defaultPrayerText } from "@/invite/resolve";
 import { Thumb } from "@/invite/runtime/thumb";
 import { TEMPLATE_LIST, getTemplate } from "@/invite/templates";
+import { trackFor } from "@/invite/music-tracks";
 import { addDays } from "@/invite/time";
 import { LANGS, OCCASIONS, type EventItem, type InviteData, type Lang, type Occasion } from "@/invite/types";
 import { OCCASION_LABEL } from "@/lib/filters";
 
 import { Area, ColorDot, Segmented, Select, Text, Toggle, groupLabel } from "./fields";
+import { MusicPicker } from "./music-picker";
 
 export type Set = (fn: (d: InviteData) => InviteData) => void;
 type P = { data: InviteData; set: Set };
@@ -78,7 +80,15 @@ export function DesignPicker({ data, set }: P) {
         <button
           key={t.meta.id}
           type="button"
-          onClick={() => set((d) => ({ ...d, template: t.meta.id, look: { ...d.look, palette: t.meta.palettes[0].id, colors: null, namesFont: "" } }))}
+          onClick={() =>
+            set((d) => ({
+              ...d,
+              template: t.meta.id,
+              look: { ...d.look, palette: t.meta.palettes[0].id, colors: null, namesFont: "" },
+              // The new design brings its own music, unless the host picked a track themselves.
+              music: d.music.track === trackFor(d.template) ? { ...d.music, track: trackFor(t.meta.id) } : d.music,
+            }))
+          }
           aria-pressed={data.template === t.meta.id}
           className={`group rounded-[14px] p-1 text-start transition-colors ${data.template === t.meta.id ? "bg-brand" : "hover:bg-paper-2"}`}
         >
@@ -527,18 +537,7 @@ export function MotionPanel({ data, set }: P) {
   return (
     <>
       <Toggle label="Background music" hint="Starts when guests open the invitation. They can pause it." checked={data.music.on} onChange={(v) => set((d) => ({ ...d, music: { ...d.music, on: v } }))} />
-      {data.music.on && (
-        <Segmented
-          label="Music"
-          value={data.music.track}
-          onChange={(v) => set((d) => ({ ...d, music: { ...d.music, track: v } }))}
-          options={[
-            { value: "harp", label: "Harp & bells" },
-            { value: "piano", label: "Soft piano" },
-            { value: "musicbox", label: "Music box" },
-          ]}
-        />
-      )}
+      {data.music.on && <MusicPicker value={data.music.track} suggested={trackFor(data.template)} onChange={(v) => set((d) => ({ ...d, music: { ...d.music, track: v } }))} />}
       <div className="border-t border-line pt-4">
         <Toggle label="Auto-scroll" hint="The invitation slowly scrolls by itself after opening. Touching the screen pauses it." checked={data.autoScroll.on} onChange={(v) => set((d) => ({ ...d, autoScroll: { ...d.autoScroll, on: v } }))} />
       </div>

@@ -207,13 +207,15 @@ export function VideoHero({
   const fan = small ? items.slice(1, 4) : items.slice(0, 5);
   let n = 0;
   return (
-    <header className="pt-3 pb-6 sm:pt-6">
-      <div className="relative isolate flex min-h-[540px] flex-col justify-end overflow-hidden rounded-[26px] bg-deep px-5 pt-[58vw] pb-36 text-ivory sm:min-h-[600px] sm:justify-center sm:rounded-[32px] sm:px-12 sm:pt-10 sm:pb-40 lg:min-h-[640px] lg:px-16">
+    <header className="pt-3 pb-6 sm:pt-5">
+      {/* Full-bleed: the film runs edge to edge while the words stay on the page's grid. */}
+      <div className="relative isolate left-1/2 flex min-h-[560px] w-screen -translate-x-1/2 flex-col justify-end overflow-hidden bg-deep pt-[58vw] pb-36 text-ivory sm:min-h-[620px] sm:justify-center sm:pt-10 sm:pb-40 lg:min-h-[680px]">
         <HeroFilm />
         <div
           aria-hidden
           className="absolute inset-0 -z-10 bg-[linear-gradient(to_top,rgb(9_32_30/0.98)_0%,rgb(9_32_30/0.92)_58%,rgb(9_32_30/0.25)_80%,rgb(9_32_30/0)_92%)] sm:bg-[linear-gradient(90deg,rgb(9_32_30/0.94)_0%,rgb(9_32_30/0.78)_34%,rgb(9_32_30/0.1)_66%,transparent_80%)]"
         />
+        <div className="mx-auto w-full max-w-6xl px-5 sm:px-6">
         <div className="max-w-[720px]">
           <motion.p initial={still ? false : { opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: EASE }} className="mb-3 text-[13.5px] font-medium text-gold-light sm:mb-5 sm:text-[14.5px]">
             {kicker}
@@ -245,6 +247,7 @@ export function VideoHero({
               {secondary.label}
             </Link>
           </motion.div>
+        </div>
         </div>
       </div>
       <div
