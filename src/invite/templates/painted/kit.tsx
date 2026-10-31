@@ -225,8 +225,9 @@ function Layers({ id, o, r }: { id: string; o: PaintedOpts; r: Resolved }) {
         <span className="pt-sheet">
           {img()}
           <video key={f} className="pt-img pt-film" muted playsInline preload="auto" poster={artUrl(id, name, 720)} aria-hidden>
-            <source src={`/art/${id}/${f}.webm`} type="video/webm" />
+            {/* MP4 first: some browsers claim VP9 WebM and then fail to decode it */}
             <source src={`/art/${id}/${f}.mp4`} type="video/mp4" />
+            <source src={`/art/${id}/${f}.webm`} type="video/webm" />
           </video>
         </span>
       );

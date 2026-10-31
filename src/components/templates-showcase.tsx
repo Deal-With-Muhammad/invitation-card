@@ -5,9 +5,9 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { motion, useMotionValue, useReducedMotion, useSpring, useTransform, type MotionValue } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRef, useSyncExternalStore, type ReactNode } from "react";
+import { useRef, useState, useSyncExternalStore, type ReactNode } from "react";
 
-import { LiveThumb } from "@/components/live-thumb";
+import { LiveThumb, ThumbPlayButton, type ThumbControl } from "@/components/live-thumb";
 import { PreviewIconButton } from "@/components/preview-sheet";
 import type { TemplateMeta } from "@/invite/templates/types";
 
@@ -176,8 +176,8 @@ function HeroFilm() {
   if (still || saver) return <Image src="/hero/poster.webp" alt="" fill priority sizes="100vw" className={cls} />;
   return (
     <video className={cls} autoPlay muted loop playsInline preload="auto" poster="/hero/poster.webp" aria-hidden>
-      <source src="/hero/loop.webm" type="video/webm" />
       <source src="/hero/loop.mp4" type="video/mp4" />
+      <source src="/hero/loop.webm" type="video/webm" />
     </video>
   );
 }
@@ -298,6 +298,7 @@ export function Reveal({ children, delay = 0, className }: { children: ReactNode
 function SpotlightCard({ item }: { item: FanItem }) {
   const { meta, thumb } = item;
   const still = useReducedMotion();
+  const [control, setControl] = useState<ThumbControl | null>(null);
   const rx = useSpring(useMotionValue(0), { stiffness: 140, damping: 16 });
   const ry = useSpring(useMotionValue(0), { stiffness: 140, damping: 16 });
   return (
@@ -321,12 +322,14 @@ function SpotlightCard({ item }: { item: FanItem }) {
           label={meta.filmed ? "Filmed opening" : undefined}
           indicatorClassName="top-3 left-3"
           barClassName="inset-x-6 bottom-[5px]"
+          onControl={setControl}
         >
           {thumb}
         </LiveThumb>
         <PreviewIconButton id={meta.id} name={meta.name} className="absolute top-3 right-3 z-10" />
-        <div className="pointer-events-none absolute inset-x-3 bottom-3 z-10 flex items-center justify-between gap-3 rounded-2xl bg-white/88 py-2.5 pr-2.5 pl-4 shadow-[0_8px_24px_-10px_rgb(0_0_0/0.35)] backdrop-blur-md">
-          <div className="min-w-0">
+        <div className="pointer-events-none absolute inset-x-3 bottom-3 z-10 flex items-center gap-3 rounded-2xl bg-white/88 py-2.5 pr-2.5 pl-2.5 shadow-[0_8px_24px_-10px_rgb(0_0_0/0.35)] backdrop-blur-md">
+          <ThumbPlayButton control={control} name={meta.name} />
+          <div className="min-w-0 flex-1">
             <h3 className="truncate text-[16px] leading-tight font-medium text-ink">{meta.name}</h3>
             <p className="mt-0.5 truncate text-[12.5px] text-muted">{meta.tagline}</p>
           </div>

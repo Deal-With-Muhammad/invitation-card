@@ -1,7 +1,7 @@
 "use client";
 
 import { Spinner } from "@heroui/react";
-import { Play, RotateCcw } from "lucide-react";
+import { Pause, Play, RotateCcw } from "lucide-react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
 // A design's thumbnail that plays its opening (public/previews/<id>/loop.*) right in
@@ -14,9 +14,19 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 // is over the card; `autoplay` loops it while it's on screen instead. Hover and
 // autoplay respect reduced motion and data saver; a tap always plays. Only one tile
 // plays at a time.
+//
+// The loop is MP4 (H.264) first: some browsers say they can play VP9 WebM and then
+// fail to decode it. A WebM fallback and a watchdog make sure the tile never spins
+// forever: if nothing plays it settles back to the still.
 
-type Phase = "idle" | "loading" | "playing" | "paused" | "ended";
+export type Phase = "idle" | "loading" | "playing" | "paused" | "ended";
 type Mode = "hover" | "auto" | "tap";
+
+/** What a separate play button (see ThumbPlayButton) needs to drive a tile. */
+export type ThumbControl = { phase: Phase; action: string; toggle: () => void };
+
+const FORMATS = ["mp4", "webm"] as const;
+const WATCHDOG_MS = 9000;
 
 let current: { video: HTMLVideoElement; stop: () => void } | null = null;
 
@@ -35,6 +45,7 @@ export function LiveThumb({
   className = "",
   indicatorClassName = "bottom-2.5 left-2.5",
   barClassName = "inset-x-3 bottom-2.5",
+  onControl,
 }: {
   id: string;
   /** The design's name, for the play button's label. */
@@ -53,11 +64,15 @@ export function LiveThumb({
   indicatorClassName?: string;
   /** Where the progress bar sits. */
   barClassName?: string;
+  /** For a separate play button: called whenever the tile's state changes. The corner
+   * pill then becomes a plain label. */
+  onControl?: (c: ThumbControl) => void;
 }) {
   const box = useRef<HTMLDivElement>(null);
   const video = useRef<HTMLVideoElement>(null);
   const bar = useRef<HTMLSpanElement>(null);
   const mode = useRef<Mode | null>(null);
+  const fmt = useRef(0);
   const [phase, setPhase] = useState<Phase>("idle");
   const [tapped, setTapped] = useState(false);
 
@@ -73,6 +88,19 @@ export function LiveThumb({
     if (current?.video === v) current = null;
   };
 
+  // The current format failed to load or decode: try the next one, else give up quietly.
+  const fail = () => {
+    const v = video.current;
+    const how = mode.current;
+    if (!v || !how) return;
+    if (fmt.current < FORMATS.length - 1) {
+      fmt.current += 1;
+      v.removeAttribute("src");
+      v.load();
+      start(how);
+    } else stop();
+  };
+
   const claim = (v: HTMLVideoElement) => {
     if (current && current.video !== v) current.stop();
     current = { video: v, stop };
@@ -82,7 +110,7 @@ export function LiveThumb({
     const v = video.current;
     if (!v || (how !== "tap" && quiet())) return;
     // Load on first play only; setting src starts the download.
-    if (!v.getAttribute("src")) v.src = `/previews/${id}/loop.${v.canPlayType('video/webm; codecs="vp9"') ? "webm" : "mp4"}`;
+    if (!v.getAttribute("src")) v.src = `/previews/${id}/loop.${FORMATS[fmt.current]}`;
     claim(v);
     mode.current = how;
     v.loop = how !== "tap";
@@ -91,7 +119,9 @@ export function LiveThumb({
     setTapped(how === "tap");
     setPhase((p) => (p === "playing" ? "playing" : "loading"));
     v.play().catch((e: unknown) => {
-      if (!(e instanceof DOMException && e.name === "AbortError")) stop();
+      if (e instanceof DOMException && e.name === "AbortError") return;
+      if (e instanceof DOMException && e.name === "NotSupportedError") fail();
+      else stop();
     });
   };
 
@@ -149,6 +179,28 @@ export function LiveThumb({
     // eslint-disable-next-line react-hooks/exhaustive-deps -- see start/stop above
   }, [autoplay]);
 
+  // Never spin forever: if a load hasn't started playing in time, try the other format.
+  useEffect(() => {
+    if (phase !== "loading") return;
+    const t = window.setTimeout(() => {
+      const v = video.current;
+      if (v && (v.error || v.readyState < 3)) fail();
+    }, WATCHDOG_MS);
+    return () => window.clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- see start/stop above
+  }, [phase]);
+
+  // This format can't load or decode here (or there's no recording yet): try the other,
+  // else settle back to the still.
+  useEffect(() => {
+    const v = video.current;
+    if (!v) return;
+    const onErr = () => mode.current && fail();
+    v.addEventListener("error", onErr);
+    return () => v.removeEventListener("error", onErr);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- see start/stop above
+  }, []);
+
   // The progress bar follows the video every frame while a tapped opening plays.
   useEffect(() => {
     if (!tapped || phase !== "playing") return;
@@ -163,9 +215,19 @@ export function LiveThumb({
   }, [tapped, phase]);
 
   const shown = phase === "playing" || phase === "paused" || phase === "ended";
-  const showIcon = phase === "idle" || phase === "paused" || phase === "ended" || (phase === "loading" && tapped);
+  const showIcon = (onControl && label) || phase === "idle" || phase === "paused" || phase === "ended" || (phase === "loading" && tapped);
   const showBar = tapped && (phase === "loading" || phase === "playing" || phase === "paused");
   const action = phase === "ended" ? "Replay" : tapped && phase === "playing" ? "Pause" : tapped && phase === "paused" ? "Resume" : "Play";
+
+  // A separate play button drives the tile through the latest onTap.
+  const tapRef = useRef(onTap);
+  useEffect(() => {
+    tapRef.current = onTap;
+  });
+  const shownPhase: Phase = !tapped && phase !== "ended" ? (phase === "loading" ? "idle" : phase === "playing" ? "idle" : phase) : phase;
+  useEffect(() => {
+    onControl?.({ phase: shownPhase, action, toggle: () => tapRef.current() });
+  }, [onControl, shownPhase, action]);
 
   return (
     <div ref={box} className={`relative ${className}`}>
@@ -180,8 +242,6 @@ export function LiveThumb({
         tabIndex={-1}
         onPlaying={() => setPhase("playing")}
         onEnded={() => mode.current === "tap" && setPhase("ended")}
-        // No recording for this design (yet): settle back to the still.
-        onError={() => mode.current && stop()}
       />
       {player && (
         <>
@@ -194,17 +254,17 @@ export function LiveThumb({
           <span
             aria-hidden
             className={`pointer-events-none absolute z-[2] inline-flex items-center justify-center gap-1.5 rounded-full bg-black/40 text-white backdrop-blur-md transition-opacity duration-200 ${
-              compact ? "size-7" : label ? "h-7 ps-2.5 pe-3 text-[12px] font-medium" : "size-8"
+              compact ? "size-7" : label ? (onControl ? "h-7 px-3 text-[12px] font-medium" : "h-7 ps-2.5 pe-3 text-[12px] font-medium") : "size-8"
             } ${indicatorClassName} ${showIcon ? "opacity-100" : "opacity-0"}`}
           >
-            {phase === "loading" ? (
+            {onControl && label ? null : phase === "loading" ? (
               <Spinner size="sm" color="current" className="size-3.5" />
             ) : phase === "ended" ? (
               <RotateCcw className="size-3.5" strokeWidth={2.4} />
             ) : (
               <Play className={`${compact ? "size-3" : "size-3.5"} translate-x-px fill-current`} strokeWidth={0} />
             )}
-            {label && !compact && <span>{phase === "ended" ? "Watch again" : label}</span>}
+            {label && !compact && <span>{phase === "ended" && !onControl ? "Watch again" : label}</span>}
           </span>
           <span
             aria-hidden
@@ -217,5 +277,29 @@ export function LiveThumb({
         </>
       )}
     </div>
+  );
+}
+
+/** A play button for a tile's caption bar, driven by the tile's `onControl`. */
+export function ThumbPlayButton({ control, name, className = "" }: { control: ThumbControl | null; name: string; className?: string }) {
+  const phase = control?.phase ?? "idle";
+  const action = control?.action ?? "Play";
+  return (
+    <button
+      type="button"
+      onClick={() => control?.toggle()}
+      aria-label={`${action} the opening of ${name}`}
+      className={`pointer-events-auto grid size-9 flex-none place-items-center rounded-full bg-brand text-ivory shadow-[0_4px_10px_-4px_rgb(18_64_60/0.6)] transition-transform duration-200 hover:scale-105 active:scale-95 ${className}`}
+    >
+      {phase === "loading" ? (
+        <Spinner size="sm" color="current" className="size-4" />
+      ) : phase === "playing" ? (
+        <Pause className="size-3.5 fill-current" strokeWidth={0} />
+      ) : phase === "ended" ? (
+        <RotateCcw className="size-4" strokeWidth={2.4} />
+      ) : (
+        <Play className="size-3.5 translate-x-px fill-current" strokeWidth={0} />
+      )}
+    </button>
   );
 }

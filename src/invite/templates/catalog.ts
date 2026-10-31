@@ -470,7 +470,7 @@ export const CATALOG: TemplateMeta[] = [
     palettes: [p("main", "Noor", "#f6f1e9", "#3a352c", "#8a7a5c", "#ece4d6")],
     fonts: { display: "italiana", names: "pinyon", body: "outfit" },
     opening: "The lattice shutters open on film",
-    openMs: 5500,
+    openMs: 5800,
     keywords: ["modern nikah invitation", "minimal nikah card", "video nikah invitation"],
     islamic: true,
     filmed: true,
