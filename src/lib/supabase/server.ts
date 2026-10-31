@@ -10,10 +10,14 @@ import { cookies } from "next/headers";
 // - auth(): the signed-in visitor's session, read from (and refreshed into)
 //   cookies, using the public key. Used for sign-in and "who is this?".
 
-const url = () => process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
+// Values pasted into a host's settings often pick up quotes or a trailing
+// space or newline, which Supabase rejects as an invalid key.
+export const clean = (v: string | undefined) => (v ?? "").trim().replace(/^(["'])(.*)\1$/, "$2").trim();
+
+const url = () => clean(process.env.NEXT_PUBLIC_SUPABASE_URL).replace(/\/+$/, "");
 const publicKey = () =>
-  process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || "";
-const serviceKey = () => process.env.SUPABASE_SERVICE_ROLE || process.env.SUPABASE_SERVICE_ROLE_KEY || "";
+  clean(process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY) || clean(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) || clean(process.env.SUPABASE_ANON_KEY);
+const serviceKey = () => clean(process.env.SUPABASE_SERVICE_ROLE) || clean(process.env.SUPABASE_SERVICE_ROLE_KEY);
 
 /** Is the database (service role) configured? */
 export const hasDb = () => Boolean(url() && serviceKey());

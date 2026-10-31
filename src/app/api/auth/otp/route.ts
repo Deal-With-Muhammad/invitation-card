@@ -30,6 +30,8 @@ export async function POST(req: Request) {
     options: { shouldCreateUser: true, emailRedirectTo: `${origin}/auth/confirm?next=${encodeURIComponent(next)}` },
   });
   if (error) {
+    // Shows in the host's server logs (Amplify → Monitoring → Hosting compute logs).
+    console.error("signInWithOtp failed", error.status, error.code, error.message);
     const limited = error.status === 429 || /rate limit/i.test(error.message);
     return NextResponse.json(
       { error: limited ? "Too many emails sent just now. Wait a minute and try again." : "Couldn't send the code. Please try again." },
