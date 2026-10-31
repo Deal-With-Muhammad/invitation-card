@@ -70,6 +70,16 @@ With Gmail:
 - Host `smtp.gmail.com`, port `465`, username = the Gmail address, password =
   the 16-letter app password, sender name `DWM Invite`
 
+Sending as `me@dealwithmuhammad.com` through Gmail needs two things, or mail
+shows "via gmail.com" or lands in spam:
+
+- In Gmail → Settings → Accounts → **Send mail as**, add and verify
+  `me@dealwithmuhammad.com` (otherwise Gmail swaps the From back to the Gmail address).
+- In Namecheap → Advanced DNS, change the SPF TXT record on `@` to
+  `v=spf1 include:spf.efwd.registrar-servers.com include:_spf.google.com ~all`.
+
+Gmail allows about 500 emails a day, which is plenty to start with.
+
 (Resend, Brevo or Zoho work too and look more professional with a
 `@dealwithmuhammad.com` sender.) Then raise Authentication → **Rate Limits** →
 emails per hour (for example to 100).
