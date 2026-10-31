@@ -1,7 +1,8 @@
 "use client";
 
 import { Spinner } from "@heroui/react";
-import { Pause, Play, RotateCcw } from "lucide-react";
+import { Pause, RotateCcw } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
 // A design's thumbnail that plays its opening (public/previews/<id>/loop.*) right in
@@ -10,7 +11,8 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 //
 // As a player (the default) the tile itself is the play button: tap to watch the
 // opening from the start with a thin progress bar, tap again to pause, and once it
-// ends tap to replay. With a mouse it also plays, looping silently, while the pointer
+// ends tap to replay. With `href`, tapping the tile opens that page instead (the
+// editor) and the corner play icon (or the caption's ThumbPlayButton) plays it. With a mouse it also plays, looping silently, while the pointer
 // is over the card; `autoplay` loops it while it's on screen instead. Hover and
 // autoplay respect reduced motion and data saver; a tap always plays. Only one tile
 // plays at a time.
@@ -46,6 +48,7 @@ export function LiveThumb({
   indicatorClassName = "bottom-2.5 left-2.5",
   barClassName = "inset-x-3 bottom-2.5",
   onControl,
+  href,
 }: {
   id: string;
   /** The design's name, for the play button's label. */
@@ -67,6 +70,8 @@ export function LiveThumb({
   /** For a separate play button: called whenever the tile's state changes. The corner
    * pill then becomes a plain label. */
   onControl?: (c: ThumbControl) => void;
+  /** Where tapping the tile goes (the design's editor). Play is then the corner icon's job. */
+  href?: string;
 }) {
   const box = useRef<HTMLDivElement>(null);
   const video = useRef<HTMLVideoElement>(null);
@@ -245,27 +250,55 @@ export function LiveThumb({
       />
       {player && (
         <>
-          <button
-            type="button"
-            onClick={onTap}
-            className="absolute inset-0 z-[1] cursor-pointer rounded-[inherit] outline-none focus-visible:ring-3 focus-visible:ring-white/90 focus-visible:ring-inset"
-            aria-label={`${action} the opening${name ? ` of ${name}` : ""}`}
-          />
-          <span
-            aria-hidden
-            className={`pointer-events-none absolute z-[2] inline-flex items-center justify-center gap-1.5 rounded-full bg-black/40 text-white backdrop-blur-md transition-opacity duration-200 ${
-              compact ? "size-7" : label ? (onControl ? "h-7 px-3 text-[12px] font-medium" : "h-7 ps-2.5 pe-3 text-[12px] font-medium") : "size-8"
-            } ${indicatorClassName} ${showIcon ? "opacity-100" : "opacity-0"}`}
-          >
-            {onControl && label ? null : phase === "loading" ? (
-              <Spinner size="sm" color="current" className="size-3.5" />
-            ) : phase === "ended" ? (
-              <RotateCcw className="size-3.5" strokeWidth={2.4} />
+          {href ? (
+            <Link
+              href={href}
+              className="absolute inset-0 z-[1] rounded-[inherit] outline-none focus-visible:ring-3 focus-visible:ring-white/90 focus-visible:ring-inset"
+              aria-label={`Use ${name || "this design"}`}
+            />
+          ) : (
+            <button
+              type="button"
+              onClick={onTap}
+              className="absolute inset-0 z-[1] cursor-pointer rounded-[inherit] outline-none focus-visible:ring-3 focus-visible:ring-white/90 focus-visible:ring-inset"
+              aria-label={`${action} the opening${name ? ` of ${name}` : ""}`}
+            />
+          )}
+          {(() => {
+            // With href and no caption play button, the corner icon is the play button.
+            // With href and a caption play button, a bare corner icon would only
+            // mislead (tapping there opens the editor), so only a label shows.
+            if (href && onControl && !label) return null;
+            const asButton = Boolean(href && !onControl);
+            const cls = `absolute z-[2] inline-flex items-center justify-center gap-1.5 rounded-full bg-black/40 text-white ring-1 ring-white/20 backdrop-blur-md transition-opacity duration-200 ${
+              compact ? "size-8" : label ? (onControl ? "h-7 px-3 text-[12px] font-medium" : "h-7 ps-2.5 pe-3 text-[12px] font-medium") : "size-9"
+            } ${indicatorClassName} ${showIcon || asButton ? "opacity-100" : "opacity-0"} ${
+              asButton ? "cursor-pointer outline-none before:absolute before:-inset-2 hover:bg-black/55 focus-visible:ring-2 focus-visible:ring-white" : "pointer-events-none"
+            }`;
+            const inner = (
+              <>
+                {onControl && label ? null : phase === "loading" ? (
+                  <Spinner size="sm" color="current" className="size-3.5" />
+                ) : phase === "ended" ? (
+                  <RotateCcw className="size-3.5" strokeWidth={2.4} />
+                ) : asButton && tapped && phase === "playing" ? (
+                  <Pause className="size-3.5 fill-current" strokeWidth={0} />
+                ) : (
+                  <PlayGlyph className={compact ? "size-3.5" : "size-4"} />
+                )}
+                {label && !compact && <span>{phase === "ended" && !onControl ? "Watch again" : label}</span>}
+              </>
+            );
+            return asButton ? (
+              <button type="button" onClick={onTap} className={cls} aria-label={`${action} the opening${name ? ` of ${name}` : ""}`}>
+                {inner}
+              </button>
             ) : (
-              <Play className={`${compact ? "size-3" : "size-3.5"} translate-x-px fill-current`} strokeWidth={0} />
-            )}
-            {label && !compact && <span>{phase === "ended" && !onControl ? "Watch again" : label}</span>}
-          </span>
+              <span aria-hidden className={cls}>
+                {inner}
+              </span>
+            );
+          })()}
           <span
             aria-hidden
             className={`pointer-events-none absolute z-[2] h-[3px] overflow-hidden rounded-full bg-white/35 shadow-[0_1px_4px_rgb(0_0_0/0.3)] transition-opacity duration-200 ${barClassName} ${
@@ -298,8 +331,21 @@ export function ThumbPlayButton({ control, name, className = "" }: { control: Th
       ) : phase === "ended" ? (
         <RotateCcw className="size-4" strokeWidth={2.4} />
       ) : (
-        <Play className="size-3.5 translate-x-px fill-current" strokeWidth={0} />
+        <PlayGlyph className="size-4" />
       )}
     </button>
+  );
+}
+
+/**
+ * A play triangle that looks centred in a circle. A triangle's visual weight sits
+ * at its centroid, a third of the way in from the flat side, so the triangle is
+ * placed with its centroid on the middle of the box (x 8 to 20, centroid at 12).
+ */
+export function PlayGlyph({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden>
+      <path d="M8 5.6v12.8a1.2 1.2 0 0 0 1.8 1l10.2-6.4a1.2 1.2 0 0 0 0-2L9.8 4.6A1.2 1.2 0 0 0 8 5.6Z" />
+    </svg>
   );
 }

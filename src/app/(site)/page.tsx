@@ -42,7 +42,7 @@ export default function Home() {
               {g.title}
             </h2>
             <p className="mt-1 text-[15.5px] text-muted">
-              {g.blurb} <span className="text-muted/70">· tap any card to watch it open</span>
+              {g.blurb} <span className="text-muted/70">· tap play to watch it open, or a card to make it yours</span>
             </p>
           </Reveal>
           <TemplateRow items={g.items} />

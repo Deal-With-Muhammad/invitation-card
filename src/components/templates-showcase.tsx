@@ -60,6 +60,7 @@ function FanCard({ item, i, n, mx, my, still }: { item: FanItem; i: number; n: n
         <LiveThumb
           id={item.meta.id}
           name={item.meta.name}
+          href={`/create/${item.meta.id}`}
           autoplay={i === Math.floor(mid)}
           compact
           indicatorClassName="bottom-2 left-2"
@@ -315,6 +316,7 @@ function SpotlightCard({ item }: { item: FanItem }) {
           id={meta.id}
           name={meta.name}
           label={meta.filmed ? "Filmed opening" : undefined}
+          href={`/create/${meta.id}`}
           indicatorClassName="top-3 left-3"
           barClassName="inset-x-6 bottom-[5px]"
           onControl={setControl}
@@ -331,9 +333,9 @@ function SpotlightCard({ item }: { item: FanItem }) {
           <Link
             href={`/create/${meta.id}`}
             aria-label={`Use ${meta.name}`}
-            className="pointer-events-auto grid size-9 flex-none place-items-center rounded-full bg-black text-[16px] text-white transition-transform duration-300 hover:scale-110 group-hover:translate-x-0.5"
+            className="pointer-events-auto grid size-9 flex-none place-items-center rounded-full bg-brand text-ivory shadow-[0_4px_10px_-4px_rgb(18_64_60/0.6)] transition-transform duration-300 hover:scale-110 group-hover:translate-x-0.5"
           >
-            →
+            <ArrowRight className="size-[18px]" strokeWidth={2.2} aria-hidden />
           </Link>
         </div>
       </motion.div>

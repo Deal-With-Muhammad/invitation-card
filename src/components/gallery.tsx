@@ -61,6 +61,7 @@ function GalleryTile({ item, occasion }: { item: GalleryItem; occasion?: Occasio
           id={meta.id}
           name={meta.name}
           label={meta.filmed ? "Filmed opening" : undefined}
+          href={`/create/${meta.id}${q}`}
           onControl={setControl}
           className="overflow-hidden rounded-[16px] shadow-[0_18px_36px_-20px_rgb(31_28_25/0.55)] ring-1 ring-black/5"
         >
