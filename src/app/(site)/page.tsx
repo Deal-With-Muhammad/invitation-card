@@ -4,7 +4,6 @@ import { galleryItems } from "@/components/gallery-items";
 import { CustomCta, Features, HowItWorks, OccasionLinks } from "@/components/sections";
 import { Reveal, TemplateRow, VideoHero } from "@/components/templates-showcase";
 import { TryIt } from "@/components/try-it";
-import { CATALOG } from "@/invite/templates/catalog";
 import { GROUPS, groupOf, NEW_DESIGNS } from "@/lib/groups";
 import { buildHomeJsonLd, jsonLdString } from "@/lib/seo";
 import { site } from "@/lib/site";
