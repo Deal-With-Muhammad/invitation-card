@@ -30,6 +30,9 @@ export function PreviewFrame({
       if (e.data?.type === "frame-ready") setReady(true);
     };
     window.addEventListener("message", onMsg);
+    // Load the frame only once we're listening, so its "frame-ready" can't arrive
+    // before this page has hydrated (that left the preview blank).
+    if (ref.current && !ref.current.getAttribute("src")) ref.current.src = "/frame";
     return () => window.removeEventListener("message", onMsg);
   }, []);
 
@@ -46,7 +49,7 @@ export function PreviewFrame({
     );
   }, [command, ready]);
 
-  return <iframe ref={ref} src="/frame" title={title} className={className} />;
+  return <iframe ref={ref} title={title} className={className} />;
 }
 
 /** A phone-shaped box that scales a 390 × 844 screen to fit its parent. */

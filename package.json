@@ -11,6 +11,8 @@
     "previews": "node scripts/record-previews.mjs"
   },
   "dependencies": {
+    "@heroui/react": "^3.2.7",
+    "@heroui/styles": "^3.2.7",
     "@upstash/redis": "^1.39.0",
     "lucide-react": "^1.59.0",
     "motion": "^14.3.0",

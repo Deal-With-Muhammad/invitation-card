@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { buttonVariants } from "@heroui/styles";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -57,10 +58,10 @@ export default async function TemplatePage(props: PageProps<"/templates/[id]">) 
           <p className="mt-3 text-[20px] text-muted">{meta.tagline}</p>
           <p className="mt-5 max-w-lg text-[16px] leading-relaxed text-muted">{meta.description}</p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Link href={`/create/${meta.id}?occasion=${occasion}`} className="btn btn-primary h-12 px-6 text-[16px]">
+            <Link href={`/create/${meta.id}?occasion=${occasion}`} className={buttonVariants({ size: "lg" })}>
               Use this design
             </Link>
-            <Link href={`/preview/${meta.id}?occasion=${occasion}`} className="btn btn-ghost h-12 px-6 text-[16px]" target="_blank">
+            <Link href={`/preview/${meta.id}?occasion=${occasion}`} className={buttonVariants({ variant: "outline", size: "lg" })} target="_blank">
               Open full screen
             </Link>
           </div>
@@ -92,7 +93,7 @@ export default async function TemplatePage(props: PageProps<"/templates/[id]">) 
             {related.map((x) => (
               <li key={x.meta.id}>
                 <Link href={`/templates/${x.meta.id}`} className="block overflow-hidden rounded-[20px] ring-1 ring-line transition-transform hover:-translate-y-1">
-                  <LiveThumb id={x.meta.id}>
+                  <LiveThumb id={x.meta.id} player={false}>
                     <Thumb id={x.meta.id} />
                   </LiveThumb>
                 </Link>

@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@heroui/react";
 import qrcode from "qrcode-generator";
 import { useMemo } from "react";
 
@@ -40,9 +41,9 @@ export function QrCode({ url, name, color = "#2a2520" }: { url: string; name: st
       </svg>
       <div className="space-y-2">
         <p className="text-[13.5px] leading-snug text-muted">Print it on paper cards or show it at the door. It opens the same link.</p>
-        <button type="button" onClick={download} className="btn btn-ghost h-9 px-3.5 text-[13.5px]">
+        <Button variant="outline" size="sm" onPress={download}>
           Download QR (PNG)
-        </button>
+        </Button>
       </div>
     </div>
   );

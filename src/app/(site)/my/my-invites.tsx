@@ -1,5 +1,6 @@
 "use client";
 
+import { Button, buttonVariants } from "@heroui/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -24,7 +25,7 @@ export function MyInvites() {
       {draft && (
         <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-gold/45 bg-gold/12 p-4">
           <p className="text-[15px]">You have an unpublished draft ({metaFor(draft).name}).</p>
-          <Link href={`/create/${draft}`} className="btn btn-primary h-10 px-4 text-[14px]">
+          <Link href={`/create/${draft}`} className={buttonVariants({ className: "h-10 px-4 text-[14px]" })}>
             Continue editing
           </Link>
         </div>
@@ -33,7 +34,7 @@ export function MyInvites() {
         <div className="rounded-2xl border border-dashed border-line p-10 text-center">
           <p className="font-serif text-[22px]">No invitations on this device yet</p>
           <p className="mt-2 text-muted">Invitations you publish from this browser show up here. Made one elsewhere? Open its private edit link.</p>
-          <Link href="/templates" className="btn btn-primary mt-6">
+          <Link href="/templates" className={buttonVariants({ className: "mt-6" })}>
             Make an invitation
           </Link>
         </div>
@@ -48,23 +49,24 @@ export function MyInvites() {
                 </p>
               </div>
               <div className="flex gap-2">
-                <Link href={`/${m.slug}`} className="btn btn-ghost h-9 px-3.5 text-[13.5px]" target="_blank">
+                <Link href={`/${m.slug}`} className={buttonVariants({ variant: "outline", size: "sm" })} target="_blank">
                   Open
                 </Link>
-                <Link href={`/edit/${m.slug}`} className="btn btn-primary h-9 px-3.5 text-[13.5px]">
+                <Link href={`/edit/${m.slug}`} className={buttonVariants({ size: "sm" })}>
                   Edit
                 </Link>
-                <button
-                  type="button"
-                  className="h-9 px-2 text-[13px] text-muted hover:text-wax"
-                  onClick={() => {
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="px-2.5 text-[13px] text-muted hover:text-wax"
+                  onPress={() => {
                     if (!window.confirm("Remove it from this list? The invitation itself stays online. Keep its edit link if you want to edit it later.")) return;
                     forgetInvite(m.slug);
                     setMine(loadMine());
                   }}
                 >
                   Remove
-                </button>
+                </Button>
               </div>
             </li>
           ))}

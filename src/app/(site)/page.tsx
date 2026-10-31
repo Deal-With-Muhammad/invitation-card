@@ -2,41 +2,41 @@ import { Faq } from "@/components/faq";
 import type { GalleryItem } from "@/components/gallery";
 import { galleryItems } from "@/components/gallery-items";
 import { CustomCta, Features, HowItWorks, OccasionLinks } from "@/components/sections";
-import { Reveal, TemplateRow, TemplatesHero } from "@/components/templates-showcase";
+import { Reveal, TemplateRow, VideoHero } from "@/components/templates-showcase";
 import { TryIt } from "@/components/try-it";
 import { CATALOG } from "@/invite/templates/catalog";
-import { GROUPS, groupOf } from "@/lib/groups";
+import { GROUPS, groupOf, NEW_DESIGNS } from "@/lib/groups";
 import { buildHomeJsonLd, jsonLdString } from "@/lib/seo";
 import { site } from "@/lib/site";
 
-/** The fan in the hero; the middle one plays its opening. */
-const FAN = ["velvetrose", "petals", "peony", "jharokha", "marigold"];
+/** The fan under the hero film; the middle one plays its opening. */
+const FAN = ["goldink", "riad", "noor", "silkribbon", "blossom"];
 
 export default function Home() {
   const all = galleryItems();
   const fan = FAN.map((id) => all.find((it) => it.meta.id === id)).filter((it): it is GalleryItem => !!it);
-  const filmed = all.filter((it) => it.meta.filmed);
+  const filmedCount = all.filter((it) => it.meta.filmed).length;
   const rows = [
-    { id: "filmed", title: "Filmed openings", blurb: "Tap one and the card opens like a film, then your names appear.", items: filmed },
-    ...GROUPS.map((g) => ({ ...g, items: all.filter((it) => !it.meta.filmed && groupOf(it.meta.defaultOccasion) === g.id) })),
+    { id: "new", title: "New: light and modern", blurb: "Soft daylight, cotton paper and silk, each one opening on film.", items: all.filter((it) => NEW_DESIGNS.includes(it.meta.id)) },
+    ...GROUPS.map((g) => ({ ...g, items: all.filter((it) => !NEW_DESIGNS.includes(it.meta.id) && groupOf(it.meta.defaultOccasion) === g.id) })),
   ].filter((g) => g.items.length);
 
   return (
     <main className="mx-auto max-w-6xl px-4 sm:px-6">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdString(buildHomeJsonLd()) }} />
 
-      <TemplatesHero
-        count={CATALOG.length}
+      <VideoHero
         items={fan}
         kicker="Free to make · no sign-up · no app"
         lines={[
           ["Invitations", "that"],
-          ["open", "like", "the"],
-          ["real", "thing."],
+          ["open", "like", "a"],
+          ["film."],
         ]}
-        lede="Pick a design, add your names and venues, and send one link on WhatsApp. Guests tap it open, the music starts, and every function and map is inside."
+        lede="Pick a design, add your names and venues, and send one link on WhatsApp. Guests tap it and the card opens like a little film, then the music starts and every function and map is inside."
+        note={`${CATALOG.length} designs, ${filmedCount} of them filmed. Tap any card below to watch it open.`}
         secondary={{ href: "#try", label: "Try it with your names" }}
-        links={rows.map((g) => ({ id: g.id, label: g.id === "filmed" ? "Filmed" : g.title.split(",")[0].split(" &")[0] }))}
+        links={rows.map((g) => ({ id: g.id, label: g.id === "new" ? "New" : g.title.split(",")[0].split(" &")[0] }))}
       />
 
       {rows.map((g) => (

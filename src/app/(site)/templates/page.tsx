@@ -5,7 +5,7 @@ import { galleryItems } from "@/components/gallery-items";
 import { OccasionLinks } from "@/components/sections";
 import { Reveal, TemplateRow, TemplatesHero } from "@/components/templates-showcase";
 import { CATALOG } from "@/invite/templates/catalog";
-import { GROUPS, groupOf } from "@/lib/groups";
+import { GROUPS, groupOf, NEW_DESIGNS } from "@/lib/groups";
 
 export const metadata: Metadata = {
   title: "Invitation Templates: Wedding, Nikah, Mehndi, Birthday & More",
@@ -14,20 +14,19 @@ export const metadata: Metadata = {
 };
 
 /** The designs shown in the fan, in order; the middle one plays its opening. */
-const MOST_LOVED = ["velvetrose", "petals", "peony", "jharokha", "marigold"];
+const MOST_LOVED = ["velvetrose", "peony", "silkribbon", "haveli", "petals"];
 
 export default function TemplatesPage() {
   const all = galleryItems();
   const loved = MOST_LOVED.map((id) => all.find((it) => it.meta.id === id)).filter((it): it is GalleryItem => !!it);
-  const rest = all.filter((it) => !MOST_LOVED.includes(it.meta.id));
   const grouped = [
-    { id: "filmed", title: "Filmed openings", blurb: "Tap one and the card opens like a film, then your names appear.", items: all.filter((it) => it.meta.filmed) },
-    ...GROUPS.map((g) => ({ ...g, items: rest.filter((it) => !it.meta.filmed && groupOf(it.meta.defaultOccasion) === g.id) })),
+    { id: "new", title: "New: light and modern", blurb: "Soft daylight, cotton paper and silk, each one opening on film.", items: all.filter((it) => NEW_DESIGNS.includes(it.meta.id)) },
+    ...GROUPS.map((g) => ({ ...g, items: all.filter((it) => !NEW_DESIGNS.includes(it.meta.id) && groupOf(it.meta.defaultOccasion) === g.id) })),
   ].filter((g) => g.items.length);
 
   return (
     <main className="mx-auto max-w-6xl px-4 sm:px-6">
-      <TemplatesHero count={CATALOG.length} items={loved} links={grouped.map((g) => ({ id: g.id, label: g.id === "filmed" ? "Filmed" : g.title.split(",")[0].split(" &")[0] }))} />
+      <TemplatesHero count={CATALOG.length} items={loved} links={grouped.map((g) => ({ id: g.id, label: g.id === "new" ? "New" : g.title.split(",")[0].split(" &")[0] }))} />
 
 
       {grouped.map((g) => (

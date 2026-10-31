@@ -1,5 +1,6 @@
 "use client";
 
+import { Button, buttonVariants } from "@heroui/react";
 import { BookOpenText, CalendarDays, Eye, Globe, Languages, Moon, Music, Palette, PartyPopper, Play, RotateCcw, Shapes, Sparkles, Users, X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -179,13 +180,13 @@ export function Editor(props: Props) {
 
   const primary =
     published ? (
-      <button type="button" className="btn btn-primary h-10 px-4 text-[14.5px]" disabled={saving || !dirty} onClick={save}>
+      <Button className="h-10 px-4 text-[14.5px]" isDisabled={saving || !dirty} onPress={save}>
         {saving ? "Saving…" : dirty ? "Save changes" : "Saved"}
-      </button>
+      </Button>
     ) : (
-      <button type="button" className="btn btn-primary h-10 px-4 text-[14.5px]" onClick={() => setPublishing(true)}>
+      <Button className="h-10 px-4 text-[14.5px]" onPress={() => setPublishing(true)}>
         Publish
-      </button>
+      </Button>
     );
 
   return (
@@ -207,9 +208,9 @@ export function Editor(props: Props) {
           </p>
         </div>
         {published && (
-          <button type="button" className="btn btn-ghost hidden h-10 px-4 text-[14px] sm:inline-flex" onClick={() => setSharing(true)}>
+          <Button variant="outline" className="hidden h-10 px-4 text-[14px] sm:inline-flex" onPress={() => setSharing(true)}>
             Share
-          </button>
+          </Button>
         )}
         <div className="hidden lg:block">{primary}</div>
       </header>
@@ -245,13 +246,13 @@ export function Editor(props: Props) {
           </div>
         </aside>
 
-        <section className="relative hidden min-h-0 flex-col bg-paper-2/70 lg:flex" aria-label="Preview">
+        <section className="relative hidden min-h-0 flex-col overflow-clip bg-paper-2/70 lg:flex" aria-label="Preview">
           <div className="flex flex-none items-center justify-center gap-2 pt-4">
-            <button type="button" onClick={replay} className="btn btn-ghost h-9 px-3.5 text-[13.5px]">
+            <Button variant="outline" size="sm" onPress={replay}>
               <Play className="size-3.5" aria-hidden /> Replay opening
-            </button>
+            </Button>
             {published && (
-              <a href={`/${published.slug}`} target="_blank" rel="noopener" className="btn btn-ghost h-9 px-3.5 text-[13.5px]">
+              <a href={`/${published.slug}`} target="_blank" rel="noopener" className={buttonVariants({ variant: "outline", size: "sm" })}>
                 <Globe className="size-3.5" aria-hidden /> Open live link
               </a>
             )}
@@ -266,21 +267,21 @@ export function Editor(props: Props) {
 
       {/* phones: preview as a full-screen sheet */}
       <div className="fixed inset-x-0 bottom-0 z-30 flex gap-2 border-t border-line bg-card/95 p-3 pb-[calc(12px+env(safe-area-inset-bottom))] backdrop-blur lg:hidden">
-        <button type="button" className="btn btn-ghost h-12 flex-1 text-[15px]" onClick={() => setMobilePreview(true)}>
+        <Button variant="outline" className="h-12 flex-1 text-[15px]" onPress={() => setMobilePreview(true)}>
           <Eye className="size-4.5" aria-hidden /> Preview
-        </button>
+        </Button>
         <div className="flex-1 [&>button]:h-12 [&>button]:w-full [&>button]:text-[15px]">{primary}</div>
       </div>
       {mobilePreview && (
         <div className="fixed inset-0 z-40 bg-paper lg:hidden">
           <PreviewFrame data={data} command={command} className="h-full w-full border-0" />
           <div className="absolute inset-x-0 bottom-0 flex justify-center gap-2 p-3 pb-[calc(12px+env(safe-area-inset-bottom))]">
-            <button type="button" onClick={() => setMobilePreview(false)} className="btn h-11 bg-ink px-5 text-[14.5px] text-paper shadow-lg">
+            <Button onPress={() => setMobilePreview(false)} className="h-11 bg-ink px-5 text-[14.5px] text-paper shadow-lg hover:bg-ink/90">
               <X className="size-4" aria-hidden /> Back to editing
-            </button>
-            <button type="button" onClick={replay} className="btn h-11 bg-card px-4 text-[14.5px] shadow-lg ring-1 ring-line">
+            </Button>
+            <Button variant="tertiary" onPress={replay} className="h-11 bg-card px-4 text-[14.5px] shadow-lg ring-1 ring-line hover:bg-card">
               <Play className="size-4" aria-hidden /> Replay
-            </button>
+            </Button>
           </div>
         </div>
       )}

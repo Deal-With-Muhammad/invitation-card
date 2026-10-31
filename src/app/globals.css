@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "@heroui/styles";
 
 @source "../";
 
@@ -7,6 +8,7 @@
   --font-serif: var(--font-cormorant), ui-serif, Georgia, serif;
   --color-paper: var(--paper);
   --color-paper-2: var(--paper-2);
+  --color-paper-3: var(--paper-3);
   --color-card: var(--card);
   --color-ink: var(--ink);
   --color-muted: var(--muted);
@@ -30,6 +32,7 @@
   --ivory: #f5f0e6;
   --paper: var(--ivory);
   --paper-2: #ece4d3;
+  --paper-3: #e4dac4;
   --card: #fffcf6;
   --ink: #1e2a28;
   --muted: #5d6965;
@@ -43,6 +46,47 @@
   --wax: #a8452f;
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   color-scheme: light;
+
+  /* HeroUI theme tokens, mapped onto the palette above. Unlayered so they win
+     over HeroUI's layered defaults. Light only: the site has no dark mode. */
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --surface: var(--card);
+  --surface-foreground: var(--ink);
+  --surface-secondary: var(--paper-2);
+  --surface-secondary-foreground: var(--ink);
+  --surface-tertiary: var(--paper-3);
+  --surface-tertiary-foreground: var(--ink);
+  --overlay: var(--card);
+  --overlay-foreground: var(--ink);
+  --accent: var(--brand);
+  --accent-foreground: var(--ivory);
+  --accent-hover: var(--brand-ink);
+  --default: var(--paper-2);
+  --default-foreground: var(--ink);
+  --default-hover: var(--paper-3);
+  --border: var(--line);
+  --separator: var(--line);
+  --field-background: var(--card);
+  --field-foreground: var(--ink);
+  --field-placeholder: color-mix(in srgb, var(--muted) 72%, transparent);
+  --field-border: var(--line);
+  --field-border-width: 1px;
+  --field-border-hover: rgb(30 42 40 / 0.26);
+  --field-border-focus: var(--brand);
+  --field-hover: var(--card);
+  --field-focus: var(--card);
+  --field-radius: 0.75rem;
+  --field-shadow: 0 0 #0000;
+  --focus: var(--brand);
+  --link: var(--brand);
+  --danger: var(--wax);
+  --danger-foreground: #fff;
+  --success: #1f7a4d;
+  --success-foreground: #fff;
+  --backdrop: rgb(18 64 60 / 0.5);
+  --surface-shadow: 0 1px 2px rgb(30 42 40 / 0.05), 0 10px 30px -22px rgb(42 37 32 / 0.5);
+  --overlay-shadow: 0 0 0 1px rgb(30 42 40 / 0.06), 0 24px 60px -24px rgb(42 37 32 / 0.45);
 }
 
 @layer base {
@@ -66,6 +110,16 @@
     outline: 2px solid var(--brand);
     outline-offset: 2px;
   }
+
+  /* While a modal is open the page keeps its scrollbar's space (React Aria sets
+     scrollbar-gutter: stable). Tint that strip to match the backdrop over it. */
+  html:has(.sheet-backdrop) {
+    background: color-mix(in srgb, var(--deep) 80%, var(--paper));
+  }
+
+  html:has(.dialog-backdrop) {
+    background: color-mix(in srgb, #2a2520 45%, var(--paper));
+  }
 }
 
 @layer components {
@@ -75,24 +129,114 @@
     letter-spacing: -0.01em;
   }
 
-  .btn {
-    @apply inline-flex h-11 items-center justify-center gap-2 rounded-xl px-5 text-[15px] font-medium transition-[background-color,border-color,color,transform] duration-150 ease-[var(--ease-out)] active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50;
+  /* HeroUI, tuned to the site: rounded-xl buttons and fields at the old sizes,
+     a bordered card-coloured outline button, and a soft teal halo on fields. */
+  .button {
+    @apply rounded-xl text-[15px];
   }
 
-  .btn-primary {
-    @apply bg-brand text-ivory hover:bg-brand-ink;
+  .button--sm {
+    @apply h-9 px-3.5 text-[13.5px] md:h-9;
   }
 
-  .btn-ghost {
-    @apply border border-ink/15 bg-card text-ink hover:border-ink/30;
+  .button--md {
+    @apply h-11 px-5 md:h-11;
   }
 
-  .field {
-    @apply block w-full rounded-xl border border-line bg-card px-3.5 py-2.5 text-[15px] text-ink outline-none transition-[border-color,box-shadow] placeholder:text-muted/70 focus:border-brand focus:ring-3 focus:ring-brand/15;
+  .button--lg {
+    @apply h-12 px-6 text-[16px] md:h-12;
   }
 
-  .label {
-    @apply mb-1.5 block text-[13px] font-medium text-muted;
+  .button--icon-only {
+    @apply px-0;
+  }
+
+  .button--icon-only.button--sm {
+    @apply w-9 md:w-9;
+  }
+
+  .button--icon-only.button--md {
+    @apply w-10 md:w-10;
+  }
+
+  .button--icon-only.button--lg {
+    @apply w-12 md:w-12;
+  }
+
+  .button--tertiary {
+    --button-fg: var(--ink);
+  }
+
+  .button--outline {
+    @apply border-ink/15;
+    --button-bg: var(--card);
+    --button-bg-hover: var(--card);
+    --button-bg-pressed: var(--paper);
+    --button-fg: var(--ink);
+
+    @media (hover: hover) {
+      &:hover {
+        @apply border-ink/30;
+      }
+    }
+  }
+
+  /* Full width also lets them shrink inside grids, like a width: 100% native input. */
+  .input,
+  .textarea {
+    @apply w-full px-3.5 py-2.5 text-base sm:text-[15px];
+  }
+
+  .textarea {
+    @apply leading-relaxed;
+  }
+
+  .input:focus,
+  .input[data-focused="true"],
+  .textarea:focus,
+  .textarea[data-focused="true"] {
+    @apply ring-3 ring-brand/15;
+  }
+
+  .select__trigger {
+    @apply min-h-11 items-center px-3.5 text-base sm:text-[15px];
+  }
+
+  .select__value {
+    @apply sm:text-[15px];
+  }
+
+  .select__trigger[data-focus-visible="true"],
+  .select__trigger[data-pressed="true"],
+  .select:has([data-open="true"]) .select__trigger {
+    @apply border-brand ring-3 ring-brand/15;
+  }
+
+  .textfield,
+  .select {
+    @apply gap-1.5;
+  }
+
+  /* Field labels: small and muted, like the rest of the site. */
+  .textfield .label,
+  .select .label {
+    @apply text-[13px] text-muted;
+  }
+
+  .input-group {
+    @apply min-h-11 text-base sm:text-[15px];
+  }
+
+  .input-group:has([data-slot="input-group-input"]:focus) {
+    @apply border-brand ring-3 ring-brand/15;
+  }
+
+  .list-box-item {
+    @apply rounded-lg text-[15px];
+  }
+
+  .description {
+    @apply text-[12.5px] leading-snug;
   }
 
   .paper-grain {

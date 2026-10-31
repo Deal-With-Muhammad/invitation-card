@@ -1,5 +1,6 @@
 "use client";
 
+import { Button, Checkbox, Input, Label, TextField } from "@heroui/react";
 import { ArrowDown, ArrowUp, Plus, Trash2 } from "lucide-react";
 
 import { uid } from "@/invite/defaults";
@@ -13,10 +14,13 @@ import { addDays } from "@/invite/time";
 import { LANGS, OCCASIONS, type EventItem, type InviteData, type Lang, type Occasion } from "@/invite/types";
 import { OCCASION_LABEL } from "@/lib/filters";
 
-import { Area, ColorDot, Field, Segmented, Select, Text, Toggle } from "./fields";
+import { Area, ColorDot, Segmented, Select, Text, Toggle, groupLabel } from "./fields";
 
 export type Set = (fn: (d: InviteData) => InviteData) => void;
 type P = { data: InviteData; set: Set };
+
+/** Small round icon buttons (move, remove). */
+const iconBtn = "size-8 rounded-full text-muted hover:bg-card";
 
 const TWO: Occasion[] = ["wedding", "nikah", "walima", "mehndi", "engagement", "reception", "anniversary", "housewarming"];
 
@@ -115,6 +119,7 @@ export function PeoplePanel({ data, set }: P) {
           <div className="grid grid-cols-[auto_1fr] gap-2.5">
             <Select
               label="Line"
+              className="w-36"
               value={p.relation}
               onChange={(v) => setPerson(i, { relation: v as typeof p.relation })}
               options={[
@@ -129,13 +134,13 @@ export function PeoplePanel({ data, set }: P) {
       ))}
       <div className="flex flex-wrap gap-2">
         {!two ? (
-          <button type="button" className="btn btn-ghost h-9 px-3.5 text-[13.5px]" onClick={() => set((d) => ({ ...d, people: [...d.people, { name: "", full: "", relation: "none", parents: "" }] }))}>
+          <Button variant="outline" size="sm" onPress={() => set((d) => ({ ...d, people: [...d.people, { name: "", full: "", relation: "none", parents: "" }] }))}>
             <Plus className="size-4" aria-hidden /> Add a second name
-          </button>
+          </Button>
         ) : (
-          <button type="button" className="btn btn-ghost h-9 px-3.5 text-[13.5px]" onClick={() => set((d) => ({ ...d, people: d.people.slice(0, 1) }))}>
+          <Button variant="outline" size="sm" onPress={() => set((d) => ({ ...d, people: d.people.slice(0, 1) }))}>
             Only one name
-          </button>
+          </Button>
         )}
       </div>
       <Area
@@ -196,15 +201,15 @@ export function EventsPanel({ data, set }: P) {
             <p className="text-[13px] font-medium text-muted">{many ? `Day ${i + 1}` : "The day"}</p>
             {many && (
               <span className="flex gap-1">
-                <button type="button" disabled={i === 0} onClick={() => move(i, -1)} className="grid size-8 place-items-center rounded-full text-muted hover:bg-card disabled:opacity-30" aria-label="Move up">
-                  <ArrowUp className="size-4" />
-                </button>
-                <button type="button" disabled={i === data.events.length - 1} onClick={() => move(i, 1)} className="grid size-8 place-items-center rounded-full text-muted hover:bg-card disabled:opacity-30" aria-label="Move down">
-                  <ArrowDown className="size-4" />
-                </button>
-                <button type="button" onClick={() => set((d) => ({ ...d, events: d.events.filter((_, j) => j !== i) }))} className="grid size-8 place-items-center rounded-full text-muted hover:bg-card hover:text-wax" aria-label="Remove this day">
-                  <Trash2 className="size-4" />
-                </button>
+                <Button isIconOnly variant="ghost" size="sm" isDisabled={i === 0} onPress={() => move(i, -1)} className={iconBtn} aria-label="Move up">
+                  <ArrowUp className="size-4" aria-hidden />
+                </Button>
+                <Button isIconOnly variant="ghost" size="sm" isDisabled={i === data.events.length - 1} onPress={() => move(i, 1)} className={iconBtn} aria-label="Move down">
+                  <ArrowDown className="size-4" aria-hidden />
+                </Button>
+                <Button isIconOnly variant="ghost" size="sm" onPress={() => set((d) => ({ ...d, events: d.events.filter((_, j) => j !== i) }))} className={`${iconBtn} hover:text-wax`} aria-label="Remove this day">
+                  <Trash2 className="size-4" aria-hidden />
+                </Button>
               </span>
             )}
           </div>
@@ -219,11 +224,9 @@ export function EventsPanel({ data, set }: P) {
             </div>
           )}
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-[1.3fr_1fr_1fr]">
-            <div className="col-span-2 sm:col-span-1">
-              <Field label="Date">{(id) => <input id={id} type="date" className="field px-2.5" value={e.date} onChange={(x) => setEv(i, { date: x.target.value })} />}</Field>
-            </div>
-            <Field label="Starts">{(id) => <input id={id} type="time" className="field min-w-0 px-2.5" value={e.start} onChange={(x) => setEv(i, { start: x.target.value })} />}</Field>
-            <Field label="Ends">{(id) => <input id={id} type="time" className="field min-w-0 px-2.5" value={e.end} onChange={(x) => setEv(i, { end: x.target.value })} />}</Field>
+            <Text label="Date" type="date" value={e.date} onChange={(v) => setEv(i, { date: v })} className="col-span-2 sm:col-span-1" inputClassName="px-2.5" />
+            <Text label="Starts" type="time" value={e.start} onChange={(v) => setEv(i, { start: v })} inputClassName="min-w-0 px-2.5" />
+            <Text label="Ends" type="time" value={e.end} onChange={(v) => setEv(i, { end: v })} inputClassName="min-w-0 px-2.5" />
           </div>
           <Text label="Venue" value={e.venue} onChange={(v) => setEv(i, { venue: v })} placeholder="The Grand Ballroom" maxLength={100} />
           <Area label="Address" value={e.address} onChange={(v) => setEv(i, { address: v })} placeholder="Street, city, postcode" rows={2} maxLength={240} />
@@ -239,10 +242,11 @@ export function EventsPanel({ data, set }: P) {
         </div>
       ))}
       {data.events.length < 8 && (
-        <button
-          type="button"
-          className="btn btn-ghost h-10 w-full text-[14px]"
-          onClick={() =>
+        <Button
+          variant="outline"
+          fullWidth
+          className="h-10 text-[14px]"
+          onPress={() =>
             set((d) => {
               const last = d.events[d.events.length - 1];
               return { ...d, events: [...d.events, { ...last, id: uid(), title: "", date: last?.date ? addDays(last.date, 1) : last?.date ?? "", note: "" }] };
@@ -250,7 +254,7 @@ export function EventsPanel({ data, set }: P) {
           }
         >
           <Plus className="size-4" aria-hidden /> Add another day or function
-        </button>
+        </Button>
       )}
       <Select label="Time zone" value={data.timeZone} onChange={(v) => set((d) => ({ ...d, timeZone: v }))} options={zones(data.timeZone)} hint="Where the event is. Guests abroad still see the times as written, and the countdown is exact." />
     </>
@@ -296,7 +300,7 @@ export function LookPanel({ data, set }: P) {
   return (
     <>
       <div>
-        <p className="label">Colours</p>
+        <p className={groupLabel}>Colours</p>
         <div className="flex flex-wrap gap-2">
           {meta.palettes.map((p) => (
             <button
@@ -334,7 +338,7 @@ export function LookPanel({ data, set }: P) {
         </div>
       )}
       <div>
-        <p className="label">Font for the names</p>
+        <p className={groupLabel}>Font for the names</p>
         <div className="grid grid-cols-2 gap-1.5">
           <button
             type="button"
@@ -428,17 +432,21 @@ export function ExtrasPanel({ data, set }: P) {
           <div className="mt-3 space-y-2">
             {data.schedule.map((s, i) => (
               <div key={i} className="grid grid-cols-[96px_1fr_auto] gap-2">
-                <input className="field px-2.5" value={s.time} placeholder="7:30 PM" maxLength={20} aria-label="Time" onChange={(e) => set((d) => ({ ...d, schedule: d.schedule.map((x, j) => (j === i ? { ...x, time: e.target.value } : x)) }))} />
-                <input className="field" value={s.title} placeholder="Dinner is served" maxLength={80} aria-label="What happens" dir="auto" onChange={(e) => set((d) => ({ ...d, schedule: d.schedule.map((x, j) => (j === i ? { ...x, title: e.target.value } : x)) }))} />
-                <button type="button" aria-label="Remove" className="grid size-10 place-items-center rounded-full text-muted hover:bg-paper-2 hover:text-wax" onClick={() => set((d) => ({ ...d, schedule: d.schedule.filter((_, j) => j !== i) }))}>
-                  <Trash2 className="size-4" />
-                </button>
+                <TextField aria-label="Time" className="min-w-0" value={s.time} maxLength={20} onChange={(v) => set((d) => ({ ...d, schedule: d.schedule.map((x, j) => (j === i ? { ...x, time: v } : x)) }))}>
+                  <Input placeholder="7:30 PM" className="px-2.5" />
+                </TextField>
+                <TextField aria-label="What happens" className="min-w-0" value={s.title} maxLength={80} onChange={(v) => set((d) => ({ ...d, schedule: d.schedule.map((x, j) => (j === i ? { ...x, title: v } : x)) }))}>
+                  <Input placeholder="Dinner is served" dir="auto" />
+                </TextField>
+                <Button isIconOnly variant="ghost" aria-label="Remove" className={`${iconBtn} size-10 hover:text-wax`} onPress={() => set((d) => ({ ...d, schedule: d.schedule.filter((_, j) => j !== i) }))}>
+                  <Trash2 className="size-4" aria-hidden />
+                </Button>
               </div>
             ))}
             {data.schedule.length < 12 && (
-              <button type="button" className="btn btn-ghost h-9 px-3.5 text-[13.5px]" onClick={() => set((d) => ({ ...d, schedule: [...d.schedule, { time: "", title: "" }] }))}>
+              <Button variant="outline" size="sm" onPress={() => set((d) => ({ ...d, schedule: [...d.schedule, { time: "", title: "" }] }))}>
                 <Plus className="size-4" aria-hidden /> Add a line
-              </button>
+              </Button>
             )}
           </div>
         )}
@@ -451,7 +459,7 @@ export function ExtrasPanel({ data, set }: P) {
             <Text label="Title" value={data.dress.title ?? c.defaults.dressTitle} onChange={(v) => set((d) => ({ ...d, dress: { ...d.dress, title: v } }))} maxLength={60} />
             <Area label="Note" value={data.dress.note ?? c.defaults.dressNote} onChange={(v) => set((d) => ({ ...d, dress: { ...d.dress, note: v } }))} rows={2} maxLength={300} />
             <div>
-              <p className="label">Colours to wear</p>
+              <p className={groupLabel}>Colours to wear</p>
               <div className="flex flex-wrap items-center gap-2.5">
                 {data.dress.colors.map((col, i) => (
                   <ColorDot
@@ -463,9 +471,9 @@ export function ExtrasPanel({ data, set }: P) {
                   />
                 ))}
                 {data.dress.colors.length < 6 && (
-                  <button type="button" aria-label="Add a colour" className="grid size-10 place-items-center rounded-full border border-dashed border-ink/25 text-muted hover:text-ink" onClick={() => set((d) => ({ ...d, dress: { ...d.dress, colors: [...d.dress.colors, "#c9a35f"] } }))}>
-                    <Plus className="size-4" />
-                  </button>
+                  <Button isIconOnly variant="ghost" aria-label="Add a colour" className="size-10 rounded-full border border-dashed border-ink/25 text-muted hover:bg-transparent hover:text-ink" onPress={() => set((d) => ({ ...d, dress: { ...d.dress, colors: [...d.dress.colors, "#c9a35f"] } }))}>
+                    <Plus className="size-4" aria-hidden />
+                  </Button>
                 )}
               </div>
             </div>
@@ -479,17 +487,21 @@ export function ExtrasPanel({ data, set }: P) {
           <div className="mt-3 space-y-2">
             {data.contacts.map((x, i) => (
               <div key={i} className="grid grid-cols-[1fr_1.1fr_auto] gap-2">
-                <input className="field" value={x.name} placeholder="Name" maxLength={50} aria-label="Contact name" dir="auto" onChange={(e) => set((d) => ({ ...d, contacts: d.contacts.map((y, j) => (j === i ? { ...y, name: e.target.value } : y)) }))} />
-                <input className="field" value={x.phone} placeholder="+60 12-345 6789" maxLength={24} inputMode="tel" aria-label="Phone with country code" onChange={(e) => set((d) => ({ ...d, contacts: d.contacts.map((y, j) => (j === i ? { ...y, phone: e.target.value } : y)) }))} />
-                <button type="button" aria-label="Remove" className="grid size-10 place-items-center rounded-full text-muted hover:bg-paper-2 hover:text-wax" onClick={() => set((d) => ({ ...d, contacts: d.contacts.filter((_, j) => j !== i) }))}>
-                  <Trash2 className="size-4" />
-                </button>
+                <TextField aria-label="Contact name" className="min-w-0" value={x.name} maxLength={50} onChange={(v) => set((d) => ({ ...d, contacts: d.contacts.map((y, j) => (j === i ? { ...y, name: v } : y)) }))}>
+                  <Input placeholder="Name" dir="auto" />
+                </TextField>
+                <TextField aria-label="Phone with country code" className="min-w-0" type="tel" inputMode="tel" value={x.phone} maxLength={24} onChange={(v) => set((d) => ({ ...d, contacts: d.contacts.map((y, j) => (j === i ? { ...y, phone: v } : y)) }))}>
+                  <Input placeholder="+60 12-345 6789" />
+                </TextField>
+                <Button isIconOnly variant="ghost" aria-label="Remove" className={`${iconBtn} size-10 hover:text-wax`} onPress={() => set((d) => ({ ...d, contacts: d.contacts.filter((_, j) => j !== i) }))}>
+                  <Trash2 className="size-4" aria-hidden />
+                </Button>
               </div>
             ))}
             {data.contacts.length < 4 && (
-              <button type="button" className="btn btn-ghost h-9 px-3.5 text-[13.5px]" onClick={() => set((d) => ({ ...d, contacts: [...d.contacts, { name: "", phone: "" }] }))}>
+              <Button variant="outline" size="sm" onPress={() => set((d) => ({ ...d, contacts: [...d.contacts, { name: "", phone: "" }] }))}>
                 <Plus className="size-4" aria-hidden /> Add a contact
-              </button>
+              </Button>
             )}
             <p className="text-[12.5px] text-muted">Include the country code so WhatsApp works for guests abroad.</p>
           </div>
@@ -559,22 +571,28 @@ export function LanguagePanel({ data, set }: P) {
         hint="Labels, dates and the suggested wording use this language."
       />
       <div>
-        <p className="label">Guests can switch to</p>
+        <p className={groupLabel}>Guests can switch to</p>
         <div className="grid grid-cols-2 gap-1.5">
           {LANGS.map((l) => {
             const on = data.langs.includes(l);
             const main = l === data.lang;
             return (
-              <label key={l} className={`flex cursor-pointer items-center gap-2.5 rounded-xl border px-3 py-2.5 text-[14px] ${on ? "border-brand/50 bg-brand/5" : "border-line"} ${main ? "opacity-70" : ""}`}>
-                <input
-                  type="checkbox"
-                  className="size-4 accent-[var(--brand)]"
-                  checked={on}
-                  disabled={main}
-                  onChange={(e) => set((d) => ({ ...d, langs: e.target.checked ? [...d.langs, l] : d.langs.filter((x) => x !== l) }))}
-                />
-                <span lang={l}>{copyFor(l).meta.native}</span>
-              </label>
+              <Checkbox
+                key={l}
+                isSelected={on}
+                isDisabled={main}
+                onChange={(v) => set((d) => ({ ...d, langs: v ? [...d.langs, l] : d.langs.filter((x) => x !== l) }))}
+                className="data-[disabled=true]:opacity-70"
+              >
+                <Checkbox.Content className={`w-full gap-2.5 rounded-xl border px-3 py-2.5 transition-colors ${on ? "border-brand/50 bg-brand/5" : "border-line hover:border-ink/25"}`}>
+                  <Checkbox.Control>
+                    <Checkbox.Indicator />
+                  </Checkbox.Control>
+                  <Label lang={l} className="text-[14px] font-normal text-ink">
+                    {copyFor(l).meta.native}
+                  </Label>
+                </Checkbox.Content>
+              </Checkbox>
             );
           })}
         </div>

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState, type ReactNode } from "react";
 
 import { LiveThumb } from "@/components/live-thumb";
-import { PreviewButton } from "@/components/preview-sheet";
+import { PreviewIconButton } from "@/components/preview-sheet";
 import type { TemplateMeta } from "@/invite/templates/types";
 import type { Occasion } from "@/invite/types";
 import { FILTERS } from "@/lib/filters";
@@ -44,19 +44,16 @@ export function Gallery({ items, occasion, showFilters = true }: { items: Galler
           const q = occasion && meta.occasions.includes(occasion) ? `?occasion=${occasion}` : "";
           return (
             <li key={meta.id} className="group">
-              <div className="relative">
-                <LiveThumb id={meta.id} className="overflow-hidden rounded-[16px] shadow-[0_18px_36px_-20px_rgb(31_28_25/0.55)] ring-1 ring-black/5 transition-transform duration-300 ease-[var(--ease-out)] group-hover:-translate-y-1">
+              <div className="relative transition-transform duration-300 ease-[var(--ease-out)] group-hover:-translate-y-1">
+                <LiveThumb
+                  id={meta.id}
+                  name={meta.name}
+                  label={meta.filmed ? "Filmed opening" : undefined}
+                  className="overflow-hidden rounded-[16px] shadow-[0_18px_36px_-20px_rgb(31_28_25/0.55)] ring-1 ring-black/5"
+                >
                   {thumb}
                 </LiveThumb>
-                <PreviewButton id={meta.id} className="absolute inset-0 rounded-[16px]">
-                  <span className="sr-only">Preview {meta.name}</span>
-                </PreviewButton>
-                <span className="pointer-events-none absolute bottom-2.5 left-2.5 inline-flex items-center gap-1 rounded-full bg-black/40 px-2.5 py-1 text-[12px] font-medium text-white backdrop-blur-md">
-                  <svg viewBox="0 0 24 24" className="size-3" aria-hidden>
-                    <path d="M8 5.5v13l10.5-6.5z" fill="currentColor" />
-                  </svg>
-                  {meta.filmed ? "Filmed opening" : "Preview"}
-                </span>
+                <PreviewIconButton id={meta.id} name={meta.name} className="absolute top-2.5 right-2.5 z-10" />
               </div>
               <div className="mt-3 flex items-start justify-between gap-2">
                 <div className="min-w-0">

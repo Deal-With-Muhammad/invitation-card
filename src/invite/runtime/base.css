@@ -862,3 +862,21 @@ html.inv-locked body {
     opacity: 1;
   }
 }
+
+/* No visible scrollbars on an invitation page (/[slug], /preview, /frame, and inside
+   the site's preview iframes); it still scrolls. Thumbnails (.is-thumb) share this
+   file with the site's pages, so the page-level rule only applies when a full
+   invitation is on the page. */
+html:has(.inv:not(.is-thumb)),
+html:has(.inv:not(.is-thumb)) body,
+.inv,
+.inv * {
+  scrollbar-width: none;
+}
+
+html:has(.inv:not(.is-thumb))::-webkit-scrollbar,
+html:has(.inv:not(.is-thumb)) body::-webkit-scrollbar,
+.inv::-webkit-scrollbar,
+.inv *::-webkit-scrollbar {
+  display: none;
+}

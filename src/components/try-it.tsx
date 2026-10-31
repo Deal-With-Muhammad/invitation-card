@@ -1,5 +1,6 @@
 "use client";
 
+import { Input, TextField } from "@heroui/react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 
@@ -35,15 +36,19 @@ export function TryIt() {
           <Thumb id={id} data={data} />
         </div>
         <div className="mt-5 grid grid-cols-[1fr_auto_1fr] items-end gap-2">
-          <label className="block">
-            <span className="mb-1 block text-[12.5px] text-muted">Name</span>
-            <input className="field h-10 py-0" value={a} maxLength={18} onChange={(e) => setA(e.target.value)} aria-label="First name" />
-          </label>
+          <TextField value={a} onChange={setA} maxLength={18} aria-label="First name">
+            <span aria-hidden className="text-[12.5px] text-muted">
+              Name
+            </span>
+            <Input className="h-10 py-0" autoComplete="off" />
+          </TextField>
           <span className="pb-2.5 text-muted">&amp;</span>
-          <label className="block">
-            <span className="mb-1 block text-[12.5px] text-muted">Name</span>
-            <input className="field h-10 py-0" value={b} maxLength={18} onChange={(e) => setB(e.target.value)} aria-label="Second name" />
-          </label>
+          <TextField value={b} onChange={setB} maxLength={18} aria-label="Second name">
+            <span aria-hidden className="text-[12.5px] text-muted">
+              Name
+            </span>
+            <Input className="h-10 py-0" autoComplete="off" />
+          </TextField>
         </div>
         <div className="mt-4 flex items-center justify-between gap-3">
           <div className="flex gap-1.5" role="radiogroup" aria-label="Design">

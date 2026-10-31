@@ -1,5 +1,6 @@
 "use client";
 
+import { buttonVariants } from "@heroui/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -47,10 +48,10 @@ export function EditLoader({ slug }: { slug: string }) {
           <h1 className="font-serif text-[28px]">Can&apos;t open the editor</h1>
           <p className="mt-2 text-muted">{state.message}</p>
           <div className="mt-6 flex justify-center gap-2">
-            <Link href="/my" className="btn btn-ghost">
+            <Link href="/my" className={buttonVariants({ variant: "outline" })}>
               My invitations
             </Link>
-            <Link href={`/${slug}`} className="btn btn-primary">
+            <Link href={`/${slug}`} className={buttonVariants()}>
               View invitation
             </Link>
           </div>

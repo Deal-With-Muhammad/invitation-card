@@ -1,9 +1,13 @@
 "use client";
 
+import { Description, Input, Label, ListBox, Select as HSelect, Switch, TextArea, TextField } from "@heroui/react";
 import { ChevronDown, RotateCcw } from "lucide-react";
-import { useId, type ReactNode } from "react";
+import type { ReactNode } from "react";
 
-// Small form pieces for the editor, styled to match the site.
+// Small form pieces for the editor: HeroUI fields, styled to match the site.
+
+/** The small muted label above a group of choices (chips, swatches, checkboxes). */
+export const groupLabel = "mb-1.5 block text-[13px] font-medium text-muted";
 
 export function Panel({
   id,
@@ -25,7 +29,7 @@ export function Panel({
   return (
     <section className={`rounded-2xl border bg-card transition-colors ${open ? "border-ink/15 shadow-[0_10px_30px_-22px_rgb(42_37_32/0.5)]" : "border-line"}`}>
       <h2>
-        <button type="button" onClick={() => onToggle(id)} aria-expanded={open} className="flex w-full items-center gap-3 px-4 py-3.5 text-start">
+        <button type="button" onClick={() => onToggle(id)} aria-expanded={open} className="flex w-full items-center gap-3 rounded-2xl px-4 py-3.5 text-start">
           <span className="grid size-9 flex-none place-items-center rounded-xl bg-paper-2 text-brand">{icon}</span>
           <span className="min-w-0 flex-1">
             <span className="block text-[15.5px] font-medium">{title}</span>
@@ -39,22 +43,6 @@ export function Panel({
   );
 }
 
-export function Field({ label, hint, children, action }: { label: string; hint?: string; children: (id: string) => ReactNode; action?: ReactNode }) {
-  const id = useId();
-  return (
-    <div>
-      <div className="flex items-baseline justify-between gap-2">
-        <label htmlFor={id} className="label">
-          {label}
-        </label>
-        {action}
-      </div>
-      {children(id)}
-      {hint && <p className="mt-1.5 text-[12.5px] leading-snug text-muted">{hint}</p>}
-    </div>
-  );
-}
-
 export function Text({
   label,
   value,
@@ -65,33 +53,27 @@ export function Text({
   inputMode,
   maxLength,
   dir,
+  className = "",
+  inputClassName = "",
 }: {
   label: string;
   value: string;
   onChange: (v: string) => void;
   placeholder?: string;
   hint?: string;
-  type?: string;
+  type?: "text" | "date" | "time" | "tel" | "url" | "email";
   inputMode?: "text" | "tel" | "url" | "numeric";
   maxLength?: number;
   dir?: string;
+  className?: string;
+  inputClassName?: string;
 }) {
   return (
-    <Field label={label} hint={hint}>
-      {(id) => (
-        <input
-          id={id}
-          className="field"
-          type={type}
-          value={value}
-          placeholder={placeholder}
-          inputMode={inputMode}
-          maxLength={maxLength}
-          dir={dir ?? "auto"}
-          onChange={(e) => onChange(e.target.value)}
-        />
-      )}
-    </Field>
+    <TextField value={value} onChange={onChange} type={type} inputMode={inputMode} maxLength={maxLength} className={`min-w-0 ${className}`}>
+      <Label>{label}</Label>
+      <Input placeholder={placeholder} dir={dir ?? (type === "date" || type === "time" ? undefined : "auto")} className={inputClassName} />
+      {hint && <Description>{hint}</Description>}
+    </TextField>
   );
 }
 
@@ -116,52 +98,34 @@ export function Area({
   onReset?: (() => void) | null;
 }) {
   return (
-    <Field
-      label={label}
-      hint={hint}
-      action={
-        onReset ? (
-          <button type="button" onClick={onReset} className="inline-flex items-center gap-1 text-[12.5px] text-muted hover:text-brand">
+    <TextField value={value} onChange={onChange} maxLength={maxLength}>
+      <div className="flex items-baseline justify-between gap-2">
+        <Label>{label}</Label>
+        {onReset && (
+          <button type="button" onClick={onReset} className="inline-flex items-center gap-1 rounded-md text-[12.5px] text-muted hover:text-brand">
             <RotateCcw className="size-3" aria-hidden /> Reset
           </button>
-        ) : null
-      }
-    >
-      {(id) => (
-        <textarea
-          id={id}
-          className="field resize-y leading-relaxed"
-          rows={rows}
-          value={value}
-          placeholder={placeholder}
-          maxLength={maxLength}
-          dir="auto"
-          onChange={(e) => onChange(e.target.value)}
-        />
-      )}
-    </Field>
+        )}
+      </div>
+      <TextArea rows={rows} placeholder={placeholder} dir="auto" className="resize-y" />
+      {hint && <Description>{hint}</Description>}
+    </TextField>
   );
 }
 
 export function Toggle({ label, hint, checked, onChange }: { label: string; hint?: string; checked: boolean; onChange: (v: boolean) => void }) {
-  const id = useId();
   return (
-    <div className="flex items-start justify-between gap-4">
-      <label htmlFor={id} className="min-w-0 cursor-pointer">
-        <span className="block text-[15px]">{label}</span>
-        {hint && <span className="block text-[12.5px] leading-snug text-muted">{hint}</span>}
-      </label>
-      <button
-        id={id}
-        type="button"
-        role="switch"
-        aria-checked={checked}
-        onClick={() => onChange(!checked)}
-        className={`relative mt-0.5 h-[26px] w-[44px] flex-none rounded-full transition-colors ${checked ? "bg-brand" : "bg-ink/15"}`}
-      >
-        <span className={`absolute top-[3px] size-5 rounded-full bg-white shadow transition-[inset-inline-start] ${checked ? "start-[21px]" : "start-[3px]"}`} />
-      </button>
-    </div>
+    <Switch isSelected={checked} onChange={onChange} className="w-full">
+      <Switch.Content className="w-full items-start justify-between gap-4">
+        <span className="min-w-0">
+          <Label className="block text-[15px] font-normal text-ink">{label}</Label>
+          {hint && <Description className="block">{hint}</Description>}
+        </span>
+        <Switch.Control className="mt-0.5">
+          <Switch.Thumb />
+        </Switch.Control>
+      </Switch.Content>
+    </Switch>
   );
 }
 
@@ -178,7 +142,7 @@ export function Segmented<T extends string | number>({
 }) {
   return (
     <div>
-      <p className="label">{label}</p>
+      <p className={groupLabel}>{label}</p>
       <div className="flex flex-wrap gap-1.5" role="radiogroup" aria-label={label}>
         {options.map((o) => (
           <button
@@ -205,28 +169,34 @@ export function Select({
   onChange,
   options,
   hint,
+  className = "",
 }: {
   label: string;
   value: string;
   onChange: (v: string) => void;
   options: { value: string; label: string }[];
   hint?: string;
+  className?: string;
 }) {
   return (
-    <Field label={label} hint={hint}>
-      {(id) => (
-        <div className="relative">
-          <select id={id} className="field appearance-none pe-9" value={value} onChange={(e) => onChange(e.target.value)}>
-            {options.map((o) => (
-              <option key={o.value} value={o.value}>
-                {o.label}
-              </option>
-            ))}
-          </select>
-          <ChevronDown className="pointer-events-none absolute end-3 top-1/2 size-4 -translate-y-1/2 text-muted" aria-hidden />
-        </div>
-      )}
-    </Field>
+    <HSelect value={value} onChange={(k) => k != null && onChange(String(k))} className={className}>
+      <Label>{label}</Label>
+      <HSelect.Trigger>
+        <HSelect.Value className="truncate" />
+        <HSelect.Indicator />
+      </HSelect.Trigger>
+      <HSelect.Popover>
+        <ListBox>
+          {options.map((o) => (
+            <ListBox.Item key={o.value} id={o.value} textValue={o.label}>
+              {o.label}
+              <ListBox.ItemIndicator />
+            </ListBox.Item>
+          ))}
+        </ListBox>
+      </HSelect.Popover>
+      {hint && <Description>{hint}</Description>}
+    </HSelect>
   );
 }
 

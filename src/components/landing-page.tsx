@@ -1,3 +1,4 @@
+import { buttonVariants } from "@heroui/styles";
 import Link from "next/link";
 
 import { Faq } from "@/components/faq";
@@ -26,7 +27,7 @@ export function LandingPage({ slug }: { slug: string }) {
       <Eyebrow>{ms ? "Percuma · Tanpa daftar" : "Free · No sign-up"}</Eyebrow>
       <h1 className="max-w-3xl font-serif text-[40px] leading-[1.06] text-balance sm:text-[54px]">{page.title}</h1>
       <p className="mt-5 max-w-2xl text-[17px] leading-relaxed text-muted">{page.answer}</p>
-      <Link href={`/create/${page.featured}?occasion=${page.occasion}${page.lang === "ms" ? "&lang=ms" : ""}`} className="btn btn-primary mt-8 h-12 px-6 text-[16px]">
+      <Link href={`/create/${page.featured}?occasion=${page.occasion}${page.lang === "ms" ? "&lang=ms" : ""}`} className={buttonVariants({ size: "lg", className: "mt-8" })}>
         {ms ? "Mula buat kad" : "Start with a design"}
       </Link>
 

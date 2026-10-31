@@ -1,3 +1,4 @@
+import { buttonVariants } from "@heroui/styles";
 import Link from "next/link";
 
 import { FONT_VARS } from "@/invite/fonts";
@@ -145,7 +146,7 @@ export function CustomCta() {
           Your own colours, monogram or artwork, or a theme that isn&apos;t in the gallery. Tell us about your event and we&apos;ll reply with ideas and a price.
         </p>
       </div>
-      <Link href="/custom" className="btn bg-white text-brand-ink hover:bg-white/90">
+      <Link href="/custom" className={buttonVariants({ className: "bg-white text-brand-ink hover:bg-white/90" })}>
         Request a custom design
       </Link>
     </div>
