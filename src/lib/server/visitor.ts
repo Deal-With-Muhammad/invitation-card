@@ -1,7 +1,8 @@
 import "server-only";
 
-// What a request says about where it came from: location from the headers
-// Vercel adds (empty in local dev), the kind of device, and the source.
+// What a request says about where it came from: location from the headers the
+// host adds (Vercel's or CloudFront's on AWS Amplify; none in local dev), the
+// kind of device, and the source.
 
 export type Origin = { country: string | null; region: string | null; city: string | null };
 export type VisitInfo = Origin & { device: string; source: string };
@@ -18,10 +19,18 @@ const header = (h: Headers, name: string) => {
 
 export function origin(h: Headers): Origin {
   return {
-    country: header(h, "x-vercel-ip-country")?.toUpperCase() ?? null,
-    region: header(h, "x-vercel-ip-country-region"),
-    city: header(h, "x-vercel-ip-city"),
+    country: (header(h, "x-vercel-ip-country") ?? header(h, "cloudfront-viewer-country"))?.toUpperCase() ?? null,
+    region: header(h, "x-vercel-ip-country-region") ?? header(h, "cloudfront-viewer-country-region"),
+    city: header(h, "x-vercel-ip-city") ?? header(h, "cloudfront-viewer-city"),
   };
+}
+
+/** The site's own address as the visitor sees it, even behind a CDN or proxy. */
+export function siteOrigin(req: Request) {
+  const host = req.headers.get("x-forwarded-host")?.split(",")[0]?.trim();
+  if (!host) return new URL(req.url).origin;
+  const proto = req.headers.get("x-forwarded-proto")?.split(",")[0]?.trim() || (host.startsWith("localhost") ? "http" : "https");
+  return `${proto}://${host}`;
 }
 
 function device(ua: string) {
@@ -69,5 +78,5 @@ function source(ua: string, referrer: unknown, ownHost: string) {
 
 export function visitInfo(req: Request, referrer: unknown): VisitInfo {
   const ua = req.headers.get("user-agent") ?? "";
-  return { ...origin(req.headers), device: device(ua), source: source(ua, referrer, new URL(req.url).hostname.replace(/^www\./, "")) };
+  return { ...origin(req.headers), device: device(ua), source: source(ua, referrer, new URL(siteOrigin(req)).hostname.replace(/^www\./, "")) };
 }

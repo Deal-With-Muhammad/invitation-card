@@ -14,7 +14,10 @@ read or write anything. Only the server (service-role key) can.
 
 ## 2. Environment variables
 
-In `.env` locally and in Vercel → Project → Settings → Environment Variables:
+In `.env` locally, and on the host. The live site runs on **AWS Amplify**:
+Amplify console → the app → Hosting → **Environment variables**. Amplify only
+passes these to the build, so `amplify.yml` writes them into `.env.production`
+for the server; after adding or changing one, redeploy.
 
 | Name | Where to find it |
 | --- | --- |

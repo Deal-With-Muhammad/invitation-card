@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 
 import { EMAIL_RE, safeNext } from "@/lib/server/auth-helpers";
 import { clientIp, getStore } from "@/lib/server/store";
+import { siteOrigin } from "@/lib/server/visitor";
 import { auth, hasAuth } from "@/lib/supabase/server";
 
 // Step 1 of signing in: email a 6-digit code (and a sign-in link) to this address.
@@ -23,7 +24,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Too many codes asked for. Wait a few minutes and try again." }, { status: 429 });
 
   const next = safeNext(body.next);
-  const origin = new URL(req.url).origin;
+  const origin = siteOrigin(req);
   const { error } = await (await auth()).auth.signInWithOtp({
     email,
     options: { shouldCreateUser: true, emailRedirectTo: `${origin}/auth/confirm?next=${encodeURIComponent(next)}` },

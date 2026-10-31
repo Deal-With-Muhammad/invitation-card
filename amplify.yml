@@ -1,0 +1,21 @@
+# AWS Amplify build. Amplify only gives environment variables to the build, not
+# to the running Next.js server, so the server-side ones are written into
+# .env.production first (AWS's documented way for Next.js SSR).
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - npm ci
+    build:
+      commands:
+        - env | grep -E '^(NEXT_PUBLIC_|SUPABASE_|ADMIN_EMAILS|INVITE_COOKIE_SECRET)' >> .env.production || true
+        - npm run build
+  artifacts:
+    baseDirectory: .next
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - .next/cache/**/*
+      - node_modules/**/*
