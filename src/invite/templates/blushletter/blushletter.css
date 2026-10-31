@@ -18,3 +18,8 @@
 .t-blushletter .pt-text.has-glow::before {
   inset: calc(-58 * var(--u)) calc(-62 * var(--u));
 }
+
+/* the film shows the card late: the names wait for it */
+.t-blushletter {
+  --twin-at: 0.82;
+}

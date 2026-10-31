@@ -939,22 +939,39 @@
   animation: none;
 }
 
-.inv[data-phase="opening"].pk-open-film .pt-text {
-  opacity: 0;
-}
-
-.inv[data-phase="opening"].pk-open-film .pt-text > * {
+/* Filmed openings: the names rise in over the second half of the film, on a twin of the
+   hero text laid over the video (.pt-twin, in the cover). The hero's own text waits, still and
+   complete, under the film, so when the cover hands over to the page nothing moves. A card
+   whose film shows the card late (envelopes) sets --twin-at, the share of the film to wait. */
+.inv.pk-open-film .pt-hero .pt-text > *,
+.inv.pk-open-film .pt-hero .pt-text.has-glow::before {
   animation: none;
 }
 
-.inv[data-phase="open"].pk-open-film .pt-text > * {
-  animation: pt-rise 1000ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
-  animation-delay: calc(80ms + var(--d, 0ms));
+.pt-twin {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  z-index: 3;
+  width: min(100%, 480px);
+  height: max(var(--sh), calc(600 * var(--u)));
+  translate: -50% 0;
+  pointer-events: none;
+}
+
+.inv:not([data-phase="opening"]) .pt-twin {
+  display: none;
+}
+
+.inv[data-phase="opening"].pk-open-film .pt-twin .pt-text > * {
+  animation: pt-rise 1100ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: calc(var(--open) * var(--twin-at, 0.55) + var(--d, 0ms));
 }
 
 /* the glow behind the names comes up with them, not before */
-.inv[data-phase="open"].pk-open-film .pt-text.has-glow::before {
-  animation: pt-glow-in 900ms ease-out both;
+.inv[data-phase="opening"].pk-open-film .pt-twin .pt-text.has-glow::before {
+  animation: pt-glow-in 1000ms ease-out both;
+  animation-delay: calc(var(--open) * var(--twin-at, 0.55));
 }
 
 @keyframes pt-glow-in {

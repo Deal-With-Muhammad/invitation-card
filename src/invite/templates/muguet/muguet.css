@@ -133,3 +133,8 @@
 .t-muguet .inv-closing-names {
   font-size: 54px;
 }
+
+/* the film shows the card late: the names wait for it */
+.t-muguet {
+  --twin-at: 0.7;
+}

@@ -291,6 +291,14 @@ export function makePainted(id: string, o: PaintedOpts): Template {
         aria-label={r.t.tapToOpen}
       >
         <Layers id={id} o={o} r={r} />
+        {c.kind === "film" && (
+          // The names rise in over the film's second half (see .pt-twin in painted.css).
+          <div className="pt-twin" aria-hidden>
+            <div className={`pt-text is-${text.tone}${text.glow ? " has-glow" : ""}`} style={{ "--top": text.top, "--tw": text.width } as CSSProperties}>
+              <HeroText r={r} o={o} />
+            </div>
+          </div>
+        )}
         {seal && (
           <span
             className={`pt-seal is-${seal.look}`}

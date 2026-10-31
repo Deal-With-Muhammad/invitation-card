@@ -190,3 +190,8 @@
 .inv.pk-open-film[data-phase="open"] .fl-mono {
   animation: pt-rise 1000ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
+
+/* the film shows the card late: the names wait for it */
+.t-filigree {
+  --twin-at: 0.68;
+}

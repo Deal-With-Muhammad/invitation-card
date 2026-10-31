@@ -34,6 +34,8 @@ Delete the design's old `art.tsx` / `cover.tsx` if it has them; nothing else imp
   Prefer `film` for weddings: no opening may crossfade between two different pictures. Make the
   first frame from the closed state and the last from the open state with text hidden, trim the
   still start, cut at the frame that best matches the hero, and check for one-frame jumps.
+  On a film the names rise in over its second half (a twin of the hero text in the cover); a
+  card whose film shows the card late sets `--twin-at` on `.t-<id>` (default `0.55` of `openMs`).
 - `cover.art`: closed-state art name. `cover.pos`: object-position.
 - `cover.seal`: initials laid over a seal/medallion in the art: `{ x: "50%", y: "48%", size: 90,
   look: "foil" | "wax" | "emboss" | "thread" | "ink" | "plain" }`. Measure x/y on the art.
