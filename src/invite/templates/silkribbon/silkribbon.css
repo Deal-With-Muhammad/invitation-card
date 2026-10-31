@@ -19,3 +19,8 @@
 .t-silkribbon .pt-text.has-glow::before {
   inset: calc(-56 * var(--u)) calc(-60 * var(--u));
 }
+
+/* the box opens late in the film: the names wait for the card */
+.t-silkribbon {
+  --twin-at: 0.74;
+}

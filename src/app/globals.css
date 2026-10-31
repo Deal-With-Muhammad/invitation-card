@@ -243,3 +243,35 @@
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.16 0 0 0 0 0.14 0 0 0 0 0.12 0 0 0 0.06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 }
+
+/* Design rows: a slim, rounded scrollbar track under the cards. */
+/* Firefox only: Chrome would let these override the styled bar below and add arrow buttons. */
+@supports not selector(::-webkit-scrollbar) {
+  .row-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb, var(--brand) 55%, transparent) color-mix(in srgb, var(--ink) 8%, transparent);
+  }
+}
+
+.row-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+
+.row-scroll::-webkit-scrollbar-button {
+  display: none;
+}
+
+.row-scroll::-webkit-scrollbar-track {
+  margin-inline: 16px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ink) 8%, transparent);
+}
+
+.row-scroll::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--brand) 55%, transparent);
+}
+
+.row-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--brand);
+}

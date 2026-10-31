@@ -190,7 +190,6 @@ export function VideoHero({
   lines,
   lede,
   kicker,
-  note,
   secondary,
 }: {
   items: FanItem[];
@@ -198,7 +197,6 @@ export function VideoHero({
   lines: string[][];
   lede: string;
   kicker: string;
-  note: string;
   secondary: { href: string; label: string };
 }) {
   const still = useReducedMotion();
@@ -215,11 +213,11 @@ export function VideoHero({
           aria-hidden
           className="absolute inset-0 -z-10 bg-[linear-gradient(to_top,rgb(9_32_30/0.98)_0%,rgb(9_32_30/0.92)_58%,rgb(9_32_30/0.25)_80%,rgb(9_32_30/0)_92%)] sm:bg-[linear-gradient(90deg,rgb(9_32_30/0.94)_0%,rgb(9_32_30/0.78)_34%,rgb(9_32_30/0.1)_66%,transparent_80%)]"
         />
-        <div className="max-w-[560px]">
+        <div className="max-w-[720px]">
           <motion.p initial={still ? false : { opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: EASE }} className="mb-3 text-[13.5px] font-medium text-gold-light sm:mb-5 sm:text-[14.5px]">
             {kicker}
           </motion.p>
-          <h1 className="font-serif text-[40px] leading-[0.95] font-normal tracking-[-0.02em] sm:text-[72px] lg:text-[80px]" aria-label={lines.flat().join(" ")}>
+          <h1 className="font-serif text-[clamp(30px,8.6vw,40px)] leading-[0.98] font-normal tracking-[-0.02em] whitespace-nowrap sm:text-[64px] lg:text-[76px]" aria-label={lines.flat().join(" ")}>
             {lines.map((line) => (
               <span key={line[0]} className="block" aria-hidden>
                 {line.map((w) => {
@@ -246,9 +244,6 @@ export function VideoHero({
               {secondary.label}
             </Link>
           </motion.div>
-          <motion.p initial={still ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, ease: EASE, delay: 0.9 }} className="mt-5 text-[13.5px] text-ivory/60">
-            {note}
-          </motion.p>
         </div>
       </div>
       <div
@@ -352,7 +347,7 @@ export function TemplateRow({ items }: { items: FanItem[] }) {
   const go = (dir: 1 | -1) => ref.current?.scrollBy({ left: dir * 600, behavior: "smooth" });
   return (
     <div className="relative">
-      <ul ref={ref} className="-mx-4 flex snap-x snap-mandatory scroll-px-4 gap-5 overflow-x-auto px-4 pt-3 pb-20 [scrollbar-width:none] sm:-mx-6 sm:scroll-px-6 sm:px-6 lg:[mask-image:linear-gradient(to_right,black_94%,transparent)] [&::-webkit-scrollbar]:hidden">
+      <ul ref={ref} className="-mx-4 flex snap-x snap-mandatory scroll-px-4 gap-5 overflow-x-auto px-4 pt-3 pb-8 sm:-mx-6 sm:scroll-px-6 sm:px-6 lg:[mask-image:linear-gradient(to_right,black_94%,transparent)] row-scroll">
         {items.map((it) => (
           <SpotlightCard key={it.meta.id} item={it} />
         ))}

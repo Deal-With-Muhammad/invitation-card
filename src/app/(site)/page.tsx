@@ -15,7 +15,6 @@ const FAN = ["goldink", "riad", "noor", "silkribbon", "blossom"];
 export default function Home() {
   const all = galleryItems();
   const fan = FAN.map((id) => all.find((it) => it.meta.id === id)).filter((it): it is GalleryItem => !!it);
-  const filmedCount = all.filter((it) => it.meta.filmed).length;
   const rows = [
     { id: "new", title: "New: light and modern", blurb: "Soft daylight, cotton paper and silk, each one opening on film.", items: all.filter((it) => NEW_DESIGNS.includes(it.meta.id)) },
     ...GROUPS.map((g) => ({ ...g, items: all.filter((it) => !NEW_DESIGNS.includes(it.meta.id) && groupOf(it.meta.defaultOccasion) === g.id) })),
@@ -29,12 +28,10 @@ export default function Home() {
         items={fan}
         kicker="Free to make · no sign-up · no app"
         lines={[
-          ["Invitations", "that"],
-          ["open", "like", "a"],
-          ["film."],
+          ["Invitations", "that", "open"],
+          ["like", "a", "film."],
         ]}
         lede="Pick a design, add your names and venues, and send one link on WhatsApp. Guests tap it and the card opens like a little film, then the music starts and every function and map is inside."
-        note={`${CATALOG.length} designs, ${filmedCount} of them filmed. Tap any card below to watch it open.`}
         secondary={{ href: "#try", label: "Try it with your names" }}
         links={rows.map((g) => ({ id: g.id, label: g.id === "new" ? "New" : g.title.split(",")[0].split(" &")[0] }))}
       />

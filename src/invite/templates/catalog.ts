@@ -502,7 +502,7 @@ export const CATALOG: TemplateMeta[] = [
     palettes: [p("main", "Silk Ribbon", "#f4efe6", "#3b3f35", "#7d8b6a", "#e9e4d8")],
     fonts: { display: "italiana", names: "pinyon", body: "outfit" },
     opening: "The silk bow unties on film",
-    openMs: 6100,
+    openMs: 4700,
     keywords: ["modern wedding invitation", "minimal wedding card", "video wedding invitation"],
     islamic: false,
     filmed: true,
