@@ -67,8 +67,10 @@ export function Invitation({ data, replay = 0, credit = true, focus = null }: Pr
     if (focus && phase === "closed") setPhase("open");
   }
 
+  // Only the closed card ("tap to open") holds the page still. During the opening
+  // the page scrolls, and scrolling skips the rest of the opening (see below).
   useEffect(() => {
-    document.documentElement.classList.toggle("inv-locked", phase !== "open");
+    document.documentElement.classList.toggle("inv-locked", phase === "closed");
     return () => document.documentElement.classList.remove("inv-locked");
   }, [phase]);
 
@@ -102,19 +104,38 @@ export function Invitation({ data, replay = 0, credit = true, focus = null }: Pr
     [data.music.on, data.music.track],
   );
 
+  const finish = useCallback(() => {
+    timers.current.forEach(clearTimeout);
+    timers.current = [];
+    setPhase("open");
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (root.current && !reduce) tpl.celebrate?.(root.current);
+  }, [tpl]);
+
   const open = useCallback(() => {
     if (phase !== "closed") return;
     startMusic(true);
     setPhase("opening");
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const ms = reduce ? 300 : tpl.meta.openMs;
-    timers.current.push(
-      window.setTimeout(() => {
-        setPhase("open");
-        if (root.current && !reduce) tpl.celebrate?.(root.current);
-      }, ms),
-    );
-  }, [phase, startMusic, tpl]);
+    timers.current.push(window.setTimeout(finish, reduce ? 300 : tpl.meta.openMs));
+  }, [phase, startMusic, tpl, finish]);
+
+  // A guest who scrolls while the opening plays (or its film loads) skips straight
+  // to the invitation and keeps scrolling. Touch scrolling shows up as "scroll";
+  // a wheel or the keyboard counts even at the top of the page.
+  useEffect(() => {
+    if (phase !== "opening") return;
+    const keys = new Set(["ArrowDown", "ArrowUp", "PageDown", "PageUp", "End", "Home", " "]);
+    const onKey = (e: KeyboardEvent) => keys.has(e.key) && finish();
+    window.addEventListener("scroll", finish, { passive: true });
+    window.addEventListener("wheel", finish, { passive: true });
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("scroll", finish);
+      window.removeEventListener("wheel", finish);
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [phase, finish]);
 
   const toggleMusic = () => {
     if (playing) {
