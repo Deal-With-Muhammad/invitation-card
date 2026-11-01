@@ -18,13 +18,13 @@ import { OCCASION_LABEL } from "@/lib/filters";
 import { Panel } from "./fields";
 import { DesignPicker, EventsPanel, ExtrasPanel, FaithPanel, LanguagePanel, LookPanel, MotionPanel, OccasionPanel, PeoplePanel, WordsPanel, type Set } from "./panels";
 import { Phone, PreviewFrame } from "./preview";
-import { PublishDialog, ShareDialog } from "./publish";
+import { EditAccess, PublishDialog, ShareDialog } from "./publish";
 import { clearDraft, forgetInvite, loadDraft, saveDraft } from "./storage";
 import { VISIT_LIMIT, visitsLeft } from "./visits";
 
 type Props =
   | { mode: "create"; template: string; occasion?: Occasion; palette?: string; lang?: Lang }
-  | { mode: "edit"; slug: string; token: string; initial: InviteData; views: number; maxViews: number };
+  | { mode: "edit"; slug: string; token: string; initial: InviteData; views: number; maxViews: number; openEdit: boolean; canManage: boolean };
 
 // Which part of the invitation each panel edits, so the preview can jump there.
 const FOCUS: Record<string, string> = {
@@ -77,6 +77,10 @@ export function Editor(props: Props) {
   const [publishing, setPublishing] = useState(false);
   const [sharing, setSharing] = useState(false);
   const [published, setPublished] = useState<{ slug: string; token: string } | null>(props.mode === "edit" ? { slug: props.slug, token: props.token } : null);
+  const [openEdit, setOpenEdit] = useState(props.mode === "edit" ? props.openEdit : false);
+  const [changingAccess, setChangingAccess] = useState(false);
+  // Someone editing through an open edit link can't delete it or close editing.
+  const canManage = props.mode === "create" || props.canManage;
   const [dirty, setDirty] = useState(false);
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
@@ -155,6 +159,26 @@ export function Editor(props: Props) {
     } else setToast("Couldn't delete it. Please try again.");
   };
 
+  const changeAccess = async (open: boolean) => {
+    if (!published) return;
+    setChangingAccess(true);
+    try {
+      const res = await fetch(`/api/invites/${published.slug}`, {
+        method: "PATCH",
+        headers: { "content-type": "application/json", "x-edit-token": published.token },
+        body: JSON.stringify({ openEdit: open }),
+      });
+      const j = await res.json();
+      if (!res.ok) throw new Error(j.error || "Couldn't change who can edit.");
+      setOpenEdit(open);
+      setToast(open ? "Anyone with the edit link can edit it now." : "Only you can edit it now.");
+    } catch (e) {
+      setToast(e instanceof Error ? e.message : "Couldn't change who can edit.");
+    } finally {
+      setChangingAccess(false);
+    }
+  };
+
   const r = useMemo(() => resolve(data), [data]);
   const meta = getTemplate(data.template).meta;
   const c = copyFor(data.lang);
@@ -225,6 +249,12 @@ export function Editor(props: Props) {
               </Panel>
             ))}
           </div>
+          {published && canManage && (
+            <div className="mt-6 rounded-2xl border border-line bg-card p-3.5">
+              <p className="mb-2 text-[13px] font-medium text-muted">Who can edit</p>
+              <EditAccess slug={published.slug} value={openEdit} onChange={changeAccess} disabled={changingAccess} />
+            </div>
+          )}
           <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 px-1 text-[13px] text-muted">
             {props.mode === "create" && !published && (
               <button type="button" className="inline-flex items-center gap-1.5 hover:text-ink" onClick={startOver}>
@@ -236,9 +266,11 @@ export function Editor(props: Props) {
                 <button type="button" className="hover:text-ink sm:hidden" onClick={() => setSharing(true)}>
                   Share link
                 </button>
-                <button type="button" className="hover:text-wax" onClick={remove}>
-                  Delete invitation
-                </button>
+                {canManage && (
+                  <button type="button" className="hover:text-wax" onClick={remove}>
+                    Delete invitation
+                  </button>
+                )}
               </>
             )}
             <Link href="/custom" className="hover:text-ink">
@@ -296,8 +328,9 @@ export function Editor(props: Props) {
             setMobilePreview(false);
             setOpen(panel);
           }}
-          onPublished={(slug, token) => {
+          onPublished={(slug, token, open) => {
             setPublished({ slug, token });
+            setOpenEdit(open);
             setDirty(false);
             clearDraft();
           }}

@@ -44,6 +44,37 @@ function CopyField({ value, label }: { value: string; label: string }) {
   );
 }
 
+/** Who can edit: only the maker (private key, this browser, their account) or anyone with /edit/<slug>. */
+export function EditAccess({ slug, value, onChange, disabled }: { slug?: string; value: boolean; onChange: (open: boolean) => void; disabled?: boolean }) {
+  const options = [
+    { open: false, title: "Only you", note: "This browser, your private edit link or your account." },
+    { open: true, title: "Anyone with the edit link", note: `Whoever opens ${HOST}/edit/${slug || "your-link"} can change it. Good for sharing with family.` },
+  ];
+  return (
+    <div role="radiogroup" aria-label="Who can edit" className="grid gap-2">
+      {options.map((o) => (
+        <button
+          key={String(o.open)}
+          type="button"
+          role="radio"
+          aria-checked={value === o.open}
+          disabled={disabled}
+          onClick={() => value !== o.open && onChange(o.open)}
+          className={`flex items-start gap-3 rounded-xl border p-3 text-start transition disabled:opacity-60 ${value === o.open ? "border-brand bg-brand/5" : "border-line bg-paper hover:bg-paper-2"}`}
+        >
+          <span className={`mt-0.5 grid size-4 flex-none place-items-center rounded-full border ${value === o.open ? "border-brand" : "border-line"}`} aria-hidden>
+            {value === o.open && <span className="size-2 rounded-full bg-brand" />}
+          </span>
+          <span className="min-w-0">
+            <span className="block text-[14px] font-medium">{o.title}</span>
+            <span className="block text-[12.5px] leading-snug break-words text-muted">{o.note}</span>
+          </span>
+        </button>
+      ))}
+    </div>
+  );
+}
+
 export function ShareCard({ data, slug, token }: { data: InviteData; slug: string; token?: string }) {
   const r = resolve(data);
   const url = `${origin()}/${slug}`;
@@ -91,12 +122,13 @@ export function ShareCard({ data, slug, token }: { data: InviteData; slug: strin
 
 type State = { step: "form" } | { step: "saving" } | { step: "done"; slug: string; token: string; saved: boolean; maxViews: number };
 
-export function PublishDialog({ data, onClose, onPublished, onFix }: { data: InviteData; onClose: () => void; onPublished: (slug: string, token: string) => void; onFix: (panel: string) => void }) {
+export function PublishDialog({ data, onClose, onPublished, onFix }: { data: InviteData; onClose: () => void; onPublished: (slug: string, token: string, openEdit: boolean) => void; onFix: (panel: string) => void }) {
   const r = resolve(data);
   const [slug, setSlug] = useState(() => suggestSlug(r.people.map((p) => p.name)) || "");
   const [result, setResult] = useState<{ slug: string; available: boolean } | null>(null);
   const [state, setState] = useState<State>({ step: "form" });
   const [error, setError] = useState<string | null>(null);
+  const [openEdit, setOpenEdit] = useState(false);
 
   const check = !slug ? "idle" : !validSlug(slug) ? "invalid" : result?.slug !== slug ? "checking" : result.available ? "free" : "taken";
 
@@ -126,13 +158,13 @@ export function PublishDialog({ data, onClose, onPublished, onFix }: { data: Inv
       const res = await fetch("/api/invites", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ data, slug: slug && check !== "invalid" ? slug : undefined }),
+        body: JSON.stringify({ data, slug: slug && check !== "invalid" ? slug : undefined, openEdit }),
       });
       const j = await res.json();
       if (!res.ok) throw new Error(j.error || "Couldn't publish. Please try again.");
       rememberInvite({ slug: j.slug, token: j.token, names: r.names, template: data.template, occasion: data.occasion, createdAt: Date.now() });
       setState({ step: "done", slug: j.slug, token: j.token, saved: Boolean(j.saved), maxViews: j.maxViews ?? VISIT_LIMIT });
-      onPublished(j.slug, j.token);
+      onPublished(j.slug, j.token, openEdit);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Couldn't publish. Please try again.");
       setState({ step: "form" });
@@ -176,6 +208,10 @@ export function PublishDialog({ data, onClose, onPublished, onFix }: { data: Inv
             {check === "checking" && "Checking…"}
             {check === "idle" && "Leave empty and we'll make one for you."}
           </p>
+
+          <p className={`${groupLabel} mt-3`}>Who can edit it?</p>
+          <EditAccess slug={slug && check !== "invalid" ? slug : ""} value={openEdit} onChange={setOpenEdit} />
+          <p className="mt-1.5 text-[12.5px] text-muted">You can change this later.</p>
 
           {(samples.length > 0 || noNames || noDate) && (
             <div className="mt-4 space-y-2 rounded-2xl border border-wax/25 bg-wax/5 p-4 text-[14px]">

@@ -7,6 +7,7 @@ import { currentUser } from "@/lib/supabase/server";
 import { randomSuffix, suggestSlug, validSlug } from "@/lib/slug";
 
 // Publishes a new invitation and returns its link plus a private edit token.
+// openEdit: true lets anyone with /edit/<slug> edit it, without the token.
 // Signed in, it is also saved to the account; otherwise it is a guest invitation.
 
 const CREATES_PER_HOUR = 15;
@@ -18,7 +19,7 @@ export async function POST(req: Request) {
 
   const raw = await req.text();
   if (raw.length > MAX_BODY) return NextResponse.json({ error: "This invitation is too long." }, { status: 413 });
-  let body: { data?: unknown; slug?: unknown };
+  let body: { data?: unknown; slug?: unknown; openEdit?: unknown };
   try {
     body = JSON.parse(raw);
   } catch {
@@ -41,7 +42,7 @@ export async function POST(req: Request) {
   const now = Date.now();
   const owner = await currentUser();
   const { country, city } = origin(req.headers);
-  const rec = { data, tokenHash: hashToken(token), ownerId: owner?.id ?? null, views: 0, maxViews: VISIT_LIMIT, country, city, createdAt: now, updatedAt: now };
+  const rec = { data, tokenHash: hashToken(token), ownerId: owner?.id ?? null, views: 0, maxViews: VISIT_LIMIT, openEdit: body.openEdit === true, country, city, createdAt: now, updatedAt: now };
 
   // The chosen link if it's free; otherwise (only for auto-made links) add a short suffix.
   const candidates = wanted ? [wanted] : [validSlug(base) ? base : `${base}-${randomSuffix()}`, ...Array.from({ length: 4 }, () => `${base}-${randomSuffix()}`)];

@@ -7,7 +7,7 @@ import { OCCASION_LABEL } from "@/lib/filters";
 import { ADMIN_SESSION_HOURS, requireAdmin } from "@/lib/server/admin";
 import { db } from "@/lib/supabase/server";
 
-import { addVisits, deleteInvite, resetVisits, signOut } from "./actions";
+import { addVisits, deleteInvite, resetVisits, setEditAccess, signOut } from "./actions";
 import { ConfirmButton } from "./confirm-button";
 import { CopyLink } from "./copy-link";
 import { InsightsTab, PERIODS } from "./insights";
@@ -142,6 +142,11 @@ async function Invites({ filter, sort, q, page, emailOf, href }: { filter: Filte
   if (q) query = query.ilike("slug", `%${q}%`);
   const { data, count, error } = await query.overrideTypes<InviteRow[], { merge: false }>();
   const rows = data ?? [];
+  // Asked separately so the list still loads if the open_edit column hasn't been added yet.
+  const { data: access, error: accessError } = rows.length
+    ? await db().from("invites").select("slug, open_edit").in("slug", rows.map((r) => r.slug)).overrideTypes<{ slug: string; open_edit: boolean }[], { merge: false }>()
+    : { data: [], error: null };
+  const openSet = new Set((access ?? []).filter((a) => a.open_edit).map((a) => a.slug));
   const pages = Math.max(1, Math.ceil((count ?? 0) / PER_PAGE));
 
   return (
@@ -183,6 +188,11 @@ async function Invites({ filter, sort, q, page, emailOf, href }: { filter: Filte
       </div>
 
       {error && <p className="mt-4 rounded-xl bg-wax/10 px-3.5 py-2.5 text-[14px] text-wax">Couldn&apos;t load invitations: {error.message}</p>}
+      {accessError && (
+        <p className="mt-4 rounded-xl bg-wax/10 px-3.5 py-2.5 text-[14px] text-wax">
+          Edit access isn&apos;t set up yet. Run the &quot;Open editing&quot; part of supabase/schema.sql in the Supabase SQL editor.
+        </p>
+      )}
 
       <p className="mt-4 text-[13px] text-muted">
         {nf.format(count ?? 0)} {count === 1 ? "invitation" : "invitations"}
@@ -197,6 +207,7 @@ async function Invites({ filter, sort, q, page, emailOf, href }: { filter: Filte
             const names = (r.people ?? []).map((p) => p.name?.trim()).filter(Boolean).join(" & ");
             const meta = metaFor(r.template);
             const left = Math.max(0, r.max_views - r.views);
+            const open = openSet.has(r.slug);
             return (
               <li key={r.slug} className="flex min-w-0 gap-3.5 rounded-2xl border border-line bg-card p-3">
                 <a href={`/${r.slug}`} target="_blank" rel="noopener" className="shrink-0" aria-label={`Open /${r.slug}`}>
@@ -220,8 +231,30 @@ async function Invites({ filter, sort, q, page, emailOf, href }: { filter: Filte
                     </span>
                     <span className="text-muted"> · {left === 0 ? "full" : `${nf.format(left)} left`}</span>
                   </p>
+                  <p className="text-[12.5px] text-muted">
+                    Editing:{" "}
+                    {open ? (
+                      <a href={`/edit/${r.slug}`} target="_blank" rel="noopener" className="text-brand underline underline-offset-2">
+                        anyone with /edit/{r.slug}
+                      </a>
+                    ) : (
+                      "only the maker"
+                    )}
+                  </p>
                   <div className="mt-auto flex flex-wrap gap-1.5 pt-2">
                     <CopyLink path={`/${r.slug}`} />
+                    {!accessError && (
+                      <form action={setEditAccess}>
+                        <input type="hidden" name="slug" value={r.slug} />
+                        <input type="hidden" name="open" value={open ? "0" : "1"} />
+                        <ConfirmButton
+                          message={open ? `Make /${r.slug} editable only by its maker again?` : `Let anyone who opens /edit/${r.slug} edit this invitation?`}
+                          className="rounded-full border border-line px-3 py-1 text-[13px] hover:bg-paper-2"
+                        >
+                          {open ? "Lock editing" : "Open editing"}
+                        </ConfirmButton>
+                      </form>
+                    )}
                     <form action={addVisits}>
                       <input type="hidden" name="slug" value={r.slug} />
                       <input type="hidden" name="n" value="100" />

@@ -39,6 +39,16 @@ export async function resetVisits(form: FormData) {
   revalidatePath("/admin");
 }
 
+export async function setEditAccess(form: FormData) {
+  const admin = await requireAdmin();
+  const slug = slugFrom(form);
+  const open = form.get("open") === "1";
+  const { error } = await db().from("invites").update({ open_edit: open }).eq("slug", slug);
+  if (error) throw new Error(`${error.message} (has supabase/schema.sql been run since open editing was added?)`);
+  await logAdmin(admin.email!, open ? "open-editing" : "private-editing", slug, await requestIp());
+  revalidatePath("/admin");
+}
+
 export async function deleteInvite(form: FormData) {
   const admin = await requireAdmin();
   const slug = slugFrom(form);

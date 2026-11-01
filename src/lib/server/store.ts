@@ -24,6 +24,8 @@ export type InviteRecord = {
   ownerId: string | null;
   views: number;
   maxViews: number;
+  /** Anyone who opens /edit/<slug> can edit it, without the private key. */
+  openEdit?: boolean;
   /** Where it was made (from the request's location headers), if known. */
   country?: string | null;
   city?: string | null;
@@ -52,6 +54,8 @@ export type Store = {
   registerView(slug: string, info: VisitInfo): Promise<ViewResult | null>;
   /** Invitations saved to an account, newest first. */
   listByOwner(ownerId: string): Promise<InviteSummary[]>;
+  /** Lets anyone with /edit/<slug> edit it (true), or only the key holder and account (false). */
+  setOpenEdit(slug: string, open: boolean): Promise<void>;
   /** Moves a guest invitation into an account. False if it already has one. */
   claim(slug: string, ownerId: string): Promise<boolean>;
   /** Counter that resets after `windowSeconds`; returns the new count. */
@@ -65,6 +69,8 @@ type Row = {
   owner_id: string | null;
   views: number;
   max_views: number;
+  // Added Nov 2026; missing until the column is created (schema.sql).
+  open_edit?: boolean;
   country: string | null;
   city: string | null;
   created_at: string;
@@ -77,6 +83,7 @@ const fromRow = (r: Row): InviteRecord => ({
   ownerId: r.owner_id,
   views: r.views,
   maxViews: r.max_views,
+  openEdit: r.open_edit === true,
   country: r.country,
   city: r.city,
   createdAt: Date.parse(r.created_at),
@@ -98,7 +105,7 @@ function supabaseStore(): Store {
   return {
     kind: "supabase",
     async create(slug, rec) {
-      const { error } = await t().insert({
+      const row: Record<string, unknown> = {
         slug,
         data: rec.data,
         token_hash: rec.tokenHash,
@@ -109,7 +116,10 @@ function supabaseStore(): Store {
         city: rec.city ?? null,
         created_at: new Date(rec.createdAt).toISOString(),
         updated_at: new Date(rec.updatedAt).toISOString(),
-      });
+      };
+      let { error } = await t().insert(rec.openEdit ? { ...row, open_edit: true } : row);
+      // Before the open_edit column exists (PGRST204), publish it as private.
+      if (error?.code === "PGRST204" && rec.openEdit) ({ error } = await t().insert(row));
       if (error?.code === "23505") return false; // slug already taken
       if (error) fail("insert", error);
       return true;
@@ -144,6 +154,10 @@ function supabaseStore(): Store {
       if (error) fail("register_view", error);
       const row = (data as { counted: boolean; views: number; max_views: number }[] | null)?.[0];
       return row ? { counted: row.counted, views: row.views, maxViews: row.max_views } : null;
+    },
+    async setOpenEdit(slug, open) {
+      const { error } = await t().update({ open_edit: open }).eq("slug", slug);
+      if (error) fail("update", error);
     },
     async listByOwner(ownerId) {
       const { data, error } = await t().select("*").eq("owner_id", ownerId).order("created_at", { ascending: false }).limit(200).overrideTypes<Row[], { merge: false }>();
@@ -221,6 +235,12 @@ function fileStore(): Store {
       rec.views += 1;
       save(s);
       return { counted: true, views: rec.views, maxViews: rec.maxViews };
+    },
+    async setOpenEdit(slug, open) {
+      const s = load();
+      if (!s.docs[slug]) return;
+      s.docs[slug].openEdit = open;
+      save(s);
     },
     async listByOwner(ownerId) {
       return Object.entries(load().docs)

@@ -200,3 +200,10 @@ $$;
 
 revoke all on function public.admin_insights(integer) from public, anon, authenticated;
 grant execute on function public.admin_insights(integer) to service_role;
+
+-- ── Open editing (added Nov 2026) ─────────────────────────────────────────────
+
+-- When true, anyone who opens /edit/<slug> can edit the invitation without the
+-- private key. Off by default; the maker picks it when publishing, and the
+-- admin or the maker can change it later.
+alter table public.invites add column if not exists open_edit boolean not null default false;
