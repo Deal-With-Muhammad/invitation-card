@@ -1,6 +1,6 @@
 import "server-only";
 
-import { createHash, createHmac, randomBytes, timingSafeEqual } from "node:crypto";
+import { createHash, randomBytes, timingSafeEqual } from "node:crypto";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
@@ -13,7 +13,7 @@ import type { VisitInfo } from "./visitor";
 // (schema in supabase/schema.sql). In development without Supabase keys, a JSON
 // file in .data/ so links survive restarts.
 
-/** Guest visits each invitation includes. Each phone counts once. */
+/** Visits each invitation includes. Every time the link is opened counts as one. */
 export const VISIT_LIMIT = 100;
 
 export type InviteRecord = {
@@ -273,23 +273,4 @@ export function tokenMatches(token: string | null, hash: string) {
 
 export function clientIp(headers: Headers) {
   return headers.get("x-forwarded-for")?.split(",")[0]?.trim() || headers.get("x-real-ip") || "local";
-}
-
-// A device that has been counted for an invitation (or made it) gets a signed
-// cookie, so it isn't counted twice and can still open it after the limit.
-
-const seenSecret = () =>
-  createHash("sha256")
-    .update(`dwm-invite:seen:${process.env.INVITE_COOKIE_SECRET || process.env.SUPABASE_SERVICE_ROLE || process.env.SUPABASE_SERVICE_ROLE_KEY || "dev"}`)
-    .digest();
-
-export const seenCookieName = (slug: string) => `seen_${slug}`;
-export const seenCookieValue = (slug: string) => createHmac("sha256", seenSecret()).update(slug).digest("base64url").slice(0, 32);
-export const seenCookieOptions = { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "lax" as const, path: "/", maxAge: 60 * 60 * 24 * 400 };
-
-export function hasSeen(slug: string, value: string | undefined) {
-  if (!value) return false;
-  const a = Buffer.from(value);
-  const b = Buffer.from(seenCookieValue(slug));
-  return a.length === b.length && timingSafeEqual(a, b);
 }

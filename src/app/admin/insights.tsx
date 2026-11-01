@@ -81,7 +81,7 @@ export async function InsightsTab({ days, href }: { days: number; href: (p: Reco
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         <Tile label="Invitations made" value={d.made} note={`${nf.format(d.made_accounts)} by accounts, ${nf.format(d.made - d.made_accounts)} by guests`} />
-        <Tile label="Guest visits" value={d.visits} note="Each phone counts once per invitation" />
+        <Tile label="Guest visits" value={d.visits} note="Every opening of a link counts" />
         <Tile
           label="Website visitors (all time)"
           value={visitors}
@@ -129,6 +129,9 @@ export async function InsightsTab({ days, href }: { days: number; href: (p: Reco
         </Panel>
         <Panel title="Most-opened invitations">
           <Ranked rows={d.top_invites.map((r) => ({ label: `/${r.key}`, n: r.n, href: `/${r.key}` }))} />
+          <Link href={href({ tab: "invites", page: 1 })} className="mt-3 inline-block text-[13.5px] text-brand underline underline-offset-4">
+            See every invitation
+          </Link>
         </Panel>
       </div>
       <p className="text-[12.5px] text-muted">

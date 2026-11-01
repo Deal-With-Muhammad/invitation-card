@@ -28,3 +28,9 @@ export async function requireAdmin(): Promise<User> {
 export async function requestIp() {
   return clientIp(await headers());
 }
+
+/** Is this request from a signed-in admin? (Admins can open full invitations, and their opens aren't counted.) */
+export async function isAdminRequest() {
+  const user = await currentUser().catch(() => null);
+  return Boolean(user?.email_confirmed_at && isAdminEmail(user.email));
+}

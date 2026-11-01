@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { parseInvite } from "@/invite/schema";
-import { clientIp, getStore, hashToken, newToken, seenCookieName, seenCookieOptions, seenCookieValue, VISIT_LIMIT } from "@/lib/server/store";
+import { clientIp, getStore, hashToken, newToken, VISIT_LIMIT } from "@/lib/server/store";
 import { origin } from "@/lib/server/visitor";
 import { currentUser } from "@/lib/supabase/server";
 import { randomSuffix, suggestSlug, validSlug } from "@/lib/slug";
@@ -48,10 +48,7 @@ export async function POST(req: Request) {
   for (const slug of candidates) {
     if (!validSlug(slug)) continue;
     if (!(await store.create(slug, rec))) continue;
-    // The maker's own device never uses up a visit and can always open it.
-    const res = NextResponse.json({ slug, token, maxViews: rec.maxViews, saved: Boolean(owner) });
-    res.cookies.set(seenCookieName(slug), seenCookieValue(slug), seenCookieOptions);
-    return res;
+    return NextResponse.json({ slug, token, maxViews: rec.maxViews, saved: Boolean(owner) });
   }
   return NextResponse.json({ error: wanted ? "That link is already taken. Try another one." : "Couldn't make a link. Please try again." }, { status: 409 });
 }

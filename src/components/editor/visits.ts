@@ -1,4 +1,4 @@
-// Every invitation includes this many guest visits (one per phone). The server
+// Every invitation includes this many visits (each opening of the link counts). The server
 // keeps its own copy in lib/server/store.ts.
 export const VISIT_LIMIT = 100;
 

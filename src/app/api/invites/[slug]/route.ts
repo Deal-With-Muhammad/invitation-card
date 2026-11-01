@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { parseInvite } from "@/invite/schema";
-import { getStore, seenCookieName, seenCookieOptions, seenCookieValue, tokenMatches } from "@/lib/server/store";
+import { getStore, tokenMatches } from "@/lib/server/store";
 import { currentUser } from "@/lib/supabase/server";
 
 // Reading an invitation for editing, saving changes and deleting it. All three
@@ -28,7 +28,7 @@ export async function GET(req: Request, ctx: Ctx) {
   const a = await authorised(req, slug);
   if ("error" in a) return a.error;
   const { rec } = a;
-  const res = NextResponse.json({
+  return NextResponse.json({
     data: rec.data,
     createdAt: rec.createdAt,
     updatedAt: rec.updatedAt,
@@ -36,9 +36,6 @@ export async function GET(req: Request, ctx: Ctx) {
     maxViews: rec.maxViews,
     saved: Boolean(rec.ownerId),
   });
-  // Whoever can edit it can always open it, without using up a visit.
-  res.cookies.set(seenCookieName(slug), seenCookieValue(slug), seenCookieOptions);
-  return res;
 }
 
 export async function PUT(req: Request, ctx: Ctx) {

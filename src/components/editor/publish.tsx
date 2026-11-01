@@ -146,7 +146,7 @@ export function PublishDialog({ data, onClose, onPublished, onFix }: { data: Inv
           <p className="text-[12px] font-semibold tracking-[0.2em] text-gold-ink uppercase">Published</p>
           <Modal.Heading className="mt-2 font-serif text-[28px] leading-tight font-medium">Your invitation is live</Modal.Heading>
           <p className="mt-1.5 mb-5 text-[14px] text-muted">
-            {visitsLeft(0, state.maxViews)}. Each guest&apos;s phone counts once, and yours never does.{" "}
+            {visitsLeft(0, state.maxViews)}. Every time the link is opened counts as one visit, including yours.{" "}
             {state.saved ? "It's saved to your account." : (
               <>
                 Made as a guest, so it&apos;s kept on this device.{" "}
@@ -211,7 +211,7 @@ export function PublishDialog({ data, onClose, onPublished, onFix }: { data: Inv
             {state.step === "saving" ? "Publishing…" : samples.length ? "Publish anyway" : "Publish invitation"}
           </Button>
           <p className="mt-3 text-center text-[12.5px] text-muted">
-            Anyone with the link can see it, up to {VISIT_LIMIT} guest visits. It isn&apos;t listed anywhere or shown in search results.
+            Anyone with the link can see it, up to {VISIT_LIMIT} visits. It isn&apos;t listed anywhere or shown in search results.
           </p>
         </>
       )}
