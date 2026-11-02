@@ -8,7 +8,7 @@ import { OCCASION_LABEL } from "@/lib/filters";
 import { ADMIN_SESSION_HOURS, requireAdmin } from "@/lib/server/admin";
 import { db } from "@/lib/supabase/server";
 
-import { addVisits, deleteInvite, resetVisits, setEditAccess, signOut } from "./actions";
+import { addVisits, deleteInvite, resetVisits, setAccountUnlimited, setEditAccess, setUnlimited, signOut } from "./actions";
 import { ConfirmButton } from "./confirm-button";
 import { CopyLink } from "./copy-link";
 import { InsightsTab, PERIODS } from "./insights";
@@ -33,7 +33,7 @@ type InviteRow = {
   people: { name?: string }[] | null;
 };
 
-const FILTERS = { all: "All", account: "Accounts", guest: "Guests", full: "Full", custom: "Custom" } as const;
+const FILTERS = { all: "All", account: "Accounts", guest: "Guests", full: "Full", unlimited: "Unlimited", custom: "Custom" } as const;
 const SORTS = { new: "Newest", views: "Most visits" } as const;
 type Sort = keyof typeof SORTS;
 type Filter = keyof typeof FILTERS;
@@ -141,6 +141,7 @@ async function Invites({ filter, sort, q, page, emailOf, href }: { filter: Filte
   if (filter === "account") query = query.not("owner_id", "is", null);
   if (filter === "full") query = query.eq("is_full", true);
   if (filter === "custom") query = query.in("slug", CUSTOM_SLUGS);
+  if (filter === "unlimited") query = query.gte("max_views", 1_000_000_000);
   if (q) query = query.ilike("slug", `%${q}%`);
   const { data, count, error } = await query.overrideTypes<InviteRow[], { merge: false }>();
   const rows = data ?? [];
@@ -212,6 +213,7 @@ async function Invites({ filter, sort, q, page, emailOf, href }: { filter: Filte
             const open = openSet.has(r.slug);
             // Custom invitations are pages in code (src/custom): no limit, no editor.
             const custom = customFor(r.slug);
+            const unlimited = r.max_views >= 1_000_000_000;
             return (
               <li key={r.slug} className="flex min-w-0 gap-3.5 rounded-2xl border border-line bg-card p-3">
                 <a href={`/${r.slug}`} target="_blank" rel="noopener" className="shrink-0" aria-label={`Open /${r.slug}`}>
@@ -235,12 +237,18 @@ async function Invites({ filter, sort, q, page, emailOf, href }: { filter: Filte
                     </p>
                   ) : (
                     <>
-                      <p className="mt-1 text-[13px] tabular-nums">
-                        <span className={left === 0 ? "text-wax" : ""}>
-                          {nf.format(r.views)} / {nf.format(r.max_views)} visits
-                        </span>
-                        <span className="text-muted"> · {left === 0 ? "full" : `${nf.format(left)} left`}</span>
-                      </p>
+                      {unlimited ? (
+                        <p className="mt-1 text-[13px] tabular-nums">
+                          {nf.format(r.views)} visits <span className="text-muted">· unlimited</span>
+                        </p>
+                      ) : (
+                        <p className="mt-1 text-[13px] tabular-nums">
+                          <span className={left === 0 ? "text-wax" : ""}>
+                            {nf.format(r.views)} / {nf.format(r.max_views)} visits
+                          </span>
+                          <span className="text-muted"> · {left === 0 ? "full" : `${nf.format(left)} left`}</span>
+                        </p>
+                      )}
                       <p className="text-[12.5px] text-muted">
                         Editing:{" "}
                         {open ? (
@@ -269,13 +277,25 @@ async function Invites({ filter, sort, q, page, emailOf, href }: { filter: Filte
                             </ConfirmButton>
                           </form>
                         )}
-                        <form action={addVisits}>
+                        <form action={setUnlimited}>
                           <input type="hidden" name="slug" value={r.slug} />
-                          <input type="hidden" name="n" value="100" />
-                          <button type="submit" className="rounded-full border border-line px-3 py-1 text-[13px] hover:bg-paper-2">
-                            +100
-                          </button>
+                          <input type="hidden" name="on" value={unlimited ? "0" : "1"} />
+                          <ConfirmButton
+                            message={unlimited ? `Put /${r.slug} back to 100 visits?` : `Give /${r.slug} unlimited visits?`}
+                            className="rounded-full border border-line px-3 py-1 text-[13px] hover:bg-paper-2"
+                          >
+                            {unlimited ? "Back to 100" : "Make unlimited"}
+                          </ConfirmButton>
                         </form>
+                        {!unlimited && (
+                          <form action={addVisits}>
+                            <input type="hidden" name="slug" value={r.slug} />
+                            <input type="hidden" name="n" value="100" />
+                            <button type="submit" className="rounded-full border border-line px-3 py-1 text-[13px] hover:bg-paper-2">
+                              +100
+                            </button>
+                          </form>
+                        )}
                         <form action={resetVisits}>
                           <input type="hidden" name="slug" value={r.slug} />
                           <ConfirmButton message={`Reset /${r.slug} to 0 visits used?`} className="rounded-full border border-line px-3 py-1 text-[13px] hover:bg-paper-2">
@@ -314,26 +334,27 @@ async function Invites({ filter, sort, q, page, emailOf, href }: { filter: Filte
   );
 }
 
-async function Users({ users }: { users: { id: string; email?: string; created_at: string; last_sign_in_at?: string }[] }) {
+async function Users({ users }: { users: { id: string; email?: string; created_at: string; last_sign_in_at?: string; app_metadata?: Record<string, unknown> }[] }) {
   const { data } = await db().from("invites").select("owner_id").not("owner_id", "is", null).limit(10000);
   const counts = new Map<string, number>();
   for (const r of data ?? []) counts.set(r.owner_id, (counts.get(r.owner_id) ?? 0) + 1);
   const sorted = [...users].sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at));
   return (
     <div className="mt-5 overflow-x-auto rounded-2xl border border-line bg-card">
-      <table className="w-full min-w-[640px] text-[14px]">
+      <table className="w-full min-w-[780px] text-[14px]">
         <thead className="border-b border-line text-[12.5px] text-muted">
           <tr>
             <th className="px-4 py-3 text-start font-medium">Email</th>
             <th className="px-4 py-3 text-start font-medium">Invitations</th>
             <th className="px-4 py-3 text-start font-medium">Joined</th>
             <th className="px-4 py-3 text-start font-medium">Last sign-in</th>
+            <th className="px-4 py-3 text-start font-medium">Visit limit</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-line">
           {sorted.length === 0 && (
             <tr>
-              <td colSpan={4} className="px-4 py-10 text-center text-muted">
+              <td colSpan={5} className="px-4 py-10 text-center text-muted">
                 No accounts yet.
               </td>
             </tr>
@@ -344,6 +365,25 @@ async function Users({ users }: { users: { id: string; email?: string; created_a
               <td className="px-4 py-3 tabular-nums">{counts.get(u.id) ?? 0}</td>
               <td className="px-4 py-3 text-[13px] text-muted">{when(u.created_at)}</td>
               <td className="px-4 py-3 text-[13px] text-muted">{when(u.last_sign_in_at)}</td>
+              <td className="px-4 py-3">
+                <form action={setAccountUnlimited} className="flex items-center gap-2">
+                  <input type="hidden" name="id" value={u.id} />
+                  <input type="hidden" name="on" value={u.app_metadata?.unlimited === true ? "0" : "1"} />
+                  <span className={`text-[13px] ${u.app_metadata?.unlimited === true ? "font-medium text-brand" : "text-muted"}`}>
+                    {u.app_metadata?.unlimited === true ? "Unlimited" : "100 per invite"}
+                  </span>
+                  <ConfirmButton
+                    message={
+                      u.app_metadata?.unlimited === true
+                        ? `Stop giving ${u.email}'s new invitations unlimited visits? (Their current ones keep theirs.)`
+                        : `Give every invitation ${u.email} makes unlimited visits, including the ones they already have?`
+                    }
+                    className="rounded-full border border-line px-3 py-1 text-[12.5px] whitespace-nowrap hover:bg-paper-2"
+                  >
+                    {u.app_metadata?.unlimited === true ? "Turn off" : "Make unlimited"}
+                  </ConfirmButton>
+                </form>
+              </td>
             </tr>
           ))}
         </tbody>

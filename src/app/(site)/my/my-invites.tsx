@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 
 import { forgetInvite, loadDraft, loadMine, type MyInvite } from "@/components/editor/storage";
-import { visitsLeft } from "@/components/editor/visits";
+import { isUnlimited, visitsLeft } from "@/components/editor/visits";
 import { metaFor } from "@/invite/templates/catalog";
 
 type Status = { views: number; maxViews: number; saved: boolean } | null;
@@ -195,6 +195,12 @@ function InviteList({ rows, onRemove }: { rows: Row[]; onRemove?: (slug: string)
 
 /** "88 of 100 visits left" with a thin bar of what's used. */
 function Visits({ views, maxViews }: { views: number; maxViews: number }) {
+  if (isUnlimited(maxViews))
+    return (
+      <p className="mt-2 text-[12.5px] text-muted tabular-nums">
+        Unlimited visits · opened {views} {views === 1 ? "time" : "times"}
+      </p>
+    );
   const left = Math.max(0, maxViews - views);
   const low = left <= Math.max(5, maxViews * 0.1);
   return (

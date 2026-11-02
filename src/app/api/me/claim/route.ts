@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { getStore, tokenMatches } from "@/lib/server/store";
+import { getStore, isUnlimitedAccount, tokenMatches, UNLIMITED_VISITS } from "@/lib/server/store";
 import { SLUG_RE } from "@/lib/slug";
 import { currentUser } from "@/lib/supabase/server";
 
@@ -22,7 +22,10 @@ export async function POST(req: Request) {
     if (typeof slug !== "string" || typeof token !== "string" || !SLUG_RE.test(slug)) continue;
     const rec = await store.get(slug);
     if (!rec || rec.ownerId || !tokenMatches(token, rec.tokenHash)) continue;
-    if (await store.claim(slug, user.id)) claimed.push(slug);
+    if (!(await store.claim(slug, user.id))) continue;
+    // An unlimited account's invitations have no visit limit.
+    if (isUnlimitedAccount(user)) await store.setMaxViews(slug, UNLIMITED_VISITS);
+    claimed.push(slug);
   }
   return NextResponse.json({ claimed });
 }

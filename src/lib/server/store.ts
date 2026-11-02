@@ -16,6 +16,12 @@ import type { VisitInfo } from "./visitor";
 /** Visits each invitation includes. Every time the link is opened counts as one. */
 export const VISIT_LIMIT = 100;
 
+/** The visit limit of an unlimited invitation (custom designs, or turned on by the admin). */
+export const UNLIMITED_VISITS = 2147483647;
+
+/** Accounts the admin made unlimited carry this in their Supabase app_metadata. */
+export const isUnlimitedAccount = (user: { app_metadata?: Record<string, unknown> } | null | undefined) => user?.app_metadata?.unlimited === true;
+
 export type InviteRecord = {
   data: InviteData;
   /** sha256 (hex) of the edit token. The token itself is never stored. */
@@ -58,6 +64,8 @@ export type Store = {
   setOpenEdit(slug: string, open: boolean): Promise<void>;
   /** Moves a guest invitation into an account. False if it already has one. */
   claim(slug: string, ownerId: string): Promise<boolean>;
+  /** Changes how many visits an invitation includes. */
+  setMaxViews(slug: string, maxViews: number): Promise<void>;
   /** Counter that resets after `windowSeconds`; returns the new count. */
   hit(key: string, windowSeconds: number): Promise<number>;
 };
@@ -164,6 +172,10 @@ function supabaseStore(): Store {
       if (error) fail("select", error);
       return (data ?? []).map((r) => summarise(r.slug, fromRow(r)));
     },
+    async setMaxViews(slug, maxViews) {
+      const { error } = await t().update({ max_views: maxViews }).eq("slug", slug);
+      if (error) fail("update", error);
+    },
     async claim(slug, ownerId) {
       const { data, error } = await t().update({ owner_id: ownerId }).eq("slug", slug).is("owner_id", null).select("slug");
       if (error) fail("claim", error);
@@ -247,6 +259,12 @@ function fileStore(): Store {
         .filter(([, r]) => r.ownerId === ownerId)
         .map(([slug, r]) => summarise(slug, r))
         .sort((a, b) => b.createdAt - a.createdAt);
+    },
+    async setMaxViews(slug, maxViews) {
+      const s = load();
+      if (!s.docs[slug]) return;
+      s.docs[slug].maxViews = maxViews;
+      save(s);
     },
     async claim(slug, ownerId) {
       const s = load();
