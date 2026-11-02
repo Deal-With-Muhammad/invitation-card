@@ -2,16 +2,16 @@
    ink, after the reference video. Full-screen scenes over the art; text writes
    itself in. Phone first; on wider screens it stays a 480px column. */
 
-html.ad-locked,
-html.ad-locked body {
+html.rl-locked,
+html.rl-locked body {
   overflow: hidden;
 }
 
-html:has(.ad) {
+html:has(.rl) {
   scroll-behavior: smooth;
 }
 
-.ad {
+.rl {
   --ivory: #ece3d4;
   --ink: #4e3a28;
   --brown: #6c4f35;
@@ -31,18 +31,18 @@ html:has(.ad) {
   -webkit-tap-highlight-color: transparent;
 }
 
-:where(.ad) :where(p, h1, h2) {
+:where(.rl) :where(p, h1, h2) {
   margin: 0;
 }
 
-.ad-main {
+.rl-main {
   position: relative;
   max-width: 480px;
   margin: 0 auto;
   box-shadow: 0 0 70px rgba(80, 60, 30, 0.18);
 }
 
-.ad-art {
+.rl-art {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -52,7 +52,7 @@ html:has(.ad) {
 
 /* ── envelope and film ────────────────────────────────────────────────────── */
 
-.ad-cover {
+.rl-cover {
   position: fixed;
   inset: 0 auto 0 50%;
   z-index: 40;
@@ -64,7 +64,7 @@ html:has(.ad) {
   outline: none;
 }
 
-.ad-film {
+.rl-film {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -73,11 +73,11 @@ html:has(.ad) {
   opacity: 0;
 }
 
-[data-phase="opening"] .ad-film {
+[data-phase="opening"] .rl-film {
   opacity: 1;
 }
 
-.ad-tap {
+.rl-tap {
   position: absolute;
   bottom: calc(9% + env(safe-area-inset-bottom));
   left: 50%;
@@ -91,21 +91,21 @@ html:has(.ad) {
   white-space: nowrap;
   box-shadow: 0 12px 28px -16px rgba(80, 60, 30, 0.55);
   transform: translateX(-50%);
-  animation: ad-breathe 3.2s ease-in-out infinite;
+  animation: rl-breathe 3.2s ease-in-out infinite;
 }
 
-.ad-cover:focus-visible .ad-tap {
+.rl-cover:focus-visible .rl-tap {
   outline: 2px solid var(--gold);
   outline-offset: 3px;
 }
 
-[data-phase="opening"] .ad-tap {
+[data-phase="opening"] .rl-tap {
   opacity: 0;
   transition: opacity 0.3s ease;
   animation: none;
 }
 
-@keyframes ad-breathe {
+@keyframes rl-breathe {
   50% {
     transform: translateX(-50%) scale(1.04);
   }
@@ -113,7 +113,7 @@ html:has(.ad) {
 
 /* ── scenes ──────────────────────────────────────────────────────────────── */
 
-.ad-scene {
+.rl-scene {
   position: relative;
   display: flex;
   min-height: 100svh;
@@ -121,7 +121,7 @@ html:has(.ad) {
   background: var(--ivory);
 }
 
-.ad-text {
+.rl-text {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -133,42 +133,42 @@ html:has(.ad) {
 }
 
 /* the couple stands in the bottom third, so their scenes keep text above them */
-.ad-scene.is-couple .ad-text {
+.rl-scene.is-couple .rl-text {
   justify-content: flex-start;
   padding: 23svh 14% 43svh;
 }
 
-.ad-scene.is-last .ad-text {
+.rl-scene.is-last .rl-text {
   padding-top: 24svh;
   padding-bottom: 40svh;
 }
 
-.ad-scene.is-details .ad-text {
+.rl-scene.is-details .rl-text {
   padding: 16svh 12% 15svh;
 }
 
 /* a celebration with its hosts on top: start below the pearls, keep off the bows */
-.ad-scene.is-event .ad-text {
+.rl-scene.is-event .rl-text {
   padding: 23svh 13.5% 13svh;
 }
 
-.ad-scene.is-event .ad-body,
-.ad-scene.is-event .ad-en {
+.rl-scene.is-event .rl-body,
+.rl-scene.is-event .rl-en {
   font-size: clamp(15px, 2svh, 17px);
   line-height: 1.35;
 }
 
-.ad-scene.is-event .ad-body {
+.rl-scene.is-event .rl-body {
   margin-top: 0.6svh;
 }
 
-.ad-scene.is-event .ad-pair,
-.ad-scene.is-event .ad-one {
+.rl-scene.is-event .rl-pair,
+.rl-scene.is-event .rl-one {
   margin-top: 1.4svh;
 }
 
 /* writing in: everything rises softly, calligraphy is drawn on from its first letter */
-.ad-text > * {
+.rl-text > * {
   opacity: 0;
   transform: translateY(10px);
   filter: blur(2px);
@@ -178,14 +178,14 @@ html:has(.ad) {
     filter 0.6s ease;
 }
 
-.ad-scene.is-in .ad-text > * {
+.rl-scene.is-in .rl-text > * {
   opacity: 1;
   transform: none;
   filter: none;
 }
 
-.ad-write,
-.ad-write-rtl {
+.rl-write,
+.rl-write-rtl {
   clip-path: inset(-20% 100% -20% 0);
   transition:
     opacity 0.4s ease,
@@ -194,50 +194,50 @@ html:has(.ad) {
     filter 0.4s ease;
 }
 
-.ad-write-rtl {
+.rl-write-rtl {
   clip-path: inset(-20% 0 -20% 100%);
 }
 
-.ad-scene.is-in .ad-write,
-.ad-scene.is-in .ad-write-rtl {
+.rl-scene.is-in .rl-write,
+.rl-scene.is-in .rl-write-rtl {
   clip-path: inset(-20% -5% -20% -5%);
 }
 
-.ad-scene.is-in .ad-text > :nth-child(2) {
+.rl-scene.is-in .rl-text > :nth-child(2) {
   transition-delay: 0.15s;
 }
-.ad-scene.is-in .ad-text > :nth-child(3) {
+.rl-scene.is-in .rl-text > :nth-child(3) {
   transition-delay: 0.3s;
 }
-.ad-scene.is-in .ad-text > :nth-child(4) {
+.rl-scene.is-in .rl-text > :nth-child(4) {
   transition-delay: 0.45s;
 }
-.ad-scene.is-in .ad-text > :nth-child(5) {
+.rl-scene.is-in .rl-text > :nth-child(5) {
   transition-delay: 0.6s;
 }
-.ad-scene.is-in .ad-text > :nth-child(6) {
+.rl-scene.is-in .rl-text > :nth-child(6) {
   transition-delay: 0.75s;
 }
-.ad-scene.is-in .ad-text > :nth-child(7) {
+.rl-scene.is-in .rl-text > :nth-child(7) {
   transition-delay: 0.9s;
 }
-.ad-scene.is-in .ad-text > :nth-child(n + 8) {
+.rl-scene.is-in .rl-text > :nth-child(n + 8) {
   transition-delay: 1.05s;
 }
 
 /* type */
-.ad-bism {
+.rl-bism {
   color: var(--brown);
   font: 400 clamp(26px, 4.2svh, 34px) / 1.7 var(--arabic);
 }
 
-.ad-bism-sm {
+.rl-bism-sm {
   margin-bottom: 1.4svh;
   color: var(--brown);
   font: 400 22px/1.7 var(--arabic);
 }
 
-.ad-small {
+.rl-small {
   max-width: 260px;
   color: var(--muted);
   font-style: italic;
@@ -245,7 +245,7 @@ html:has(.ad) {
   line-height: 1.35;
 }
 
-.ad-orn {
+.rl-orn {
   position: relative;
   display: block;
   width: 120px;
@@ -254,7 +254,7 @@ html:has(.ad) {
   background: linear-gradient(90deg, transparent, var(--gold), transparent);
 }
 
-.ad-orn::after {
+.rl-orn::after {
   content: "";
   position: absolute;
   top: 50%;
@@ -266,21 +266,21 @@ html:has(.ad) {
   transform: translate(-50%, -50%) rotate(45deg);
 }
 
-.ad-ar {
+.rl-ar {
   color: var(--ink);
   font: 400 clamp(26px, 4svh, 32px) / 1.8 var(--arabic);
 }
 
-.ad-rum {
+.rl-rum {
   font-size: clamp(18px, 2.6svh, 22px);
   line-height: 1.95;
 }
 
-.ad-rum + .ad-en {
+.rl-rum + .rl-en {
   font-size: clamp(15px, 2svh, 17px);
 }
 
-.ad-en {
+.rl-en {
   margin-top: 4px;
   color: var(--muted);
   font-style: italic;
@@ -289,14 +289,14 @@ html:has(.ad) {
   text-wrap: balance;
 }
 
-.ad-ref {
+.rl-ref {
   margin-top: 8px;
   color: var(--gold);
   font: 600 11.5px/1.3 var(--caps);
   letter-spacing: 0.18em;
 }
 
-.ad-mono {
+.rl-mono {
   position: relative;
   display: grid;
   place-items: center;
@@ -311,41 +311,41 @@ html:has(.ad) {
   font: 400 clamp(38px, 6.2svh, 58px) / 1 var(--script);
 }
 
-.ad-mono span:first-child {
+.rl-mono span:first-child {
   transform: translate(-14%, -8%);
 }
 
-.ad-mono span:last-child {
+.rl-mono span:last-child {
   position: absolute;
   transform: translate(22%, 14%);
   color: var(--gold);
 }
 
-.ad-names {
+.rl-names {
   display: grid;
   color: var(--brown);
   font: 400 clamp(34px, 5.9svh, 54px) / 1.1 var(--script);
 }
 
-.ad-names span {
+.rl-names span {
   color: var(--gold);
   font: italic 400 0.5em/1.2 var(--serif);
 }
 
-.ad-saying {
+.rl-saying {
   margin-top: 1.4svh;
   color: var(--muted);
   font-style: italic;
   font-size: 19px;
 }
 
-.ad-qubool {
+.rl-qubool {
   margin-top: 1svh;
   color: var(--brown);
   font: 400 clamp(30px, 5.2svh, 48px) / 1.9 var(--urdu);
 }
 
-.ad-when {
+.rl-when {
   margin-top: 2.4svh;
   padding: 8px 16px;
   border: 1px solid rgba(169, 138, 92, 0.5);
@@ -356,14 +356,14 @@ html:has(.ad) {
   letter-spacing: 0.06em;
 }
 
-.ad-caps {
+.rl-caps {
   color: var(--brown);
   font: 600 clamp(13px, 1.8svh, 15px) / 1.4 var(--caps);
   letter-spacing: 0.08em;
   text-wrap: balance;
 }
 
-.ad-body {
+.rl-body {
   margin-top: 1.2svh;
   color: var(--muted);
   font-size: clamp(16px, 2.2svh, 18.5px);
@@ -371,14 +371,14 @@ html:has(.ad) {
   text-wrap: balance;
 }
 
-.ad-person {
+.rl-person {
   margin-top: 1.4svh;
   color: var(--brown);
   font: 400 clamp(30px, 4.3svh, 38px) / 1.15 var(--script);
   white-space: nowrap;
 }
 
-.ad-with {
+.rl-with {
   margin-top: 0.6svh;
   color: var(--gold);
   font-style: italic;
@@ -386,18 +386,18 @@ html:has(.ad) {
 }
 
 /* the Nikah */
-.ad-insha {
+.rl-insha {
   color: var(--brown);
   font: 400 clamp(24px, 3.4svh, 30px) / 1.6 var(--arabic);
 }
 
-.ad-title {
+.rl-title {
   margin-bottom: 1.6svh;
   color: var(--brown);
   font: 400 clamp(40px, 5.8svh, 50px) / 1.15 var(--script);
 }
 
-.ad-pair {
+.rl-pair {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 14px;
@@ -405,18 +405,18 @@ html:has(.ad) {
   margin-top: 1.8svh;
 }
 
-.ad-one {
+.rl-one {
   display: flex;
   justify-content: center;
   width: 100%;
   margin-top: 1.8svh;
 }
 
-.ad-title.is-long {
+.rl-title.is-long {
   font-size: clamp(34px, 4.8svh, 42px);
 }
 
-.ad-link {
+.rl-link {
   margin-top: 1.6svh;
   padding: 8px 14px;
   border: 1px solid rgba(108, 79, 53, 0.45);
@@ -427,23 +427,23 @@ html:has(.ad) {
   text-decoration: none;
 }
 
-.ad-foot-venue {
+.rl-foot-venue {
   margin-top: 4px;
   color: var(--brown);
   font: 600 18px/1.3 var(--caps);
 }
 
-.ad-foot .ad-btn {
+.rl-foot .rl-btn {
   margin-bottom: 4px;
 }
 
-.ad-detail {
+.rl-detail {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.ad-detail svg {
+.rl-detail svg {
   width: 22px;
   height: 22px;
   margin-bottom: 4px;
@@ -454,21 +454,21 @@ html:has(.ad) {
   stroke-linejoin: round;
 }
 
-.ad-detail p {
+.rl-detail p {
   color: var(--ink);
   font: 600 clamp(13px, 1.8svh, 15px) / 1.3 var(--caps);
   letter-spacing: 0.03em;
   text-wrap: balance;
 }
 
-.ad-detail small {
+.rl-detail small {
   display: block;
   color: var(--muted);
   font: italic 400 15px/1.3 var(--serif);
   letter-spacing: 0;
 }
 
-.ad-detail a {
+.rl-detail a {
   display: inline-block;
   margin-top: 4px;
   color: var(--gold);
@@ -477,13 +477,13 @@ html:has(.ad) {
   text-underline-offset: 3px;
 }
 
-.ad-count {
+.rl-count {
   display: flex;
   gap: 8px;
   margin-top: 2.2svh;
 }
 
-.ad-count span {
+.rl-count span {
   min-width: 52px;
   padding: 8px 4px 6px;
   border: 1px solid rgba(169, 138, 92, 0.55);
@@ -494,7 +494,7 @@ html:has(.ad) {
   font-variant-numeric: lining-nums tabular-nums;
 }
 
-.ad-count small {
+.rl-count small {
   display: block;
   margin-top: 4px;
   color: var(--muted);
@@ -502,12 +502,12 @@ html:has(.ad) {
   letter-spacing: 0.12em;
 }
 
-.ad-today {
+.rl-today {
   margin-top: 2svh;
   font-size: 20px;
 }
 
-.ad-btn {
+.rl-btn {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
@@ -524,13 +524,13 @@ html:has(.ad) {
 }
 
 /* regards */
-.ad-family {
+.rl-family {
   margin-top: 0.4svh;
   color: var(--brown);
   font: 400 clamp(38px, 5.4svh, 46px) / 1.2 var(--script);
 }
 
-.ad-calls {
+.rl-calls {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -538,7 +538,7 @@ html:has(.ad) {
   margin-top: 1.6svh;
 }
 
-.ad-calls a {
+.rl-calls a {
   padding: 8px 14px;
   border: 1px solid rgba(169, 138, 92, 0.55);
   border-radius: 12px;
@@ -547,26 +547,26 @@ html:has(.ad) {
   text-decoration: none;
 }
 
-.ad-calls span {
+.rl-calls span {
   display: block;
   font-size: 15px;
   font-weight: 600;
 }
 
-.ad-calls small {
+.rl-calls small {
   display: block;
   color: var(--muted);
   font-size: 13.5px;
 }
 
-.ad-foot {
+.rl-foot {
   padding: 28px 22px calc(80px + env(safe-area-inset-bottom));
   border-top: 1px solid rgba(169, 138, 92, 0.45);
   background: #f3ece0;
   text-align: center;
 }
 
-.ad-credit {
+.rl-credit {
   display: inline-block;
   margin-top: 18px;
   color: var(--muted);
@@ -576,7 +576,7 @@ html:has(.ad) {
 
 /* ── chrome ──────────────────────────────────────────────────────────────── */
 
-.ad-dots {
+.rl-dots {
   position: fixed;
   top: 50%;
   right: max(10px, calc(50vw - 230px));
@@ -591,7 +591,7 @@ html:has(.ad) {
   transform: translateY(-50%);
 }
 
-.ad-dots button {
+.rl-dots button {
   width: 7px;
   height: 7px;
   padding: 0;
@@ -604,12 +604,12 @@ html:has(.ad) {
     background 0.3s ease;
 }
 
-.ad-dots button.is-on {
+.rl-dots button.is-on {
   height: 22px;
   background: var(--brown);
 }
 
-.ad-next {
+.rl-next {
   position: fixed;
   bottom: calc(14px + env(safe-area-inset-bottom));
   left: 50%;
@@ -621,16 +621,16 @@ html:has(.ad) {
   font: 600 10.5px/1 var(--caps);
   letter-spacing: 0.24em;
   transform: translateX(-50%);
-  animation: ad-bob 2.6s ease-in-out infinite;
+  animation: rl-bob 2.6s ease-in-out infinite;
 }
 
-@keyframes ad-bob {
+@keyframes rl-bob {
   50% {
     transform: translate(-50%, 4px);
   }
 }
 
-.ad-music {
+.rl-music {
   position: fixed;
   bottom: calc(16px + env(safe-area-inset-bottom));
   left: max(14px, calc(50vw - 226px));
@@ -647,49 +647,49 @@ html:has(.ad) {
   cursor: pointer;
 }
 
-.ad-music span {
+.rl-music span {
   display: flex;
   align-items: flex-end;
   gap: 3px;
   height: 16px;
 }
 
-.ad-music i {
+.rl-music i {
   width: 3px;
   height: 6px;
   border-radius: 2px;
   background: var(--brown);
 }
 
-.ad-music.is-on i {
-  animation: ad-bars 1.2s ease-in-out infinite;
+.rl-music.is-on i {
+  animation: rl-bars 1.2s ease-in-out infinite;
 }
 
-.ad-music.is-on i:nth-child(2) {
+.rl-music.is-on i:nth-child(2) {
   animation-delay: -0.4s;
 }
 
-.ad-music.is-on i:nth-child(3) {
+.rl-music.is-on i:nth-child(3) {
   animation-delay: -0.8s;
 }
 
-@keyframes ad-bars {
+@keyframes rl-bars {
   50% {
     height: 16px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ad *,
-  .ad *::before,
-  .ad *::after {
+  .rl *,
+  .rl *::before,
+  .rl *::after {
     animation: none !important;
     transition: none !important;
   }
 
-  .ad-text > *,
-  .ad-write,
-  .ad-write-rtl {
+  .rl-text > *,
+  .rl-write,
+  .rl-write-rtl {
     opacity: 1;
     transform: none;
     filter: none;

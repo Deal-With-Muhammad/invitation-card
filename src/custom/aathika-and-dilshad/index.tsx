@@ -39,12 +39,12 @@ export function Invite() {
       music="harp"
       labels={["Bismillah", "Qubool Hai", "Invitation", "Nikah", "Ar-Rum"]}
       footer={
-        <footer className="ad-foot">
-          <p className="ad-caps">With warm regards</p>
-          <p className="ad-family">BMS Family</p>
-          <span className="ad-orn" aria-hidden />
-          <p className="ad-small">For any queries</p>
-          <div className="ad-calls">
+        <footer className="rl-foot">
+          <p className="rl-caps">With warm regards</p>
+          <p className="rl-family">BMS Family</p>
+          <span className="rl-orn" aria-hidden />
+          <p className="rl-small">For any queries</p>
+          <div className="rl-calls">
             {CONTACTS.map((c) => (
               <a key={c.phone} href={`tel:+91${c.phone}`}>
                 <span>{c.name}</span>
@@ -61,23 +61,23 @@ export function Invite() {
       <QuboolScene initials={["A", "D"]} first="Aathika" second="Dilshad" when="Friday · 20th November 2026 · Vellore" />
 
       <Scene art="frame">
-        <p className="ad-bism-sm" lang="ar" dir="rtl">
+        <p className="rl-bism-sm" lang="ar" dir="rtl">
           {BISMILLAH}
         </p>
-        <p className="ad-caps">Mr &amp; Mrs Abdul Shuckoor Majeed</p>
-        <p className="ad-body">request the pleasure of your gracious presence on the auspicious occasion of the Nikah of their beloved daughter</p>
-        <p className="ad-person ad-write">Aathika Tharannum S</p>
-        <p className="ad-with">with</p>
-        <p className="ad-person ad-write">Dilshad Backer K</p>
-        <p className="ad-body">son of Mr &amp; Mrs Abu Backer</p>
+        <p className="rl-caps">Mr &amp; Mrs Abdul Shuckoor Majeed</p>
+        <p className="rl-body">request the pleasure of your gracious presence on the auspicious occasion of the Nikah of their beloved daughter</p>
+        <p className="rl-person rl-write">Aathika Tharannum S</p>
+        <p className="rl-with">with</p>
+        <p className="rl-person rl-write">Dilshad Backer K</p>
+        <p className="rl-body">son of Mr &amp; Mrs Abu Backer</p>
       </Scene>
 
       <Scene art="frame" className="is-details">
-        <p className="ad-insha" lang="ar" dir="rtl">
+        <p className="rl-insha" lang="ar" dir="rtl">
           {INSHALLAH}
         </p>
-        <h2 className="ad-title ad-write">Nikah Ceremony</h2>
-        <div className="ad-pair">
+        <h2 className="rl-title rl-write">Nikah Ceremony</h2>
+        <div className="rl-pair">
           <Detail icon="calendar">
             Friday
             <small>20th November 2026</small>
@@ -87,7 +87,7 @@ export function Invite() {
             <small>Nikah</small>
           </Detail>
         </div>
-        <div className="ad-pair">
+        <div className="rl-pair">
           <Detail icon="pin">
             {MASJID.name}
             <small>{MASJID.address}</small>
@@ -104,7 +104,7 @@ export function Invite() {
           </Detail>
         </div>
         <Countdown to={START} />
-        <a className="ad-btn" href={CALENDAR} target="_blank" rel="noopener">
+        <a className="rl-btn" href={CALENDAR} target="_blank" rel="noopener">
           Add to calendar
         </a>
       </Scene>

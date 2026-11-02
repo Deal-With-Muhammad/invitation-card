@@ -73,8 +73,8 @@ export function Relief({ slug, music: track, labels, children, footer }: { slug:
   }, [slug]);
 
   useEffect(() => {
-    document.documentElement.classList.toggle("ad-locked", phase === "closed");
-    return () => document.documentElement.classList.remove("ad-locked");
+    document.documentElement.classList.toggle("rl-locked", phase === "closed");
+    return () => document.documentElement.classList.remove("rl-locked");
   }, [phase]);
 
   // Each scene writes itself in once it's well onto the screen; the dots follow the
@@ -82,7 +82,7 @@ export function Relief({ slug, music: track, labels, children, footer }: { slug:
   // rather than with an IntersectionObserver, which some in-app browsers delay.
   useEffect(() => {
     if (phase !== "open" || !main.current) return;
-    const scenes = [...main.current.querySelectorAll<HTMLElement>(".ad-scene")];
+    const scenes = [...main.current.querySelectorAll<HTMLElement>(".rl-scene")];
     let raf = 0;
     const check = () => {
       raf = 0;
@@ -119,7 +119,7 @@ export function Relief({ slug, music: track, labels, children, footer }: { slug:
   // seconds, until the guest touches or scrolls the page themselves.
   useEffect(() => {
     if (phase !== "open" || reduced() || !main.current) return;
-    const scenes = [...main.current.querySelectorAll<HTMLElement>(".ad-scene")];
+    const scenes = [...main.current.querySelectorAll<HTMLElement>(".rl-scene")];
     let i = 0;
     let t = 0;
     const events = ["wheel", "touchstart", "keydown", "pointerdown"] as const;
@@ -191,13 +191,13 @@ export function Relief({ slug, music: track, labels, children, footer }: { slug:
     } else startMusic();
   };
 
-  const goTo = (i: number) => main.current?.querySelectorAll(".ad-scene")[i]?.scrollIntoView({ behavior: "smooth" });
+  const goTo = (i: number) => main.current?.querySelectorAll(".rl-scene")[i]?.scrollIntoView({ behavior: "smooth" });
 
   return (
-    <div className={`ad ${FONT_VARS}`} data-phase={phase}>
+    <div className={`rl ${FONT_VARS}`} data-phase={phase}>
       {phase !== "open" && (
         <div
-          className="ad-cover"
+          className="rl-cover"
           role="button"
           tabIndex={0}
           aria-label="Tap to open the invitation"
@@ -205,34 +205,34 @@ export function Relief({ slug, music: track, labels, children, footer }: { slug:
           onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && (e.preventDefault(), open())}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img className="ad-art" src={`${ART}/closed.webp`} alt="" />
-          <video ref={video} className="ad-film" muted playsInline preload="auto" poster={`${ART}/closed.webp`} onEnded={finish} aria-hidden>
+          <img className="rl-art" src={`${ART}/closed.webp`} alt="" />
+          <video ref={video} className="rl-film" muted playsInline preload="auto" poster={`${ART}/closed.webp`} onEnded={finish} aria-hidden>
             {/* MP4 first: some browsers claim VP9 WebM and then fail to decode it */}
             <source src={`${ART}/open.mp4`} type="video/mp4" />
             <source src={`${ART}/open.webm`} type="video/webm" />
           </video>
-          <span className="ad-tap">Tap to open</span>
+          <span className="rl-tap">Tap to open</span>
         </div>
       )}
 
-      <main ref={main} className="ad-main" aria-hidden={phase === "closed" || undefined}>
+      <main ref={main} className="rl-main" aria-hidden={phase === "closed" || undefined}>
         {children}
         {footer}
       </main>
 
       {phase === "open" && (
         <>
-          <nav className="ad-dots" aria-label="Scenes">
+          <nav className="rl-dots" aria-label="Scenes">
             {labels.map((s, i) => (
               <button key={s} type="button" className={scene === i ? "is-on" : ""} onClick={() => goTo(i)} aria-label={s} aria-current={scene === i || undefined} />
             ))}
           </nav>
           {scene === 0 && (
-            <span className="ad-next" aria-hidden>
+            <span className="rl-next" aria-hidden>
               Scroll
             </span>
           )}
-          <button type="button" className={`ad-music${playing ? " is-on" : ""}`} onClick={toggleMusic} aria-label={playing ? "Pause music" : "Play music"} aria-pressed={playing}>
+          <button type="button" className={`rl-music${playing ? " is-on" : ""}`} onClick={toggleMusic} aria-label={playing ? "Pause music" : "Play music"} aria-pressed={playing}>
             <span aria-hidden>
               <i />
               <i />
@@ -248,10 +248,10 @@ export function Relief({ slug, music: track, labels, children, footer }: { slug:
 /** A full-screen scene over the frame (text in the middle) or the couple (text above them). */
 export function Scene({ art, className = "", children }: { art: "couple" | "frame"; className?: string; children: ReactNode }) {
   return (
-    <section className={`ad-scene is-${art} ${className}`}>
+    <section className={`rl-scene is-${art} ${className}`}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img className="ad-art" src={`${ART}/${art}.webp`} alt="" loading={className.includes("is-first") ? "eager" : "lazy"} />
-      <div className="ad-text">{children}</div>
+      <img className="rl-art" src={`${ART}/${art}.webp`} alt="" loading={className.includes("is-first") ? "eager" : "lazy"} />
+      <div className="rl-text">{children}</div>
     </section>
   );
 }
@@ -260,16 +260,16 @@ export function Scene({ art, className = "", children }: { art: "couple" | "fram
 export function BismillahScene() {
   return (
     <Scene art="couple" className="is-first">
-      <p className="ad-bism ad-write-rtl" lang="ar" dir="rtl">
+      <p className="rl-bism rl-write-rtl" lang="ar" dir="rtl">
         {BISMILLAH}
       </p>
-      <p className="ad-small">In the name of Allah, the Most Beneficent, the Most Merciful</p>
-      <span className="ad-orn" aria-hidden />
-      <p className="ad-ar ad-write-rtl" lang="ar" dir="rtl">
+      <p className="rl-small">In the name of Allah, the Most Beneficent, the Most Merciful</p>
+      <span className="rl-orn" aria-hidden />
+      <p className="rl-ar rl-write-rtl" lang="ar" dir="rtl">
         {PAIRS.ar}
       </p>
-      <p className="ad-en">{PAIRS.en}</p>
-      <p className="ad-ref">{PAIRS.ref}</p>
+      <p className="rl-en">{PAIRS.en}</p>
+      <p className="rl-ref">{PAIRS.ref}</p>
     </Scene>
   );
 }
@@ -278,19 +278,19 @@ export function BismillahScene() {
 export function QuboolScene({ initials, first, second, when }: { initials: [string, string]; first: string; second: string; when: string }) {
   return (
     <Scene art="frame">
-      <div className="ad-mono" aria-hidden>
+      <div className="rl-mono" aria-hidden>
         <span>{initials[0]}</span>
         <span>{initials[1]}</span>
       </div>
-      <h1 className="ad-names ad-write">
+      <h1 className="rl-names rl-write">
         {first} <span>&amp;</span> {second}
       </h1>
-      <p className="ad-saying">are saying</p>
-      <p className="ad-qubool ad-write-rtl" lang="ur" dir="rtl">
+      <p className="rl-saying">are saying</p>
+      <p className="rl-qubool rl-write-rtl" lang="ur" dir="rtl">
         قبول ہے
       </p>
-      <p className="ad-ref">Qubool Hai</p>
-      <p className="ad-when">{when}</p>
+      <p className="rl-ref">Qubool Hai</p>
+      <p className="rl-when">{when}</p>
     </Scene>
   );
 }
@@ -299,18 +299,18 @@ export function QuboolScene({ initials, first, second, when }: { initials: [stri
 export function RumScene() {
   return (
     <Scene art="couple" className="is-last">
-      <p className="ad-ar ad-rum ad-write-rtl" lang="ar" dir="rtl">
+      <p className="rl-ar rl-rum rl-write-rtl" lang="ar" dir="rtl">
         {RUM.ar}
       </p>
-      <p className="ad-en">{RUM.en}</p>
-      <p className="ad-ref">{RUM.ref}</p>
+      <p className="rl-en">{RUM.en}</p>
+      <p className="rl-ref">{RUM.ref}</p>
     </Scene>
   );
 }
 
 export function Credit() {
   return (
-    <a className="ad-credit" href="https://invite.dealwithmuhammad.com/?ref=invite" target="_blank" rel="noopener">
+    <a className="rl-credit" href="https://invite.dealwithmuhammad.com/?ref=invite" target="_blank" rel="noopener">
       Made with DWM Invite
     </a>
   );
@@ -344,7 +344,7 @@ const ICONS: Record<string, ReactNode> = {
 
 export function Detail({ icon, children }: { icon: keyof typeof ICONS; children: ReactNode }) {
   return (
-    <div className="ad-detail">
+    <div className="rl-detail">
       <svg viewBox="0 0 24 24" aria-hidden>
         {ICONS[icon]}
       </svg>
@@ -364,7 +364,7 @@ export function Countdown({ to }: { to: string }) {
     const t = window.setInterval(tick, 1000);
     return () => window.clearInterval(t);
   }, [to]);
-  if (left === 0) return <p className="ad-today">Alhamdulillah, the day is here.</p>;
+  if (left === 0) return <p className="rl-today">Alhamdulillah, the day is here.</p>;
   const parts: [string, string][] =
     left == null
       ? [["–", "Days"], ["–", "Hrs"], ["–", "Min"], ["–", "Sec"]]
@@ -375,7 +375,7 @@ export function Countdown({ to }: { to: string }) {
           [pad(Math.floor(left / 1000) % 60), "Sec"],
         ];
   return (
-    <div className="ad-count" role="timer" aria-live="off">
+    <div className="rl-count" role="timer" aria-live="off">
       {parts.map(([n, l]) => (
         <span key={l}>
           {n}

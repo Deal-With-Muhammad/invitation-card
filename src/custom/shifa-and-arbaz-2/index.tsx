@@ -52,11 +52,11 @@ function Venue() {
 function EventScene({ e, hosts, invite, title, tagline, after }: { e: Ev; hosts: string; invite: string; title: string; tagline?: string; after?: ReactNode }) {
   return (
     <Scene art="frame" className="is-details is-event">
-      <p className="ad-caps">{hosts}</p>
-      <p className="ad-body">{invite}</p>
-      <h2 className={`ad-title ad-write${title.length > 14 ? " is-long" : ""}`}>{title}</h2>
-      {tagline && <p className="ad-en">{tagline}</p>}
-      <div className="ad-pair">
+      <p className="rl-caps">{hosts}</p>
+      <p className="rl-body">{invite}</p>
+      <h2 className={`rl-title rl-write${title.length > 14 ? " is-long" : ""}`}>{title}</h2>
+      {tagline && <p className="rl-en">{tagline}</p>}
+      <div className="rl-pair">
         <Detail icon="calendar">
           {e.day}
           <small>{e.date}</small>
@@ -66,11 +66,11 @@ function EventScene({ e, hosts, invite, title, tagline, after }: { e: Ev; hosts:
           <small>{e.note}</small>
         </Detail>
       </div>
-      <div className="ad-one">
+      <div className="rl-one">
         <Venue />
       </div>
       {after}
-      <a className="ad-link" href={calendar(e)} target="_blank" rel="noopener">
+      <a className="rl-link" href={calendar(e)} target="_blank" rel="noopener">
         Add to calendar
       </a>
     </Scene>
@@ -84,14 +84,14 @@ export function Invite() {
       music="harp"
       labels={["Bismillah", "Qubool Hai", "Invitation", "Nikah", "Mehendi", "Pithi & Mosaru", "Daawat-e-Mehmani", "Ar-Rum"]}
       footer={
-        <footer className="ad-foot">
-          <p className="ad-caps">With love and duas</p>
-          <p className="ad-family">The Vankalwala Family</p>
-          <span className="ad-orn" aria-hidden />
-          <p className="ad-small">All celebrations at</p>
-          <p className="ad-foot-venue">{VENUE.name}</p>
-          <p className="ad-small">{VENUE.address}</p>
-          <a className="ad-btn" href={VENUE.maps} target="_blank" rel="noopener">
+        <footer className="rl-foot">
+          <p className="rl-caps">With love and duas</p>
+          <p className="rl-family">The Vankalwala Family</p>
+          <span className="rl-orn" aria-hidden />
+          <p className="rl-small">All celebrations at</p>
+          <p className="rl-foot-venue">{VENUE.name}</p>
+          <p className="rl-small">{VENUE.address}</p>
+          <a className="rl-btn" href={VENUE.maps} target="_blank" rel="noopener">
             Open in Maps
           </a>
           <br />
@@ -104,23 +104,23 @@ export function Invite() {
       <QuboolScene initials={["S", "A"]} first="Shifa" second="Arbaz" when="7 · 8 · 9 January 2027 · Vapi" />
 
       <Scene art="frame">
-        <p className="ad-bism-sm" lang="ar" dir="rtl">
+        <p className="rl-bism-sm" lang="ar" dir="rtl">
           {BISMILLAH}
         </p>
-        <p className="ad-caps">Mrs.&nbsp;Yashmin &amp; Late&nbsp;Mr.&nbsp;Firoz&nbsp;Vankalwala</p>
-        <p className="ad-body">request the pleasure of your gracious presence at the wedding celebrations of their beloved daughter</p>
-        <p className="ad-person ad-write">Shifa</p>
-        <p className="ad-with">with</p>
-        <p className="ad-person ad-write">Arbaz</p>
-        <p className="ad-body">son of Mrs. Femida &amp; Late Mr. Shaiyad Khan</p>
+        <p className="rl-caps">Mrs.&nbsp;Yashmin &amp; Late&nbsp;Mr.&nbsp;Firoz&nbsp;Vankalwala</p>
+        <p className="rl-body">request the pleasure of your gracious presence at the wedding celebrations of their beloved daughter</p>
+        <p className="rl-person rl-write">Shifa</p>
+        <p className="rl-with">with</p>
+        <p className="rl-person rl-write">Arbaz</p>
+        <p className="rl-body">son of Mrs. Femida &amp; Late Mr. Shaiyad Khan</p>
       </Scene>
 
       <Scene art="frame" className="is-details">
-        <p className="ad-insha" lang="ar" dir="rtl">
+        <p className="rl-insha" lang="ar" dir="rtl">
           {INSHALLAH}
         </p>
-        <h2 className="ad-title ad-write">Nikah Ceremony</h2>
-        <div className="ad-pair">
+        <h2 className="rl-title rl-write">Nikah Ceremony</h2>
+        <div className="rl-pair">
           <Detail icon="calendar">
             {NIKAH.day}
             <small>{NIKAH.date}</small>
@@ -130,12 +130,12 @@ export function Invite() {
             <small>Nikah</small>
           </Detail>
         </div>
-        <div className="ad-one">
+        <div className="rl-one">
           <Venue />
         </div>
-        <p className="ad-en">Lunch will be served from 2:00 pm onwards</p>
+        <p className="rl-en">Lunch will be served from 2:00 pm onwards</p>
         <Countdown to={NIKAH.start} />
-        <a className="ad-btn" href={calendar(NIKAH)} target="_blank" rel="noopener">
+        <a className="rl-btn" href={calendar(NIKAH)} target="_blank" rel="noopener">
           Add to calendar
         </a>
       </Scene>
