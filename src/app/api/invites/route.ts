@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 
+import { customFor } from "@/custom";
 import { parseInvite } from "@/invite/schema";
 import { clientIp, getStore, hashToken, newToken, VISIT_LIMIT } from "@/lib/server/store";
 import { origin } from "@/lib/server/visitor";
@@ -47,7 +48,7 @@ export async function POST(req: Request) {
   // The chosen link if it's free; otherwise (only for auto-made links) add a short suffix.
   const candidates = wanted ? [wanted] : [validSlug(base) ? base : `${base}-${randomSuffix()}`, ...Array.from({ length: 4 }, () => `${base}-${randomSuffix()}`)];
   for (const slug of candidates) {
-    if (!validSlug(slug)) continue;
+    if (!validSlug(slug) || customFor(slug)) continue;
     if (!(await store.create(slug, rec))) continue;
     return NextResponse.json({ slug, token, maxViews: rec.maxViews, saved: Boolean(owner) });
   }

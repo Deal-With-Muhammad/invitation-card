@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { LogoMark } from "@/components/logo";
+import { CUSTOM_SLUGS, customFor } from "@/custom";
 import { metaFor } from "@/invite/templates/catalog";
 import type { Occasion } from "@/invite/types";
 import { OCCASION_LABEL } from "@/lib/filters";
@@ -32,7 +33,7 @@ type InviteRow = {
   people: { name?: string }[] | null;
 };
 
-const FILTERS = { all: "All", account: "Accounts", guest: "Guests", full: "Full" } as const;
+const FILTERS = { all: "All", account: "Accounts", guest: "Guests", full: "Full", custom: "Custom" } as const;
 const SORTS = { new: "Newest", views: "Most visits" } as const;
 type Sort = keyof typeof SORTS;
 type Filter = keyof typeof FILTERS;
@@ -139,6 +140,7 @@ async function Invites({ filter, sort, q, page, emailOf, href }: { filter: Filte
   if (filter === "guest") query = query.is("owner_id", null);
   if (filter === "account") query = query.not("owner_id", "is", null);
   if (filter === "full") query = query.eq("is_full", true);
+  if (filter === "custom") query = query.in("slug", CUSTOM_SLUGS);
   if (q) query = query.ilike("slug", `%${q}%`);
   const { data, count, error } = await query.overrideTypes<InviteRow[], { merge: false }>();
   const rows = data ?? [];
@@ -208,11 +210,13 @@ async function Invites({ filter, sort, q, page, emailOf, href }: { filter: Filte
             const meta = metaFor(r.template);
             const left = Math.max(0, r.max_views - r.views);
             const open = openSet.has(r.slug);
+            // Custom invitations are pages in code (src/custom): no limit, no editor.
+            const custom = customFor(r.slug);
             return (
               <li key={r.slug} className="flex min-w-0 gap-3.5 rounded-2xl border border-line bg-card p-3">
                 <a href={`/${r.slug}`} target="_blank" rel="noopener" className="shrink-0" aria-label={`Open /${r.slug}`}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={`/previews/${meta.id}/poster.webp`} alt="" loading="lazy" className="h-[124px] w-[70px] rounded-lg bg-paper-2 object-cover" />
+                  <img src={custom?.poster ?? `/previews/${meta.id}/poster.webp`} alt="" loading="lazy" className="h-[124px] w-[70px] rounded-lg bg-paper-2 object-cover" />
                 </a>
                 <div className="flex min-w-0 flex-1 flex-col">
                   <a href={`/${r.slug}`} target="_blank" rel="noopener" className="truncate font-medium hover:text-brand">
@@ -220,63 +224,75 @@ async function Invites({ filter, sort, q, page, emailOf, href }: { filter: Filte
                   </a>
                   <p className="truncate text-[13px]">{names || <span className="text-muted">No names</span>}</p>
                   <p className="truncate text-[12.5px] text-muted">
-                    {meta.name} · {OCCASION_LABEL[r.occasion as Occasion] ?? r.occasion}
+                    {custom ? <span className="font-medium text-gold-ink">Custom design</span> : meta.name} · {OCCASION_LABEL[r.occasion as Occasion] ?? r.occasion}
                   </p>
                   <p className="truncate text-[12.5px] text-muted">
                     {r.owner_id ? emailOf.get(r.owner_id) ?? "Account" : "Guest"} · {when(r.created_at)}
                   </p>
-                  <p className="mt-1 text-[13px] tabular-nums">
-                    <span className={left === 0 ? "text-wax" : ""}>
-                      {nf.format(r.views)} / {nf.format(r.max_views)} visits
-                    </span>
-                    <span className="text-muted"> · {left === 0 ? "full" : `${nf.format(left)} left`}</span>
-                  </p>
-                  <p className="text-[12.5px] text-muted">
-                    Editing:{" "}
-                    {open ? (
-                      <a href={`/edit/${r.slug}`} target="_blank" rel="noopener" className="text-brand underline underline-offset-2">
-                        anyone with /edit/{r.slug}
-                      </a>
-                    ) : (
-                      "only the maker"
-                    )}
-                  </p>
+                  {custom ? (
+                    <p className="mt-1 text-[13px] tabular-nums">
+                      {nf.format(r.views)} visits <span className="text-muted">· no limit</span>
+                    </p>
+                  ) : (
+                    <>
+                      <p className="mt-1 text-[13px] tabular-nums">
+                        <span className={left === 0 ? "text-wax" : ""}>
+                          {nf.format(r.views)} / {nf.format(r.max_views)} visits
+                        </span>
+                        <span className="text-muted"> · {left === 0 ? "full" : `${nf.format(left)} left`}</span>
+                      </p>
+                      <p className="text-[12.5px] text-muted">
+                        Editing:{" "}
+                        {open ? (
+                          <a href={`/edit/${r.slug}`} target="_blank" rel="noopener" className="text-brand underline underline-offset-2">
+                            anyone with /edit/{r.slug}
+                          </a>
+                        ) : (
+                          "only the maker"
+                        )}
+                      </p>
+                    </>
+                  )}
                   <div className="mt-auto flex flex-wrap gap-1.5 pt-2">
                     <CopyLink path={`/${r.slug}`} />
-                    {!accessError && (
-                      <form action={setEditAccess}>
-                        <input type="hidden" name="slug" value={r.slug} />
-                        <input type="hidden" name="open" value={open ? "0" : "1"} />
-                        <ConfirmButton
-                          message={open ? `Make /${r.slug} editable only by its maker again?` : `Let anyone who opens /edit/${r.slug} edit this invitation?`}
-                          className="rounded-full border border-line px-3 py-1 text-[13px] hover:bg-paper-2"
-                        >
-                          {open ? "Lock editing" : "Open editing"}
-                        </ConfirmButton>
-                      </form>
+                    {!custom && (
+                      <>
+                        {!accessError && (
+                          <form action={setEditAccess}>
+                            <input type="hidden" name="slug" value={r.slug} />
+                            <input type="hidden" name="open" value={open ? "0" : "1"} />
+                            <ConfirmButton
+                              message={open ? `Make /${r.slug} editable only by its maker again?` : `Let anyone who opens /edit/${r.slug} edit this invitation?`}
+                              className="rounded-full border border-line px-3 py-1 text-[13px] hover:bg-paper-2"
+                            >
+                              {open ? "Lock editing" : "Open editing"}
+                            </ConfirmButton>
+                          </form>
+                        )}
+                        <form action={addVisits}>
+                          <input type="hidden" name="slug" value={r.slug} />
+                          <input type="hidden" name="n" value="100" />
+                          <button type="submit" className="rounded-full border border-line px-3 py-1 text-[13px] hover:bg-paper-2">
+                            +100
+                          </button>
+                        </form>
+                        <form action={resetVisits}>
+                          <input type="hidden" name="slug" value={r.slug} />
+                          <ConfirmButton message={`Reset /${r.slug} to 0 visits used?`} className="rounded-full border border-line px-3 py-1 text-[13px] hover:bg-paper-2">
+                            Reset
+                          </ConfirmButton>
+                        </form>
+                        <form action={deleteInvite}>
+                          <input type="hidden" name="slug" value={r.slug} />
+                          <ConfirmButton
+                            message={`Delete /${r.slug}? The link stops working for everyone. This can't be undone.`}
+                            className="rounded-full border border-wax/40 px-3 py-1 text-[13px] text-wax hover:bg-wax/10"
+                          >
+                            Delete
+                          </ConfirmButton>
+                        </form>
+                      </>
                     )}
-                    <form action={addVisits}>
-                      <input type="hidden" name="slug" value={r.slug} />
-                      <input type="hidden" name="n" value="100" />
-                      <button type="submit" className="rounded-full border border-line px-3 py-1 text-[13px] hover:bg-paper-2">
-                        +100
-                      </button>
-                    </form>
-                    <form action={resetVisits}>
-                      <input type="hidden" name="slug" value={r.slug} />
-                      <ConfirmButton message={`Reset /${r.slug} to 0 visits used?`} className="rounded-full border border-line px-3 py-1 text-[13px] hover:bg-paper-2">
-                        Reset
-                      </ConfirmButton>
-                    </form>
-                    <form action={deleteInvite}>
-                      <input type="hidden" name="slug" value={r.slug} />
-                      <ConfirmButton
-                        message={`Delete /${r.slug}? The link stops working for everyone. This can't be undone.`}
-                        className="rounded-full border border-wax/40 px-3 py-1 text-[13px] text-wax hover:bg-wax/10"
-                      >
-                        Delete
-                      </ConfirmButton>
-                    </form>
                   </div>
                 </div>
               </li>

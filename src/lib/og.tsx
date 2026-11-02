@@ -45,10 +45,10 @@ function Frame({ p, children }: { p: Pick<Palette, "bg" | "ink" | "accent">; chi
 }
 
 /** The design's art for share cards: a 420×630 JPEG slice of its painting (public/art/<id>/og.jpg). */
-export async function ogArt(origin: string | null, id: string): Promise<string | null> {
+export async function ogArt(origin: string | null, id: string, path = `/art/${id}/og.jpg`): Promise<string | null> {
   if (!origin) return null;
   try {
-    const res = await fetch(`${origin}/art/${id}/og.jpg`, { cache: "force-cache" });
+    const res = await fetch(`${origin}${path}`, { cache: "force-cache" });
     if (!res.ok) return null;
     return `data:image/jpeg;base64,${Buffer.from(await res.arrayBuffer()).toString("base64")}`;
   } catch {

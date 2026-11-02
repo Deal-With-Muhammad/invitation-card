@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { notFound } from "next/navigation";
 import { cache } from "react";
 
+import { customFor } from "@/custom";
 import { paletteFor } from "@/invite/look";
 import { resolve } from "@/invite/resolve";
 import { getTemplate } from "@/invite/templates";
@@ -19,6 +20,18 @@ const load = cache(async (slug: string) => {
 
 export async function generateMetadata(props: PageProps<"/[slug]">): Promise<Metadata> {
   const { slug } = await props.params;
+  const custom = customFor(slug);
+  if (custom) {
+    const { title, description } = custom;
+    return {
+      title: { absolute: title },
+      description,
+      robots: { index: false, follow: false },
+      alternates: { canonical: `/${slug}` },
+      openGraph: { type: "website", url: `/${slug}`, title, description, siteName: "DWM Invite" },
+      twitter: { card: "summary_large_image", title, description },
+    };
+  }
   const rec = await load(slug);
   if (!rec) return { title: "Invitation not found", robots: { index: false } };
   const r = resolve(rec.data);
@@ -36,6 +49,8 @@ export async function generateMetadata(props: PageProps<"/[slug]">): Promise<Met
 
 export async function generateViewport(props: PageProps<"/[slug]">): Promise<Viewport> {
   const { slug } = await props.params;
+  const custom = customFor(slug);
+  if (custom) return { themeColor: custom.themeColor, viewportFit: "cover" };
   const rec = await load(slug);
   const color = rec ? paletteFor(getTemplate(rec.data.template).meta, rec.data.look).bg : "#f5f0e6";
   return { themeColor: color, viewportFit: "cover" };
@@ -43,6 +58,12 @@ export async function generateViewport(props: PageProps<"/[slug]">): Promise<Vie
 
 export default async function InvitePage(props: PageProps<"/[slug]">) {
   const { slug } = await props.params;
+  // A custom invitation is its own page, with no visit limit.
+  const custom = customFor(slug);
+  if (custom) {
+    const Custom = await custom.load();
+    return <Custom />;
+  }
   const rec = await load(slug);
   if (!rec) notFound();
   // Once every visit is used, nobody gets in (the admin still can, to check it).
