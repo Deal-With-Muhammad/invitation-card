@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 
-import { BISMILLAH, BismillahScene, calendarUrl, Countdown, Credit, Detail, INSHALLAH, maps, QuboolScene, Relief, RumScene, Scene } from "../relief/kit";
+import { BISMILLAH, BismillahScene, calendarUrl, Countdown, Credit, Detail, maps, QuboolScene, Relief, RumScene, Scene } from "../relief/kit";
 
 // Shifa & Arbaz, design 2: the ivory relief design (../relief) with all four
 // celebrations (Vapi, 7–9 January 2027) as scenes. Details from the family's latest
@@ -115,10 +115,9 @@ export function Invite() {
         <p className="rl-body">son of Mrs. Femida &amp; Late Mr. Shaiyad Khan</p>
       </Scene>
 
-      <Scene art="frame" className="is-details">
-        <p className="rl-insha" lang="ar" dir="rtl">
-          {INSHALLAH}
-        </p>
+      <Scene art="frame" className="is-details is-event">
+        <p className="rl-caps">Mr.&nbsp;Salim &amp; Late&nbsp;Mrs.&nbsp;Mumtaz&nbsp;Vankalwala</p>
+        <p className="rl-body">would like to invite you to the</p>
         <h2 className="rl-title rl-write">Nikah Ceremony</h2>
         <div className="rl-pair">
           <Detail icon="calendar">
@@ -127,15 +126,14 @@ export function Invite() {
           </Detail>
           <Detail icon="clock">
             {NIKAH.time}
-            <small>Nikah</small>
+            <small>Lunch from 2:00 PM</small>
           </Detail>
         </div>
         <div className="rl-one">
           <Venue />
         </div>
-        <p className="rl-en">Lunch will be served from 2:00 pm onwards</p>
         <Countdown to={NIKAH.start} />
-        <a className="rl-btn" href={calendar(NIKAH)} target="_blank" rel="noopener">
+        <a className="rl-link" href={calendar(NIKAH)} target="_blank" rel="noopener">
           Add to calendar
         </a>
       </Scene>

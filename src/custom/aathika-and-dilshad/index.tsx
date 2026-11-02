@@ -3,21 +3,22 @@
 import { BISMILLAH, BismillahScene, calendarUrl, Countdown, Credit, Detail, INSHALLAH, maps, QuboolScene, Relief, RumScene, Scene } from "../relief/kit";
 
 // Custom invitation for Aathika & Dilshad's Nikah (Vellore, 20 November 2026), on the
-// ivory relief design (../relief). Details from her own invite (/aathika).
+// ivory relief design (../relief). Details from her own invite (/aathika), with her
+// corrections: the Nikah is after Asr at Hussainpura Big Mosque, then Function Palace.
 
 const SLUG = "aathika-and-dilshad";
 
-/** The Nikah, India time. */
-const START = "2026-11-20T16:30:00+05:30";
-const END = "2026-11-20T17:00:00+05:30";
+/** The Nikah is after Asr (about 3:30 pm in Vellore in November), India time. */
+const START = "2026-11-20T15:30:00+05:30";
+const END = "2026-11-20T18:00:00+05:30";
 
-const MASJID = { name: "Masjid-E-Azam", address: "Kaspa, Vellore", maps: maps("Masjid-E-Azam, Kaspa, Vellore") };
-
-const HALL = {
-  name: "Khanna Fiesta Banquet Hall",
-  address: "Vellore",
-  maps: "https://www.google.com/maps/place/Khanna+Fiesta,+A+Bergamont+Hotel+-+Vellore/@12.909297,79.1287891,17z/data=!4m9!3m8!1s0x3bad3890ebc7dde9:0xd2d8720815504e77!5m2!4m1!1i2!8m2!3d12.909297!4d79.131364!16s%2Fg%2F12hkwp02w",
+const MASJID = {
+  name: "Hussainpura Big Mosque",
+  address: "Deterline Masjid, Vellore",
+  maps: maps("Hussainpura Big Mosque, Vellore"),
 };
+
+const HALL = { name: "Function Palace", address: "Vellore", maps: maps("Function Palace, Vellore") };
 
 const CONTACTS = [
   { name: "Abdul Shuckoor", phone: "9944650008" },
@@ -25,10 +26,10 @@ const CONTACTS = [
 ];
 
 const CALENDAR = calendarUrl({
-  title: "Nikah · Aathika & Dilshad",
+  title: "Nikah (after Asr) · Aathika & Dilshad",
   start: START,
   end: END,
-  details: `Nikah at ${MASJID.name}, ${MASJID.address}\nVenue: ${HALL.name}, ${HALL.address}\n\nhttps://invite.dealwithmuhammad.com/${SLUG}`,
+  details: `Nikah after Asr prayer at ${MASJID.name} (${MASJID.address})\nThen at ${HALL.name}, ${HALL.address}\n\nhttps://invite.dealwithmuhammad.com/${SLUG}`,
   location: `${MASJID.name}, ${MASJID.address}`,
 });
 
@@ -66,9 +67,9 @@ export function Invite() {
         </p>
         <p className="rl-caps">Mr &amp; Mrs Abdul Shuckoor Majeed</p>
         <p className="rl-body">request the pleasure of your gracious presence on the auspicious occasion of the Nikah of their beloved daughter</p>
-        <p className="rl-person rl-write">Aathika Tharannum S</p>
+        <p className="rl-person rl-write">Aathika Tharannum</p>
         <p className="rl-with">with</p>
-        <p className="rl-person rl-write">Dilshad Backer K</p>
+        <p className="rl-person rl-write">Dilshad Backer</p>
         <p className="rl-body">son of Mr &amp; Mrs Abu Backer</p>
       </Scene>
 
@@ -83,7 +84,7 @@ export function Invite() {
             <small>20th November 2026</small>
           </Detail>
           <Detail icon="clock">
-            4:30 PM
+            After Asr
             <small>Nikah</small>
           </Detail>
         </div>
