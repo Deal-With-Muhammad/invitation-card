@@ -37,6 +37,21 @@ export const CUSTOM: Record<string, CustomInvite> = {
     },
     load: () => import("./siraj-and-shireen").then((m) => m.Invite),
   },
+  "shifa-and-arbaz": {
+    title: "Wedding Celebrations · Shifa & Arbaz",
+    description: "Nikah, Mehendi, Pithi & Mosaru and Daawat-e-Mehmani · 7–9 January 2027 · Vapi — tap to open",
+    themeColor: "#4b1630",
+    poster: "/custom/shifa-and-arbaz/poster.webp",
+    og: {
+      p: { id: "plum", name: "Plum", bg: "#f6efe2", ink: "#3b2630", accent: "#7a2a45", soft: "#e6d3a3" },
+      art: "/custom/shifa-and-arbaz/og.jpg",
+      title: "Wedding Celebrations",
+      names: "Shifa & Arbaz",
+      date: "7 – 9 January 2027",
+      venue: "Vapi, Gujarat",
+    },
+    load: () => import("./shifa-and-arbaz").then((m) => m.Invite),
+  },
 };
 
 export const customFor = (slug: string): CustomInvite | null => (Object.hasOwn(CUSTOM, slug) ? CUSTOM[slug] : null);
