@@ -52,6 +52,21 @@ export const CUSTOM: Record<string, CustomInvite> = {
     },
     load: () => import("./shifa-and-arbaz").then((m) => m.Invite),
   },
+  "aathika-and-dilshad": {
+    title: "Nikah · Aathika & Dilshad",
+    description: "Friday 20 November 2026 · 4:30 PM · Vellore — tap to open",
+    themeColor: "#ece3d4",
+    poster: "/custom/aathika-and-dilshad/poster.webp",
+    og: {
+      p: { id: "ivory", name: "Ivory", bg: "#f3ece0", ink: "#4e3a28", accent: "#a98a5c", soft: "#e2d6c2" },
+      art: "/custom/aathika-and-dilshad/og.jpg",
+      title: "Nikah",
+      names: "Aathika & Dilshad",
+      date: "Friday 20 November 2026",
+      venue: "Vellore",
+    },
+    load: () => import("./aathika-and-dilshad").then((m) => m.Invite),
+  },
 };
 
 export const customFor = (slug: string): CustomInvite | null => (Object.hasOwn(CUSTOM, slug) ? CUSTOM[slug] : null);

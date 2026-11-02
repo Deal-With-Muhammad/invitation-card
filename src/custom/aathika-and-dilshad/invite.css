@@ -1,0 +1,637 @@
+/* Aathika & Dilshad: ivory sculpted relief, champagne and warm brown ink, after the
+   reference video. Full-screen scenes over the art; text writes itself in. Phone
+   first; on wider screens it stays a 480px column. */
+
+html.ad-locked,
+html.ad-locked body {
+  overflow: hidden;
+}
+
+html:has(.ad) {
+  scroll-behavior: smooth;
+  scroll-snap-type: y proximity;
+}
+
+.ad {
+  --ivory: #ece3d4;
+  --ink: #4e3a28;
+  --brown: #6c4f35;
+  --muted: #7d6a57;
+  --gold: #a98a5c;
+  --gold-l: #cdb48c;
+  --serif: var(--f-cormorant), "Cormorant Garamond", Georgia, serif;
+  --caps: var(--f-cinzel), var(--serif);
+  --script: var(--f-great-vibes), cursive;
+  --arabic: var(--f-amiri), "Amiri", serif;
+  --urdu: var(--f-nastaliq), "Noto Nastaliq Urdu", serif;
+  min-height: 100dvh;
+  background: #d9cdb9;
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 18px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+:where(.ad) :where(p, h1, h2) {
+  margin: 0;
+}
+
+.ad-main {
+  position: relative;
+  max-width: 480px;
+  margin: 0 auto;
+  box-shadow: 0 0 70px rgba(80, 60, 30, 0.18);
+}
+
+.ad-art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ── envelope and film ────────────────────────────────────────────────────── */
+
+.ad-cover {
+  position: fixed;
+  inset: 0 auto 0 50%;
+  z-index: 40;
+  width: min(100vw, 480px);
+  transform: translateX(-50%);
+  overflow: hidden;
+  background: var(--ivory);
+  cursor: pointer;
+  outline: none;
+}
+
+.ad-film {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+}
+
+[data-phase="opening"] .ad-film {
+  opacity: 1;
+}
+
+.ad-tap {
+  position: absolute;
+  bottom: calc(9% + env(safe-area-inset-bottom));
+  left: 50%;
+  padding: 12px 24px;
+  border: 1px solid rgba(169, 138, 92, 0.6);
+  border-radius: 999px;
+  background: rgba(250, 245, 236, 0.88);
+  color: var(--brown);
+  font: 600 12.5px/1 var(--caps);
+  letter-spacing: 0.24em;
+  white-space: nowrap;
+  box-shadow: 0 12px 28px -16px rgba(80, 60, 30, 0.55);
+  transform: translateX(-50%);
+  animation: ad-breathe 3.2s ease-in-out infinite;
+}
+
+.ad-cover:focus-visible .ad-tap {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+[data-phase="opening"] .ad-tap {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  animation: none;
+}
+
+@keyframes ad-breathe {
+  50% {
+    transform: translateX(-50%) scale(1.04);
+  }
+}
+
+/* ── scenes ──────────────────────────────────────────────────────────────── */
+
+.ad-scene {
+  position: relative;
+  display: flex;
+  min-height: 100svh;
+  scroll-snap-align: start;
+  overflow: hidden;
+  background: var(--ivory);
+}
+
+.ad-text {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 18svh 17% 19svh;
+  text-align: center;
+}
+
+/* the couple stands in the bottom third, so their scenes keep text above them */
+.ad-scene.is-couple .ad-text {
+  justify-content: flex-start;
+  padding: 23svh 14% 43svh;
+}
+
+.ad-scene.is-last .ad-text {
+  padding-top: 24svh;
+  padding-bottom: 40svh;
+}
+
+.ad-scene.is-details .ad-text {
+  padding: 16svh 12% 15svh;
+}
+
+/* writing in: everything rises softly, calligraphy is drawn on from its first letter */
+.ad-text > * {
+  opacity: 0;
+  transform: translateY(12px);
+  filter: blur(3px);
+  transition:
+    opacity 0.9s ease,
+    transform 0.9s cubic-bezier(0.2, 0.7, 0.3, 1),
+    filter 0.9s ease;
+}
+
+.ad-scene.is-in .ad-text > * {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+.ad-write,
+.ad-write-rtl {
+  clip-path: inset(-20% 100% -20% 0);
+  transition:
+    opacity 0.4s ease,
+    clip-path 1.8s cubic-bezier(0.45, 0.05, 0.3, 1),
+    transform 0.9s ease,
+    filter 0.4s ease;
+}
+
+.ad-write-rtl {
+  clip-path: inset(-20% 0 -20% 100%);
+}
+
+.ad-scene.is-in .ad-write,
+.ad-scene.is-in .ad-write-rtl {
+  clip-path: inset(-20% -5% -20% -5%);
+}
+
+.ad-scene.is-in .ad-text > :nth-child(2) {
+  transition-delay: 0.5s;
+}
+.ad-scene.is-in .ad-text > :nth-child(3) {
+  transition-delay: 0.9s;
+}
+.ad-scene.is-in .ad-text > :nth-child(4) {
+  transition-delay: 1.3s;
+}
+.ad-scene.is-in .ad-text > :nth-child(5) {
+  transition-delay: 1.7s;
+}
+.ad-scene.is-in .ad-text > :nth-child(6) {
+  transition-delay: 2s;
+}
+.ad-scene.is-in .ad-text > :nth-child(7) {
+  transition-delay: 2.3s;
+}
+.ad-scene.is-in .ad-text > :nth-child(n + 8) {
+  transition-delay: 2.6s;
+}
+
+/* type */
+.ad-bism {
+  color: var(--brown);
+  font: 400 clamp(26px, 4.2svh, 34px) / 1.7 var(--arabic);
+}
+
+.ad-bism-sm {
+  margin-bottom: 1.4svh;
+  color: var(--brown);
+  font: 400 22px/1.7 var(--arabic);
+}
+
+.ad-small {
+  max-width: 260px;
+  color: var(--muted);
+  font-style: italic;
+  font-size: 15px;
+  line-height: 1.35;
+}
+
+.ad-orn {
+  position: relative;
+  display: block;
+  width: 120px;
+  height: 1px;
+  margin: 2.6svh auto;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+.ad-orn::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  border: 1px solid var(--gold);
+  background: var(--ivory);
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.ad-ar {
+  color: var(--ink);
+  font: 400 clamp(26px, 4svh, 32px) / 1.8 var(--arabic);
+}
+
+.ad-rum {
+  font-size: clamp(18px, 2.6svh, 22px);
+  line-height: 1.95;
+}
+
+.ad-rum + .ad-en {
+  font-size: clamp(15px, 2svh, 17px);
+}
+
+.ad-en {
+  margin-top: 4px;
+  color: var(--muted);
+  font-style: italic;
+  font-size: clamp(16px, 2.2svh, 18px);
+  line-height: 1.45;
+  text-wrap: balance;
+}
+
+.ad-ref {
+  margin-top: 8px;
+  color: var(--gold);
+  font: 600 11.5px/1.3 var(--caps);
+  letter-spacing: 0.18em;
+}
+
+.ad-mono {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: clamp(104px, 15svh, 128px);
+  aspect-ratio: 1;
+  margin-bottom: 2.4svh;
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  outline: 1px solid rgba(169, 138, 92, 0.45);
+  outline-offset: 5px;
+  color: var(--brown);
+  font: 400 clamp(46px, 6.8svh, 58px) / 1 var(--script);
+}
+
+.ad-mono span:first-child {
+  transform: translate(-14%, -8%);
+}
+
+.ad-mono span:last-child {
+  position: absolute;
+  transform: translate(22%, 14%);
+  color: var(--gold);
+}
+
+.ad-names {
+  display: grid;
+  color: var(--brown);
+  font: 400 clamp(42px, 6.2svh, 54px) / 1.1 var(--script);
+}
+
+.ad-names span {
+  color: var(--gold);
+  font: italic 400 0.5em/1.2 var(--serif);
+}
+
+.ad-saying {
+  margin-top: 1.4svh;
+  color: var(--muted);
+  font-style: italic;
+  font-size: 19px;
+}
+
+.ad-qubool {
+  margin-top: 1svh;
+  color: var(--brown);
+  font: 400 clamp(36px, 5.6svh, 48px) / 2 var(--urdu);
+}
+
+.ad-caps {
+  color: var(--brown);
+  font: 600 clamp(13px, 1.8svh, 15px) / 1.4 var(--caps);
+  letter-spacing: 0.08em;
+  text-wrap: balance;
+}
+
+.ad-body {
+  margin-top: 1.2svh;
+  color: var(--muted);
+  font-size: clamp(16px, 2.2svh, 18.5px);
+  line-height: 1.45;
+  text-wrap: balance;
+}
+
+.ad-person {
+  margin-top: 1.4svh;
+  color: var(--brown);
+  font: 400 clamp(30px, 4.3svh, 38px) / 1.15 var(--script);
+  white-space: nowrap;
+}
+
+.ad-with {
+  margin-top: 0.6svh;
+  color: var(--gold);
+  font-style: italic;
+  font-size: 18px;
+}
+
+/* the Nikah */
+.ad-insha {
+  color: var(--brown);
+  font: 400 clamp(24px, 3.4svh, 30px) / 1.6 var(--arabic);
+}
+
+.ad-title {
+  margin-bottom: 1.6svh;
+  color: var(--brown);
+  font: 400 clamp(40px, 5.8svh, 50px) / 1.15 var(--script);
+}
+
+.ad-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  width: 100%;
+  margin-top: 1.8svh;
+}
+
+.ad-detail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ad-detail svg {
+  width: 22px;
+  height: 22px;
+  margin-bottom: 4px;
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ad-detail p {
+  color: var(--ink);
+  font: 600 clamp(13px, 1.8svh, 15px) / 1.3 var(--caps);
+  letter-spacing: 0.03em;
+  text-wrap: balance;
+}
+
+.ad-detail small {
+  display: block;
+  color: var(--muted);
+  font: italic 400 15px/1.3 var(--serif);
+  letter-spacing: 0;
+}
+
+.ad-detail a {
+  display: inline-block;
+  margin-top: 4px;
+  color: var(--gold);
+  font: 600 11px/1 var(--caps);
+  letter-spacing: 0.16em;
+  text-underline-offset: 3px;
+}
+
+.ad-count {
+  display: flex;
+  gap: 8px;
+  margin-top: 2.2svh;
+}
+
+.ad-count span {
+  min-width: 52px;
+  padding: 8px 4px 6px;
+  border: 1px solid rgba(169, 138, 92, 0.55);
+  border-radius: 10px;
+  background: rgba(250, 245, 236, 0.7);
+  color: var(--brown);
+  font: 500 22px/1 var(--serif);
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.ad-count small {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font: 600 9px/1 var(--caps);
+  letter-spacing: 0.12em;
+}
+
+.ad-today {
+  margin-top: 2svh;
+  font-size: 20px;
+}
+
+.ad-btn {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-top: 2.2svh;
+  padding: 0 22px;
+  border-radius: 999px;
+  background: var(--brown);
+  color: #f8f1e4;
+  font: 600 11.5px/1 var(--caps);
+  letter-spacing: 0.16em;
+  text-decoration: none;
+  white-space: nowrap;
+  box-shadow: 0 12px 24px -14px rgba(80, 60, 30, 0.8);
+}
+
+/* regards */
+.ad-family {
+  margin-top: 0.4svh;
+  color: var(--brown);
+  font: 400 clamp(38px, 5.4svh, 46px) / 1.2 var(--script);
+}
+
+.ad-calls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 1.6svh;
+}
+
+.ad-calls a {
+  padding: 8px 14px;
+  border: 1px solid rgba(169, 138, 92, 0.55);
+  border-radius: 12px;
+  background: rgba(250, 245, 236, 0.75);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.ad-calls span {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.ad-calls small {
+  display: block;
+  color: var(--muted);
+  font-size: 13.5px;
+}
+
+.ad-foot {
+  padding: 28px 22px calc(80px + env(safe-area-inset-bottom));
+  border-top: 1px solid rgba(169, 138, 92, 0.45);
+  background: #f3ece0;
+  text-align: center;
+}
+
+.ad-credit {
+  display: inline-block;
+  margin-top: 18px;
+  color: var(--muted);
+  font-size: 13.5px;
+  text-underline-offset: 3px;
+}
+
+/* ── chrome ──────────────────────────────────────────────────────────────── */
+
+.ad-dots {
+  position: fixed;
+  top: 50%;
+  right: max(10px, calc(50vw - 230px));
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 9px 6px;
+  border-radius: 999px;
+  background: rgba(250, 245, 236, 0.82);
+  box-shadow: 0 6px 18px -10px rgba(80, 60, 30, 0.5);
+  transform: translateY(-50%);
+}
+
+.ad-dots button {
+  width: 7px;
+  height: 7px;
+  padding: 0;
+  border: 1px solid var(--brown);
+  border-radius: 4px;
+  background: transparent;
+  cursor: pointer;
+  transition:
+    height 0.3s ease,
+    background 0.3s ease;
+}
+
+.ad-dots button.is-on {
+  height: 22px;
+  background: var(--brown);
+}
+
+.ad-next {
+  position: fixed;
+  bottom: calc(14px + env(safe-area-inset-bottom));
+  left: 50%;
+  z-index: 30;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: rgba(250, 245, 236, 0.85);
+  color: var(--brown);
+  font: 600 10.5px/1 var(--caps);
+  letter-spacing: 0.24em;
+  transform: translateX(-50%);
+  animation: ad-bob 2.6s ease-in-out infinite;
+}
+
+@keyframes ad-bob {
+  50% {
+    transform: translate(-50%, 4px);
+  }
+}
+
+.ad-music {
+  position: fixed;
+  bottom: calc(16px + env(safe-area-inset-bottom));
+  left: max(14px, calc(50vw - 226px));
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid rgba(169, 138, 92, 0.6);
+  border-radius: 50%;
+  background: rgba(250, 245, 236, 0.9);
+  box-shadow: 0 10px 24px -14px rgba(80, 60, 30, 0.6);
+  cursor: pointer;
+}
+
+.ad-music span {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 16px;
+}
+
+.ad-music i {
+  width: 3px;
+  height: 6px;
+  border-radius: 2px;
+  background: var(--brown);
+}
+
+.ad-music.is-on i {
+  animation: ad-bars 1.2s ease-in-out infinite;
+}
+
+.ad-music.is-on i:nth-child(2) {
+  animation-delay: -0.4s;
+}
+
+.ad-music.is-on i:nth-child(3) {
+  animation-delay: -0.8s;
+}
+
+@keyframes ad-bars {
+  50% {
+    height: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ad *,
+  .ad *::before,
+  .ad *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .ad-text > *,
+  .ad-write,
+  .ad-write-rtl {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    clip-path: none;
+  }
+}
