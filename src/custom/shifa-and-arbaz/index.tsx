@@ -17,23 +17,18 @@ import "./invite.css";
 const SLUG = "shifa-and-arbaz";
 const DIR = `/custom/${SLUG}`;
 
-/** Counts down to the first function (India time). */
-const COUNT_TO = "2027-01-07T00:00:00+05:30";
+/** Counts down to the Nikah (India time). */
+const COUNT_TO = "2027-01-07T11:00:00+05:30";
 
 const maps = (q: string) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
 
 type Place = { name: string; address: string; maps: string };
 
+// Spelt as on the family's latest cards. Every celebration, the Nikah too, is here.
 const FARHEEN: Place = {
-  name: "FARHEEN Party Plot",
-  address: "Mohid Bungalow, G-9, Vapi–Daman Main Road, Opp. GST Bhavan, near Adit Hospital, Chala, Vapi, Gujarat 396191",
-  maps: maps("FARHEEN Party Plot, Vapi Daman Main Road, Chala, Vapi, Gujarat 396191"),
-};
-
-const MASJID: Place = {
-  name: "Madina Masjid",
-  address: "Imran Nagar, Vapi",
-  maps: maps("Madina Masjid, Imran Nagar, Vapi, Gujarat"),
+  name: "FARHEN Party Plot",
+  address: "Mohid Bungalow, G-9, Vapi–Daman Main Road, Opp. GST Bhavan, Near Aditi Hospital, Chala, Vapi, Gujarat 396191",
+  maps: maps("Farheen Party Plot, Mohid Bungalow, Vapi Daman Main Road, Chala, Vapi, Gujarat 396191"),
 };
 
 type Stop = { time: string; what: string; place: Place };
@@ -64,10 +59,8 @@ const EVENTS: Ev[] = [
     day: "Thursday",
     date: "7th January 2027",
     ymd: "20270107",
-    stops: [
-      { time: "After Zuhr", what: "Nikah ceremony", place: MASJID },
-      { time: "From 2:00 pm", what: "Lunch", place: FARHEEN },
-    ],
+    tag: "Lunch will be served from 2:00 pm onwards",
+    stops: [{ time: "Nikah at 11:00 am", what: "Nikah ceremony", place: FARHEEN }],
     look: { a: "#7a2a45", b: "#8a8357", c: "#a0577a" },
   },
   {
@@ -77,7 +70,7 @@ const EVENTS: Ev[] = [
     day: "Thursday",
     date: "7th January 2027",
     ymd: "20270107",
-    host: "Arbaz, Sohaa, Adnan & Hassan",
+    host: "Arbaz, Neamat, Adnan, Sohaa & Hassan",
     invite: "would like to invite you to Shifa's",
     stops: [{ time: "Guest arrival 7:00 pm", what: "Mehendi", place: FARHEEN }],
     look: { a: "#7a2a45", b: "#8a8357", c: "#a0577a" },
@@ -89,7 +82,9 @@ const EVENTS: Ev[] = [
     day: "Friday",
     date: "8th January 2027",
     ymd: "20270108",
-    tag: "An evening of colour, family & celebration",
+    host: "Yashmin Vankalwala & Late Firoz Vankalwala",
+    invite: "request the pleasure of your company for a special celebration of their daughter Shifa",
+    tag: "An evening of colour, family and celebration",
     stops: [{ time: "Guest arrival 6:00 pm", what: "Pithi & Mosaru", place: FARHEEN }],
     look: { a: "#2f7f7a", b: "#c4672a", c: "#b8336a" },
     dots: true,
@@ -103,7 +98,7 @@ const EVENTS: Ev[] = [
     ymd: "20270109",
     host: "Aslam & Vahida Vankalwala",
     invite: "request the pleasure of your company for",
-    tag: "Celebrating the wedding of their beloved niece",
+    tag: "To celebrate the wedding of their beloved niece",
     stops: [{ time: "Guest arrival 7:00 pm", what: "Daawat-e-Mehmani", place: FARHEEN }],
     look: { a: "#7d7550", b: "#8a8357", c: "#a39a6c" },
   },
@@ -262,7 +257,7 @@ function Hero() {
           <span className="sa-amp">&amp;</span>
           <span>Arbaz</span>
         </h1>
-        <p className="sa-groom">son of Late Shahzad &amp; Femida Khan</p>
+        <p className="sa-groom">son of Mrs. Femida &amp; Late Mr. Shaiyad Khan</p>
         <Rule />
         <p className="sa-dates">7 · 8 · 9 January 2027</p>
         <p className="sa-city">Vapi, Gujarat</p>
@@ -435,7 +430,7 @@ function Countdown() {
   return (
     <section className="sa-sec">
       <header className="sa-head">
-        <p className="sa-sub">until the celebrations begin</p>
+        <p className="sa-sub">until the Nikah</p>
         <h2>Counting Down</h2>
         <Rule />
       </header>
@@ -458,8 +453,7 @@ function Countdown() {
 function Venues() {
   const places = useMemo(
     () => [
-      { place: FARHEEN, for: "Mehendi · Nikah lunch · Pithi & Mosaru · Daawat-e-Mehmani" },
-      { place: MASJID, for: "Nikah ceremony, after Zuhr" },
+      { place: FARHEEN, for: "Nikah · Mehendi · Pithi & Mosaru · Daawat-e-Mehmani" },
     ],
     [],
   );
@@ -467,7 +461,7 @@ function Venues() {
     <section className="sa-sec">
       <header className="sa-head">
         <p className="sa-sub">where to find us</p>
-        <h2>The Venues</h2>
+        <h2>The Venue</h2>
         <Rule />
       </header>
       <div className="sa-venues">
@@ -489,7 +483,6 @@ function Venues() {
 function Closing() {
   return (
     <footer className="sa-sec sa-closing">
-      <p className="sa-note">A gentle request: no boxed gifts, please.</p>
       <p className="sa-close-names">
         Shifa <span>&amp;</span> Arbaz
       </p>
