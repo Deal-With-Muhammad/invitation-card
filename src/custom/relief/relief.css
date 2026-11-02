@@ -149,7 +149,7 @@ html:has(.rl) {
 
 /* a celebration with its hosts on top: start below the pearls, keep off the bows */
 .rl-scene.is-event .rl-text {
-  padding: 23svh 13.5% 13svh;
+  padding: 21svh 13.5% 13svh;
 }
 
 .rl-scene.is-event .rl-body,
@@ -437,6 +437,20 @@ html:has(.rl) {
   margin-bottom: 4px;
 }
 
+.rl-foot .rl-small {
+  margin-inline: auto;
+}
+
+.rl-map {
+  display: block;
+  width: 100%;
+  height: 220px;
+  margin-top: 16px;
+  border: 1px solid rgba(169, 138, 92, 0.55);
+  border-radius: 14px;
+  background: #e9e0d0;
+}
+
 .rl-detail {
   display: flex;
   flex-direction: column;
@@ -500,6 +514,22 @@ html:has(.rl) {
   color: var(--muted);
   font: 600 9px/1 var(--caps);
   letter-spacing: 0.12em;
+}
+
+.rl-count.is-compact {
+  gap: 6px;
+  margin-top: 1.4svh;
+}
+
+.rl-count.is-compact span {
+  min-width: 44px;
+  padding: 6px 3px 5px;
+  font-size: 18px;
+}
+
+.rl-count.is-compact small {
+  margin-top: 3px;
+  font-size: 8px;
 }
 
 .rl-today {

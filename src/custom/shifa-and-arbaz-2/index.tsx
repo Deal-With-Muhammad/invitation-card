@@ -36,7 +36,8 @@ function calendar(e: Ev) {
   });
 }
 
-function Venue() {
+/** The venue, with directions and (for a celebration) its add-to-calendar link. */
+function Venue({ e }: { e?: Ev }) {
   return (
     <Detail icon="pin">
       {VENUE.name}
@@ -44,6 +45,14 @@ function Venue() {
       <a href={VENUE.maps} target="_blank" rel="noopener">
         Directions
       </a>
+      {e && (
+        <>
+          {" · "}
+          <a href={calendar(e)} target="_blank" rel="noopener">
+            Add to calendar
+          </a>
+        </>
+      )}
     </Detail>
   );
 }
@@ -67,12 +76,10 @@ function EventScene({ e, hosts, invite, title, tagline, after }: { e: Ev; hosts:
         </Detail>
       </div>
       <div className="rl-one">
-        <Venue />
+        <Venue e={e} />
       </div>
       {after}
-      <a className="rl-link" href={calendar(e)} target="_blank" rel="noopener">
-        Add to calendar
-      </a>
+      <Countdown to={e.start} compact />
     </Scene>
   );
 }
@@ -91,6 +98,13 @@ export function Invite() {
           <p className="rl-small">All celebrations at</p>
           <p className="rl-foot-venue">{VENUE.name}</p>
           <p className="rl-small">{VENUE.address}</p>
+          <iframe
+            className="rl-map"
+            title={`Map of ${VENUE.name}`}
+            src={`https://www.google.com/maps?q=${encodeURIComponent("Mohid Bungalow, Vapi Daman Main Road, Chala, Vapi, Gujarat 396191")}&z=15&output=embed`}
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          />
           <a className="rl-btn" href={VENUE.maps} target="_blank" rel="noopener">
             Open in Maps
           </a>
@@ -130,12 +144,9 @@ export function Invite() {
           </Detail>
         </div>
         <div className="rl-one">
-          <Venue />
+          <Venue e={NIKAH} />
         </div>
-        <Countdown to={NIKAH.start} />
-        <a className="rl-link" href={calendar(NIKAH)} target="_blank" rel="noopener">
-          Add to calendar
-        </a>
+        <Countdown to={NIKAH.start} compact />
       </Scene>
 
       <EventScene e={MEHENDI} hosts="Arbaz, Neamat, Adnan, Sohaa & Hassan" invite="would like to invite you to" title="Shifa's Mehendi" />

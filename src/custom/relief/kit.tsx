@@ -355,7 +355,8 @@ export function Detail({ icon, children }: { icon: keyof typeof ICONS; children:
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
-export function Countdown({ to }: { to: string }) {
+/** Days, hours, minutes and seconds to `to`; `compact` for scenes short on room. */
+export function Countdown({ to, compact = false }: { to: string; compact?: boolean }) {
   const [left, setLeft] = useState<number | null>(null);
   useEffect(() => {
     const target = Date.parse(to);
@@ -375,7 +376,7 @@ export function Countdown({ to }: { to: string }) {
           [pad(Math.floor(left / 1000) % 60), "Sec"],
         ];
   return (
-    <div className="rl-count" role="timer" aria-live="off">
+    <div className={`rl-count${compact ? " is-compact" : ""}`} role="timer" aria-live="off">
       {parts.map(([n, l]) => (
         <span key={l}>
           {n}
