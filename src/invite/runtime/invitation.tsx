@@ -7,12 +7,14 @@ import { copyFor } from "../i18n";
 import { rootStyle } from "../look";
 import { resolve } from "../resolve";
 import { getTemplate } from "../templates";
+import type { Song } from "../songs";
 import type { Phase } from "../templates/types";
 import type { InviteData, Lang } from "../types";
 import { useAutoScroll } from "./auto-scroll";
 import { Music } from "./music";
 import { Body } from "./sections";
 import { SimpleCover } from "./simple-cover";
+import { YouTubeSong } from "./youtube-song";
 
 import "./base.css";
 
@@ -26,11 +28,13 @@ type Props = {
   credit?: boolean;
   /** "section:nonce" — scroll to that section, skipping the cover (editor jumps to what you're editing). */
   focus?: string | null;
+  /** A real song to play instead of the synthesised music. */
+  song?: Song;
 };
 
 const SITE = "https://invite.dealwithmuhammad.com";
 
-export function Invitation({ data, replay = 0, credit = true, focus = null }: Props) {
+export function Invitation({ data, replay = 0, credit = true, focus = null, song }: Props) {
   const tpl = getTemplate(data.template);
   const [lang, setLang] = useState<Lang>(data.lang);
   // The host changed the main language in the editor: show it.
@@ -44,7 +48,7 @@ export function Invitation({ data, replay = 0, credit = true, focus = null }: Pr
   const [phase, setPhase] = useState<Phase>(data.look.opening ? "closed" : "open");
   const [playingState, setPlaying] = useState(false);
   const playing = playingState && data.music.on;
-  const music = useRef<Music | null>(null);
+  const music = useRef<Music | YouTubeSong | null>(null);
   const root = useRef<HTMLDivElement>(null);
   const timers = useRef<number[]>([]);
 
@@ -93,6 +97,17 @@ export function Invitation({ data, replay = 0, credit = true, focus = null }: Pr
   }, [playing]);
 
   useEffect(() => () => music.current?.dispose(), []);
+
+  // A song's player loads with the page, so it's ready for the tap that opens the card.
+  useEffect(() => {
+    if (!song || !data.music.on) return;
+    const s = new YouTubeSong(song, data.music.track);
+    music.current = s;
+    return () => {
+      s.dispose();
+      if (music.current === s) music.current = null;
+    };
+  }, [song, data.music.on, data.music.track]);
 
   const startMusic = useCallback(
     (chime = false) => {

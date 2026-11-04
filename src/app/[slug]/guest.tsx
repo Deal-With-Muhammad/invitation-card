@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 
 import { Invitation } from "@/invite/runtime/invitation";
+import { songFor } from "@/invite/songs";
 import type { InviteData } from "@/invite/types";
 
 // Slugs already counted in this page load, so a remount (or React's dev double
@@ -22,5 +23,5 @@ export function Guest({ slug, data }: { slug: string; data: InviteData }) {
       body: JSON.stringify({ ref: document.referrer }),
     }).catch(() => {});
   }, [slug]);
-  return <Invitation data={data} />;
+  return <Invitation data={data} song={songFor(slug)} />;
 }
