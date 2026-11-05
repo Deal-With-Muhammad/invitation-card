@@ -65,6 +65,14 @@ export function SiteFooter() {
           {AUTHOR.email}
         </a>
         <span aria-hidden>·</span>
+        <Link className={link} href="/privacy">
+          Privacy
+        </Link>
+        <span aria-hidden>·</span>
+        <Link className={link} href="/terms">
+          Terms
+        </Link>
+        <span aria-hidden>·</span>
         <span>Updated {site.updated.label}</span>
         <VisitCounter />
       </div>

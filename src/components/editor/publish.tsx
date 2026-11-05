@@ -249,6 +249,17 @@ export function PublishDialog({ data, onClose, onPublished, onFix }: { data: Inv
           <p className="mt-3 text-center text-[12.5px] text-muted">
             Anyone with the link can see it, up to {VISIT_LIMIT} visits. It isn&apos;t listed anywhere or shown in search results.
           </p>
+          <p className="mt-1.5 text-center text-[12.5px] text-muted">
+            By publishing you agree to the{" "}
+            <a className="underline underline-offset-4" href="/terms" target="_blank" rel="noopener">
+              Terms
+            </a>{" "}
+            and{" "}
+            <a className="underline underline-offset-4" href="/privacy" target="_blank" rel="noopener">
+              Privacy Policy
+            </a>
+            .
+          </p>
         </>
       )}
     </Sheet>

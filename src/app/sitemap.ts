@@ -13,5 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...PAGE_LIST.map((p) => ({ url: `${site.url}/${p.slug}`, lastModified: p.dateModified, changeFrequency: "monthly" as const, priority: 0.8 })),
     ...CATALOG.map((m) => ({ url: `${site.url}/templates/${m.id}`, lastModified: d, changeFrequency: "monthly" as const, priority: 0.7 })),
     { url: `${site.url}/custom`, lastModified: d, changeFrequency: "yearly", priority: 0.5 },
+    { url: `${site.url}/privacy`, lastModified: "2026-11-05", changeFrequency: "yearly", priority: 0.3 },
+    { url: `${site.url}/terms`, lastModified: "2026-11-05", changeFrequency: "yearly", priority: 0.3 },
   ];
 }

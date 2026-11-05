@@ -1,6 +1,7 @@
 "use client";
 
 import { Button, Input, Label, TextField } from "@heroui/react";
+import Link from "next/link";
 import { useState } from "react";
 
 type Step = { kind: "email" } | { kind: "code"; email: string };
@@ -78,6 +79,17 @@ export function LoginForm({ next, reauth, linkFailed }: { next: string; reauth: 
           </form>
           <p className="mt-5 text-[13px] leading-snug text-muted">
             You don&apos;t need an account to make an invitation. Signing in keeps your invitations safe in your account, so you can edit them from any phone.
+          </p>
+          <p className="mt-2 text-[13px] leading-snug text-muted">
+            By continuing you agree to the{" "}
+            <Link className="underline underline-offset-4" href="/terms">
+              Terms
+            </Link>{" "}
+            and{" "}
+            <Link className="underline underline-offset-4" href="/privacy">
+              Privacy Policy
+            </Link>
+            .
           </p>
         </>
       ) : (
