@@ -9,13 +9,13 @@ export type SongPart = {
   end?: number;
 };
 
-/** The part repeats for as long as music plays; the intro plays once, on the tap that opens the card. */
+/** The part repeats for as long as music plays. The intro plays during the opening (from the tap) and the part once the card is open. */
 export type Song = SongPart & { intro?: SongPart };
 
 const SONGS: Record<string, Song> = {
   // Shukran Allah (Kurbaan), requested by the host.
   "aleem-and-mussera": { video: "z_B0PF8Ug00", start: 0, end: 23 },
-  // A glitter sound as the card opens, then Bi Saraha (sped-up piano), requested by the host.
+  // A glitter sound during the opening, then Bi Saraha (sped-up piano) once the card is open, requested by the host.
   "ffarah-and-abid": { video: "wiKKkdMOGHc", intro: { video: "IZWL2gALgvM" } },
 };
 

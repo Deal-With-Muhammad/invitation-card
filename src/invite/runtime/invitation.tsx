@@ -111,6 +111,11 @@ export function Invitation({ data, replay = 0, credit = true, focus = null, song
     };
   }, [song, musicOn, data.music.track]);
 
+  // A song with an intro moves on to the song itself once the card is open.
+  useEffect(() => {
+    if (phase === "open" && music.current instanceof YouTubeSong) music.current.opened();
+  }, [phase, song, musicOn]);
+
   const startMusic = useCallback(
     (chime = false) => {
       if (!musicOn) return;

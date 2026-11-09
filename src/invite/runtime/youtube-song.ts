@@ -3,10 +3,11 @@ import type { MusicTrack } from "../types";
 import { Music } from "./music";
 
 // Plays a YouTube video (or part of one) on repeat as an invitation's music, with
-// the same controls as Music, optionally after a short intro that plays once. The
-// players sit out of sight and load with the page, because phones only start
-// playback if the tap on the card can reach a player that's ready. If YouTube
-// won't play the song, the design's own synthesised music takes over.
+// the same controls as Music, optionally after a short intro: the intro plays on
+// the tap that opens the card, the song once the card is open. The players sit
+// out of sight and load (silently buffering) with the page, so sound starts the
+// moment the guest taps. If YouTube won't play the song, the design's own
+// synthesised music takes over.
 
 type Player = {
   playVideo(): void;
@@ -72,6 +73,7 @@ class Clip {
   failed = false;
   /** Started muted inside the opening tap and paused, so it may play later on phones. */
   private priming = false;
+  private playing = false;
   private box: HTMLDivElement | null = null;
   private watch: number | null = null;
   private volume = 100;
@@ -98,6 +100,8 @@ class Clip {
       events: {
         onReady: () => {
           this.player = player;
+          // Buffer it now (muted autoplay is allowed), so playing it later is instant.
+          if (!this.playing) this.prime();
           this.events.ready();
         },
         onError: () => this.fail(),
@@ -116,6 +120,7 @@ class Clip {
   play() {
     const p = this.player;
     if (!p || this.failed) return;
+    this.playing = true;
     if (this.priming) {
       this.priming = false;
       p.unMute();
@@ -124,15 +129,16 @@ class Clip {
     this.startWatching();
   }
 
-  /** Lets a phone play this later without another tap: starts it silently, then pauses. */
+  /** Buffers it, and lets a phone play it later without another tap: starts it silently, then pauses. */
   prime() {
-    if (!this.player || this.failed) return;
+    if (!this.player || this.failed || this.playing) return;
     this.priming = true;
     this.player.mute();
     this.player.playVideo();
   }
 
   pause() {
+    this.playing = false;
     this.priming = false;
     this.stopWatching();
     this.player?.pauseVideo();
@@ -150,6 +156,7 @@ class Clip {
     const p = this.player;
     if (!p) return;
     if (!this.loop) {
+      this.playing = false;
       this.stopWatching();
       this.events.end();
       return;
@@ -196,7 +203,7 @@ export class YouTubeSong {
   playing = false;
   private main: Clip;
   private intro: Clip | null = null;
-  /** The intro has played (or can't), so the song is what plays now. */
+  /** The card is open (or the intro can't play), so the song is what plays now. */
   private introDone: boolean;
   private synth: Music | null = null;
   private disposed = false;
@@ -206,12 +213,7 @@ export class YouTubeSong {
     private track: MusicTrack,
   ) {
     this.main = new Clip(song, { ready: () => this.resume(), end: () => {}, fail: () => this.resume() }, true);
-    const done = () => {
-      if (this.introDone) return;
-      this.introDone = true;
-      this.resume();
-    };
-    if (song.intro) this.intro = new Clip(song.intro, { ready: () => this.resume(), end: done, fail: done }, false);
+    if (song.intro) this.intro = new Clip(song.intro, { ready: () => {}, end: () => {}, fail: () => this.opened() }, false);
     this.introDone = !this.intro;
     loadApi().then(
       (yt) => {
@@ -235,15 +237,22 @@ export class YouTubeSong {
   /** Must be called from a user gesture the first time. */
   async play(withChime = false) {
     this.playing = true;
-    // An intro that isn't ready by the tap is skipped rather than played late.
-    if (!this.introDone && !this.intro?.player) this.introDone = true;
-    if (!this.introDone && this.intro) {
-      this.intro.play();
+    if (!this.introDone) {
+      // The song waits for the card to open; an intro that isn't ready by the tap is skipped.
+      if (this.intro?.player) this.intro.play();
       this.main.prime();
       return;
     }
     if (this.main.failed) return (this.synth ??= new Music(this.track)).play(withChime && !this.intro);
     this.main.play(); // a player that isn't ready yet starts once it is (resume)
+  }
+
+  /** The card is open: the intro stops and the song starts. */
+  opened() {
+    if (this.introDone) return;
+    this.introDone = true;
+    this.intro?.pause();
+    this.resume();
   }
 
   pause() {
