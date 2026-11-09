@@ -1,17 +1,20 @@
-import type { Song } from "../songs";
+import type { Song, SongPart } from "../songs";
 import type { MusicTrack } from "../types";
 import { Music } from "./music";
 
-// Plays part of a YouTube video on repeat as an invitation's music, with the same
-// controls as Music. The player sits out of sight and loads with the page, because
-// phones only start playback if the tap on the card can reach a player that's ready.
-// If YouTube won't play it, the design's own synthesised music takes over.
+// Plays a YouTube video (or part of one) on repeat as an invitation's music, with
+// the same controls as Music, optionally after a short intro that plays once. The
+// players sit out of sight and load with the page, because phones only start
+// playback if the tap on the card can reach a player that's ready. If YouTube
+// won't play the song, the design's own synthesised music takes over.
 
 type Player = {
   playVideo(): void;
   pauseVideo(): void;
   seekTo(seconds: number, allowSeekAhead: boolean): void;
   setVolume(volume: number): void;
+  mute(): void;
+  unMute(): void;
   getCurrentTime(): number;
   destroy(): void;
 };
@@ -25,7 +28,11 @@ type YouTube = {
       height: number;
       videoId: string;
       playerVars: Record<string, number>;
-      events: { onReady: () => void; onError: () => void };
+      events: {
+        onReady: () => void;
+        onError: () => void;
+        onStateChange: (e: { data: number }) => void;
+      };
     },
   ) => Player;
 };
@@ -38,7 +45,9 @@ declare global {
 }
 
 const API = "https://www.youtube.com/iframe_api";
-const FADE = 1; // seconds faded out before the part repeats
+const FADE = 1; // seconds faded out before a cut-off part repeats
+const ENDED = 0;
+const PLAYING = 1;
 
 let api: Promise<YouTube> | null = null;
 
@@ -57,96 +66,109 @@ function loadApi() {
   return api;
 }
 
-export class YouTubeSong {
-  playing = false;
-  private player: Player | null = null;
+/** One hidden player for one part of a video. */
+class Clip {
+  player: Player | null = null;
+  failed = false;
+  /** Started muted inside the opening tap and paused, so it may play later on phones. */
+  private priming = false;
   private box: HTMLDivElement | null = null;
-  private synth: Music | null = null;
-  private failed = false;
-  private disposed = false;
   private watch: number | null = null;
   private volume = 100;
 
   constructor(
-    private song: Song,
-    private track: MusicTrack,
-  ) {
-    loadApi().then(
-      (yt) => this.create(yt),
-      () => this.fail(),
-    );
-  }
+    private part: SongPart,
+    private events: { ready: () => void; end: () => void; fail: () => void },
+    private loop: boolean,
+  ) {}
 
-  setTrack(track: MusicTrack) {
-    this.track = track;
-    this.synth?.setTrack(track);
-  }
-
-  async play(withChime = false) {
-    this.playing = true;
-    if (this.failed) return (this.synth ??= new Music(this.track)).play(withChime);
-    if (!this.player) return; // starts as soon as the player is ready
-    this.player.playVideo();
-    this.startWatching();
-  }
-
-  pause() {
-    this.playing = false;
-    this.stopWatching();
-    this.player?.pauseVideo();
-    this.synth?.pause();
-  }
-
-  dispose() {
-    this.disposed = true;
-    this.playing = false;
-    this.stopWatching();
-    this.player?.destroy();
-    this.player = null;
-    this.box?.remove();
-    this.box = null;
-    this.synth?.dispose();
-    this.synth = null;
-  }
-
-  private create(yt: YouTube) {
-    if (this.disposed) return;
+  create(yt: YouTube) {
     const box = document.createElement("div");
     box.setAttribute("aria-hidden", "true");
     box.style.cssText = "position:fixed;left:0;bottom:0;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none";
     const target = box.appendChild(document.createElement("div"));
     document.body.appendChild(box);
     this.box = box;
-    const { video, start } = this.song;
     const player = new yt.Player(target, {
       host: "https://www.youtube-nocookie.com",
       width: 200,
       height: 200,
-      videoId: video,
-      playerVars: { start, controls: 0, disablekb: 1, fs: 0, playsinline: 1, rel: 0, iv_load_policy: 3 },
+      videoId: this.part.video,
+      playerVars: { start: this.part.start ?? 0, controls: 0, disablekb: 1, fs: 0, playsinline: 1, rel: 0, iv_load_policy: 3 },
       events: {
         onReady: () => {
-          if (this.disposed) return;
           this.player = player;
-          if (this.playing) void this.play();
+          this.events.ready();
         },
         onError: () => this.fail(),
+        onStateChange: (e) => {
+          if (e.data === PLAYING && this.priming) {
+            this.priming = false;
+            player.pauseVideo();
+            player.seekTo(this.part.start ?? 0, true);
+            player.unMute();
+          } else if (e.data === ENDED) this.ended();
+        },
       },
     });
   }
 
-  /** Fades the end of the part and jumps back to its start. */
+  play() {
+    const p = this.player;
+    if (!p || this.failed) return;
+    if (this.priming) {
+      this.priming = false;
+      p.unMute();
+    }
+    p.playVideo();
+    this.startWatching();
+  }
+
+  /** Lets a phone play this later without another tap: starts it silently, then pauses. */
+  prime() {
+    if (!this.player || this.failed) return;
+    this.priming = true;
+    this.player.mute();
+    this.player.playVideo();
+  }
+
+  pause() {
+    this.priming = false;
+    this.stopWatching();
+    this.player?.pauseVideo();
+  }
+
+  dispose() {
+    this.stopWatching();
+    this.player?.destroy();
+    this.player = null;
+    this.box?.remove();
+    this.box = null;
+  }
+
+  private ended() {
+    const p = this.player;
+    if (!p) return;
+    if (!this.loop) {
+      this.stopWatching();
+      this.events.end();
+      return;
+    }
+    p.seekTo(this.part.start ?? 0, true);
+    this.setVolume(100);
+    p.playVideo();
+  }
+
+  /** A part that stops before the video ends: fade its end and treat it as the end. */
   private startWatching() {
-    if (this.watch !== null) return;
-    const { start, end } = this.song;
+    const { end } = this.part;
+    if (end === undefined || this.watch !== null) return;
     this.watch = window.setInterval(() => {
       const p = this.player;
       if (!p) return;
       const left = end - p.getCurrentTime();
-      if (left <= 0) {
-        p.seekTo(start, true);
-        this.setVolume(100);
-      } else this.setVolume(left < FADE ? Math.round((left / FADE) * 100) : 100);
+      if (left <= 0) this.ended();
+      else if (this.loop) this.setVolume(left < FADE ? Math.round((left / FADE) * 100) : 100);
     }, 100);
   }
 
@@ -162,10 +184,87 @@ export class YouTubeSong {
   }
 
   private fail() {
-    if (this.disposed || this.failed) return;
+    if (this.failed) return;
     this.failed = true;
     this.stopWatching();
     this.player = null;
-    if (this.playing) void this.play();
+    this.events.fail();
+  }
+}
+
+export class YouTubeSong {
+  playing = false;
+  private main: Clip;
+  private intro: Clip | null = null;
+  /** The intro has played (or can't), so the song is what plays now. */
+  private introDone: boolean;
+  private synth: Music | null = null;
+  private disposed = false;
+
+  constructor(
+    song: Song,
+    private track: MusicTrack,
+  ) {
+    this.main = new Clip(song, { ready: () => this.resume(), end: () => {}, fail: () => this.resume() }, true);
+    const done = () => {
+      if (this.introDone) return;
+      this.introDone = true;
+      this.resume();
+    };
+    if (song.intro) this.intro = new Clip(song.intro, { ready: () => this.resume(), end: done, fail: done }, false);
+    this.introDone = !this.intro;
+    loadApi().then(
+      (yt) => {
+        if (this.disposed) return;
+        this.main.create(yt);
+        this.intro?.create(yt);
+      },
+      () => {
+        this.main.failed = true;
+        this.introDone = true;
+        this.resume();
+      },
+    );
+  }
+
+  setTrack(track: MusicTrack) {
+    this.track = track;
+    this.synth?.setTrack(track);
+  }
+
+  /** Must be called from a user gesture the first time. */
+  async play(withChime = false) {
+    this.playing = true;
+    // An intro that isn't ready by the tap is skipped rather than played late.
+    if (!this.introDone && !this.intro?.player) this.introDone = true;
+    if (!this.introDone && this.intro) {
+      this.intro.play();
+      this.main.prime();
+      return;
+    }
+    if (this.main.failed) return (this.synth ??= new Music(this.track)).play(withChime && !this.intro);
+    this.main.play(); // a player that isn't ready yet starts once it is (resume)
+  }
+
+  pause() {
+    this.playing = false;
+    this.intro?.pause();
+    this.main.pause();
+    this.synth?.pause();
+  }
+
+  dispose() {
+    this.disposed = true;
+    this.playing = false;
+    this.intro?.dispose();
+    this.main.dispose();
+    this.synth?.dispose();
+    this.synth = null;
+  }
+
+  /** Something became ready, ended or failed: carry on playing, if we are. */
+  private resume() {
+    if (this.disposed || !this.playing) return;
+    void this.play();
   }
 }

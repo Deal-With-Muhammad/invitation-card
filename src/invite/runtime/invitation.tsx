@@ -47,7 +47,9 @@ export function Invitation({ data, replay = 0, credit = true, focus = null, song
   const r = useMemo(() => resolve(data, guestLang), [data, guestLang]);
   const [phase, setPhase] = useState<Phase>(data.look.opening ? "closed" : "open");
   const [playingState, setPlaying] = useState(false);
-  const playing = playingState && data.music.on;
+  // A song the host asked for plays even if the music setting is off.
+  const musicOn = data.music.on || Boolean(song);
+  const playing = playingState && musicOn;
   const music = useRef<Music | YouTubeSong | null>(null);
   const root = useRef<HTMLDivElement>(null);
   const timers = useRef<number[]>([]);
@@ -80,11 +82,11 @@ export function Invitation({ data, replay = 0, credit = true, focus = null, song
 
   // Music follows the host's settings live in the editor.
   useEffect(() => {
-    if (!data.music.on) {
+    if (!musicOn) {
       music.current?.dispose();
       music.current = null;
     } else music.current?.setTrack(data.music.track);
-  }, [data.music.on, data.music.track]);
+  }, [musicOn, data.music.track]);
 
   useEffect(() => {
     const onVis = () => {
@@ -100,23 +102,23 @@ export function Invitation({ data, replay = 0, credit = true, focus = null, song
 
   // A song's player loads with the page, so it's ready for the tap that opens the card.
   useEffect(() => {
-    if (!song || !data.music.on) return;
+    if (!song || !musicOn) return;
     const s = new YouTubeSong(song, data.music.track);
     music.current = s;
     return () => {
       s.dispose();
       if (music.current === s) music.current = null;
     };
-  }, [song, data.music.on, data.music.track]);
+  }, [song, musicOn, data.music.track]);
 
   const startMusic = useCallback(
     (chime = false) => {
-      if (!data.music.on) return;
+      if (!musicOn) return;
       music.current ??= new Music(data.music.track);
       void music.current.play(chime);
       setPlaying(true);
     },
-    [data.music.on, data.music.track],
+    [musicOn, data.music.track],
   );
 
   const finish = useCallback(() => {
@@ -231,7 +233,7 @@ export function Invitation({ data, replay = 0, credit = true, focus = null, song
               </svg>
             </button>
           )}
-          {data.music.on && (
+          {musicOn && (
             <button
               type="button"
               className={`inv-ctl inv-ctl-music${playing ? " is-on" : ""}`}
