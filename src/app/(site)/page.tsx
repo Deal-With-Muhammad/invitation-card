@@ -9,7 +9,7 @@ import { buildHomeJsonLd, jsonLdString } from "@/lib/seo";
 import { site } from "@/lib/site";
 
 /** The fan under the hero film; the middle one plays its opening. */
-const FAN = ["goldink", "riad", "noor", "silkribbon", "blossom"];
+const FAN = ["goldink", "riad", "arbour", "noor", "silkribbon"];
 
 export default function Home() {
   const all = galleryItems();

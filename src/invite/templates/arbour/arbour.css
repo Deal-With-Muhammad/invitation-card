@@ -1,0 +1,35 @@
+/* Rose Arbour (painted kit, filmed opening). */
+
+.t-arbour .pt-title {
+  font-family: var(--f-display);
+  font-size: calc(12 * var(--u));
+  font-weight: 600;
+  letter-spacing: 0.2em;
+}
+
+.t-arbour .pt-names {
+  line-height: 1.12;
+}
+
+.t-arbour .pt-date {
+  font-family: var(--f-display);
+  font-size: calc(22 * var(--u));
+  font-weight: 500;
+}
+
+.t-arbour .pt-text.has-glow::before {
+  inset: calc(-52 * var(--u)) calc(-56 * var(--u));
+}
+
+/* initials pressed into the champagne wax */
+.t-arbour .pt-seal.is-emboss .pt-ini {
+  color: #9a8160;
+  text-shadow:
+    0 1px 0 color-mix(in srgb, #fff9e8 70%, transparent),
+    0 -1px 0 color-mix(in srgb, #604a28 38%, transparent);
+}
+
+/* the film shows the open arch late: the names wait for it */
+.t-arbour {
+  --twin-at: 0.74;
+}

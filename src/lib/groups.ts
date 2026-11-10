@@ -1,10 +1,11 @@
 import type { Occasion } from "@/invite/types";
 
 /** The newest designs: light, modern and filmed. They get their own row first. */
-export const NEW_DESIGNS = ["noor", "riad", "silkribbon", "blossom", "goldink"];
+export const NEW_DESIGNS = ["arbour", "noor", "riad", "silkribbon", "blossom", "goldink"];
 
 /** The order designs appear in everywhere: the wedding functions first, then the rest. */
 export const TEMPLATE_ORDER = [
+  "arbour",
   "noor",
   "riad",
   "silkribbon",

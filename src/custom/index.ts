@@ -97,6 +97,21 @@ export const CUSTOM: Record<string, CustomInvite> = {
     },
     load: () => import("./kagalwala-silver-jubilee").then((m) => m.Invite),
   },
+  "akib-and-riza": {
+    title: "Nikah & Walima · Akib & Riza",
+    description: "14 & 30 December 2026 · Jodhpur & Ahmednagar — tap to open",
+    themeColor: "#e9cfca",
+    poster: "/custom/akib-and-riza/poster.webp",
+    og: {
+      p: { id: "blush", name: "Blush", bg: "#f7e9e6", ink: "#5a3f45", accent: "#8d5d63", soft: "#ead3d0" },
+      art: "/custom/akib-and-riza/og.jpg",
+      title: "Nikah & Walima",
+      names: "Akib & Riza",
+      date: "14 & 30 December 2026",
+      venue: "Jodhpur · Ahmednagar",
+    },
+    load: () => import("./akib-and-riza").then((m) => m.Invite),
+  },
 };
 
 export const customFor = (slug: string): CustomInvite | null => (Object.hasOwn(CUSTOM, slug) ? CUSTOM[slug] : null);

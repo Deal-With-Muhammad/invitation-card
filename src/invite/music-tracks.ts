@@ -15,7 +15,7 @@ export const TRACK_INFO: Record<MusicTrack, { name: string; mood: string }> = {
 };
 
 const BY_DESIGN: Record<MusicTrack, string[]> = {
-  harp: ["gilded", "rosestudy", "orchid", "wildflower", "botanica", "muguet", "petals", "gulab", "mangni"],
+  harp: ["arbour", "gilded", "rosestudy", "orchid", "wildflower", "botanica", "muguet", "petals", "gulab", "mangni"],
   piano: ["lace", "filigree", "envelope", "editorial", "seaside", "blushletter"],
   musicbox: ["celestial", "cloudnine", "scrapbook", "ringbox"],
   strings: ["velvetrose", "velvet", "deco", "chandelier", "kashi", "zardozi", "sheeshmahal"],

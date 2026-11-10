@@ -460,6 +460,22 @@ export const CATALOG: TemplateMeta[] = [
     filmed: true,
   },
   {
+    id: "arbour",
+    name: "Rose Arbour",
+    tagline: "A satin bow unties and garden gates open on a rose arch",
+    description:
+      "Filmed opening: a blush envelope embossed with roses opens at its wax seal, a satin bow on a pair of ivory garden gates unties itself, and the gates swing open onto a rose arch over a still lake, where your names appear.",
+    occasions: ["nikah", "wedding", "walima", "engagement", "reception"],
+    defaultOccasion: "nikah",
+    palettes: [p("main", "Blush garden", "#f7e9e6", "#5a3f45", "#8d5d63", "#ecd6d2")],
+    fonts: { display: "cormorant", names: "pinyon", body: "cormorant" },
+    opening: "The bow unties and the garden gates open, on film",
+    openMs: 8600,
+    keywords: ["pink wedding invitation", "garden wedding invitation", "video nikah invitation", "floral arch wedding invitation"],
+    islamic: true,
+    filmed: true,
+  },
+  {
     id: "noor",
     name: "Noor",
     tagline: "White lattice shutters open on a sunlit arch",
