@@ -18,7 +18,7 @@ import "./invite.css";
 // with pencil sketches of each venue, a countdown, the hashtag and a draped closing.
 // Edit the details below. The "anr-" class prefix keeps clear of ad-blocker rules.
 
-const SLUG = "akib-and-riza";
+const SLUG = "akib-weds-riza";
 const DIR = `/custom/${SLUG}`;
 
 /** An mp3 in public/custom/<slug>/ to play instead of the synthesised harp piece. */
