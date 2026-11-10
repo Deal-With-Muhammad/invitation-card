@@ -82,6 +82,21 @@ export const CUSTOM: Record<string, CustomInvite> = {
     },
     load: () => import("./shifa-and-arbaz-2").then((m) => m.Invite),
   },
+  "kagalwala-silver-jubilee": {
+    title: "Silver Jubilee · Mr & Mrs Kagalwala",
+    description: "25 years together · Sunday 27 December 2026 — tap to open",
+    themeColor: "#eeeef0",
+    poster: "/custom/kagalwala-silver-jubilee/poster.webp",
+    og: {
+      p: { id: "silver", name: "Silver", bg: "#f2f2f3", ink: "#2f343c", accent: "#7d838d", soft: "#d9dbdf" },
+      art: "/custom/kagalwala-silver-jubilee/og.jpg",
+      title: "Silver Jubilee",
+      names: "Mr & Mrs Kagalwala",
+      date: "Sunday 27 December 2026",
+      venue: "25 years together",
+    },
+    load: () => import("./kagalwala-silver-jubilee").then((m) => m.Invite),
+  },
 };
 
 export const customFor = (slug: string): CustomInvite | null => (Object.hasOwn(CUSTOM, slug) ? CUSTOM[slug] : null);
