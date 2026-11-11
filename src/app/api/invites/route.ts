@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 
 import { customFor } from "@/custom";
 import { parseInvite } from "@/invite/schema";
-import { clientIp, getStore, hashToken, isUnlimitedAccount, newToken, UNLIMITED_VISITS, VISIT_LIMIT } from "@/lib/server/store";
+import { isPremium } from "@/lib/groups";
+import { clientIp, getStore, hashToken, isUnlimitedAccount, newToken, PREMIUM_VISIT_LIMIT, UNLIMITED_VISITS, VISIT_LIMIT } from "@/lib/server/store";
 import { origin } from "@/lib/server/visitor";
 import { currentUser } from "@/lib/supabase/server";
 import { randomSuffix, suggestSlug, validSlug } from "@/lib/slug";
@@ -43,7 +44,7 @@ export async function POST(req: Request) {
   const now = Date.now();
   const owner = await currentUser();
   const { country, city } = origin(req.headers);
-  const rec = { data, tokenHash: hashToken(token), ownerId: owner?.id ?? null, views: 0, maxViews: isUnlimitedAccount(owner) ? UNLIMITED_VISITS : VISIT_LIMIT, openEdit: body.openEdit === true, country, city, createdAt: now, updatedAt: now };
+  const rec = { data, tokenHash: hashToken(token), ownerId: owner?.id ?? null, views: 0, maxViews: isUnlimitedAccount(owner) ? UNLIMITED_VISITS : isPremium(data.template) ? PREMIUM_VISIT_LIMIT : VISIT_LIMIT, openEdit: body.openEdit === true, country, city, createdAt: now, updatedAt: now };
 
   // The chosen link if it's free; otherwise (only for auto-made links) add a short suffix.
   const candidates = wanted ? [wanted] : [validSlug(base) ? base : `${base}-${randomSuffix()}`, ...Array.from({ length: 4 }, () => `${base}-${randomSuffix()}`)];

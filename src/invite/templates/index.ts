@@ -49,6 +49,7 @@ import { blossom } from "./blossom";
 import { goldink } from "./goldink";
 import { arbour } from "./arbour";
 import { shagun } from "./shagun";
+import { yaadein } from "./yaadein";
 import type { Template } from "./types";
 import { TEMPLATE_ORDER } from "@/lib/groups";
 
@@ -56,7 +57,7 @@ const ALL: Template[] = [
   boarding, botanica, celestial, cloudnine, confetti, deco, editorial, envelope, filigree, gilded, jharokha, kashi, lace, marigold,
   muguet, openhouse, orchid, peony, petals, rosestudy, scrapbook, scroll, seaside, velvet, velvetrose, wildflower, zellige, haveli, zardozi,
   ghoonghat, doli, sheeshmahal, hilal, chandelier, mangni, ringbox, bagh, lanterns, aatishbazi, shamiana, mor, gulab, aarsi, blushletter,
-  noor, riad, silkribbon, blossom, goldink, arbour, shagun,
+  noor, riad, silkribbon, blossom, goldink, arbour, shagun, yaadein,
 ];
 
 // Gallery order: see TEMPLATE_ORDER (the wedding functions first).

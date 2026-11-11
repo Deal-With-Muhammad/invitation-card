@@ -20,7 +20,7 @@ import { DesignPicker, EventsPanel, ExtrasPanel, FaithPanel, LanguagePanel, Look
 import { Phone, PreviewFrame } from "./preview";
 import { EditAccess, PublishDialog, ShareDialog } from "./publish";
 import { clearDraft, forgetInvite, loadDraft, saveDraft } from "./storage";
-import { VISIT_LIMIT, visitsLeft } from "./visits";
+import { visitLimitFor, visitsLeft } from "./visits";
 
 type Props =
   | { mode: "create"; template: string; occasion?: Occasion; palette?: string; lang?: Lang }
@@ -226,7 +226,7 @@ export function Editor(props: Props) {
             {published
               ? props.mode === "edit"
                 ? `${visitsLeft(props.views, props.maxViews)} · ${dirty ? "unsaved changes" : "all changes saved"}`
-                : dirty ? "Unsaved changes" : `Published · ${visitsLeft(0, VISIT_LIMIT)}`
+                : dirty ? "Unsaved changes" : `Published · ${visitsLeft(0, visitLimitFor(data.template))}`
               : restored
                 ? "Your details from last time are back"
                 : "Changes show in the preview as you type"}

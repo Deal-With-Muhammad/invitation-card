@@ -1,13 +1,17 @@
 import type { Occasion } from "@/invite/types";
 
 /** Premium designs: the most detailed ones, each opening on its own film. Their own section, first. */
-export const PREMIUM_DESIGNS = ["shagun", "arbour"];
+export const PREMIUM_DESIGNS = ["yaadein", "shagun", "arbour"];
+
+/** Premium designs can take RSVPs and wishes, and include fewer free visits (PREMIUM_VISIT_LIMIT). */
+export const isPremium = (template: string) => PREMIUM_DESIGNS.includes(template);
 
 /** The newest designs: light, modern and filmed. They get their own row first. */
 export const NEW_DESIGNS = ["noor", "riad", "silkribbon", "blossom", "goldink"];
 
 /** The order designs appear in everywhere: the wedding functions first, then the rest. */
 export const TEMPLATE_ORDER = [
+  "yaadein",
   "shagun",
   "arbour",
   "noor",

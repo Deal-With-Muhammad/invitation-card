@@ -11,6 +11,7 @@ import { defaultArabicPrayer, defaultPrayerText } from "@/invite/resolve";
 import { Thumb } from "@/invite/runtime/thumb";
 import { TEMPLATE_LIST, getTemplate } from "@/invite/templates";
 import { trackFor } from "@/invite/music-tracks";
+import { isPremium } from "@/lib/groups";
 import { addDays } from "@/invite/time";
 import { LANGS, OCCASIONS, type EventItem, type InviteData, type Lang, type Occasion } from "@/invite/types";
 import { OCCASION_LABEL } from "@/lib/filters";
@@ -432,6 +433,12 @@ export function ExtrasPanel({ data, set }: P) {
   const show = (k: keyof InviteData["show"], v: boolean) => set((d) => ({ ...d, show: { ...d.show, [k]: v } }));
   return (
     <>
+      {isPremium(data.template) && (
+        <>
+          <Toggle label="RSVP" hint="Guests say if they're coming, to which functions and how many. Replies are on your private replies page" checked={data.show.rsvp === true} onChange={(v) => show("rsvp", v)} />
+          <Toggle label="Wishes from guests" hint="A wall where family and friends leave duas and wishes for you" checked={data.show.wishes === true} onChange={(v) => show("wishes", v)} />
+        </>
+      )}
       <Toggle label="Countdown" hint="Days, hours and minutes to the first day" checked={data.show.countdown} onChange={(v) => show("countdown", v)} />
       <Toggle label="Add to calendar" hint="Google Calendar, Apple and Outlook" checked={data.show.calendar} onChange={(v) => show("calendar", v)} />
       <Toggle label="Map on the card" hint="Google Maps and Waze buttons are always there" checked={data.show.map} onChange={(v) => show("map", v)} />

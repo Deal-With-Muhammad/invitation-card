@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 
 import { parseInvite } from "@/invite/schema";
-import { getStore, tokenMatches } from "@/lib/server/store";
+import { isPremium } from "@/lib/groups";
+import { getStore, PREMIUM_VISIT_LIMIT, tokenMatches, VISIT_LIMIT } from "@/lib/server/store";
 import { currentUser } from "@/lib/supabase/server";
 
 // Reading an invitation for editing, saving changes, deleting it and choosing
@@ -58,7 +59,14 @@ export async function PUT(req: Request, ctx: Ctx) {
   const parsed = parseInvite(body.data);
   if (!parsed.ok) return NextResponse.json({ error: `Please check the details (${parsed.error}).` }, { status: 400 });
   await a.store.update(slug, parsed.data);
-  return NextResponse.json({ ok: true });
+  // Switching an invitation to a premium design brings it to the premium allowance (never
+  // below the visits it has already had); unlimited and admin-raised limits stay as they are.
+  let maxViews = a.rec.maxViews;
+  if (isPremium(parsed.data.template) && !isPremium(a.rec.data.template) && a.rec.maxViews === VISIT_LIMIT) {
+    maxViews = Math.max(PREMIUM_VISIT_LIMIT, a.rec.views);
+    await a.store.setMaxViews(slug, maxViews);
+  }
+  return NextResponse.json({ ok: true, maxViews });
 }
 
 // Body { openEdit: boolean }: who can edit it.

@@ -4,15 +4,14 @@ import type { Resolved, ResolvedEvent } from "../../resolve";
 import { googleCalendarUrl } from "../../runtime/calendar";
 import { artUrl } from "../painted/kit";
 
-import { Replies } from "./replies";
 import { themesFor, type Theme } from "./themes";
-import { SaveVideo, type VideoSpec } from "./video";
+import { SaveVideo, type VideoSpec } from "../../runtime/video-maker";
 
 // The Shagun design's events section: every function is its own full-screen chapter
 // on its own painted art (Mayoun in marigold yellow, Mehndi in henna colours, Baraat
-// in Mughal red and gold, Walima in white and green), then the guest replies (RSVP
-// and wishes) and "Save as video". No hooks here: the replies and the video maker
-// are client components.
+// in Mughal red and gold, Walima in white and green), then "Save as video". RSVP and
+// wishes follow as the shared sections when the host turns them on. No hooks here: the
+// video maker is a client component.
 
 const ID = "shagun";
 
@@ -30,7 +29,7 @@ function Chapter({ e, theme, n, of, r }: { e: ResolvedEvent; theme: Theme; n: nu
   const dated = Boolean(e.dateLong);
   const cal = googleCalendarUrl(e, `${e.title} · ${r.names}`, r.title || r.occasionLabel);
   return (
-    <section className={`sg-ch is-${theme.id}`} id={`ch-${e.id}`} style={style} aria-label={e.title}>
+    <section className={`sg-ch is-${theme.id}`} id={`ch-${n}`} style={style} aria-label={e.title}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         className="sg-ch-art"
@@ -95,8 +94,13 @@ function videoSpec(r: Resolved, themes: Theme[]): VideoSpec {
     hero: artUrl(ID, "hero", 720),
     closed: artUrl(ID, "closed", 720),
     track: r.data.music.track,
+    lang: r.lang,
+    tone: "light",
     chapters: r.events.map((e, i) => ({
-      theme: themes[i].id,
+      // Baraat's text sits inside the arch, between the curtains, in light ink.
+      dark: themes[i].id === "baraat",
+      wide: themes[i].id === "baraat" ? 470 : 580,
+      top: themes[i].id === "baraat" ? 0.27 : 0.25,
       art: artUrl(ID, themes[i].art, 720),
       urdu: themes[i].urdu,
       ink: themes[i].ink,
@@ -121,7 +125,8 @@ export function Chapters({ r }: { r: Resolved }) {
     <div className="sg-chapters" data-sec="events">
       <nav className="sg-index rv" aria-label="The functions">
         {r.events.map((e, i) => (
-          <a key={e.id} href={`#ch-${e.id}`} className={`sg-pill is-${themes[i].id}`}>
+          // Numbered, not by event id: sample ids differ between the server and the browser.
+          <a key={e.id} href={`#ch-${i + 1}`} className={`sg-pill is-${themes[i].id}`}>
             {e.title}
           </a>
         ))}
@@ -129,9 +134,6 @@ export function Chapters({ r }: { r: Resolved }) {
       {r.events.map((e, i) => (
         <Chapter key={e.id} e={e} theme={themes[i]} n={i + 1} of={r.events.length} r={r} />
       ))}
-      <section className="inv-sec sg-replies" data-sec="replies">
-        <Replies events={r.events.map((e, i) => ({ id: e.id, title: e.title, theme: themes[i].id }))} names={r.names} />
-      </section>
       <section className="inv-sec sg-video-sec">
         <SaveVideo spec={videoSpec(r, themes)} />
       </section>

@@ -13,7 +13,9 @@ import { suggestSlug, validSlug } from "@/lib/slug";
 import { QrCode } from "./qr";
 import { groupLabel } from "./fields";
 import { rememberInvite } from "./storage";
-import { VISIT_LIMIT, visitsLeft } from "./visits";
+import { isPremium } from "@/lib/groups";
+
+import { visitLimitFor, visitsLeft } from "./visits";
 
 const HOST = "invite.dealwithmuhammad.com";
 
@@ -163,7 +165,7 @@ export function PublishDialog({ data, onClose, onPublished, onFix }: { data: Inv
       const j = await res.json();
       if (!res.ok) throw new Error(j.error || "Couldn't publish. Please try again.");
       rememberInvite({ slug: j.slug, token: j.token, names: r.names, template: data.template, occasion: data.occasion, createdAt: Date.now() });
-      setState({ step: "done", slug: j.slug, token: j.token, saved: Boolean(j.saved), maxViews: j.maxViews ?? VISIT_LIMIT });
+      setState({ step: "done", slug: j.slug, token: j.token, saved: Boolean(j.saved), maxViews: j.maxViews ?? visitLimitFor(data.template) });
       onPublished(j.slug, j.token, openEdit);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Couldn't publish. Please try again.");
@@ -247,7 +249,8 @@ export function PublishDialog({ data, onClose, onPublished, onFix }: { data: Inv
             {state.step === "saving" ? "Publishing…" : samples.length ? "Publish anyway" : "Publish invitation"}
           </Button>
           <p className="mt-3 text-center text-[12.5px] text-muted">
-            Anyone with the link can see it, up to {VISIT_LIMIT} visits. It isn&apos;t listed anywhere or shown in search results.
+            Anyone with the link can see it, up to {visitLimitFor(data.template)} visits
+            {isPremium(data.template) ? " (premium design; message us for unlimited)" : ""}. It isn&apos;t listed anywhere or shown in search results.
           </p>
           <p className="mt-1.5 text-center text-[12.5px] text-muted">
             By publishing you agree to the{" "}

@@ -88,6 +88,8 @@ export const inviteSchema = z.object({
     prayer: z.boolean(),
     gifts: z.boolean(),
     hijri: z.boolean(),
+    rsvp: z.boolean().optional(),
+    wishes: z.boolean().optional(),
   }),
   music: z.object({ on: z.boolean(), track: z.enum(MUSIC_TRACKS) }),
   autoScroll: z.object({ on: z.boolean(), speed: z.union([z.literal(1), z.literal(2), z.literal(3)]) }),

@@ -460,6 +460,23 @@ export const CATALOG: TemplateMeta[] = [
     filmed: true,
   },
   {
+    id: "yaadein",
+    name: "Yaadein",
+    tagline: "A 90s shaadi-hall stage, the invitation in gold",
+    description:
+      "Filmed opening: a 1990s wedding stage of red velvet, tinsel streamers and strings of bulbs, where the bride and groom sit on their thrones and fade away like a memory. The invitation then writes itself over the curtains in gold, in Urdu, Hindi or English, with a soft film grain, RSVP, wishes and a button that saves it all as a video.",
+    occasions: ["wedding", "nikah", "walima", "mehndi", "reception"],
+    defaultOccasion: "wedding",
+    palettes: [p("main", "Velvet & gold", "#2a0609", "#f6e3b4", "#e3b45c", "#4a1015")],
+    fonts: { display: "rozha", names: "rozha", body: "cormorant" },
+    opening: "The couple fades from the 90s stage like a memory, on film",
+    openMs: 6700,
+    keywords: ["90s wedding invitation", "urdu wedding card", "hindi wedding invitation", "pakistani baraat invitation", "nostalgic shadi card"],
+    islamic: true,
+    filmed: true,
+    special: true,
+  },
+  {
     id: "shagun",
     name: "Shagun Box",
     tagline: "Every function in one link, each in its own colours",

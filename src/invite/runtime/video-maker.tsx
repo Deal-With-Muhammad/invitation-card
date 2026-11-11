@@ -2,17 +2,86 @@
 
 import { useEffect, useRef, useState } from "react";
 
-import { Synth } from "../../runtime/music";
-import type { MusicTrack } from "../../types";
+import type { Lang } from "../types";
+import type { MusicTrack } from "../types";
+import { Synth } from "./music";
 
-import type { ThemeId } from "./themes";
+import "./video-maker.css";
 
-// "Save as video": the whole invitation as one MP4 for WhatsApp, Instagram and
-// Facebook, for guests who can't open links easily. It is made on the phone itself:
-// the opening film, the names, then every function one by one (each on its own art,
-// with a soft circular reveal between them) and a closing card with the family's
-// numbers, drawn onto a canvas and recorded with the music. Recording runs in real
-// time (about half a minute), so the screen has to stay open.
+type Words = {
+  kicker: string;
+  title: string;
+  sub: (s: number) => string;
+  make: string;
+  making: (p: number) => string;
+  download: string;
+  share: string;
+  unsupported: string;
+  failed: string;
+  await: string;
+  details: string;
+  soon: string;
+};
+
+const WORDS: Record<"en" | "ur" | "hi", Words> = {
+  en: {
+    kicker: "For WhatsApp & Instagram",
+    title: "Save as a video",
+    sub: (s) => `One video with every function, the music and the family's numbers, for anyone who finds links hard to open. It takes about ${s} seconds to make; please keep this screen open.`,
+    make: "Make the video",
+    making: (p) => `Making your video… ${p}%`,
+    download: "Download video",
+    share: "Share",
+    unsupported: "This browser can't make videos. Please open the invitation in Chrome or Safari.",
+    failed: "The video couldn't be made.",
+    await: "We await your presence",
+    details: "FOR DETAILS",
+    soon: "Date to be shared soon",
+  },
+  ur: {
+    kicker: "واٹس ایپ اور انسٹاگرام کے لیے",
+    title: "ویڈیو بنائیں",
+    sub: (s) => `تمام تقریبات، موسیقی اور گھر والوں کے نمبروں کے ساتھ ایک ویڈیو، اُن کے لیے جنہیں لنک کھولنا مشکل لگتا ہے۔ بننے میں تقریباً ${s} سیکنڈ لگیں گے؛ براہِ کرم یہ صفحہ کھلا رکھیں۔`,
+    make: "ویڈیو بنائیں",
+    making: (p) => `ویڈیو بن رہی ہے… ${p}%`,
+    download: "ویڈیو ڈاؤن لوڈ کریں",
+    share: "شیئر کریں",
+    unsupported: "یہ براؤزر ویڈیو نہیں بنا سکتا۔ براہِ کرم کروم یا سفاری میں کھولیں۔",
+    failed: "ویڈیو نہیں بن سکی۔",
+    await: "آپ کی آمد کے منتظر",
+    details: "مزید معلومات کے لیے",
+    soon: "تاریخ جلد بتائی جائے گی",
+  },
+  hi: {
+    kicker: "व्हाट्सऐप और इंस्टाग्राम के लिए",
+    title: "वीडियो बनाएँ",
+    sub: (s) => `सभी कार्यक्रमों, संगीत और परिवार के नंबरों के साथ एक वीडियो, उनके लिए जिन्हें लिंक खोलना मुश्किल लगता है। बनने में लगभग ${s} सेकंड लगेंगे; कृपया यह पेज खुला रखें।`,
+    make: "वीडियो बनाएँ",
+    making: (p) => `वीडियो बन रहा है… ${p}%`,
+    download: "वीडियो डाउनलोड करें",
+    share: "शेयर करें",
+    unsupported: "यह ब्राउज़र वीडियो नहीं बना सकता। कृपया क्रोम या सफ़ारी में खोलें।",
+    failed: "वीडियो नहीं बन सका।",
+    await: "आपके आगमन की प्रतीक्षा में",
+    details: "जानकारी के लिए",
+    soon: "तारीख़ जल्द बताई जाएगी",
+  },
+};
+
+const wordsFor = (lang: Lang) => (lang === "ur" ? WORDS.ur : lang === "hi" ? WORDS.hi : WORDS.en);
+
+/** Text colours and the wash behind the title and closing, by tone. */
+const TONES = {
+  light: { wash: "253,249,242", kicker: "#7b5b33", name: "#3f2a1e", body: "#5b4130", soft: "#6b4c2c", label: "#8a6a3e" },
+  dark: { wash: "34,6,8", kicker: "#e7bf6a", name: "#f6dfa6", body: "#f1d8a8", soft: "#e9c98a", label: "#d6a54f" },
+};
+
+// "Save as video" on premium designs: the whole invitation as one MP4 for WhatsApp,
+// Instagram and Facebook, for guests who can't open links easily. It is made on the
+// phone itself: the opening film, the names, then every function one by one (each on
+// its own art, with a soft circular reveal between them) and a closing card with the
+// family's numbers, drawn onto a canvas and recorded with the music. Recording runs in
+// real time (about half a minute), so the screen has to stay open.
 
 export type VideoSpec = {
   names: string;
@@ -23,10 +92,23 @@ export type VideoSpec = {
   hero: string;
   closed: string;
   track: MusicTrack;
+  /** The language the words are in (labels and right-to-left text follow it). */
+  lang: Lang;
+  /** light: dark text on a pale wash (Shagun); dark: light text on a dark wash (Yaadein). */
+  tone: "light" | "dark";
+  /** Where the names card and the closing card start (px of 1280), to clear busy art at the top. */
+  titleTop?: number;
+  closingTop?: number;
   chapters: {
-    theme: ThemeId;
     art: string;
+    /** A small line above the title (the function's name in Urdu, on Shagun). */
     urdu: string;
+    /** Light text on a dark part of the art. */
+    dark?: boolean;
+    /** How wide the text may run (px of 720). */
+    wide?: number;
+    /** Where the text starts, as a share of the height. */
+    top?: number;
     ink: string;
     accent: string;
     titleFont: string;
@@ -126,6 +208,8 @@ function fontsOf(el: Element): Fonts {
     script: get("pinyon", "cursive"),
     serif: get("cormorant", "Georgia, serif"),
     nastaliq: get("nastaliq", "serif"),
+    devanagari: get("devanagari", "serif"),
+    rozha: get("rozha", "Georgia, serif"),
     yeseva: get("yeseva", "Georgia, serif"),
     shrikhand: get("shrikhand", "Georgia, serif"),
     cinzel: get("cinzel", "Georgia, serif"),
@@ -137,6 +221,7 @@ function fontsOf(el: Element): Fonts {
 function line(ctx: CanvasRenderingContext2D, text: string, y: number, font: string, color: string, a: number, opts: { max?: number; lh?: number; shadow?: string } = {}) {
   if (!text) return y;
   ctx.save();
+  ctx.direction = dirNow;
   ctx.globalAlpha = a;
   ctx.font = font;
   ctx.fillStyle = color;
@@ -146,7 +231,8 @@ function line(ctx: CanvasRenderingContext2D, text: string, y: number, font: stri
     ctx.shadowColor = opts.shadow;
     ctx.shadowBlur = 18;
   }
-  const lh = opts.lh ?? parseInt(font.match(/(\d+)px/)?.[1] ?? "30", 10) * 1.22;
+  // Nastaliq is tall: right-to-left lines get more room unless a height is given.
+  const lh = opts.lh ?? parseInt(font.match(/(\d+)px/)?.[1] ?? "30", 10) * (dirNow === "rtl" ? 1.7 : 1.22);
   const lines = opts.max ? wrap(ctx, text, opts.max) : [text];
   const rise = (1 - a) * 14;
   lines.forEach((l, i) => ctx.fillText(l, W / 2, y + rise + i * lh));
@@ -154,10 +240,19 @@ function line(ctx: CanvasRenderingContext2D, text: string, y: number, font: stri
   return y + lines.length * lh;
 }
 
+/** Writing direction for the text being drawn (set per video). */
+let dirNow: CanvasDirection = "ltr";
+
 async function make(spec: VideoSpec, root: Element, onProgress: (p: number) => void): Promise<Made> {
+  const w = wordsFor(spec.lang);
   const mime = pickMime();
-  if (!mime) throw new Error("This browser can't make videos. Please try Chrome or Safari.");
-  const f = fontsOf(root);
+  if (!mime) throw new Error(w.unsupported);
+  dirNow = spec.lang === "ur" || spec.lang === "ar" || spec.lang === "fa" ? "rtl" : "ltr";
+  const tone = TONES[spec.tone];
+  const raw = fontsOf(root);
+  // Every face falls back to the script faces, so Urdu and Hindi words draw in Nastaliq and Devanagari.
+  const tail = `${raw.nastaliq}, ${raw.devanagari}`;
+  const f: Fonts = Object.fromEntries(Object.entries(raw).map(([k, v]) => [k, `${v}, ${tail}`]));
   await Promise.all(Object.values(f).map((fam) => document.fonts?.load(`40px ${fam}`).catch(() => null)));
   const [hero, closed, clip, ...arts] = await Promise.all([img(spec.hero), img(spec.closed), film(spec.film), ...spec.chapters.map((c) => img(c.art))]);
 
@@ -183,26 +278,38 @@ async function make(spec: VideoSpec, root: Element, onProgress: (p: number) => v
 
   const drawTitle = (t: number) => {
     cover(ctx, hero, hero.width, hero.height, 1 + 0.03 * (t / TITLE_S));
-    const g = ctx.createLinearGradient(0, 0, 0, H * 0.42);
-    g.addColorStop(0, "rgba(253,249,242,0.82)");
-    g.addColorStop(1, "rgba(253,249,242,0)");
-    ctx.fillStyle = g;
-    ctx.fillRect(0, 0, W, H * 0.42);
-    let y = 92;
-    y = line(ctx, spec.title.toUpperCase(), y, `600 22px ${f.serif}`, "#7b5b33", ease(t / 0.8), { lh: 34 });
-    y = line(ctx, spec.names, y + 8, `400 96px ${f.script}`, "#3f2a1e", ease((t - 0.3) / 0.9), { max: 660, lh: 108 });
-    line(ctx, spec.when, y + 10, `600 36px ${f.serif}`, "#5b4130", ease((t - 0.8) / 0.9));
+    if (spec.titleTop == null) {
+      const g = ctx.createLinearGradient(0, 0, 0, H * 0.42);
+      g.addColorStop(0, `rgba(${tone.wash},0.82)`);
+      g.addColorStop(1, `rgba(${tone.wash},0)`);
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, W, H * 0.42);
+    } else {
+      // a band of wash behind text set lower down
+      const a0 = Math.max(0, spec.titleTop - 140);
+      const g = ctx.createLinearGradient(0, a0, 0, a0 + 560);
+      g.addColorStop(0, `rgba(${tone.wash},0)`);
+      g.addColorStop(0.3, `rgba(${tone.wash},0.7)`);
+      g.addColorStop(0.7, `rgba(${tone.wash},0.7)`);
+      g.addColorStop(1, `rgba(${tone.wash},0)`);
+      ctx.fillStyle = g;
+      ctx.fillRect(0, a0, W, 560);
+    }
+    let y = spec.titleTop ?? 92;
+    y = line(ctx, spec.title.toUpperCase(), y, `600 22px ${f.serif}`, tone.kicker, ease(t / 0.8), { lh: 34 });
+    y = line(ctx, spec.names, y + 8, `400 ${spec.tone === "dark" ? "84px " + f.rozha : "96px " + f.script}`, tone.name, ease((t - 0.3) / 0.9), { max: 660, lh: 108 });
+    line(ctx, spec.when, y + 10, `600 36px ${f.serif}`, tone.body, ease((t - 0.8) / 0.9));
   };
 
   const drawChapter = (i: number, t: number) => {
     const c = spec.chapters[i];
     const a = arts[i];
     cover(ctx, a, a.width, a.height, 1.02 + 0.05 * (t / CHAPTER_S));
-    const dark = c.theme === "baraat";
+    const dark = c.dark === true;
     const shade = dark ? "rgba(40,0,0,0.55)" : "rgba(255,250,240,0.9)";
-    const top = H * (c.theme === "baraat" ? 0.27 : 0.25);
+    const top = H * (c.top ?? 0.25);
     // Baraat's text sits inside the arch, between the curtains.
-    const wide = c.theme === "baraat" ? 470 : 580;
+    const wide = c.wide ?? 580;
     let y = top;
     y = line(ctx, c.urdu, y, `400 66px ${f.nastaliq}`, c.accent, ease((t - 0.35) / 0.8), { shadow: shade, lh: 108 });
     y = line(ctx, c.title, y, `400 ${c.titleFont === "cinzel" ? 74 : 86}px ${f[c.titleFont] ?? f.serif}`, c.ink, ease((t - 0.55) / 0.8), { max: wide, shadow: shade, lh: 98 });
@@ -210,7 +317,7 @@ async function make(spec: VideoSpec, root: Element, onProgress: (p: number) => v
     if (c.date) {
       y = line(ctx, `${c.weekday} · ${c.date}`, y, `600 37px ${f.serif}`, c.ink, ease((t - 0.9) / 0.8), { shadow: shade, max: wide });
       y = line(ctx, c.time, y + 4, `600 34px ${f.serif}`, c.ink, ease((t - 1.05) / 0.8), { shadow: shade });
-    } else y = line(ctx, "Date to be shared soon", y, `italic 500 36px ${f.serif}`, c.ink, ease((t - 0.9) / 0.8), { shadow: shade });
+    } else y = line(ctx, w.soon, y, `italic 500 36px ${f.serif}`, c.ink, ease((t - 0.9) / 0.8), { shadow: shade });
     y += 22;
     y = line(ctx, c.venue, y, `italic 700 42px ${f.serif}`, c.accent, ease((t - 1.3) / 0.8), { max: wide, shadow: shade });
     line(ctx, c.address, y + 6, `500 27px ${f.serif}`, c.ink, ease((t - 1.5) / 0.8), { max: wide - 20, lh: 36, shadow: shade });
@@ -218,20 +325,20 @@ async function make(spec: VideoSpec, root: Element, onProgress: (p: number) => v
 
   const drawClosing = (t: number) => {
     cover(ctx, closed, closed.width, closed.height, 1.04 - 0.03 * (t / CLOSING_S));
-    ctx.fillStyle = "rgba(253,249,242,0.55)";
+    ctx.fillStyle = `rgba(${tone.wash},${spec.tone === "dark" ? 0.62 : 0.55})`;
     ctx.fillRect(0, 0, W, H);
-    let y = 150;
-    y = line(ctx, "We await your presence", y, `italic 500 36px ${f.serif}`, "#6b4c2c", ease(t / 0.8));
-    y = line(ctx, spec.names, y + 10, `400 84px ${f.script}`, "#3f2a1e", ease((t - 0.3) / 0.8), { max: 640, lh: 96 });
+    let y = spec.closingTop ?? 150;
+    y = line(ctx, w.await, y, `italic 500 36px ${f.serif}`, tone.soft, ease(t / 0.8));
+    y = line(ctx, spec.names, y + 10, `400 ${spec.tone === "dark" ? "76px " + f.rozha : "84px " + f.script}`, tone.name, ease((t - 0.3) / 0.8), { max: 640, lh: 96 });
     y += 20;
-    spec.hosts.slice(0, 2).forEach((h, i) => (y = line(ctx, h, y, `600 32px ${f.serif}`, "#5b4130", ease((t - 0.7 - i * 0.15) / 0.8), { max: 620 })));
+    spec.hosts.slice(0, 2).forEach((h, i) => (y = line(ctx, h, y, `600 32px ${f.serif}`, tone.body, ease((t - 0.7 - i * 0.15) / 0.8), { max: 620 })));
     if (spec.contacts.length) {
       y += 30;
-      y = line(ctx, "FOR DETAILS", y, `700 22px ${f.serif}`, "#8a6a3e", ease((t - 1.1) / 0.8), { lh: 38 });
-      spec.contacts.forEach((c, i) => (y = line(ctx, [c.name, c.phone].filter(Boolean).join(" · "), y, `600 33px ${f.serif}`, "#3f2a1e", ease((t - 1.3 - i * 0.15) / 0.8))));
+      y = line(ctx, w.details, y, `700 22px ${f.serif}`, tone.label, ease((t - 1.1) / 0.8), { lh: 38 });
+      spec.contacts.forEach((c, i) => (y = line(ctx, [c.name, c.phone].filter(Boolean).join(" · "), y, `600 33px ${f.serif}`, tone.name, ease((t - 1.3 - i * 0.15) / 0.8))));
     }
     if (t > CLOSING_S - 0.7) {
-      ctx.fillStyle = `rgba(253,249,242,${clamp((t - (CLOSING_S - 0.7)) / 0.7)})`;
+      ctx.fillStyle = `rgba(${tone.wash},${clamp((t - (CLOSING_S - 0.7)) / 0.7)})`;
       ctx.fillRect(0, 0, W, H);
     }
   };
@@ -317,7 +424,8 @@ export function SaveVideo({ spec }: { spec: VideoSpec }) {
     [made],
   );
 
-  const total = Math.round(6.3 + TITLE_S + spec.chapters.length * CHAPTER_S + CLOSING_S);
+  const w = wordsFor(spec.lang);
+  const total = Math.round(6.5 + TITLE_S + spec.chapters.length * CHAPTER_S + CLOSING_S);
 
   const start = async () => {
     setState("making");
@@ -330,7 +438,7 @@ export function SaveVideo({ spec }: { spec: VideoSpec }) {
       setCanShare(typeof navigator.canShare === "function" && navigator.canShare({ files: [out.file] }));
       setState("done");
     } catch (e) {
-      setError((e as Error).message || "The video couldn't be made.");
+      setError((e as Error).message || w.failed);
       setState("error");
     }
   };
@@ -343,41 +451,38 @@ export function SaveVideo({ spec }: { spec: VideoSpec }) {
   };
 
   return (
-    <div ref={box} className="sg-video rv">
-      <p className="sg-kicker">For WhatsApp &amp; Instagram</p>
-      <h2 className="sg-h">Save as a video</h2>
-      <p className="sg-sub">
-        One video with every function, the music and the family&apos;s numbers, for anyone who finds links hard to open. It takes about {total} seconds to make;
-        please keep this screen open.
-      </p>
+    <div ref={box} className="vm rv">
+      <p className="vm-kicker">{w.kicker}</p>
+      <h2 className="vm-h">{w.title}</h2>
+      <p className="vm-sub">{w.sub(total)}</p>
       {!supported ? (
-        <p className="sg-empty">This browser can&apos;t make videos. Please open the invitation in Chrome or Safari.</p>
+        <p className="vm-empty">{w.unsupported}</p>
       ) : state === "making" ? (
-        <div className="sg-progress" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(progress * 100)} aria-label="Making the video">
+        <div className="vm-progress" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(progress * 100)} aria-label={w.title}>
           <i style={{ width: `${Math.round(progress * 100)}%` }} />
-          <span>Making your video… {Math.round(progress * 100)}%</span>
+          <span>{w.making(Math.round(progress * 100))}</span>
         </div>
       ) : state === "done" && made ? (
-        <div className="sg-video-done">
-          <video src={made.url} controls playsInline className="sg-video-preview" />
-          <div className="sg-ch-actions">
-            <a className="sg-btn" href={made.url} download={made.name}>
-              Download video
+        <div className="vm-done">
+          <video src={made.url} controls playsInline className="vm-preview" />
+          <div className="vm-actions">
+            <a className="vm-btn" href={made.url} download={made.name}>
+              {w.download}
             </a>
             {canShare && (
-              <button type="button" className="sg-btn is-ghost" onClick={share}>
-                Share
+              <button type="button" className="vm-btn is-ghost" onClick={share}>
+                {w.share}
               </button>
             )}
           </div>
         </div>
       ) : (
         <>
-          <button type="button" className="sg-btn" onClick={start}>
-            Make the video
+          <button type="button" className="vm-btn" onClick={start}>
+            {w.make}
           </button>
           {state === "error" && (
-            <p className="sg-error" role="alert">
+            <p className="vm-error" role="alert">
               {error}
             </p>
           )}

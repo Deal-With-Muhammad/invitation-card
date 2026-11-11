@@ -4,7 +4,11 @@ import { Bismillah } from "../art/bismillah";
 import type { Resolved, ResolvedEvent } from "../resolve";
 import type { TemplateParts } from "../templates/types";
 import type { SectionId } from "../types";
+import { isPremium } from "@/lib/groups";
+
 import { CalendarButton, Countdown } from "./client-bits";
+import { RsvpForm, WishesWall } from "./replies";
+import { repliesCopy } from "./replies-copy";
 
 // The shared section markup. Templates restyle these through their own CSS (every
 // element has a stable inv-* class) or replace a section outright.
@@ -318,10 +322,34 @@ function ClosingSection({ r }: { r: Resolved }) {
   );
 }
 
+/** RSVP (premium designs, when the host turns it on). */
+function RsvpSection({ r, Ornament }: { r: Resolved; Ornament?: FC }) {
+  const c = repliesCopy(r.lang);
+  return (
+    <section className="inv-sec inv-rsvp" data-sec="rsvp">
+      <Heading eyebrow={c.rsvpEyebrow} title={c.rsvpTitle} Ornament={Ornament} />
+      <RsvpForm events={r.events.map((e) => ({ id: e.id, title: e.title }))} lang={r.lang} />
+    </section>
+  );
+}
+
+/** Wishes for the couple (premium designs, when the host turns them on). */
+function WishesSection({ r, Ornament }: { r: Resolved; Ornament?: FC }) {
+  const c = repliesCopy(r.lang);
+  return (
+    <section className="inv-sec inv-wishes" data-sec="wishes">
+      <Heading eyebrow={c.wishesEyebrow} title={c.wishesTitle(r.names)} Ornament={Ornament} />
+      <WishesWall lang={r.lang} />
+    </section>
+  );
+}
+
 const DEFAULTS: Record<SectionId, FC<{ r: Resolved; Ornament?: FC }>> = {
   invite: InviteSection,
   countdown: CountdownSection,
   events: EventsSection,
+  rsvp: RsvpSection,
+  wishes: WishesSection,
   schedule: ScheduleSection,
   dress: DressSection,
   contacts: ContactsSection,
@@ -330,7 +358,7 @@ const DEFAULTS: Record<SectionId, FC<{ r: Resolved; Ornament?: FC }>> = {
   closing: ClosingSection,
 };
 
-export const SECTION_ORDER: SectionId[] = ["invite", "countdown", "events", "schedule", "dress", "contacts", "prayer", "gifts", "closing"];
+export const SECTION_ORDER: SectionId[] = ["invite", "countdown", "events", "rsvp", "wishes", "schedule", "dress", "contacts", "prayer", "gifts", "closing"];
 
 export function visibleSections(r: Resolved): SectionId[] {
   return SECTION_ORDER.filter((id) => {
@@ -349,6 +377,10 @@ export function visibleSections(r: Resolved): SectionId[] {
         return r.show.gifts && Boolean(r.gifts.title || r.gifts.note);
       case "events":
         return r.events.length > 0;
+      case "rsvp":
+        return r.show.rsvp === true && isPremium(r.data.template);
+      case "wishes":
+        return r.show.wishes === true && isPremium(r.data.template);
       default:
         return true;
     }

@@ -1,4 +1,6 @@
 import { trackFor } from "./music-tracks";
+import { isPremium } from "@/lib/groups";
+
 import { metaFor } from "./templates/catalog";
 import { addDays, guessTimeZone, sampleDate } from "./time";
 import type { EventItem, InviteData, Lang, Occasion, Person } from "./types";
@@ -254,9 +256,26 @@ function allFunctions(): EventItem[] {
   ];
 }
 
+/** Yaadein (the 90s stage) reads like an old Urdu wedding card from the first second. */
+function urduCard(): Pick<Sample, "people" | "hosts" | "events"> {
+  const d = sampleDate();
+  return {
+    people: couple("ابراہیم", "محمد ابراہیم صدیقی", "جناب طارق صدیقی و بیگم", "زارا", "زارا ملک", "جناب فیصل ملک و بیگم"),
+    hosts: "جناب طارق صدیقی و بیگم\nجناب فیصل ملک و بیگم",
+    events: [
+      ev({ title: "مہندی", date: addDays(d, -1), start: "19:30", end: "23:30", venue: "ملک ہاؤس", address: "گلبرگ، لاہور" }),
+      ev({ title: "بارات", date: d, start: "19:00", end: "22:30", venue: "شالیمار ہال", address: "مال روڈ، لاہور" }),
+      ev({ title: "ولیمہ", date: addDays(d, 1), start: "20:00", end: "23:00", venue: "پرل کانٹی نینٹل", address: "شاہراہِ قائدِ اعظم، لاہور" }),
+    ],
+  };
+}
+
 export function newInvite(template: string, occasion: Occasion, palette: string, lang: Lang = "en"): InviteData {
   const base = sampleFor(occasion);
-  const sample = metaFor(template).special ? { ...base, events: allFunctions() } : base;
+  // Yaadein starts in Urdu (with Hindi and English to switch to) unless another language was asked for.
+  const urdu = template === "yaadein" && lang === "en";
+  if (urdu) lang = "ur";
+  const sample = urdu ? { ...base, ...urduCard() } : metaFor(template).special ? { ...base, events: allFunctions() } : base;
   // Designs that aren't Islamic in style start without the Bismillah; the host can add it.
   const s = metaFor(template).islamic === false ? { ...sample, bismillah: "none" as const, salam: false } : sample;
   return {
@@ -265,7 +284,7 @@ export function newInvite(template: string, occasion: Occasion, palette: string,
     occasion,
     look: { palette, colors: null, namesFont: "", opening: true },
     lang,
-    langs: lang === "en" ? ["en", "ms", "ur"] : ["en", lang],
+    langs: urdu ? ["ur", "hi", "en"] : lang === "en" ? ["en", "ms", "ur"] : ["en", lang],
     bismillah: s.bismillah,
     salam: s.salam,
     title: null,
@@ -292,6 +311,8 @@ export function newInvite(template: string, occasion: Occasion, palette: string,
       prayer: s.bismillah !== "none",
       gifts: true,
       hijri: false,
+      // Premium designs start with guest replies on; the host can turn them off.
+      ...(isPremium(template) ? { rsvp: true, wishes: true } : {}),
       ...s.show,
     },
     music: { on: s.music ?? !MUSIC_OFF.includes(occasion), track: trackFor(template) },

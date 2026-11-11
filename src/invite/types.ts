@@ -110,6 +110,9 @@ export type InviteData = {
     prayer: boolean;
     gifts: boolean;
     hijri: boolean;
+    /** Premium designs only: guests reply (which functions, how many) and leave wishes. */
+    rsvp?: boolean;
+    wishes?: boolean;
   };
 
   music: { on: boolean; track: MusicTrack };
@@ -120,6 +123,8 @@ export type SectionId =
   | "invite"
   | "countdown"
   | "events"
+  | "rsvp"
+  | "wishes"
   | "schedule"
   | "dress"
   | "contacts"
