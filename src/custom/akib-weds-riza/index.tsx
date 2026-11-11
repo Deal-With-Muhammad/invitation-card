@@ -353,7 +353,7 @@ function Families() {
         <div className="anr-person">
           <strong>Akib Shaikh</strong>
           <span>son of</span>
-          <em>Mr. Liyakat Shaikh &amp; Mrs. Yasmeen Bano</em>
+          <em>Mr. Liyakatali Shaikh &amp; Mrs. Yasmeen Bano</em>
         </div>
         <span className="anr-with" aria-hidden>
           &amp;
