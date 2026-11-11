@@ -63,7 +63,8 @@ export default async function InvitePage(props: PageProps<"/[slug]">) {
   const custom = customFor(slug);
   if (custom) {
     const Custom = await CUSTOM_PAGES[slug]();
-    return <Custom />;
+    // Custom pages that read their details from their row get it; the others ignore it.
+    return <Custom data={(await load(slug))?.data ?? null} />;
   }
   const rec = await load(slug);
   if (!rec) notFound();

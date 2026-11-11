@@ -3,7 +3,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 
 import { FONT_VARS } from "@/invite/fonts";
+import { resolve } from "@/invite/resolve";
 import { Music } from "@/invite/runtime/music";
+import type { InviteData } from "@/invite/types";
 
 import { burst, ScratchCard } from "./scratch";
 
@@ -14,38 +16,98 @@ import "./invite.css";
 // as asked: a dove-grey envelope sealed with a silver "25" that opens on a filmed
 // video (Veo, first frame closed.webp, last frame hero.webp), then the years
 // together, the invitation, a scratch-to-reveal date, the party, a countdown and a
-// closing note. Names, time and venue aren't known yet: edit the details below.
+// closing note.
+//
+// The details are editable: they come from this invitation's row in the invites table
+// (people, hosts, the first event, the dress note), which the normal edit link changes
+// (/edit/kagalwala-silver-jubilee#k=…). Anything left empty there keeps the wording
+// below. The editor's own preview shows a standard design, not this page.
 
 const SLUG = "kagalwala-silver-jubilee";
 const DIR = `/custom/${SLUG}`;
 
-const TITLES = "Mr & Mrs";
-const SURNAME = "Kagalwala";
-const COUPLE = `${TITLES} ${SURNAME}`;
-const HOSTS = "Ammar & family";
+const YEARS = 25;
 
-/** The wedding day, 25 years before the party (India time). */
-const WED = "2001-12-27T00:00:00+05:30";
-
-/** Counts down to the party. Set the hour once the time is known. */
-const PARTY = "2026-12-27T00:00:00+05:30";
-
-const EVENT = {
-  name: "Silver Jubilee Party",
-  note: "An evening of dinner, music and memories",
-  day: "Sunday",
-  date: "27 December 2026",
-  time: null as string | null,
-  venue: null as string | null,
-  address: null as string | null,
-  maps: null as string | null,
+type Details = {
+  /** The names as two lines, e.g. "Mr & Mrs" / "Kagalwala". */
+  lines: [string, string];
+  couple: string;
+  hosts: string;
+  /** The wedding day, 25 years before the party. */
+  wed: number;
+  /** Counts down to the party. */
+  party: number;
+  event: { name: string; note: string; day: string; date: string; time: string | null; venue: string | null; address: string | null; maps: string | null };
+  dress: string;
 };
 
-const MILESTONES = [
-  { year: "2001", text: "Two families became one" },
-  { year: "25 years", text: "Of love, laughter, patience and home" },
-  { year: "2026", text: "Celebrating with everyone who made it special" },
-];
+const FALLBACK: Details = {
+  lines: ["Mr & Mrs", "Kagalwala"],
+  couple: "Mr & Mrs Kagalwala",
+  hosts: "Ammar & family",
+  wed: Date.parse("2001-12-27T00:00:00+05:30"),
+  party: Date.parse("2026-12-27T00:00:00+05:30"),
+  event: {
+    name: "Silver Jubilee Party",
+    note: "An evening of dinner, music and memories",
+    day: "Sunday",
+    date: "27 December 2026",
+    time: null,
+    venue: null,
+    address: null,
+    maps: null,
+  },
+  dress: "Dress code: a touch of silver, white or grey",
+};
+
+const HONORIFIC = /^(mr|mrs|ms|miss|dr|haji|hajjah)\.?\s+/i;
+
+/** "Mr Kagalwala" and "Mrs Kagalwala" read as "Mr & Mrs" / "Kagalwala"; anything else as two names. */
+function nameLines(a: string, b: string): [string, string] {
+  const split = (n: string) => {
+    const m = n.match(HONORIFIC);
+    return m ? [m[0].trim(), n.slice(m[0].length).trim()] : ["", n];
+  };
+  const [ta, ra] = split(a);
+  const [tb, rb] = split(b);
+  if (ta && tb && ra && ra.toLowerCase() === rb.toLowerCase()) return [`${ta} & ${tb}`, ra];
+  return [`${a} &`, b];
+}
+
+/** The page's details from the invitation's row, falling back to the original wording. */
+function detailsFrom(data?: InviteData | null): Details {
+  if (!data) return FALLBACK;
+  const r = resolve(data);
+  const e = r.events[0];
+  const a = data.people[0]?.full.trim() || data.people[0]?.name.trim() || "";
+  const b = data.people[1]?.full.trim() || data.people[1]?.name.trim() || "";
+  const lines = a && b ? nameLines(a, b) : FALLBACK.lines;
+  const party = e?.start ?? FALLBACK.party;
+  const wedDay = new Date(party);
+  wedDay.setFullYear(wedDay.getFullYear() - YEARS);
+  return {
+    lines,
+    couple: a && b ? `${lines[0]} ${lines[1]}`.replace(/ &$/, "") : FALLBACK.couple,
+    hosts: data.hosts.trim().replace(/\s*\n\s*/g, " & ") || FALLBACK.hosts,
+    wed: wedDay.getTime(),
+    party,
+    event: e
+      ? {
+          name: e.title || FALLBACK.event.name,
+          note: e.note || FALLBACK.event.note,
+          day: e.weekday || FALLBACK.event.day,
+          date: e.dateLong || FALLBACK.event.date,
+          time: e.raw.start ? e.time : null,
+          venue: e.venue || null,
+          address: e.address || null,
+          maps: e.venue || e.address || e.raw.mapUrl ? e.raw.mapUrl || e.links.google : null,
+        }
+      : FALLBACK.event,
+    dress: data.dress.note?.trim() || FALLBACK.dress,
+  };
+}
+
+const yearOf = (t: number) => new Date(t).getFullYear();
 
 type Phase = "closed" | "opening" | "open";
 
@@ -56,7 +118,8 @@ const onRevealed = (el: HTMLElement) => !reduced() && burst(el);
 // Counted once per page load (React's dev double effect would count twice).
 let counted = false;
 
-export function Invite() {
+export function Invite({ data }: { data?: InviteData | null }) {
+  const k = useMemo(() => detailsFrom(data), [data]);
   const [phase, setPhase] = useState<Phase>("closed");
   const [playing, setPlaying] = useState(false);
   const video = useRef<HTMLVideoElement>(null);
@@ -155,13 +218,13 @@ export function Invite() {
       )}
 
       <main className="sjb-main" aria-hidden={phase === "closed" || undefined}>
-        <Hero />
-        <Years />
-        <Message />
-        <Reveal />
-        <Party />
-        <Countdown />
-        <Closing />
+        <Hero k={k} />
+        <Years k={k} />
+        <Message k={k} />
+        <Reveal k={k} />
+        <Party k={k} />
+        <Countdown k={k} />
+        <Closing k={k} />
       </main>
 
       {phase === "open" && (
@@ -180,7 +243,7 @@ export function Invite() {
   );
 }
 
-function Hero() {
+function Hero({ k }: { k: Details }) {
   return (
     <section className="sjb-hero">
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -190,11 +253,13 @@ function Hero() {
         <p className="sjb-jubilee">Silver Jubilee</p>
         <p className="sjb-of">of</p>
         <h1 className="sjb-names">
-          <span>{TITLES}</span>
-          <span>{SURNAME}</span>
+          <span>{k.lines[0]}</span>
+          <span>{k.lines[1]}</span>
         </h1>
         <Rule />
-        <p className="sjb-dates">Sunday · 27 December 2026</p>
+        <p className="sjb-dates">
+          {k.event.day} · {k.event.date}
+        </p>
         <p className="sjb-city">25 years of togetherness</p>
       </div>
       <span className="sjb-scroll" aria-hidden>
@@ -225,14 +290,21 @@ function Heading({ title, sub }: { title: string; sub?: string }) {
 const DAY = 86_400_000;
 
 /** A big silver 25, the years either side, and the days together so far. */
-function Years() {
+function Years({ k }: { k: Details }) {
   const [days, setDays] = useState<number | null>(null);
   useEffect(() => {
-    const tick = () => setDays(Math.floor((Date.now() - Date.parse(WED)) / DAY));
+    const tick = () => setDays(Math.floor((Date.now() - k.wed) / DAY));
     tick();
     const t = window.setInterval(tick, 60_000);
     return () => window.clearInterval(t);
-  }, []);
+  }, [k.wed]);
+  const from = yearOf(k.wed);
+  const to = yearOf(k.party);
+  const milestones = [
+    { year: String(from), text: "Two families became one" },
+    { year: `${YEARS} years`, text: "Of love, laughter, patience and home" },
+    { year: String(to), text: "Celebrating with everyone who made it special" },
+  ];
   return (
     <section className="sjb-sec sjb-years">
       <p className="sjb-sub">twenty-five years</p>
@@ -240,13 +312,13 @@ function Years() {
         25
       </p>
       <p className="sjb-span">
-        2001 <i aria-hidden /> 2026
+        {from} <i aria-hidden /> {to}
       </p>
       <p className="sjb-days">
         <strong>{days == null ? "–" : days.toLocaleString("en-IN")}</strong> days together, and counting
       </p>
       <ol className="sjb-steps">
-        {MILESTONES.map((m) => (
+        {milestones.map((m) => (
           <li key={m.year}>
             <span>{m.year}</span>
             <p>{m.text}</p>
@@ -257,30 +329,30 @@ function Years() {
   );
 }
 
-function Message() {
+function Message({ k }: { k: Details }) {
   return (
     <section className="sjb-sec">
       <Heading title="Dear Family & Friends" sub="our invitation" />
       <div className="sjb-card sjb-message">
         <p>Twenty-five years ago, our parents began a journey of love, faith and togetherness.</p>
         <p>With grateful hearts, we request the pleasure of your company as we celebrate the silver wedding anniversary of</p>
-        <p className="sjb-person">{COUPLE}</p>
+        <p className="sjb-person">{k.couple}</p>
         <p>Your presence and blessings will make the evening complete.</p>
-        <p className="sjb-script">With love, {HOSTS}</p>
+        <p className="sjb-script">With love, {k.hosts}</p>
       </div>
     </section>
   );
 }
 
-function Reveal() {
+function Reveal({ k }: { k: Details }) {
   return (
     <section className="sjb-sec">
       <Heading title="Save the Date" sub="scratch the silver" />
       <ScratchCard onReveal={onRevealed}>
         <div className="sjb-revealed">
           <p className="sjb-sub">the celebration is on</p>
-          <p className="sjb-day">{EVENT.day}</p>
-          <p className="sjb-date">{EVENT.date}</p>
+          <p className="sjb-day">{k.event.day}</p>
+          <p className="sjb-date">{k.event.date}</p>
           <p className="sjb-script">We can&apos;t wait to celebrate with you</p>
         </div>
       </ScratchCard>
@@ -288,27 +360,28 @@ function Reveal() {
   );
 }
 
-function Party() {
+function Party({ k }: { k: Details }) {
+  const ev = k.event;
   return (
     <section className="sjb-sec" id="party">
       <Heading title="The Celebration" sub="join us for" />
       <div className="sjb-card sjb-event">
         <p className="sjb-when">
-          {EVENT.day} · {EVENT.date}
-          {EVENT.time && ` · ${EVENT.time}`}
+          {ev.day} · {ev.date}
+          {ev.time && ` · ${ev.time}`}
         </p>
-        <h3>{EVENT.name}</h3>
-        <p className="sjb-note">{EVENT.note}</p>
-        {EVENT.venue ? (
+        <h3>{ev.name}</h3>
+        <p className="sjb-note">{ev.note}</p>
+        {ev.venue ? (
           <p className="sjb-place">
-            {EVENT.venue}
-            <span>{EVENT.address}</span>
+            {ev.venue}
+            <span>{ev.address}</span>
           </p>
         ) : (
           <p className="sjb-place is-tba">Time and venue to be shared soon</p>
         )}
-        {EVENT.maps && (
-          <a className="sjb-btn" href={EVENT.maps} target="_blank" rel="noopener">
+        {ev.maps && (
+          <a className="sjb-btn" href={ev.maps} target="_blank" rel="noopener">
             Directions
           </a>
         )}
@@ -318,7 +391,7 @@ function Party() {
             <i style={{ background: "#c7cbd1" }} />
             <i style={{ background: "#8e949c" }} />
           </span>
-          Dress code: a touch of silver, white or grey
+          {k.dress}
         </p>
       </div>
     </section>
@@ -327,15 +400,14 @@ function Party() {
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
-function Countdown() {
+function Countdown({ k }: { k: Details }) {
   const [left, setLeft] = useState<number | null>(null);
   useEffect(() => {
-    const target = Date.parse(PARTY);
-    const tick = () => setLeft(Math.max(0, target - Date.now()));
+    const tick = () => setLeft(Math.max(0, k.party - Date.now()));
     tick();
     const t = window.setInterval(tick, 1000);
     return () => window.clearInterval(t);
-  }, []);
+  }, [k.party]);
   const parts =
     left == null
       ? null
@@ -360,12 +432,14 @@ function Countdown() {
           ))}
         </div>
       )}
-      <p className="sjb-after">Sunday, 27 December 2026</p>
+      <p className="sjb-after">
+        {k.event.day}, {k.event.date}
+      </p>
     </section>
   );
 }
 
-function Closing() {
+function Closing({ k }: { k: Details }) {
   return (
     <footer className="sjb-sec sjb-closing">
       <p className="sjb-25-sm" aria-hidden>
@@ -375,7 +449,7 @@ function Closing() {
       <p>Thank you for being a part of their story.</p>
       <p className="sjb-wish">Here&apos;s to many more years of love, laughter and togetherness.</p>
       <Rule />
-      <p className="sjb-small">{HOSTS}</p>
+      <p className="sjb-small">{k.hosts}</p>
       <a className="sjb-credit" href="https://invite.dealwithmuhammad.com/?ref=invite" target="_blank" rel="noopener">
         Made with DWM Invite
       </a>
