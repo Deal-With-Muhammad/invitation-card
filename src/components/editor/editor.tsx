@@ -15,8 +15,10 @@ import type { InviteData, Lang, Occasion } from "@/invite/types";
 import { LogoMark } from "@/components/logo";
 import { OCCASION_LABEL } from "@/lib/filters";
 
+import { DesignSwitcher, withDesign } from "./design-switcher";
 import { Panel } from "./fields";
-import { DesignPicker, EventsPanel, ExtrasPanel, FaithPanel, LanguagePanel, LookPanel, MotionPanel, OccasionPanel, PeoplePanel, WordsPanel, type Set } from "./panels";
+import { EventsPanel, ExtrasPanel, FaithPanel, LanguagePanel, LookPanel, MotionPanel, OccasionPanel, PeoplePanel, WordsPanel, type Set } from "./panels";
+import { Thumb } from "@/invite/runtime/thumb";
 import { Phone, PreviewFrame } from "./preview";
 import { EditAccess, PublishDialog, ShareDialog } from "./publish";
 import { clearDraft, forgetInvite, loadDraft, saveDraft } from "./storage";
@@ -84,6 +86,10 @@ export function Editor(props: Props) {
   const [dirty, setDirty] = useState(false);
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
+  // "Change design": the sheet, the allowance of the published invitation, and one step of undo.
+  const [switching, setSwitching] = useState(false);
+  const [maxViews, setMaxViews] = useState(props.mode === "edit" ? props.maxViews : 0);
+  const [undo, setUndo] = useState<InviteData | null>(null);
   const n = useRef(0);
 
   const set: Set = useCallback(
@@ -111,9 +117,21 @@ export function Editor(props: Props) {
 
   useEffect(() => {
     if (!toast) return;
-    const t = window.setTimeout(() => setToast(null), 2600);
+    // The toast that offers Undo stays up longer.
+    const t = window.setTimeout(() => {
+      setToast(null);
+      setUndo(null);
+    }, undo ? 9000 : 2600);
     return () => window.clearTimeout(t);
-  }, [toast]);
+  }, [toast, undo]);
+
+  // /edit/<slug>?design=1 (the "Change design" link on My invitations) opens the sheet straight away.
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get("design") !== "1") return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- the address is only readable after mount
+    setSwitching(true);
+    history.replaceState(null, "", window.location.pathname);
+  }, []);
 
   const toggle = (id: string) => {
     setOpen((o) => (o === id ? "" : id));
@@ -121,24 +139,56 @@ export function Editor(props: Props) {
   };
   const replay = () => setCommand({ kind: "replay", n: ++n.current });
 
-  const save = async () => {
-    if (!published) return;
+  /** Saves the published invitation (the data given, or what's in the editor). */
+  const save = async (next: InviteData = data, done = "Saved. Guests see the changes now.") => {
+    if (!published) return false;
     setSaving(true);
     try {
       const res = await fetch(`/api/invites/${published.slug}`, {
         method: "PUT",
         headers: { "content-type": "application/json", "x-edit-token": published.token },
-        body: JSON.stringify({ data }),
+        body: JSON.stringify({ data: next }),
       });
       const j = await res.json();
       if (!res.ok) throw new Error(j.error || "Couldn't save.");
+      if (typeof j.maxViews === "number") setMaxViews(j.maxViews);
       setDirty(false);
-      setToast("Saved. Guests see the changes now.");
+      setToast(done);
+      return true;
     } catch (e) {
       setToast(e instanceof Error ? e.message : "Couldn't save.");
+      return false;
     } finally {
       setSaving(false);
     }
+  };
+
+  /** One tap in the "Change design" sheet: every detail stays, the look changes. A published
+   *  invitation is saved straight away, and the toast offers Undo. */
+  const pickDesign = (id: string) => {
+    setSwitching(false);
+    if (id === data.template) return;
+    const before = data;
+    const next = withDesign(data, id);
+    const name = getTemplate(id).meta.name;
+    setData(next);
+    setUndo(before);
+    setCommand({ kind: "replay", n: ++n.current });
+    if (published) void save(next, `Now on ${name}. Guests see it straight away.`);
+    else {
+      setDirty(true);
+      setToast(`Now on ${name}.`);
+    }
+  };
+
+  const undoDesign = () => {
+    if (!undo) return;
+    const back = undo;
+    setUndo(null);
+    setData(back);
+    setCommand({ kind: "replay", n: ++n.current });
+    if (published) void save(back, `Back on ${getTemplate(back.template).meta.name}.`);
+    else setToast(`Back on ${getTemplate(back.template).meta.name}.`);
   };
 
   const startOver = () => {
@@ -195,7 +245,7 @@ export function Editor(props: Props) {
       body: <EventsPanel data={data} set={set} />,
     },
     { id: "words", icon: <BookOpenText className="size-4.5" />, title: "Wording", hint: "Title, invitation line, message", body: <WordsPanel data={data} set={set} /> },
-    { id: "design", icon: <Shapes className="size-4.5" />, title: "Design", hint: meta.name, body: <DesignPicker data={data} set={set} /> },
+    { id: "design", icon: <Shapes className="size-4.5" />, title: "Design", hint: meta.name, body: <CurrentDesign data={data} onChange={() => setSwitching(true)} /> },
     { id: "look", icon: <Palette className="size-4.5" />, title: "Colours & fonts", hint: data.look.palette === "custom" ? "Your own colours" : meta.palettes.find((p) => p.id === data.look.palette)?.name ?? "", body: <LookPanel data={data} set={set} /> },
     { id: "faith", icon: <Moon className="size-4.5" />, title: "Bismillah, salam & dua", hint: data.bismillah !== "none" || data.salam ? "On" : "Off", body: <FaithPanel data={data} set={set} /> },
     { id: "extras", icon: <Sparkles className="size-4.5" />, title: "Sections", hint: "Countdown, map, programme, dress code, contacts", body: <ExtrasPanel data={data} set={set} /> },
@@ -205,7 +255,7 @@ export function Editor(props: Props) {
 
   const primary =
     published ? (
-      <Button className="h-10 px-4 text-[14.5px]" isDisabled={saving || !dirty} onPress={save}>
+      <Button className="h-10 px-4 text-[14.5px]" isDisabled={saving || !dirty} onPress={() => void save()}>
         {saving ? "Saving…" : dirty ? "Save changes" : "Saved"}
       </Button>
     ) : (
@@ -225,13 +275,17 @@ export function Editor(props: Props) {
           <p className="truncate text-[12.5px] text-muted">
             {published
               ? props.mode === "edit"
-                ? `${visitsLeft(props.views, props.maxViews)} · ${dirty ? "unsaved changes" : "all changes saved"}`
+                ? `${visitsLeft(props.views, maxViews)} · ${dirty ? "unsaved changes" : "all changes saved"}`
                 : dirty ? "Unsaved changes" : `Published · ${visitsLeft(0, visitLimitFor(data.template))}`
               : restored
                 ? "Your details from last time are back"
                 : "Changes show in the preview as you type"}
           </p>
         </div>
+        <Button variant="outline" className="h-10 flex-none px-3 text-[14px] sm:px-4" onPress={() => setSwitching(true)}>
+          <Shapes className="size-4" aria-hidden /> <span className="max-[380px]:hidden">Change design</span>
+          <span className="min-[381px]:hidden">Design</span>
+        </Button>
         {published && (
           <Button variant="outline" className="hidden h-10 px-4 text-[14px] sm:inline-flex" onPress={() => setSharing(true)}>
             Share
@@ -338,11 +392,40 @@ export function Editor(props: Props) {
       )}
       {sharing && published && <ShareDialog data={data} slug={published.slug} token={published.token} onClose={() => setSharing(false)} />}
 
+      {switching && <DesignSwitcher data={data} onPick={pickDesign} onClose={() => setSwitching(false)} />}
+
       {toast && (
-        <div role="status" className="fixed inset-x-0 bottom-24 z-50 flex justify-center px-4 lg:bottom-8">
-          <p className="rounded-full bg-ink px-4 py-2.5 text-[14px] text-paper shadow-lg">{toast}</p>
+        <div role="status" className="fixed inset-x-0 bottom-24 z-[60] flex justify-center px-4 lg:bottom-8">
+          <p className="flex items-center gap-3 rounded-full bg-ink py-2.5 ps-4 pe-4 text-[14px] text-paper shadow-lg">
+            {toast}
+            {undo && (
+              <button type="button" onClick={undoDesign} className="-me-1.5 rounded-full bg-paper/15 px-3 py-1 text-[13.5px] font-medium hover:bg-paper/25">
+                Undo
+              </button>
+            )}
+          </p>
         </div>
       )}
+    </div>
+  );
+}
+
+/** The Design panel: the design in use, and the way into the "Change design" sheet. */
+function CurrentDesign({ data, onChange }: { data: InviteData; onChange: () => void }) {
+  const meta = getTemplate(data.template).meta;
+  return (
+    <div className="flex items-center gap-4">
+      <span className="block w-[92px] flex-none overflow-hidden rounded-[12px] ring-1 ring-line">
+        <Thumb id={meta.id} data={data} />
+      </span>
+      <div className="min-w-0">
+        <p className="text-[16px] font-medium">{meta.name}</p>
+        <p className="mt-0.5 text-[13.5px] leading-snug text-muted">{meta.tagline}</p>
+        <Button variant="outline" className="mt-3 h-10 px-4 text-[14px]" onPress={onChange}>
+          <Shapes className="size-4" aria-hidden /> Change design
+        </Button>
+        <p className="mt-2 text-[12.5px] text-muted">Your names, dates and wording stay when you switch.</p>
+      </div>
     </div>
   );
 }

@@ -29,3 +29,18 @@
     transparent
   );
 }
+
+/* the mirror's glass sits right of the screen's middle; keep the text inside the glass,
+   under the crest and above the lower rim */
+.t-aarsi .pt-text {
+  left: calc(50% + 17 * var(--u));
+  gap: calc(5 * var(--u));
+}
+
+.t-aarsi .pt-bless .inv-bism {
+  width: calc(122 * var(--u));
+}
+
+.t-aarsi .pt-names {
+  font-size: min(calc(54 * var(--u)), calc(100cqi / (var(--len) * 0.47)));
+}

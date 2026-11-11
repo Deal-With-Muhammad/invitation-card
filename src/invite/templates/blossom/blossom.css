@@ -19,3 +19,9 @@
 .t-blossom .pt-text.has-glow::before {
   inset: calc(-56 * var(--u)) calc(-60 * var(--u));
 }
+
+/* Italiana's en and em dashes are blank: they come from "pt-dash" (painted.css) */
+.t-blossom .inv-main,
+.t-blossom .inv-cover {
+  --f-display: "pt-dash", var(--f-italiana), serif;
+}

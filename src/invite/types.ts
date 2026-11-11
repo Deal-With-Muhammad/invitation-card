@@ -57,7 +57,27 @@ export type Contact = { name: string; phone: string };
 
 export type Bismillah = "none" | "calligraphy" | "arabic";
 
-export const MUSIC_TRACKS = ["harp", "piano", "musicbox", "strings", "oud", "dholki", "softkeys", "celebrate"] as const;
+// New tracks go on the end: published invitations store these ids.
+export const MUSIC_TRACKS = [
+  "harp",
+  "piano",
+  "musicbox",
+  "strings",
+  "oud",
+  "dholki",
+  "softkeys",
+  "celebrate",
+  "waltz",
+  "guitar",
+  "koto",
+  "gamelan",
+  "kalimba",
+  "santoor",
+  "qanun",
+  "lullaby",
+  "jazz",
+  "aurora",
+] as const;
 export type MusicTrack = (typeof MUSIC_TRACKS)[number];
 
 export type InviteData = {

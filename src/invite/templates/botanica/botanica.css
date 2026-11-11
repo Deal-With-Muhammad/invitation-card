@@ -135,3 +135,9 @@
 .t-botanica .pt-backdrop-art {
   opacity: 0.5;
 }
+
+/* Italiana's en and em dashes are blank: they come from "pt-dash" (painted.css) */
+.t-botanica .inv-main,
+.t-botanica .inv-cover {
+  --f-display: "pt-dash", var(--f-italiana), serif;
+}

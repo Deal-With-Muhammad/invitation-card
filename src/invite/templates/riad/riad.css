@@ -30,3 +30,14 @@
     transparent
   );
 }
+
+/* the arch in the painting sits a little right of the screen's middle */
+.t-riad .pt-text {
+  left: calc(50% + 7 * var(--u));
+}
+
+/* Italiana's en and em dashes are blank: they come from "pt-dash" (painted.css) */
+.t-riad .inv-main,
+.t-riad .inv-cover {
+  --f-display: "pt-dash", var(--f-italiana), serif;
+}

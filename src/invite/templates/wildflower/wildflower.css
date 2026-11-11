@@ -198,7 +198,10 @@
   box-shadow: 0 4px 10px -4px color-mix(in srgb, #4a3b22 45%, transparent);
   font: 400 19px / 1.1 var(--f-caveat), cursive;
   color: var(--ink);
-  white-space: nowrap;
+  /* as wide as its words, but never past the panel's edge */
+  width: max-content;
+  max-width: calc((min(100vw, 480px) - 90px) / 2 - 16px);
+  text-align: start;
   opacity: 0;
   translate: -6px 0;
   rotate: 4deg;

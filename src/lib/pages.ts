@@ -40,7 +40,7 @@ const stepsEn = (what: string, extra: string) => ({
 export const PAGES: Record<string, LandingPage> = {
   "wedding-invitation-maker": {
     slug: "wedding-invitation-maker",
-    featured: "gilded",
+    featured: "cypress",
     label: "Wedding invitation maker",
     title: "Free Online Wedding Invitation Maker",
     description: "Make an animated wedding invitation online and share it as a link on WhatsApp. Add every function, maps, countdown and calendar. Free, no sign-up.",
@@ -72,7 +72,7 @@ export const PAGES: Record<string, LandingPage> = {
   },
   "nikah-invitation-card": {
     slug: "nikah-invitation-card",
-    featured: "jharokha",
+    featured: "majlis",
     label: "Nikah invitation card",
     title: "Nikah Invitation Card Maker, Free and Online",
     description: "Create a nikah invitation card online with Bismillah, salam and a dua for the couple. Share it on WhatsApp with maps and the Hijri date. Free.",
@@ -142,7 +142,7 @@ export const PAGES: Record<string, LandingPage> = {
   },
   "kad-kahwin-digital": {
     slug: "kad-kahwin-digital",
-    featured: "velvetrose",
+    featured: "songket",
     label: "Kad kahwin digital",
     title: "Kad Kahwin Digital Percuma",
     description: "Buat kad kahwin digital percuma dalam beberapa minit. Pilih reka bentuk, isi nama, tarikh dan lokasi, dan kongsi satu pautan di WhatsApp. Google Maps, Waze dan kalendar.",
@@ -220,7 +220,7 @@ export const PAGES: Record<string, LandingPage> = {
   },
   "engagement-invitation-card": {
     slug: "engagement-invitation-card",
-    featured: "celestial",
+    featured: "atelier",
     label: "Engagement invitation card",
     title: "Engagement Invitation Card Maker, Online and Free",
     description: "Create an engagement or ring ceremony invitation online and share it on WhatsApp. Starry, botanical and classic designs with maps and calendar. Free.",

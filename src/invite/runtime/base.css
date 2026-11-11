@@ -545,15 +545,23 @@ html.inv-locked body {
   text-wrap: balance;
 }
 
+/* The names share one line when they fit; otherwise they wrap between the names
+   (there is no space between the spans to break at) instead of running off the panel. */
 .inv-closing-names {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: baseline;
+  column-gap: 0.25em;
   margin-top: 18px !important;
   font-size: 46px;
   line-height: 1.2;
   color: var(--accent);
 }
 
-.inv-closing-names .inv-amp {
-  margin: 0 0.25em;
+.inv-closing-names .inv-name {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .inv-closing-meta {

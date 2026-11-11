@@ -50,6 +50,20 @@ import { goldink } from "./goldink";
 import { arbour } from "./arbour";
 import { shagun } from "./shagun";
 import { yaadein } from "./yaadein";
+import { cypress } from "./cypress";
+import { aisle } from "./aisle";
+import { atelier } from "./atelier";
+import { porcelain } from "./porcelain";
+import { amalfi } from "./amalfi";
+import { glasshouse } from "./glasshouse";
+import { hacienda } from "./hacienda";
+import { sakura } from "./sakura";
+import { lacquer } from "./lacquer";
+import { emerald } from "./emerald";
+import { majlis } from "./majlis";
+import { mandap } from "./mandap";
+import { songket } from "./songket";
+import { savanna } from "./savanna";
 import type { Template } from "./types";
 import { TEMPLATE_ORDER } from "@/lib/groups";
 
@@ -58,6 +72,20 @@ const ALL: Template[] = [
   muguet, openhouse, orchid, peony, petals, rosestudy, scrapbook, scroll, seaside, velvet, velvetrose, wildflower, zellige, haveli, zardozi,
   ghoonghat, doli, sheeshmahal, hilal, chandelier, mangni, ringbox, bagh, lanterns, aatishbazi, shamiana, mor, gulab, aarsi, blushletter,
   noor, riad, silkribbon, blossom, goldink, arbour, shagun, yaadein,
+  cypress,
+  aisle,
+  atelier,
+  porcelain,
+  amalfi,
+  glasshouse,
+  hacienda,
+  sakura,
+  lacquer,
+  emerald,
+  majlis,
+  mandap,
+  songket,
+  savanna,
 ];
 
 // Gallery order: see TEMPLATE_ORDER (the wedding functions first).

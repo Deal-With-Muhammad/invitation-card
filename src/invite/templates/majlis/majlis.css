@@ -1,0 +1,38 @@
+/* Majlis (painted kit, filmed opening). */
+
+/* the scene is clear early in the film: the names can come in sooner */
+.t-majlis {
+  --twin-at: 0.5;
+}
+
+/* the calm part of this painting is a narrow column: smaller small-caps and date */
+.t-majlis .pt-title {
+  font-size: calc(11 * var(--u));
+  letter-spacing: 0.2em;
+}
+
+.t-majlis .pt-sc {
+  font-size: calc(11 * var(--u));
+  letter-spacing: 0.16em;
+}
+
+.t-majlis .pt-date {
+  font-size: calc(19.5 * var(--u));
+}
+
+.t-majlis .pt-venue {
+  font-size: calc(15.5 * var(--u));
+}
+
+.t-majlis .pt-bless .inv-bism {
+  width: calc(128 * var(--u));
+}
+
+.t-majlis .pt-names {
+  font-size: min(calc(48 * var(--u)), calc(100cqi / (var(--len) * 0.43)));
+  line-height: 1.1;
+}
+
+.t-majlis .pt-date {
+  letter-spacing: 0.03em;
+}

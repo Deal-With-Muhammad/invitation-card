@@ -18,3 +18,9 @@
 .t-chandelier .pt-text.has-glow::before {
   inset: calc(-58 * var(--u)) calc(-62 * var(--u));
 }
+
+/* Italiana's en and em dashes are blank: they come from "pt-dash" (painted.css) */
+.t-chandelier .inv-main,
+.t-chandelier .inv-cover {
+  --f-display: "pt-dash", var(--f-italiana), serif;
+}

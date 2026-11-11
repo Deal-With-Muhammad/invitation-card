@@ -8,7 +8,7 @@ import "./lanterns.css";
 
 export const lanterns = makePainted("lanterns", {
   cover: { kind: "film", art: "closed", hint: "light" },
-  text: { top: "30%", width: 212 },
+  text: { top: "29%", width: 212 },
   stripY: "93%",
   celebrate: (root) => {
     tapToThrow(root, ".pt-hero", { pieces: GOLD, count: 14 });

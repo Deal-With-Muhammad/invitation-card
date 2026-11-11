@@ -29,3 +29,8 @@
     transparent
   );
 }
+
+/* keep the venue line above the foot of the niche */
+.t-lanterns .pt-text {
+  gap: calc(5 * var(--u));
+}

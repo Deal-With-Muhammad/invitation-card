@@ -1,0 +1,51 @@
+/* Mandap (painted kit, filmed opening). */
+
+/* the scene is clear early in the film: the names can come in sooner */
+.t-mandap {
+  --twin-at: 0.5;
+}
+
+/* the calm part of this painting is a narrow column: smaller small-caps and date */
+.t-mandap .pt-title {
+  font-size: calc(11 * var(--u));
+  letter-spacing: 0.2em;
+}
+
+.t-mandap .pt-sc {
+  font-size: calc(11 * var(--u));
+  letter-spacing: 0.16em;
+}
+
+.t-mandap .pt-date {
+  font-size: calc(19.5 * var(--u));
+}
+
+.t-mandap .pt-venue {
+  font-size: calc(15.5 * var(--u));
+}
+
+.t-mandap .pt-bless .inv-bism {
+  width: calc(128 * var(--u));
+}
+
+.t-mandap .pt-names {
+  font-size: min(calc(40 * var(--u)), calc(100cqi / (var(--len) * 0.56)));
+  font-style: italic;
+  line-height: 1.12;
+}
+
+.t-mandap .pt-names .inv-amp {
+  font-style: normal;
+}
+
+.t-mandap .pt-date {
+  font-family: var(--f-body);
+  font-size: calc(21 * var(--u));
+  font-weight: 600;
+}
+
+/* the display face is too heavy for the venue line */
+.t-mandap .pt-venue {
+  font-family: var(--f-body);
+  font-size: calc(17 * var(--u));
+}

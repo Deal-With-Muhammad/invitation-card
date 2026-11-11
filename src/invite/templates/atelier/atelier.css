@@ -1,0 +1,39 @@
+/* Atelier Blanc (painted kit, filmed opening). */
+
+/* the card fills the screen late in the film: the names wait for it */
+.t-atelier {
+  --twin-at: 0.8;
+}
+
+.t-atelier .pt-title {
+  letter-spacing: 0.32em;
+}
+
+/* tall, light capitals instead of a script */
+.t-atelier .pt-names {
+  /* never below 25: a long name takes two lines instead of shrinking away */
+  font-size: max(calc(25 * var(--u)), min(calc(38 * var(--u)), calc(100cqi / (var(--len) * 0.8))));
+  line-height: 1.22;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.t-atelier .pt-names .inv-amp {
+  font-family: var(--f-display);
+  font-style: italic;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.t-atelier .pt-date {
+  font-size: calc(21 * var(--u));
+  letter-spacing: 0.04em;
+}
+
+/* initials pressed into the dove-grey wax */
+.t-atelier .pt-seal.is-emboss .pt-ini {
+  color: #a3a7ab;
+  text-shadow:
+    0 1px 0 color-mix(in srgb, #ffffff 80%, transparent),
+    0 -1px 0 color-mix(in srgb, #50545a 40%, transparent);
+}

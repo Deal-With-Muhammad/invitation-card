@@ -1,0 +1,19 @@
+/* Sakura (painted kit, filmed opening). */
+
+/* the scene is clear early in the film: the names can come in sooner */
+.t-sakura {
+  --twin-at: 0.5;
+}
+
+.t-sakura .pt-title {
+  letter-spacing: 0.3em;
+}
+
+.t-sakura .pt-names {
+  line-height: 1.1;
+}
+
+.t-sakura .pt-date {
+  font-size: calc(21 * var(--u));
+  letter-spacing: 0.05em;
+}

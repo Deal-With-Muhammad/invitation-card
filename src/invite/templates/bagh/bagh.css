@@ -29,3 +29,12 @@
     transparent
   );
 }
+
+/* the arch is narrow at its crest: a smaller Bismillah and names that stay between its sides */
+.t-bagh .pt-bless .inv-bism {
+  width: calc(120 * var(--u));
+}
+
+.t-bagh .pt-names {
+  font-size: min(calc(54 * var(--u)), calc(100cqi / (var(--len) * 0.47)));
+}

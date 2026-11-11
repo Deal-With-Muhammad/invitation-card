@@ -1,0 +1,45 @@
+/* Amalfi (painted kit, filmed opening). */
+
+/* the scene is clear early in the film: the names can come in sooner */
+.t-amalfi {
+  --twin-at: 0.5;
+}
+
+/* the calm part of this painting is a narrow column: smaller small-caps and date */
+.t-amalfi .pt-title {
+  font-size: calc(11 * var(--u));
+  letter-spacing: 0.2em;
+}
+
+.t-amalfi .pt-sc {
+  font-size: calc(11 * var(--u));
+  letter-spacing: 0.16em;
+}
+
+.t-amalfi .pt-date {
+  font-size: calc(19.5 * var(--u));
+}
+
+.t-amalfi .pt-venue {
+  font-size: calc(15.5 * var(--u));
+}
+
+.t-amalfi .pt-bless .inv-bism {
+  width: calc(128 * var(--u));
+}
+
+.t-amalfi .pt-names {
+  font-size: min(calc(48 * var(--u)), calc(100cqi / (var(--len) * 0.44)));
+  line-height: 1.1;
+}
+
+/* the lower lines sit over the sea: a longer, stronger glow */
+.t-amalfi .pt-text.has-glow::before {
+  inset: calc(-40 * var(--u)) calc(-44 * var(--u)) calc(-60 * var(--u));
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--bg) 88%, transparent),
+    color-mix(in srgb, var(--bg) 62%, transparent) 55%,
+    transparent
+  );
+}

@@ -1,0 +1,52 @@
+/* Emerald Deco (painted kit, filmed opening). */
+
+/* the card fills the screen late in the film: the names wait for it */
+.t-emerald {
+  --twin-at: 0.82;
+}
+
+/* the calm part of this painting is a narrow column: smaller small-caps and date */
+.t-emerald .pt-title {
+  font-size: calc(11 * var(--u));
+  letter-spacing: 0.2em;
+}
+
+.t-emerald .pt-sc {
+  font-size: calc(11 * var(--u));
+  letter-spacing: 0.16em;
+}
+
+.t-emerald .pt-date {
+  font-size: calc(19.5 * var(--u));
+}
+
+.t-emerald .pt-venue {
+  font-size: calc(15.5 * var(--u));
+}
+
+.t-emerald .pt-bless .inv-bism {
+  width: calc(128 * var(--u));
+}
+
+/* thin deco capitals in pale gold */
+.t-emerald .pt-names {
+  /* never below 23: a long name takes two lines instead of shrinking away */
+  font-size: max(calc(23 * var(--u)), min(calc(34 * var(--u)), calc(100cqi / (var(--len) * 0.82))));
+  line-height: 1.25;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.t-emerald .pt-names .inv-amp {
+  letter-spacing: 0;
+}
+
+.t-emerald .pt-date {
+  font-size: calc(20 * var(--u));
+  letter-spacing: 0.08em;
+}
+
+.t-emerald .pt-venue {
+  font-style: normal;
+  letter-spacing: 0.04em;
+}

@@ -8,7 +8,7 @@ import "./aarsi.css";
 
 export const aarsi = makePainted("aarsi", {
   cover: { kind: "film", art: "closed", hint: "light" },
-  text: { top: "15.5%", width: 200 },
+  text: { top: "18%", width: 200 },
   stripY: "96%",
   celebrate: (root) => {
     fall(root, { pieces: RED_PETALS, count: 14, spread: 2.2, dur: [5, 8] });

@@ -109,7 +109,7 @@ const FEATURES = [
   ["Dress code and programme", "Colour swatches for what to wear, and when dinner is served."],
   ["Family contacts", "WhatsApp and call buttons for the people guests should ask."],
   ["12 languages", "English, Malay, Urdu, Arabic, Hindi, Bengali and more. Guests can switch."],
-  ["Music and auto-scroll", "Soft harp, piano or music box, and an invitation that scrolls itself."],
+  ["Music and auto-scroll", "Eighteen pieces to choose from, harp and waltz to oud, santoor and koto, and an invitation that scrolls itself."],
 ];
 
 export function Features() {

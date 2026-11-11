@@ -56,7 +56,7 @@ function tapToTwinkle(root: HTMLElement) {
 
 export const cloudnine = makePainted("cloudnine", {
   cover: { kind: "lift", hint: "dark" },
-  text: { top: "50%", width: 290 },
+  text: { top: "48.5%", width: 290 },
   HeroArt: Glints,
   stripY: "97%",
   stripH: 100,

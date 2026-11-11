@@ -1,0 +1,35 @@
+/* Protea (painted kit, filmed opening). */
+
+/* the card fills the screen late in the film: the names wait for it */
+.t-savanna {
+  --twin-at: 0.88;
+}
+
+.t-savanna .pt-names {
+  font-size: min(calc(46 * var(--u)), calc(100cqi / (var(--len) * 0.58)));
+  font-weight: 400;
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+}
+
+.t-savanna .pt-names .inv-amp {
+  font-style: italic;
+}
+
+.t-savanna .pt-date {
+  font-size: calc(21 * var(--u));
+  letter-spacing: 0.04em;
+}
+
+/* initials pressed into the gold wax */
+.t-savanna .pt-seal.is-emboss .pt-ini {
+  color: #8f6f2e;
+  text-shadow:
+    0 1px 0 color-mix(in srgb, #fff3cf 70%, transparent),
+    0 -1px 0 color-mix(in srgb, #4a3410 45%, transparent);
+}
+
+/* the pampas fills the right edge of the card: the lines sit a little left of the middle */
+.t-savanna .pt-text {
+  left: 46%;
+}

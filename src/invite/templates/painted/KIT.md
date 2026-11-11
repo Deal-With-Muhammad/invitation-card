@@ -34,6 +34,8 @@ Delete the design's old `art.tsx` / `cover.tsx` if it has them; nothing else imp
   Prefer `film` for weddings: no opening may crossfade between two different pictures. Make the
   first frame from the closed state and the last from the open state with text hidden, trim the
   still start, cut at the frame that best matches the hero, and check for one-frame jumps.
+  Veo returns a 768×1376 still stretched to 720×1280 (not cropped): convert the art the same way
+  (`magick still.jpg -resize '1080x1920!'`), or the film's last frame and the hero will not line up.
   On a film the names rise in over its second half (a twin of the hero text in the cover); a
   card whose film shows the card late sets `--twin-at` on `.t-<id>` (default `0.55` of `openMs`).
 - `cover.art`: closed-state art name. `cover.pos`: object-position.

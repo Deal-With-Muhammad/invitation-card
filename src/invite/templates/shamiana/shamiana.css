@@ -18,3 +18,8 @@
 .t-shamiana .pt-text.has-glow::before {
   inset: calc(-58 * var(--u)) calc(-62 * var(--u));
 }
+
+/* keep the time and venue on the lit canopy, above the string of lights and the tree line */
+.t-shamiana .pt-text {
+  gap: calc(5 * var(--u));
+}

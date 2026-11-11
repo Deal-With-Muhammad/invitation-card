@@ -24,7 +24,7 @@ export function EditLoader({ slug }: { slug: string }) {
   useEffect(() => {
     const fromHash = new URLSearchParams(window.location.hash.slice(1)).get("k");
     const token = (key.current ??= fromHash || tokenFor(slug));
-    if (fromHash) history.replaceState(null, "", window.location.pathname);
+    if (fromHash) history.replaceState(null, "", window.location.pathname + window.location.search);
     // Without a key on this device, the signed-in account it's saved to also works.
     fetch(`/api/invites/${slug}`, { headers: token ? { "x-edit-token": token } : {} })
       .then(async (res) => {

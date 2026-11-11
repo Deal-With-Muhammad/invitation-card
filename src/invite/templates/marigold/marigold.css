@@ -5,9 +5,9 @@
   max-width: none;
 }
 
-/* the stage's calm middle sits a little left of centre, between the two drapes */
+/* the stage's calm middle, between the two drapes, sits a touch right of centre */
 .t-marigold .pt-text {
-  left: 48%;
+  left: 51%;
 }
 
 .t-marigold .pt-title {

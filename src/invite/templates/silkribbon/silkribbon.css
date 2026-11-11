@@ -24,3 +24,14 @@
 .t-silkribbon {
   --twin-at: 0.74;
 }
+
+/* the card in the painting sits a little right of the screen's middle */
+.t-silkribbon .pt-text {
+  left: calc(50% + 8 * var(--u));
+}
+
+/* Italiana's en and em dashes are blank: they come from "pt-dash" (painted.css) */
+.t-silkribbon .inv-main,
+.t-silkribbon .inv-cover {
+  --f-display: "pt-dash", var(--f-italiana), serif;
+}

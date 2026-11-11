@@ -47,11 +47,17 @@ function Board({ r }: { r: Resolved }) {
   let i = 0;
   const word = (s: string) =>
     latin(s)
-      ? Array.from(s).map((ch, k) => (
-          <span key={k} className="pv-l" style={{ "--i": i++ } as CSSProperties}>
-            {ch === " " ? " " : ch}
-          </span>
-        ))
+      ? [
+          // Each letter is its own box, so on a right-to-left page (Urdu, Arabic) the boxes
+          // would be laid out right to left and the name would read backwards: keep them LTR.
+          <span key="n" dir="ltr">
+            {Array.from(s).map((ch, k) => (
+              <span key={k} className="pv-l" style={{ "--i": i++ } as CSSProperties}>
+                {ch === " " ? " " : ch}
+              </span>
+            ))}
+          </span>,
+        ]
       : [
           <span key="w" className="pv-l" style={{ "--i": i++ } as CSSProperties}>
             {s}

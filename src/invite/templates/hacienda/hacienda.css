@@ -1,0 +1,34 @@
+/* Hacienda (painted kit, filmed opening). */
+
+/* the scene is clear early in the film: the names can come in sooner */
+.t-hacienda {
+  --twin-at: 0.6;
+}
+
+/* the calm part of this painting is a narrow column: smaller small-caps and date */
+.t-hacienda .pt-title {
+  font-size: calc(11 * var(--u));
+  letter-spacing: 0.2em;
+}
+
+.t-hacienda .pt-sc {
+  font-size: calc(11 * var(--u));
+  letter-spacing: 0.16em;
+}
+
+.t-hacienda .pt-date {
+  font-size: calc(19.5 * var(--u));
+}
+
+.t-hacienda .pt-venue {
+  font-size: calc(15.5 * var(--u));
+}
+
+.t-hacienda .pt-bless .inv-bism {
+  width: calc(128 * var(--u));
+}
+
+.t-hacienda .pt-names {
+  font-size: min(calc(50 * var(--u)), calc(100cqi / (var(--len) * 0.4)));
+  line-height: 1.08;
+}

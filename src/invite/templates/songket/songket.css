@@ -1,0 +1,35 @@
+/* Songket (painted kit, filmed opening). */
+
+/* the card fills the screen late in the film: the names wait for it */
+.t-songket {
+  --twin-at: 0.84;
+}
+
+.t-songket .pt-title {
+  font-family: var(--f-display);
+  font-size: calc(11.5 * var(--u));
+  letter-spacing: 0.24em;
+}
+
+.t-songket .pt-names {
+  line-height: 1.14;
+}
+
+.t-songket .pt-date {
+  font-family: var(--f-body);
+  font-size: calc(23 * var(--u));
+  font-weight: 500;
+}
+
+/* initials pressed into the gold wax */
+.t-songket .pt-seal.is-emboss .pt-ini {
+  color: #8f6f2e;
+  text-shadow:
+    0 1px 0 color-mix(in srgb, #fff3cf 70%, transparent),
+    0 -1px 0 color-mix(in srgb, #4a3410 45%, transparent);
+}
+
+/* Cinzel has capitals only: the venue reads better in the body face */
+.t-songket .pt-venue {
+  font-family: var(--f-body);
+}

@@ -8,7 +8,7 @@ import "./mangni.css";
 
 export const mangni = makePainted("mangni", {
   cover: { kind: "film", art: "closed", hint: "dark" },
-  text: { top: "8%", width: 292 },
+  text: { top: "5.5%", width: 292 },
   stripY: null,
   celebrate: (root) => {
     fall(root, { pieces: RED_PETALS, count: 14, spread: 2.2, dur: [5, 8] });

@@ -5,7 +5,7 @@ import { isPremium } from "@/lib/groups";
 export const VISIT_LIMIT = 100;
 
 /** Premium designs include fewer visits; unlimited is arranged by message. */
-export const PREMIUM_VISIT_LIMIT = 50;
+export const PREMIUM_VISIT_LIMIT = 80;
 
 export const visitLimitFor = (template: string) => (isPremium(template) ? PREMIUM_VISIT_LIMIT : VISIT_LIMIT);
 

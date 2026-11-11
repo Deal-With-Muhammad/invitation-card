@@ -1,0 +1,30 @@
+/* Porcelain (painted kit, filmed opening). */
+
+/* the card fills the screen late in the film: the names wait for it */
+.t-porcelain {
+  --twin-at: 0.78;
+}
+
+.t-porcelain .pt-title {
+  font-family: var(--f-display);
+  font-size: calc(13 * var(--u));
+  font-weight: 600;
+  letter-spacing: 0.22em;
+}
+
+.t-porcelain .pt-names {
+  line-height: 1.12;
+}
+
+.t-porcelain .pt-date {
+  font-size: calc(22 * var(--u));
+  font-weight: 500;
+}
+
+/* initials pressed into the cobalt wax */
+.t-porcelain .pt-seal.is-wax .pt-ini {
+  color: #17358a;
+  text-shadow:
+    0 1px 0 color-mix(in srgb, #a9c2ff 50%, transparent),
+    0 -1px 0 color-mix(in srgb, #071a52 60%, transparent);
+}

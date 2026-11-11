@@ -170,11 +170,14 @@ function InviteList({ rows, onRemove }: { rows: Row[]; onRemove?: (slug: string)
               m.views != null && m.maxViews != null && <Visits views={m.views} maxViews={m.maxViews} />
             )}
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             {!m.gone && (
               <>
                 <Link href={`/${m.slug}`} className={buttonVariants({ variant: "outline", size: "sm" })} target="_blank">
                   Open
+                </Link>
+                <Link href={`/edit/${m.slug}?design=1`} className={buttonVariants({ variant: "outline", size: "sm" })}>
+                  Change design
                 </Link>
                 <Link href={`/edit/${m.slug}`} className={buttonVariants({ size: "sm" })}>
                   Edit

@@ -24,7 +24,9 @@
   align-items: baseline;
   justify-content: center;
   column-gap: 0.22em;
-  font-size: min(calc(40 * var(--u)), calc(100cqi / (var(--len) * 1.05)));
+  /* both names on one line while that leaves them a readable size; longer names take a line
+     each (the flex wraps) rather than shrinking to almost nothing */
+  font-size: min(calc(40 * var(--u)), max(calc(100cqi / (var(--len) * 1.05)), min(calc(26 * var(--u)), calc(100cqi / (var(--len) * 0.62)))));
   line-height: 1.45;
 }
 

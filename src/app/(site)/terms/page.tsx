@@ -23,7 +23,7 @@ export default function TermsPage() {
 
       <h2>Free, and provided as-is</h2>
       <p>
-        Making and publishing an invitation is free. Each one includes 100 visits (50 for premium designs), and every opening of the link counts as one. When they&apos;re used up, guests see a message that the invitation is full instead of the card. Extra visits and custom designs are arranged with me directly, and any price is agreed before work starts.
+        Making and publishing an invitation is free. Each one includes 100 visits (80 for premium designs), and every opening of the link counts as one. When they&apos;re used up, guests see a message that the invitation is full instead of the card. Extra visits and custom designs are arranged with me directly, and any price is agreed before work starts.
       </p>
       <p>
         I provide the service as it is, and can change it or stop it at any time. Please check your invitation before you send it, and keep your event details somewhere else as well.

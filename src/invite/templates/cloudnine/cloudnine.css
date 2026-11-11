@@ -185,3 +185,12 @@
 .t-cloudnine .inv-title {
   font-size: 32px;
 }
+
+/* the text ends clear of the "scroll" hint */
+.t-cloudnine .pt-text {
+  gap: calc(5 * var(--u));
+}
+
+.t-cloudnine .pt-bless .inv-bism {
+  width: calc(132 * var(--u));
+}

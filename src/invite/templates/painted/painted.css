@@ -7,6 +7,16 @@
   initial-value: 0%;
 }
 
+/* The en and em dash only (two glyphs cut from Noto Serif Display, OFL, 752 bytes). The
+   Italiana display font ships them blank, so a date range read "8 10 January" instead of
+   "8 – 10 January"; a design that uses Italiana puts this family first:
+   --f-display: "pt-dash", var(--f-italiana), serif. */
+@font-face {
+  font-family: "pt-dash";
+  src: url("data:font/woff;base64,d09GRgABAAAAAALwAA0AAAAAArwAAgJOAAAAAAAAAAAAAAAAAAAAAAAAAABHUE9TAAACmAAAACAAAAAgRHZMdUdTVUIAAAK4AAAANgAAADaTFYIWT1MvMgAAAewAAABVAAAAYIzS/uhjbWFwAAACRAAAAC4AAAA0AAwgZ2dhc3AAAAKQAAAACAAAAAgAAAAQZ2x5ZgAAATAAAAAtAAAANERqNnJoZWFkAAABiAAAADYAAAA2I9hNb2hoZWEAAAHMAAAAIAAAACQMaAeLaG10eAAAAcAAAAAMAAAADAg2AFRsb2NhAAABgAAAAAgAAAAIAA0AGm1heHAAAAFgAAAAHQAAACAAJgFybmFtZQAAAnQAAAAGAAAABgAGAABwb3N0AAACfAAAABQAAAAg/58AMnicY2D8/5uRmfEnozgDMwMDs6miKCvjP0ZmEREGBrAM81skGeZPYBkAFeUJUQAAAHicY2BkYGBgZnjAIMEwgYGNAcRDABYGRgAk+AGZAAAAAAAAAAANABoAAQAAAAICTu1JhbhfDzz1AA8D6AAAAADdgNLAAAAAAN77NTz9S/4qCu0EGAAAAAYAAgAAAAAAAAJYAF4B9P/7A+j/+3icY2BkYGDR/XebgYFb9K/33+lcbxkYGVABMwCTAQYDeJxjYGEKZpzAwMrAwNTFFMHAwOANoRnjGIwYnRgYmJhYmThYWZmYWBoYUIG7v787wwEFYQURFt1/txkYWHQZVRkYGBhBckwSTKcYGBgUGJgB7GAKPgAAAHicHclBDQAgDACxAnMAAubfFA6wMAKvS3PoGFiG9hsSIZ5zVZGzap//XVGiBpAAAAAAAAAABgAAeJxjYGYAg/9zGIwgLFQAACqDAdEAAQAB//8ADwABAAAACgAcAB4AAURGTFQACAAEAAAAAP//AAAAAAAAAAEAAAAKADIANAAEREZMVAAaY3lybAAkZ3JlawAkbGF0bgAkAAQAAAAA//8AAAAAAAAAAAAAAAA=") format("woff");
+  unicode-range: U+2013-2014;
+}
+
 .pt-img {
   position: absolute;
   inset: 0;
@@ -18,6 +28,22 @@
   user-select: none;
   -webkit-user-drag: none;
   pointer-events: none;
+}
+
+/* The art covers the screen, so anything painted in it (an arch, a card, a seal) is sized by
+   the screen's height on a tall phone but by its width on a short one, a desktop column or a
+   9:16 thumbnail. The hero's and the cover's unit follows the art's scale, capped at the usual
+   width unit, so text tuned on a 390×844 phone keeps its size against the painting everywhere.
+   (475 is the art's width when it fills an 844px-tall screen.) */
+.pt-hero,
+.pt-cover {
+  --u: min(calc(var(--sw) / 390), max(calc(var(--sw) / 475), calc(var(--sh) / 844)));
+}
+
+/* the "tap to open" and "scroll" lines are not part of the painting: they keep their size */
+.pt-tap,
+.pt-scroll {
+  --u: calc(var(--sw) / 390);
 }
 
 /* ── hero ── */

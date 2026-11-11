@@ -8,7 +8,7 @@ import "./shamiana.css";
 
 export const shamiana = makePainted("shamiana", {
   cover: { kind: "film", art: "closed", hint: "light" },
-  text: { top: "31%", width: 262 },
+  text: { top: "26%", width: 262 },
   stripY: "4%",
   celebrate: (root) => {
     tapToThrow(root, ".pt-hero", { pieces: GOLD, count: 14 });

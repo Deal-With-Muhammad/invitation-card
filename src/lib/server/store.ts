@@ -17,7 +17,10 @@ import type { VisitInfo } from "./visitor";
 export const VISIT_LIMIT = 100;
 
 /** Premium designs include fewer visits; unlimited is arranged with the admin. */
-export const PREMIUM_VISIT_LIMIT = 50;
+export const PREMIUM_VISIT_LIMIT = 80;
+
+/** What premium designs included before 12 Nov 2026; rows still on it move up on their next save. */
+export const OLD_PREMIUM_VISIT_LIMIT = 50;
 
 /** The visit limit of an unlimited invitation (custom designs, or turned on by the admin). */
 export const UNLIMITED_VISITS = 2147483647;

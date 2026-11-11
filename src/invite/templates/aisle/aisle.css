@@ -1,0 +1,24 @@
+/* Clifftop Aisle (painted kit, filmed opening). */
+
+/* the scene is clear early in the film: the names can come in sooner */
+.t-aisle {
+  --twin-at: 0.3;
+}
+
+.t-aisle .pt-title {
+  letter-spacing: 0.3em;
+}
+
+.t-aisle .pt-names {
+  line-height: 1.08;
+}
+
+.t-aisle .pt-date {
+  font-size: calc(22 * var(--u));
+}
+
+/* the clouds behind the lines: a wide, soft glow */
+.t-aisle .pt-text.has-glow::before {
+  inset: calc(-34 * var(--u)) calc(-44 * var(--u));
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--bg) 74%, transparent), color-mix(in srgb, var(--bg) 44%, transparent) 55%, transparent);
+}

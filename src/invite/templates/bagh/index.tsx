@@ -8,7 +8,7 @@ import "./bagh.css";
 
 export const bagh = makePainted("bagh", {
   cover: { kind: "film", art: "closed", hint: "light" },
-  text: { top: "26%", width: 214 },
+  text: { top: "28%", width: 214 },
   stripY: "3%",
   celebrate: (root) => {
     tapToThrow(root, ".pt-hero", { pieces: PINK_PETALS });

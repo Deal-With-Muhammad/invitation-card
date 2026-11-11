@@ -1,0 +1,24 @@
+/* Cypress Walk (painted kit, filmed opening). */
+
+/* the scene is clear early in the film: the names can come in sooner */
+.t-cypress {
+  --twin-at: 0.3;
+}
+
+.t-cypress .pt-title {
+  letter-spacing: 0.3em;
+}
+
+.t-cypress .pt-names {
+  line-height: 1.1;
+}
+
+.t-cypress .pt-date {
+  font-size: calc(22 * var(--u));
+}
+
+/* a soft, wide glow so the sky's grain doesn't cut through the lines */
+.t-cypress .pt-text.has-glow::before {
+  inset: calc(-30 * var(--u)) calc(-40 * var(--u));
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--bg) 62%, transparent), color-mix(in srgb, var(--bg) 36%, transparent) 55%, transparent);
+}

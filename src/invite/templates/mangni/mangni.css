@@ -18,3 +18,12 @@
 .t-mangni .pt-text.has-glow::before {
   inset: calc(-58 * var(--u)) calc(-62 * var(--u));
 }
+
+/* keep the venue line clear of the plate's rim */
+.t-mangni .pt-text {
+  gap: calc(5 * var(--u));
+}
+
+.t-mangni .pt-names {
+  font-size: min(calc(56 * var(--u)), calc(100cqi / (var(--len) * 0.47)));
+}

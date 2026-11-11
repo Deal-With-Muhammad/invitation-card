@@ -1,0 +1,21 @@
+/* Lacquer Doors (painted kit, filmed opening). */
+
+/* the card fills the screen late in the film: the names wait for it */
+.t-lacquer {
+  --twin-at: 0.7;
+}
+
+/* Italianno is a small script: set it larger */
+.t-lacquer .pt-names {
+  font-size: min(calc(66 * var(--u)), calc(100cqi / (var(--len) * 0.38)));
+  line-height: 0.98;
+}
+
+.t-lacquer .pt-title {
+  letter-spacing: 0.24em;
+}
+
+.t-lacquer .pt-date {
+  font-size: calc(22 * var(--u));
+  font-weight: 500;
+}
