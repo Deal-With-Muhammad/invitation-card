@@ -199,7 +199,8 @@ export function resolve(data: InviteData, lang: Lang = data.lang): Resolved {
     message: val(data.message, occ.message),
     closing: val(data.closing, occ.closing),
     events,
-    main: events[0] ?? null,
+    // The first event with a date (the countdown and map need one), else the first.
+    main: events.find((e) => e.start != null) ?? events[0] ?? null,
     oneVenue: venues.size <= 1,
     when,
     dress: {

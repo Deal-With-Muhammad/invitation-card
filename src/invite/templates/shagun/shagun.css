@@ -70,6 +70,13 @@
 
 /* ── the index of functions ── */
 
+/* The chapters sit edge to edge on solid paper, so the blurred backdrop doesn't show in
+   strips between them and the cards above and below. */
+.sg-chapters {
+  margin: 14px 0;
+  background: var(--bg);
+}
+
 .sg-index {
   display: flex;
   flex-wrap: wrap;
@@ -121,7 +128,9 @@
 
 .sg-ch {
   position: relative;
-  min-height: max(var(--sh), 640px);
+  /* at least the painting's own 9:16 height, so a wide, short laptop window doesn't crop
+     its border and push the buttons onto the flowers */
+  min-height: max(var(--sh), 640px, calc(var(--sw) * 16 / 9));
   overflow: hidden;
   color: var(--c-ink);
   text-align: center;
