@@ -1,10 +1,10 @@
 import type { Occasion } from "@/invite/types";
 
-/** Special designs: every function in one link, with RSVP, wishes and save-as-video. Their own row, first. */
-export const SPECIAL_DESIGNS = ["shagun"];
+/** Premium designs: the most detailed ones, each opening on its own film. Their own section, first. */
+export const PREMIUM_DESIGNS = ["shagun", "arbour"];
 
 /** The newest designs: light, modern and filmed. They get their own row first. */
-export const NEW_DESIGNS = ["arbour", "noor", "riad", "silkribbon", "blossom", "goldink"];
+export const NEW_DESIGNS = ["noor", "riad", "silkribbon", "blossom", "goldink"];
 
 /** The order designs appear in everywhere: the wedding functions first, then the rest. */
 export const TEMPLATE_ORDER = [
