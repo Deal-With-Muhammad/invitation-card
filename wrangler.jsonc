@@ -1,0 +1,17 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  // DWM Invite on Cloudflare Workers (built with OpenNext), moved from AWS Amplify in Nov 2026.
+  // Secrets (set once with `npx wrangler secret put NAME`): SUPABASE_SERVICE_ROLE, SUPABASE_ANON_KEY.
+  // NEXT_PUBLIC_* values are built in from .env.production / .env at build time.
+  "name": "dwm-invite",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": { "directory": ".open-next/assets", "binding": "ASSETS" },
+  "observability": { "enabled": true },
+  // The site's address. The DNS record for "invite" is proxied (orange cloud) so this route serves it.
+  "routes": [{ "pattern": "invite.dealwithmuhammad.com/*", "zone_name": "dealwithmuhammad.com" }],
+  "vars": {
+    "ADMIN_EMAILS": "iammuhammadahmad90@gmail.com"
+  }
+}

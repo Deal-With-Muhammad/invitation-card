@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 
-import { fontVar, SCRIPT_FONT, type FontKey, FONT_KEYS } from "./fonts";
+import { fontVar, SCRIPT_FONT, type FontKey, FONT_KEYS } from "./font-keys";
 import type { Palette, TemplateMeta } from "./templates/types";
 import type { InviteData, Lang } from "./types";
 

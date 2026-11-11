@@ -3,7 +3,9 @@ import { headers } from "next/headers";
 import { customFor } from "@/custom";
 import { paletteFor } from "@/invite/look";
 import { resolve } from "@/invite/resolve";
-import { getTemplate } from "@/invite/templates";
+// Only the catalog (names and palettes): importing the designs themselves would pull their CSS
+// and fonts into this image route, which the Cloudflare build can't bundle.
+import { metaFor } from "@/invite/templates/catalog";
 import { OG_SIZE, ogArt, renderInviteOg, renderSiteOg } from "@/lib/og";
 import { getStore } from "@/lib/server/store";
 import { SLUG_RE } from "@/lib/slug";
@@ -25,8 +27,8 @@ export default async function InviteOg(props: { params: Promise<{ slug: string }
   const rec = SLUG_RE.test(slug) ? await getStore()?.get(slug) : null;
   if (!rec) return renderSiteOg();
   const r = resolve(rec.data);
-  const tpl = getTemplate(rec.data.template);
-  const p = paletteFor(tpl.meta, rec.data.look);
-  const art = await ogArt(origin, tpl.meta.id);
+  const meta = metaFor(rec.data.template);
+  const p = paletteFor(meta, rec.data.look);
+  const art = await ogArt(origin, meta.id);
   return renderInviteOg({ p, title: r.title, names: r.names, date: r.when.date, venue: r.oneVenue ? (r.main?.venue ?? "") : "", tap: r.t.tapToOpen, art });
 }

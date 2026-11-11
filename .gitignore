@@ -40,3 +40,8 @@ next-env.d.ts
 # word harvest cache
 /scripts/words/.cache/
 /.data
+
+# Cloudflare (OpenNext) build output and local secrets
+.open-next
+.wrangler
+.dev.vars*

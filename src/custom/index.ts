@@ -1,12 +1,11 @@
-import type { ComponentType } from "react";
-
 import type { Palette } from "@/invite/templates/types";
 
 // Custom invitations: one-off pages designed for a client, at
 // invite.dealwithmuhammad.com/<slug>. They aren't templates (never in the gallery or
 // the editor) and have no visit limit. Each also has a row in the invites table
 // (made by hand, max_views 2147483647) so the link is reserved, visits are counted
-// and the admin lists it. Art and video live in public/custom/<slug>/.
+// and the admin lists it. Art and video live in public/custom/<slug>/. The page itself
+// is loaded from ./pages.ts (kept apart so image and API routes don't pull in its CSS).
 
 export type CustomInvite = {
   /** Page and link-preview title. */
@@ -18,7 +17,6 @@ export type CustomInvite = {
   poster: string;
   /** Link preview: colours, art (a 630px-tall JPEG) and the text beside it. */
   og: { p: Palette; art: string; title: string; names: string; date: string; venue: string };
-  load: () => Promise<ComponentType>;
 };
 
 export const CUSTOM: Record<string, CustomInvite> = {
@@ -35,7 +33,6 @@ export const CUSTOM: Record<string, CustomInvite> = {
       date: "2 & 4 December 2026",
       venue: "Hyderabad",
     },
-    load: () => import("./siraj-and-shireen").then((m) => m.Invite),
   },
   "shifa-and-arbaz": {
     title: "Wedding Celebrations · Shifa & Arbaz",
@@ -50,7 +47,6 @@ export const CUSTOM: Record<string, CustomInvite> = {
       date: "7 – 9 January 2027",
       venue: "Vapi, Gujarat",
     },
-    load: () => import("./shifa-and-arbaz").then((m) => m.Invite),
   },
   "aathika-and-dilshad": {
     title: "Nikah · Aathika & Dilshad",
@@ -65,7 +61,6 @@ export const CUSTOM: Record<string, CustomInvite> = {
       date: "Friday 20 November 2026",
       venue: "Vellore",
     },
-    load: () => import("./aathika-and-dilshad").then((m) => m.Invite),
   },
   "shifa-and-arbaz-2": {
     title: "Wedding Celebrations · Shifa & Arbaz",
@@ -80,7 +75,6 @@ export const CUSTOM: Record<string, CustomInvite> = {
       date: "7 – 9 January 2027",
       venue: "Vapi, Gujarat",
     },
-    load: () => import("./shifa-and-arbaz-2").then((m) => m.Invite),
   },
   "kagalwala-silver-jubilee": {
     title: "Silver Jubilee · Mr & Mrs Kagalwala",
@@ -95,7 +89,6 @@ export const CUSTOM: Record<string, CustomInvite> = {
       date: "Sunday 27 December 2026",
       venue: "25 years together",
     },
-    load: () => import("./kagalwala-silver-jubilee").then((m) => m.Invite),
   },
   "akib-weds-riza": {
     title: "Nikah & Walima · Akib & Riza",
@@ -110,7 +103,6 @@ export const CUSTOM: Record<string, CustomInvite> = {
       date: "14 & 30 December 2026",
       venue: "Jodhpur · Ahmednagar",
     },
-    load: () => import("./akib-weds-riza").then((m) => m.Invite),
   },
 };
 

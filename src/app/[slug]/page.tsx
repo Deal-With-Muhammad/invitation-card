@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { cache } from "react";
 
 import { customFor } from "@/custom";
+import { CUSTOM_PAGES } from "@/custom/pages";
 import { paletteFor } from "@/invite/look";
 import { resolve } from "@/invite/resolve";
 import { getTemplate } from "@/invite/templates";
@@ -61,7 +62,7 @@ export default async function InvitePage(props: PageProps<"/[slug]">) {
   // A custom invitation is its own page, with no visit limit.
   const custom = customFor(slug);
   if (custom) {
-    const Custom = await custom.load();
+    const Custom = await CUSTOM_PAGES[slug]();
     return <Custom />;
   }
   const rec = await load(slug);
