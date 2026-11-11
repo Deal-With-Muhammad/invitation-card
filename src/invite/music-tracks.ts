@@ -18,7 +18,7 @@ const BY_DESIGN: Record<MusicTrack, string[]> = {
   harp: ["arbour", "gilded", "rosestudy", "orchid", "wildflower", "botanica", "muguet", "petals", "gulab", "mangni"],
   piano: ["lace", "filigree", "envelope", "editorial", "seaside", "blushletter"],
   musicbox: ["celestial", "cloudnine", "scrapbook", "ringbox"],
-  strings: ["velvetrose", "velvet", "deco", "chandelier", "kashi", "zardozi", "sheeshmahal"],
+  strings: ["shagun", "velvetrose", "velvet", "deco", "chandelier", "kashi", "zardozi", "sheeshmahal"],
   oud: ["zellige", "jharokha", "haveli", "hilal", "lanterns", "aarsi", "bagh", "peony"],
   dholki: ["marigold", "doli", "ghoonghat", "mor", "shamiana"],
   softkeys: ["noor", "riad", "silkribbon", "blossom", "goldink", "boarding", "openhouse"],

@@ -8,7 +8,7 @@ export const RESERVED = new Set([
   "api", "auth", "preview", "frame", "dev", "templates", "template", "create", "edit", "my", "custom", "about", "privacy",
   "terms", "help", "faq", "contact", "pricing", "admin", "login", "signup", "account", "settings", "stats", "www",
   "invite", "invites", "dwm", "app", "static", "assets", "public", "icon", "apple-icon", "opengraph-image",
-  "sitemap", "robots", "manifest", "llms", "favicon", "new", "demo", "examples", "blog",
+  "sitemap", "robots", "manifest", "llms", "favicon", "new", "demo", "examples", "blog", "replies",
   "wedding-invitation-maker", "nikah-invitation-card", "walima-invitation-card", "mehndi-invitation-card",
   "kad-kahwin-digital", "birthday-invitation-maker", "aqiqah-invitation-card", "eid-invitation-card",
   "engagement-invitation-card", "digital-invitation-card", "shadi-card-online",

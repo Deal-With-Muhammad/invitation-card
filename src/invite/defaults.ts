@@ -243,8 +243,20 @@ export function sampleFor(occasion: Occasion): Sample {
 
 const MUSIC_OFF: Occasion[] = ["nikah", "aqiqah"];
 
+/** Special designs (every function in one link) start with all four functions. */
+function allFunctions(): EventItem[] {
+  const d = sampleDate();
+  return [
+    ev({ title: "Mayoun", date: addDays(d, -3), start: "16:00", end: "19:00", venue: "Malik Residence", address: "Jalan Setiabakti 5, Bukit Damansara, 50490 Kuala Lumpur" }),
+    ev({ title: "Mehndi", date: addDays(d, -1), start: "19:30", end: "23:30", venue: "The Courtyard", address: "Jalan Tun Razak, 50400 Kuala Lumpur" }),
+    ev({ title: "Baraat", date: d, start: "18:00", end: "22:30", venue: "Grand Marquee", address: "Jalan Ampang, 50450 Kuala Lumpur" }),
+    ev({ title: "Walima", date: addDays(d, 1), start: "19:30", end: "23:00", venue: "The Grand Ballroom", address: "Jalan Sultan Ismail, 50250 Kuala Lumpur" }),
+  ];
+}
+
 export function newInvite(template: string, occasion: Occasion, palette: string, lang: Lang = "en"): InviteData {
-  const sample = sampleFor(occasion);
+  const base = sampleFor(occasion);
+  const sample = metaFor(template).special ? { ...base, events: allFunctions() } : base;
   // Designs that aren't Islamic in style start without the Bismillah; the host can add it.
   const s = metaFor(template).islamic === false ? { ...sample, bismillah: "none" as const, salam: false } : sample;
   return {

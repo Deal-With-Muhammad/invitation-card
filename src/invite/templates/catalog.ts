@@ -460,6 +460,23 @@ export const CATALOG: TemplateMeta[] = [
     filmed: true,
   },
   {
+    id: "shagun",
+    name: "Shagun Box",
+    tagline: "Every function in one link, each in its own colours",
+    description:
+      "Filmed opening: a mother-of-pearl shagun box opens and four silk envelopes rise out of it. Then each function has its own painted chapter (Mayoun in marigold yellow, Mehndi in henna colours with peacocks, Baraat in Mughal red and gold, Walima in white and green) with its own date, time, venue and map, followed by RSVP, wishes for the couple and a button that saves the whole invitation as a video for WhatsApp.",
+    occasions: ["wedding", "mehndi", "walima", "nikah", "reception"],
+    defaultOccasion: "wedding",
+    palettes: [p("main", "Ivory & gold", "#fbf6ee", "#3f2a1e", "#a8823f", "#efe4d2")],
+    fonts: { display: "cormorant", names: "pinyon", body: "cormorant" },
+    opening: "The shagun box opens and four envelopes rise, on film",
+    openMs: 6300,
+    keywords: ["all functions wedding invitation", "mayoun mehndi baraat walima card", "pakistani wedding invitation", "wedding invitation video for whatsapp"],
+    islamic: true,
+    filmed: true,
+    special: true,
+  },
+  {
     id: "arbour",
     name: "Rose Arbour",
     tagline: "A satin bow unties and garden gates open on a rose arch",

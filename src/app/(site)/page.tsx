@@ -4,7 +4,8 @@ import { galleryItems } from "@/components/gallery-items";
 import { CustomCta, Features, HowItWorks, OccasionLinks } from "@/components/sections";
 import { Reveal, TemplateRow, VideoHero } from "@/components/templates-showcase";
 import { TryIt } from "@/components/try-it";
-import { GROUPS, groupOf, NEW_DESIGNS } from "@/lib/groups";
+import { GROUPS, groupOf, NEW_DESIGNS, SPECIAL_DESIGNS } from "@/lib/groups";
+import { SPECIAL_LINK, SpecialDesigns } from "@/components/special-designs";
 import { buildHomeJsonLd, jsonLdString } from "@/lib/seo";
 import { site } from "@/lib/site";
 
@@ -15,9 +16,10 @@ export default function Home() {
   const all = galleryItems();
   const fan = FAN.map((id) => all.find((it) => it.meta.id === id)).filter((it): it is GalleryItem => !!it);
   const rows = [
-    { id: "new", title: "New: light and modern", blurb: "Soft daylight, cotton paper and silk, each one opening on film.", items: all.filter((it) => NEW_DESIGNS.includes(it.meta.id)) },
-    ...GROUPS.map((g) => ({ ...g, items: all.filter((it) => !NEW_DESIGNS.includes(it.meta.id) && groupOf(it.meta.defaultOccasion) === g.id) })),
+    { id: "new", title: "New: light and modern", blurb: "Soft daylight, cotton paper and silk, each one opening on film.", items: all.filter((it) => NEW_DESIGNS.includes(it.meta.id) && !SPECIAL_DESIGNS.includes(it.meta.id)) },
+    ...GROUPS.map((g) => ({ ...g, items: all.filter((it) => !NEW_DESIGNS.includes(it.meta.id) && !SPECIAL_DESIGNS.includes(it.meta.id) && groupOf(it.meta.defaultOccasion) === g.id) })),
   ].filter((g) => g.items.length);
+  const special = SPECIAL_DESIGNS.map((id) => all.find((it) => it.meta.id === id)).filter((it): it is GalleryItem => !!it);
 
   return (
     <main className="mx-auto max-w-6xl px-4 sm:px-6">
@@ -32,8 +34,10 @@ export default function Home() {
         ]}
         lede="Pick a design, add your names and venues, and send one link on WhatsApp. Guests tap it and the card opens like a little film, then the music starts and every function and map is inside."
         secondary={{ href: "#try", label: "Try it with your names" }}
-        links={rows.map((g) => ({ id: g.id, label: g.id === "new" ? "New" : g.title.split(",")[0].split(" &")[0] }))}
+        links={[SPECIAL_LINK, ...rows.map((g) => ({ id: g.id, label: g.id === "new" ? "New" : g.title.split(",")[0].split(" &")[0] }))]}
       />
+
+      <SpecialDesigns items={special} />
 
       {rows.map((g) => (
         <section key={g.id} id={g.id} aria-labelledby={`${g.id}-h`} className="scroll-mt-8 border-t border-line pt-10 pb-12">

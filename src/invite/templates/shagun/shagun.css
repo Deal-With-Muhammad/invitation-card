@@ -1,0 +1,551 @@
+/* Shagun Box (painted kit, filmed opening, special design). Chapters use their own
+   colours (themes.ts) because each function has its own palette; everything else
+   follows the host's palette. */
+
+.t-shagun {
+  /* the film shows the envelopes late: the names wait for them */
+  --twin-at: 0.78;
+}
+
+.t-shagun .pt-title {
+  font-family: var(--f-display);
+  font-size: calc(12 * var(--u));
+  font-weight: 600;
+  letter-spacing: 0.22em;
+}
+
+.t-shagun .pt-names {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  column-gap: 0.22em;
+  font-size: min(calc(46 * var(--u)), calc(100cqi / (var(--len) * 0.95)));
+  line-height: 1.12;
+}
+
+.t-shagun .pt-names .inv-amp {
+  font-size: 0.7em;
+}
+
+.t-shagun .pt-date {
+  font-family: var(--f-display);
+  font-size: calc(21 * var(--u));
+  font-weight: 500;
+}
+
+.t-shagun .pt-text.has-glow::before {
+  inset: calc(-40 * var(--u)) calc(-50 * var(--u));
+}
+
+/* the names on the closed cover, in the silk above the box */
+.sg-cover-names {
+  position: absolute;
+  top: 9%;
+  left: 50%;
+  width: min(84%, 340px);
+  translate: -50% 0;
+  text-align: center;
+  color: var(--ink);
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+.sg-cover-names p {
+  font: 600 calc(11 * var(--u)) / 1.4 var(--f-display);
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--accent) 85%, var(--ink));
+}
+
+.sg-cover-names strong {
+  display: block;
+  margin-top: calc(4 * var(--u));
+  font: 400 calc(44 * var(--u)) / 1.1 var(--f-names);
+}
+
+.inv[data-phase="opening"] .sg-cover-names {
+  opacity: 0;
+}
+
+/* ── the index of functions ── */
+
+.sg-index {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  padding: 34px 18px 26px;
+}
+
+.inv .sg-pill {
+  --p: #a8823f;
+  --p-on: #fff;
+  display: inline-flex;
+  align-items: center;
+  min-height: 38px;
+  padding: 0 16px;
+  border: 1px solid color-mix(in srgb, var(--p) 55%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--p) 10%, var(--bg));
+  font: 600 13px/1 var(--f-body);
+  letter-spacing: 0.06em;
+  color: color-mix(in srgb, var(--p) 80%, var(--ink));
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.sg-pill.is-mayoun {
+  --p: #c47a0c;
+}
+.sg-pill.is-mehndi {
+  --p: #b0216e;
+}
+.sg-pill.is-baraat {
+  --p: #9b1b1b;
+}
+.sg-pill.is-walima {
+  --p: #2f6b4f;
+}
+
+.inv .sg-pill.is-on,
+.inv a.sg-pill:hover {
+  background: var(--p);
+  color: var(--p-on);
+}
+
+/* ── a chapter: one function on its own art ── */
+
+.sg-ch {
+  position: relative;
+  min-height: max(var(--sh), 640px);
+  overflow: hidden;
+  color: var(--c-ink);
+  text-align: center;
+  isolation: isolate;
+}
+
+.sg-ch + .sg-ch {
+  box-shadow: 0 -1px 0 color-mix(in srgb, #c9a45c 70%, transparent);
+}
+
+.sg-ch-art {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.sg-ch-text {
+  position: absolute;
+  top: var(--c-top);
+  left: 50%;
+  width: min(72%, 300px);
+  translate: -50% 0;
+  display: grid;
+  justify-items: center;
+}
+
+.sg-ch-count {
+  font: 600 11px/1 var(--c-body);
+  letter-spacing: 0.24em;
+  opacity: 0.7;
+}
+
+.sg-ch-urdu {
+  margin-top: 8px;
+  font: 400 34px/1.6 var(--f-nastaliq), serif;
+  color: var(--c-accent);
+}
+
+.sg-ch-title {
+  margin: -2px 0 12px;
+  font: 400 50px/1.05 var(--c-title);
+  color: var(--c-ink);
+  overflow-wrap: anywhere;
+}
+
+.sg-ch-date {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.sg-ch-date span {
+  padding: 6px 0;
+  border-block: 1px solid color-mix(in srgb, var(--c-accent) 55%, transparent);
+  font: 600 11px/1.35 var(--c-body);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.sg-ch-date strong {
+  font: 500 50px/1 var(--c-body);
+  color: var(--c-accent);
+}
+
+.sg-ch-time {
+  margin-top: 10px;
+  font: 600 16px/1.4 var(--c-body);
+  letter-spacing: 0.04em;
+}
+
+.sg-ch-soon,
+.sg-ch-note {
+  font: italic 500 18px/1.45 var(--c-body);
+}
+
+.sg-ch-venue {
+  margin-top: 16px;
+  font: italic 600 22px/1.25 var(--c-body);
+  color: var(--c-accent);
+}
+
+.sg-ch-addr {
+  margin-top: 4px;
+  font: 500 14px/1.45 var(--c-body);
+  opacity: 0.85;
+}
+
+.sg-ch-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.inv .sg-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0 20px;
+  border: 1px solid var(--c-accent, var(--accent));
+  border-radius: 999px;
+  background: var(--c-accent, var(--accent));
+  font: 600 12px/1 var(--c-body, var(--f-body));
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--c-on, var(--on-accent, #fff));
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    filter 0.2s ease,
+    transform 0.2s ease;
+}
+
+.inv .sg-btn:hover {
+  filter: brightness(1.06);
+}
+
+.inv .sg-btn:active {
+  transform: scale(0.97);
+}
+
+.inv .sg-btn.is-ghost {
+  background: transparent;
+  color: var(--c-accent, var(--accent));
+}
+
+.inv .sg-btn:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+/* the art behind each chapter has a calm middle; a soft wash keeps text crisp on small screens */
+.sg-ch-text::before {
+  content: "";
+  position: absolute;
+  inset: -26px -34px;
+  z-index: -1;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--wash) 72%, transparent), transparent);
+}
+
+.sg-ch.is-mayoun {
+  --wash: #fff6e0;
+}
+.sg-ch.is-mehndi {
+  --wash: #fffaf2;
+}
+.sg-ch.is-baraat {
+  --wash: #5a0b0b;
+}
+.sg-ch.is-walima {
+  --wash: #fdfcf8;
+}
+
+.sg-ch.is-baraat .sg-ch-urdu,
+.sg-ch.is-baraat .sg-ch-venue,
+.sg-ch.is-baraat .sg-ch-date strong {
+  text-shadow: 0 1px 0 rgba(60, 10, 0, 0.6);
+}
+
+.sg-ch.is-mehndi .sg-ch-title {
+  font-size: 44px;
+}
+
+.sg-ch.is-baraat .sg-ch-title {
+  font-size: 40px;
+  letter-spacing: 0.08em;
+}
+
+.sg-ch.is-walima .sg-ch-title {
+  font-size: 54px;
+}
+
+/* ── replies: RSVP and wishes ── */
+
+.sg-replies,
+.sg-video-sec {
+  display: grid;
+  gap: 34px;
+}
+
+.sg-kicker {
+  font: 600 11px/1.4 var(--f-body);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--accent) 80%, var(--ink));
+}
+
+.sg-h {
+  margin: 4px 0 18px;
+  font: 400 34px/1.15 var(--f-names);
+  color: var(--ink);
+}
+
+.sg-sub {
+  margin: -8px auto 18px;
+  max-width: 330px;
+  font-size: 15px;
+  line-height: 1.55;
+  color: color-mix(in srgb, var(--ink) 75%, transparent);
+}
+
+.sg-card {
+  display: grid;
+  gap: 14px;
+  text-align: start;
+}
+
+.sg-form .sg-kicker,
+.sg-form .sg-h {
+  text-align: center;
+}
+
+.sg-field {
+  display: grid;
+  gap: 6px;
+}
+
+.sg-field > span,
+.sg-fns legend {
+  font: 600 12px/1.3 var(--f-body);
+  letter-spacing: 0.06em;
+  color: color-mix(in srgb, var(--ink) 80%, transparent);
+}
+
+.sg-field input,
+.sg-field textarea {
+  width: 100%;
+  min-height: 46px;
+  padding: 11px 14px;
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--bg) 70%, #fff);
+  font: 400 16px/1.4 var(--f-body);
+  color: var(--ink);
+  resize: vertical;
+}
+
+.sg-field input:focus,
+.sg-field textarea:focus {
+  outline: 2px solid color-mix(in srgb, var(--accent) 60%, transparent);
+  outline-offset: 1px;
+}
+
+.sg-choice {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.sg-choice button {
+  min-height: 46px;
+  padding: 8px 10px;
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  border-radius: 12px;
+  background: transparent;
+  font: 600 14px/1.25 var(--f-body);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.sg-choice button.is-on {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--on-accent, #fff);
+}
+
+.sg-fns {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.sg-fns > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.sg-count > div {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.sg-count button {
+  width: 42px;
+  height: 42px;
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  border-radius: 50%;
+  background: transparent;
+  font: 400 22px/1 var(--f-body);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.sg-count output {
+  min-width: 2ch;
+  font: 600 22px/1 var(--f-body);
+  text-align: center;
+}
+
+.sg-error {
+  font-size: 14px;
+  color: #a3242a;
+}
+
+.sg-submit {
+  width: 100%;
+  margin-top: 4px;
+}
+
+.sg-thanks {
+  justify-items: center;
+  text-align: center;
+}
+
+.sg-script {
+  font: 400 44px/1.1 var(--f-names);
+  color: var(--accent);
+}
+
+.sg-link {
+  border: 0;
+  background: none;
+  font: 600 13px/1 var(--f-body);
+  color: color-mix(in srgb, var(--accent) 85%, var(--ink));
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.sg-wishes {
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+}
+
+.sg-wishes .sg-form {
+  width: 100%;
+}
+
+.sg-wall {
+  display: grid;
+  gap: 10px;
+  width: 100%;
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sg-wish {
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--soft) 55%, var(--bg));
+  text-align: start;
+}
+
+.sg-wish p {
+  font: italic 400 16px/1.5 var(--f-body);
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+.sg-wish span {
+  display: block;
+  margin-top: 6px;
+  font: 600 12px/1.3 var(--f-body);
+  color: color-mix(in srgb, var(--ink) 65%, transparent);
+}
+
+.sg-empty {
+  font: italic 400 15px/1.5 var(--f-body);
+  color: color-mix(in srgb, var(--ink) 65%, transparent);
+}
+
+/* ── save as video ── */
+
+.sg-video {
+  display: grid;
+  justify-items: center;
+}
+
+.sg-progress {
+  position: relative;
+  width: 100%;
+  height: 46px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  border-radius: 999px;
+}
+
+.sg-progress i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: color-mix(in srgb, var(--accent) 30%, transparent);
+  transition: width 0.3s linear;
+}
+
+.sg-progress span {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 100%;
+  font: 600 13px/1 var(--f-body);
+  color: var(--ink);
+}
+
+.sg-video-done {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+}
+
+.sg-video-preview {
+  width: min(220px, 70%);
+  aspect-ratio: 9 / 16;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--ink) 10%, var(--bg));
+  box-shadow: 0 18px 40px -24px color-mix(in srgb, var(--ink) 60%, transparent);
+}

@@ -207,3 +207,35 @@ grant execute on function public.admin_insights(integer) to service_role;
 -- private key. Off by default; the maker picks it when publishing, and the
 -- admin or the maker can change it later.
 alter table public.invites add column if not exists open_edit boolean not null default false;
+
+-- Guest replies (Nov 2026). RSVPs are read only by the host (edit key or account)
+-- through the server; wishes are shown on the invitation. Rows are written and read
+-- only by the server with the service role, so no row-level-security policies.
+create table if not exists public.rsvps (
+  id bigint generated always as identity primary key,
+  slug text not null references public.invites (slug) on delete cascade,
+  name text not null check (char_length(name) between 1 and 80),
+  attending text not null check (attending in ('yes', 'no')),
+  guests integer not null default 1 check (guests between 0 and 30),
+  -- the invitation's event ids the guest is coming to
+  events text[] not null default '{}',
+  phone text check (char_length(phone) <= 30),
+  note text check (char_length(note) <= 300),
+  created_at timestamptz not null default now()
+);
+
+create index if not exists rsvps_slug_idx on public.rsvps (slug, created_at desc);
+alter table public.rsvps enable row level security;
+
+create table if not exists public.wishes (
+  id bigint generated always as identity primary key,
+  slug text not null references public.invites (slug) on delete cascade,
+  name text not null check (char_length(name) between 1 and 60),
+  message text not null check (char_length(message) between 2 and 400),
+  -- hidden by the host or the admin
+  hidden boolean not null default false,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists wishes_slug_idx on public.wishes (slug, created_at desc);
+alter table public.wishes enable row level security;

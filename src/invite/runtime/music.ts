@@ -291,6 +291,16 @@ export class Synth {
     this.pause();
     window.setTimeout(() => this.ctx.close().catch(() => {}), 800);
   }
+
+  /** A copy of the music as a MediaStream, for recording it into a video (`gain` lifts it to a video's level). */
+  stream(gain = 1) {
+    const out = this.ctx.createMediaStreamDestination();
+    const lift = this.ctx.createGain();
+    lift.gain.value = gain;
+    const limit = this.ctx.createDynamicsCompressor();
+    this.master.connect(lift).connect(limit).connect(out);
+    return out.stream;
+  }
 }
 
 /* ── the pieces ── */

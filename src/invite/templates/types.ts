@@ -53,6 +53,8 @@ export type TemplateMeta = {
   islamic?: boolean;
   /** true: the design opens with a filmed video (the painted kit's "film" opening). */
   filmed?: boolean;
+  /** true: a special design (every function in one link, RSVP, wishes, save as video). Gets its own row. */
+  special?: boolean;
 };
 
 export type HeroProps = { r: Resolved; phase: Phase; thumb?: boolean };
