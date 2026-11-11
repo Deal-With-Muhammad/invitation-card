@@ -21,7 +21,7 @@ import "./invite.css";
 // The details are editable: they come from this invitation's row in the invites table
 // (people, hosts, the first event, the dress note), which the normal edit link changes
 // (/edit/kagalwala-silver-jubilee#k=…). Anything left empty there keeps the wording
-// below. The editor's own preview shows a standard design, not this page.
+// below. The editor's preview shows this page too (src/app/frame, EDITABLE_CUSTOM).
 
 const SLUG = "kagalwala-silver-jubilee";
 const DIR = `/custom/${SLUG}`;
@@ -118,7 +118,7 @@ const onRevealed = (el: HTMLElement) => !reduced() && burst(el);
 // Counted once per page load (React's dev double effect would count twice).
 let counted = false;
 
-export function Invite({ data }: { data?: InviteData | null }) {
+export function Invite({ data, preview = false }: { data?: InviteData | null; preview?: boolean }) {
   const k = useMemo(() => detailsFrom(data), [data]);
   const [phase, setPhase] = useState<Phase>("closed");
   const [playing, setPlaying] = useState(false);
@@ -127,7 +127,8 @@ export function Invite({ data }: { data?: InviteData | null }) {
   const timer = useRef<number | null>(null);
 
   useEffect(() => {
-    if (counted) return;
+    // The editor's preview isn't a visit.
+    if (counted || preview) return;
     counted = true;
     fetch(`/api/invites/${SLUG}/view`, {
       method: "POST",
@@ -135,7 +136,7 @@ export function Invite({ data }: { data?: InviteData | null }) {
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ ref: document.referrer }),
     }).catch(() => {});
-  }, []);
+  }, [preview]);
 
   // The sealed envelope holds the page still until it's opened.
   useEffect(() => {

@@ -1,13 +1,33 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ComponentType } from "react";
 
+import { CUSTOM_PAGES, EDITABLE_CUSTOM } from "@/custom/pages";
 import { Invitation } from "@/invite/runtime/invitation";
 import type { InviteData } from "@/invite/types";
 
-/** Runs inside the editor's preview iframe and renders whatever the editor sends. */
+type CustomPage = ComponentType<{ data?: InviteData | null; preview?: boolean }>;
+
+/** The custom invitation being edited (/edit/<slug> in the editor around this frame), if its page takes its details. */
+function editedCustom() {
+  try {
+    const slug = window.parent.location.pathname.match(/^\/edit\/([a-z0-9-]+)/)?.[1];
+    return slug && EDITABLE_CUSTOM.has(slug) && CUSTOM_PAGES[slug] ? CUSTOM_PAGES[slug] : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Runs inside the editor's preview iframe and renders whatever the editor sends. A custom
+ *  invitation whose details are editable shows its own page instead of a standard design. */
 export function FrameHost() {
   const [data, setData] = useState<InviteData | null>(null);
+  const [Custom, setCustom] = useState<CustomPage | null>(null);
+
+  useEffect(() => {
+    const load = editedCustom();
+    if (load) void load().then((C) => setCustom(() => C));
+  }, []);
   const [replay, setReplay] = useState(0);
   const [focus, setFocus] = useState<string | null>(null);
 
@@ -25,5 +45,6 @@ export function FrameHost() {
   }, []);
 
   if (!data) return null;
+  if (Custom) return <Custom key={replay} data={data} preview />;
   return <Invitation data={data} replay={replay} focus={focus} credit={false} />;
 }
