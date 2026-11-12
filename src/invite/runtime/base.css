@@ -753,6 +753,21 @@ html.inv-locked body {
   }
 }
 
+/* Without scroll-driven animations the runtime marks what has come into view
+   (runtime/reveal.ts) and each piece eases in once. */
+.inv.no-st .rv {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.inv.no-st .rv.is-in {
+  opacity: 1;
+  transform: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .inv *,
   .inv *::before,

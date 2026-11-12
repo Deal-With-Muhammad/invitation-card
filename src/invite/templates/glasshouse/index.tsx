@@ -11,6 +11,7 @@ export const glasshouse = makePainted("glasshouse", {
   cover: { kind: "film", art: "closed", hint: "dark" },
   text: { top: "24%", width: 196 },
   stripY: "93%",
+  body: { bands: ["rsvp"], countdown: "arch", window: "gothic", heading: "script", date: "stack", buttons: "pill", timeline: "line", trimY: "93%", art: { trim: false, motif: false, frame: false } },
   celebrate: (root) => {
     tapToThrow(root, ".pt-hero", { pieces: GOLD, count: 10 });
   },

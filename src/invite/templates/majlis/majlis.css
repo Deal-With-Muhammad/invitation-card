@@ -36,3 +36,15 @@
 .t-majlis .pt-date {
   letter-spacing: 0.03em;
 }
+
+/* ── scroll body ── */
+.t-majlis {
+  --pb-scene: url("/art/majlis/closed-720.webp");
+  --pb-band: #0c1634;
+  --pb-band-ink: #f4ead2;
+  --pb-band-accent: #d9b56a;
+}
+
+.t-majlis {
+  --pb-close-shade: #060b1e;
+}

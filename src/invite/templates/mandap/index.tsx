@@ -11,6 +11,7 @@ export const mandap = makePainted("mandap", {
   cover: { kind: "film", art: "closed", hint: "light" },
   text: { top: "33.5%", width: 156, glow: false },
   stripY: "5%",
+  body: { bands: ["countdown", "rsvp"], countdown: "round", window: "cusp", heading: "serif", date: "seal", buttons: "pill", timeline: "rows", trimY: "4%", art: { trim: false, motif: false, frame: false } },
   celebrate: (root) => {
     fall(root, { pieces: RED_PETALS, count: 7, spread: 2.2, dur: [5, 8] });
     tapToThrow(root, ".pt-hero", { pieces: RED_PETALS });

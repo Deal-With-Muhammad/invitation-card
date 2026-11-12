@@ -11,6 +11,7 @@ export const majlis = makePainted("majlis", {
   cover: { kind: "film", art: "closed", hint: "light" },
   text: { top: "25.5%", width: 168, tone: "light", glow: false },
   stripY: "98%",
+  body: { bands: ["rsvp"], countdown: "arch", window: "horseshoe", heading: "script", date: "seal", buttons: "pill", timeline: "line", trimY: "98%", art: { trim: false, motif: false, frame: false } },
   celebrate: (root) => {
     tapToThrow(root, ".pt-hero", { pieces: GOLD, count: 12 });
   },

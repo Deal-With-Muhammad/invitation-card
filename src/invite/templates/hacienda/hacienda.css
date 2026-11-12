@@ -32,3 +32,11 @@
   font-size: min(calc(50 * var(--u)), calc(100cqi / (var(--len) * 0.4)));
   line-height: 1.08;
 }
+
+/* ── scroll body ── */
+.t-hacienda {
+  --pb-scene: url("/art/hacienda/closed-720.webp");
+  --pb-band: #8a2a59;
+  --pb-band-ink: #fff5ee;
+  --pb-band-accent: #f6cfa6;
+}

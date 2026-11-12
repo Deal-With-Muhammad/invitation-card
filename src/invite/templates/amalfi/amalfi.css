@@ -43,3 +43,11 @@
     transparent
   );
 }
+
+/* ── scroll body ── */
+.t-amalfi {
+  --pb-scene: url("/art/amalfi/closed-720.webp");
+  --pb-band: #256783;
+  --pb-band-ink: #f6f8f0;
+  --pb-band-accent: #f0d468;
+}

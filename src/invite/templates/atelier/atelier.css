@@ -37,3 +37,31 @@
     0 1px 0 color-mix(in srgb, #ffffff 80%, transparent),
     0 -1px 0 color-mix(in srgb, #50545a 40%, transparent);
 }
+
+/* ── scroll body ── */
+.t-atelier {
+  --pb-scene: url("/art/atelier/closed-720.webp");
+  --pb-band: #7b8186;
+  --pb-band-ink: #ffffff;
+  --pb-band-accent: #e9ebec;
+}
+
+/* white on white: the closing stays pale, and hairlines stand in for a painted trim */
+.t-atelier {
+  --pb-close-shade: #f3f2ef;
+  --pb-close-ink: #4c5054;
+}
+
+.t-atelier .pb-trim.is-strip {
+  width: 44%;
+  height: 7px;
+  margin: -3.5px auto;
+  border-block: 1px solid var(--pb-rule);
+  background: none !important;
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+.t-atelier .inv-divider:first-of-type .pb-trim {
+  margin-block: 8px 0;
+}

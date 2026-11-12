@@ -17,3 +17,11 @@
   font-size: calc(21 * var(--u));
   letter-spacing: 0.05em;
 }
+
+/* ── scroll body ── */
+.t-sakura {
+  --pb-scene: url("/art/sakura/closed-720.webp");
+  --pb-band: #5a3d47;
+  --pb-band-ink: #fbf1f1;
+  --pb-band-accent: #f2bfca;
+}

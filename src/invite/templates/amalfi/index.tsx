@@ -10,6 +10,7 @@ export const amalfi = makePainted("amalfi", {
   cover: { kind: "film", art: "closed", hint: "dark" },
   text: { top: "29%", width: 172 },
   stripY: "99%",
+  body: { bands: ["rsvp"], countdown: "tiles", window: "arch", heading: "script", date: "row", buttons: "square", timeline: "rows", trimY: "99.5%", art: { trim: false, motif: false, frame: false } },
   celebrate: (root) => {
     tapToThrow(root, ".pt-hero", { pieces: GOLD, count: 12 });
   },

@@ -15,6 +15,7 @@ export const atelier = makePainted("atelier", {
   },
   text: { top: "23%", width: 224, glow: false },
   stripY: "5%",
+  body: { bands: ["rsvp"], countdown: "line", window: "rect", heading: "caps", date: "row", buttons: "line", timeline: "rows", trimY: "4%", art: { trim: false, motif: false, frame: false } },
   celebrate: (root) => {
     tapToThrow(root, ".pt-hero", { pieces: GOLD, count: 12 });
   },

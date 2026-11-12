@@ -50,3 +50,15 @@
   font-style: normal;
   letter-spacing: 0.04em;
 }
+
+/* ── scroll body ── */
+.t-emerald {
+  --pb-scene: url("/art/emerald/closed-720.webp");
+  --pb-band: #082a1f;
+  --pb-band-ink: #f2e6c2;
+  --pb-band-accent: #d6b35f;
+}
+
+.t-emerald {
+  --pb-close-shade: #03170f;
+}

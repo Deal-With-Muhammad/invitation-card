@@ -22,3 +22,11 @@
   inset: calc(-30 * var(--u)) calc(-40 * var(--u));
   background: radial-gradient(closest-side, color-mix(in srgb, var(--bg) 62%, transparent), color-mix(in srgb, var(--bg) 36%, transparent) 55%, transparent);
 }
+
+/* ── scroll body ── */
+.t-cypress {
+  --pb-scene: url("/art/cypress/closed-720.webp");
+  --pb-band: #4f4a33;
+  --pb-band-ink: #fbf1de;
+  --pb-band-accent: #e3c58f;
+}

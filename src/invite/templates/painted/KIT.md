@@ -53,6 +53,16 @@ Delete the design's old `art.tsx` / `cover.tsx` if it has them; nothing else imp
 - `stripY`: background-position-y of a band of the hero art used as the painted divider between
   sections (e.g. `"97%"` = the bottom band, `"3%"` = the top band); `null` for no strip. `stripH`.
 - `panels`: `"paper"` (default, translucent panels with a fine inner rule) or `"clear"`.
+- `body`: the premium scroll body (`templates/premium/body.css`) instead of panels and strips.
+  Sections sit on the paper, some on full-width bands of the design's deep colour (`bands`, colours
+  `--pb-band`, `--pb-band-ink`, `--pb-band-accent`, or a texture in `--pb-band-fill`, set in the
+  design's CSS); a painted trim lies across each band edge; a second painting (`--pb-scene`) shows
+  in a shaped `window` above the events and behind the closing; and `countdown`, `heading`, `date`,
+  `buttons` and `timeline` each pick one of a few styles. Give every premium design a different
+  mix. Art: `trim.webp`, `motif.webp`, `scene.webp`, `frame.webp` in `public/art/<id>/`; until a
+  design has them, pass `art: { trim: false, motif: false, frame: false }`, a `trimY` (a band of the
+  hero painting) and point `--pb-scene` at the closed art. Everything eases in with the scroll
+  (`animation-timeline: view()`, with `runtime/reveal.ts` as the fallback).
 - `celebrate(root)`: runs once after opening. `fx.ts` has `fall`, `tapToThrow`, `GOLD`,
   `RED_PETALS`, `PINK_PETALS`; `runtime/effects.ts` has `confetti`, `sparkles`, `petals`.
 

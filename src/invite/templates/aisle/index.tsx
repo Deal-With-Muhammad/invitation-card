@@ -11,6 +11,7 @@ export const aisle = makePainted("aisle", {
   cover: { kind: "film", art: "closed", hint: "light" },
   text: { top: "6.5%", width: 290 },
   stripY: null,
+  body: { bands: ["countdown", "rsvp"], countdown: "round", window: "oval", heading: "script", date: "stack", buttons: "pill", timeline: "rows", trimY: "97%", art: { trim: false, motif: false, frame: false } },
   celebrate: (root) => {
     fall(root, { pieces: PINK_PETALS, count: 7, spread: 2.2, dur: [5, 8] });
     tapToThrow(root, ".pt-hero", { pieces: PINK_PETALS });

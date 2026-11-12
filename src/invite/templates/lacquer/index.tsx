@@ -11,6 +11,7 @@ export const lacquer = makePainted("lacquer", {
   cover: { kind: "film", art: "closed", hint: "light" },
   text: { top: "31%", width: 204, glow: false },
   stripY: null,
+  body: { bands: ["countdown", "rsvp"], countdown: "tiles", window: "circle", heading: "serif", date: "seal", buttons: "square", timeline: "rows", trimY: "2%", art: { trim: false, motif: false, frame: false } },
   celebrate: (root) => {
     tapToThrow(root, ".pt-hero", { pieces: GOLD, count: 12 });
   },

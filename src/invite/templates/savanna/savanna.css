@@ -33,3 +33,16 @@
 .t-savanna .pt-text {
   left: 46%;
 }
+
+/* ── scroll body ── */
+.t-savanna {
+  --pb-scene: url("/art/savanna/closed-720.webp");
+  --pb-band: #a85a36;
+  --pb-band-ink: #fff3e2;
+  --pb-band-accent: #f8dcb6;
+}
+
+/* the band is the terracotta paper of the envelope */
+.t-savanna {
+  --pb-band-fill: linear-gradient(color-mix(in srgb, #a85a36 30%, transparent), color-mix(in srgb, #a85a36 30%, transparent)), url("/art/savanna/closed-720.webp") 50% 4% / 270% auto;
+}

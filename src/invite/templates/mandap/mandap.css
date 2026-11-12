@@ -49,3 +49,20 @@
   font-family: var(--f-body);
   font-size: calc(17 * var(--u));
 }
+
+/* ── scroll body ── */
+.t-mandap {
+  --pb-scene: url("/art/mandap/closed-720.webp");
+  --pb-band: #6d1f2b;
+  --pb-band-ink: #fdf3df;
+  --pb-band-accent: #f2b548;
+}
+
+/* Yeseva is a heavy face: a size down for the section headings */
+.t-mandap.pb .inv-title {
+  font-size: 33px;
+}
+
+.t-mandap.pb .inv-pname {
+  font-size: 30px;
+}

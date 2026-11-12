@@ -33,3 +33,16 @@
 .t-songket .pt-venue {
   font-family: var(--f-body);
 }
+
+/* ── scroll body ── */
+.t-songket {
+  --pb-scene: url("/art/songket/closed-720.webp");
+  --pb-band: #521a22;
+  --pb-band-ink: #fbf0d6;
+  --pb-band-accent: #e2c178;
+}
+
+/* the band is the songket itself */
+.t-songket {
+  --pb-band-fill: linear-gradient(color-mix(in srgb, #3d0f16 62%, transparent), color-mix(in srgb, #3d0f16 62%, transparent)), url("/art/songket/closed-720.webp") 0 0 / 300% auto;
+}

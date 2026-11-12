@@ -15,6 +15,7 @@ export const porcelain = makePainted("porcelain", {
   },
   text: { top: "22%", width: 226, glow: false },
   stripY: "98%",
+  body: { bands: ["countdown", "rsvp"], countdown: "arch", window: "arch", heading: "serif", date: "seal", buttons: "pill", timeline: "line", trimY: "98%", art: { trim: false, motif: false, frame: false } },
   celebrate: (root) => {
     tapToThrow(root, ".pt-hero", { pieces: GOLD, count: 12 });
   },

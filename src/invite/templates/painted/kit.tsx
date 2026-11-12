@@ -3,9 +3,11 @@ import type { CSSProperties, FC, KeyboardEvent, ReactNode } from "react";
 import type { Resolved } from "../../resolve";
 import { Blessing, Names } from "../../runtime/sections";
 import { metaFor } from "../catalog";
+import type { SectionId } from "../../types";
 import type { CoverProps, HeroProps, Template, TemplateParts } from "../types";
 
 import "./painted.css";
+import "../premium/body.css";
 
 // The painted kit: designs built on painted or photographed art (public/art/<id>/)
 // instead of drawn SVG. The art fills the phone; names, dates and venues are live
@@ -57,6 +59,27 @@ export type Seal = {
   look: "foil" | "wax" | "emboss" | "thread" | "ink" | "plain";
 };
 
+/** The premium scroll body (templates/premium/body.css). Each premium design picks its own mix,
+ *  so no two look alike below the hero. Art: public/art/<id>/trim.webp (a painted trim on a clear
+ *  background, laid across band edges), motif.webp (a small emblem above headings), scene.webp (a
+ *  second painting, shown in the window above the events and behind the closing) and frame.webp
+ *  (a painted frame round the countdown, for `countdown: "frame"`). */
+export type BodyOpts = {
+  /** Sections set on a full-width band of the design's deep colour (--pb-band). */
+  bands?: SectionId[];
+  countdown?: "line" | "round" | "tiles" | "arch" | "frame";
+  /** The shape of the window the scene painting (and the map) sits in. */
+  window?: "arch" | "circle" | "oval" | "rect" | "gothic" | "deco" | "horseshoe" | "cusp";
+  heading?: "script" | "serif" | "caps";
+  date?: "stack" | "row" | "seal";
+  buttons?: "pill" | "square" | "line";
+  timeline?: "line" | "rows";
+  /** Which pieces of art this design has (default: all four). */
+  art?: { trim?: boolean; motif?: boolean; scene?: boolean; frame?: boolean };
+  /** Without trim art, the trim is a band cut from the hero painting at this height (e.g. "97%"). */
+  trimY?: string;
+};
+
 export type PaintedOpts = {
   /** Art name for the hero (public/art/<id>/<name>.webp). */
   hero?: string;
@@ -98,6 +121,8 @@ export type PaintedOpts = {
   stripH?: number;
   /** Look of the section panels. */
   panels?: "paper" | "dark" | "clear";
+  /** The premium scroll body instead of panels and strips. */
+  body?: BodyOpts;
   Divider?: FC<{ index: number }>;
   Ornament?: FC;
   sections?: TemplateParts["sections"];
@@ -321,10 +346,44 @@ export function makePainted(id: string, o: PaintedOpts): Template {
     );
   }
 
+  // The premium scroll body: its trim is the divider, its motif the heading ornament.
+  const b = o.body;
+  const art = { trim: true, motif: true, scene: true, frame: true, ...b?.art };
+  const bodyClass = b
+    ? [
+        "pb",
+        `pb-cd-${b.countdown ?? "line"}`,
+        `pb-win-${b.window ?? "arch"}`,
+        `pb-h-${b.heading ?? "serif"}`,
+        `pb-date-${b.date ?? "stack"}`,
+        `pb-btn-${b.buttons ?? "pill"}`,
+        `pb-tl-${b.timeline ?? "line"}`,
+        art.scene ? "pb-has-scene" : "",
+        ...(b.bands ?? []).map((s) => `pbb-${s}`),
+      ]
+        .filter(Boolean)
+        .join(" ")
+    : "";
+  const Trim = () =>
+    art.trim ? (
+      <span className="pb-trim">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={artUrl(id, "trim")} alt="" loading="lazy" decoding="async" draggable={false} />
+      </span>
+    ) : (
+      <span className="pb-trim is-strip" style={{ backgroundImage: `url(${artUrl(id, hero, 720)})`, backgroundPositionY: b?.trimY ?? "96%" }} />
+    );
+  const Motif = () => (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img className="pb-motif" src={artUrl(id, "motif")} alt="" loading="lazy" decoding="async" draggable={false} />
+  );
+
   const stripY = o.stripY === undefined ? "96%" : o.stripY;
   const Divider =
     o.Divider ??
-    (stripY
+    (b
+      ? Trim
+      : stripY
       ? function Strip({ index }: { index: number }) {
           return (
             <span
@@ -348,9 +407,9 @@ export function makePainted(id: string, o: PaintedOpts): Template {
     Cover,
     Backdrop,
     Divider,
-    Ornament: o.Ornament,
+    Ornament: o.Ornament ?? (b && art.motif ? Motif : undefined),
     sections: o.sections,
     celebrate: o.celebrate,
-    rootClass: `pk pk-${o.panels ?? "paper"} pk-open-${o.cover.kind}`,
+    rootClass: `pk pk-${b ? "clear" : (o.panels ?? "paper")} pk-open-${o.cover.kind}${bodyClass ? ` ${bodyClass}` : ""}`,
   };
 }

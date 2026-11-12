@@ -32,3 +32,11 @@
   font-size: min(calc(50 * var(--u)), calc(100cqi / (var(--len) * 0.43)));
   line-height: 1.1;
 }
+
+/* ── scroll body ── */
+.t-glasshouse {
+  --pb-scene: url("/art/glasshouse/closed-720.webp");
+  --pb-band: #3f5c48;
+  --pb-band-ink: #f5f8f3;
+  --pb-band-accent: #d3e3d0;
+}

@@ -11,6 +11,7 @@ export const emerald = makePainted("emerald", {
   cover: { kind: "film", art: "closed", hint: "light" },
   text: { top: "30%", width: 176, tone: "light", glow: false },
   stripY: "97%",
+  body: { bands: ["rsvp"], countdown: "arch", window: "deco", heading: "caps", date: "row", buttons: "square", timeline: "line", trimY: "97%", art: { trim: false, motif: false, frame: false } },
   celebrate: (root) => {
     tapToThrow(root, ".pt-hero", { pieces: GOLD, count: 12 });
   },

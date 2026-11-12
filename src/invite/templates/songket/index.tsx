@@ -15,6 +15,7 @@ export const songket = makePainted("songket", {
   },
   text: { top: "29%", width: 236, glow: false },
   stripY: "99%",
+  body: { bands: ["rsvp"], countdown: "tiles", window: "rect", heading: "caps", date: "row", buttons: "square", timeline: "line", trimY: "99%", art: { trim: false, motif: false, frame: false } },
   celebrate: (root) => {
     tapToThrow(root, ".pt-hero", { pieces: GOLD, count: 12 });
   },

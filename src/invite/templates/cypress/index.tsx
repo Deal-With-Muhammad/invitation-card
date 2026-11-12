@@ -11,6 +11,7 @@ export const cypress = makePainted("cypress", {
   cover: { kind: "film", art: "closed", hint: "light" },
   text: { top: "8%", width: 290 },
   stripY: null,
+  body: { bands: ["rsvp"], countdown: "line", window: "arch", heading: "script", date: "row", buttons: "pill", timeline: "line", trimY: "66%", art: { trim: false, motif: false, frame: false } },
   celebrate: (root) => {
     tapToThrow(root, ".pt-hero", { pieces: GOLD, count: 12 });
   },

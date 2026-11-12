@@ -22,3 +22,11 @@
   inset: calc(-34 * var(--u)) calc(-44 * var(--u));
   background: radial-gradient(closest-side, color-mix(in srgb, var(--bg) 74%, transparent), color-mix(in srgb, var(--bg) 44%, transparent) 55%, transparent);
 }
+
+/* ── scroll body ── */
+.t-aisle {
+  --pb-scene: url("/art/aisle/closed-720.webp");
+  --pb-band: #9b5a70;
+  --pb-band-ink: #fff3ee;
+  --pb-band-accent: #f8d7d8;
+}

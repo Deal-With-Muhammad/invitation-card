@@ -12,6 +12,7 @@ import type { Phase } from "../templates/types";
 import type { InviteData, Lang } from "../types";
 import { useAutoScroll } from "./auto-scroll";
 import { Music } from "./music";
+import { watchReveals } from "./reveal";
 import { Body } from "./sections";
 import { SimpleCover } from "./simple-cover";
 import { YouTubeSong } from "./youtube-song";
@@ -167,6 +168,12 @@ export function Invitation({ data, replay = 0, credit = true, focus = null, song
   };
 
   const scroll = useAutoScroll(phase === "open" && data.autoScroll.on, data.autoScroll.speed);
+
+  // Pieces ease in as they scroll into view, also where CSS can't follow the scroll itself.
+  useEffect(() => {
+    if (phase !== "open" || !root.current) return;
+    return watchReveals(root.current);
+  }, [phase]);
 
   useEffect(() => {
     if (!focus || phase !== "open") return;

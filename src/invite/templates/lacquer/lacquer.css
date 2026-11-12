@@ -19,3 +19,11 @@
   font-size: calc(22 * var(--u));
   font-weight: 500;
 }
+
+/* ── scroll body ── */
+.t-lacquer {
+  --pb-scene: url("/art/lacquer/closed-720.webp");
+  --pb-band: #a51d16;
+  --pb-band-ink: #fff4dc;
+  --pb-band-accent: #ecc873;
+}

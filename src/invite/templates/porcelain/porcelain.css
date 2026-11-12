@@ -28,3 +28,11 @@
     0 1px 0 color-mix(in srgb, #a9c2ff 50%, transparent),
     0 -1px 0 color-mix(in srgb, #071a52 60%, transparent);
 }
+
+/* ── scroll body ── */
+.t-porcelain {
+  --pb-scene: url("/art/porcelain/closed-720.webp");
+  --pb-band: #1f3a7a;
+  --pb-band-ink: #f8f6f0;
+  --pb-band-accent: #dcc07c;
+}
