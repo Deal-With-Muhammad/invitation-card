@@ -1,0 +1,1010 @@
+/* Heirloom (painted kit, filmed opening, the host's photo, its own sections: ./sections.tsx). */
+
+.inv.t-heirloom {
+  --hl-paper: #f8f2e7;
+  --hl-claret: #4d101c;
+  --hl-gold: linear-gradient(118deg, #8a682a 0%, #c9a659 20%, #f0dda0 36%, #b58d3e 52%, #8a682a 68%, #dcc07c 84%, #9a7732 100%);
+  --hl-gold-pale: linear-gradient(118deg, #c9a659 0%, #f3e3ae 22%, #fff6d4 38%, #d9bd78 54%, #c19f55 70%, #f6e7b6 86%, #cfae66 100%);
+  --hl-line: color-mix(in srgb, #a8843c 62%, transparent);
+  /* the names wait until the silk is off the frame */
+  --twin-at: 0.84;
+}
+
+/* ── the wall ── */
+
+/* A box that sits exactly over the painting however the screen crops it, so the portrait
+   lands in the painted frame on every phone. */
+.t-heirloom .hl-artbox {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: max(100%, calc(var(--sh) * 0.5625));
+  aspect-ratio: 9 / 16;
+  translate: -50% -50%;
+  pointer-events: none;
+}
+
+/* measured on the hero art: the canvas inside the gilded frame */
+.t-heirloom .hl-photo {
+  position: absolute;
+  left: 28.2%;
+  top: 20.3%;
+  width: 45.5%;
+  height: 33.3%;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.t-heirloom .hl-photo img,
+.t-heirloom .hl-locket-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* the frame's own shadow falls on the picture */
+.t-heirloom .hl-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, #6b4a14 45%, transparent),
+    inset 5px 8px 16px color-mix(in srgb, #4a3210 42%, transparent),
+    inset -2px -3px 8px color-mix(in srgb, #fff3d0 20%, transparent);
+}
+
+/* under the silk there is no picture yet; it develops once the frame is unveiled */
+.inv.t-heirloom:is([data-phase="closed"], [data-phase="opening"]) .hl-photo {
+  opacity: 0;
+}
+
+@keyframes hl-develop {
+  from {
+    opacity: 0;
+    filter: blur(7px) brightness(1.25);
+    transform: scale(1.05);
+  }
+}
+
+.inv.t-heirloom[data-phase="open"] .hl-photo {
+  animation: hl-develop 1.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.t-heirloom .pt-text {
+  gap: calc(5 * var(--u));
+}
+
+.t-heirloom .pt-title {
+  font: 500 calc(10 * var(--u)) / 1.5 var(--f-display);
+  letter-spacing: 0.34em;
+  color: #8f6e2d;
+}
+
+/* both names on one line when they fit */
+.t-heirloom .pt-names {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: baseline;
+  column-gap: 0.24em;
+  font-size: max(calc(27 * var(--u)), min(calc(44 * var(--u)), calc(100cqi / (var(--len) * 0.92))));
+  line-height: 1.14;
+}
+
+.t-heirloom .pt-names .inv-amp {
+  font-size: 0.62em;
+  line-height: 1;
+  color: #8f6e2d;
+}
+
+.t-heirloom .pt-when {
+  margin-top: calc(3 * var(--u));
+  gap: calc(2 * var(--u));
+}
+
+.t-heirloom .pt-date {
+  font: 500 calc(13.5 * var(--u)) / 1.4 var(--f-display);
+  letter-spacing: 0.16em;
+}
+
+.t-heirloom .pt-sc {
+  font: 500 calc(9 * var(--u)) / 1.5 var(--f-display);
+  letter-spacing: 0.3em;
+  color: #8f6e2d;
+}
+
+.t-heirloom .pt-venue {
+  font: italic 500 calc(15.5 * var(--u)) / 1.3 var(--f-body);
+}
+
+.t-heirloom .pt-bless .inv-bism {
+  width: calc(96 * var(--u));
+}
+
+.t-heirloom .pt-bless .inv-bism-text {
+  font-size: calc(16 * var(--u));
+  line-height: 1.5;
+}
+
+/* ── the page ── */
+
+.t-heirloom .pt-backdrop {
+  background: var(--hl-paper);
+}
+
+.t-heirloom .pt-backdrop-art {
+  display: none;
+}
+
+.inv.t-heirloom .inv-sec {
+  margin: 0;
+  padding: 84px 30px;
+  background: none;
+  border-radius: 0;
+  outline: 0;
+  box-shadow: none;
+}
+
+.t-heirloom .hl-caps {
+  font: 500 11px/1.7 var(--f-display);
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+}
+
+.t-heirloom .hl-h {
+  font-size: 15px;
+  letter-spacing: 0.42em;
+}
+
+.t-heirloom .hl-script {
+  font: 400 44px/1.16 var(--f-names);
+  text-wrap: balance;
+}
+
+.t-heirloom .hl-italic {
+  font: italic 400 18px/1.5 var(--f-body);
+}
+
+.t-heirloom .hl-note {
+  max-width: 30ch;
+  margin-inline: auto;
+  font: 400 17px/1.65 var(--f-body);
+  text-wrap: pretty;
+}
+
+.inv.t-heirloom:is([lang="ur"], [lang="ar"], [lang="fa"], [lang="hi"], [lang="bn"]) :is(.hl-caps, .inv-title) {
+  font-size: 17px;
+  letter-spacing: 0;
+}
+
+.inv.t-heirloom:is([lang="ur"], [lang="ar"], [lang="fa"]) :is(.hl-script, .hl-caps, .inv-title) {
+  line-height: 1.8;
+}
+
+/* gold foil: letters cut from a sheet of gold that catches the light as the page moves */
+.t-heirloom .hl-foil {
+  background: var(--hl-gold) 0 0 / 260% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.t-heirloom .hl-velvet > .hl-foil {
+  background-image: var(--hl-gold-pale);
+}
+
+/* a drawing: the image is the mask, the gold shows through it */
+.t-heirloom .hl-gold {
+  display: block;
+  background: var(--hl-gold) center / 180% 100%;
+  -webkit-mask: var(--m) center / contain no-repeat;
+  mask: var(--m) center / contain no-repeat;
+}
+
+.t-heirloom .hl-draw {
+  max-width: 100%;
+  margin-inline: auto;
+}
+
+.t-heirloom .hl-flourish {
+  margin-block: 14px 22px;
+  opacity: 0.9;
+}
+
+/* buttons: engraved rectangles */
+.t-heirloom .inv-btn {
+  min-height: 46px;
+  padding: 11px 22px;
+  border: 1px solid var(--hl-line);
+  border-radius: 0;
+  background: none;
+  font: 500 10.5px/1 var(--f-display);
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+}
+
+.t-heirloom .inv-actions {
+  gap: 12px;
+  margin-top: 26px;
+}
+
+.t-heirloom .inv-btn.is-primary,
+.t-heirloom .inv-cal .inv-btn {
+  border-color: var(--hl-claret);
+  background: var(--hl-claret);
+  color: #f8efdd;
+}
+
+/* default sections: invitation lines, wishes, contacts, prayer */
+.t-heirloom .inv-title {
+  font: 500 17px/1.6 var(--f-display);
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+}
+
+.t-heirloom .inv-eyebrow {
+  font: italic 400 16px/1.4 var(--f-body);
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
+
+.t-heirloom .inv-hosts {
+  font: 400 21px/1.5 var(--f-body);
+}
+
+.t-heirloom .inv-line,
+.t-heirloom .inv-message,
+.t-heirloom .inv-prayer-text {
+  font: italic 400 18px/1.65 var(--f-body);
+}
+
+.t-heirloom .inv-message {
+  font-style: normal;
+}
+
+.t-heirloom .inv-pname {
+  font: 400 42px/1.2 var(--f-names);
+}
+
+.t-heirloom .inv-pline {
+  font: 500 10px/1.6 var(--f-display);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+/* ── the crest ── */
+
+.inv.t-heirloom .hl-crest {
+  padding: 70px 30px 0;
+}
+
+.inv.t-heirloom .hl-crest + [data-sec="invite"] {
+  padding-top: 30px;
+}
+
+.t-heirloom .hl-wreath {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 148px;
+  aspect-ratio: 442 / 477;
+  margin-inline: auto;
+  font: 500 30px/1 var(--f-display);
+  color: #8f6e2d;
+}
+
+.t-heirloom .hl-wreath .hl-gold {
+  position: absolute;
+  inset: 0;
+}
+
+.t-heirloom .hl-wreath .pt-ini {
+  position: relative;
+  translate: 0 -6%;
+  letter-spacing: 0.04em;
+}
+
+/* ── countdown: enamel medallions on claret velvet ── */
+
+.inv.t-heirloom .hl-velvet {
+  position: relative;
+  background:
+    linear-gradient(color-mix(in srgb, #2b0710 34%, transparent), color-mix(in srgb, #2b0710 34%, transparent)),
+    url("/art/heirloom/velvet.webp") center 30% / cover no-repeat;
+  color: #f8efdd;
+}
+
+/* a pair of gold rules at each edge of a band */
+.t-heirloom :is(.hl-velvet, .hl-day)::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-block: 2px solid #b08f4a;
+  box-shadow:
+    inset 0 7px 0 -6px #b08f4a,
+    inset 0 -7px 0 -6px #b08f4a;
+  pointer-events: none;
+}
+
+.inv.t-heirloom .hl-count {
+  display: grid;
+  justify-items: center;
+  padding: 76px 22px 80px;
+}
+
+.t-heirloom .hl-count .hl-script {
+  margin-top: 4px;
+  font-size: 46px;
+}
+
+.t-heirloom .hl-medals {
+  width: min(100%, 350px);
+  margin: 30px 0 28px;
+  perspective: 700px;
+}
+
+.t-heirloom .hl-medals .inv-cd {
+  gap: 13px;
+  max-width: none;
+}
+
+.t-heirloom .hl-medals .inv-cd-unit {
+  aspect-ratio: 1;
+  align-content: center;
+  gap: 2px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 34% 28%, #fffaf0, #f3e8d2 58%, #decdae);
+  color: #3b2b22;
+  box-shadow:
+    0 0 0 2px #c9a659,
+    0 0 0 5px #3a0b15,
+    0 0 0 6px #a8843c,
+    0 12px 18px -8px color-mix(in srgb, #1c0409 80%, transparent);
+}
+
+.t-heirloom .hl-medals .inv-cd-unit b {
+  font: 500 25px/1 var(--f-display);
+  color: #3b2b22;
+}
+
+.t-heirloom .hl-medals .inv-cd-unit span {
+  font: 500 7px/1.3 var(--f-display);
+  letter-spacing: 0.16em;
+  color: #8f6e2d;
+  opacity: 1;
+}
+
+.t-heirloom .hl-medals .inv-cd-done {
+  font: 400 34px/1.3 var(--f-names);
+}
+
+/* ── the place ── */
+
+.t-heirloom .hl-place {
+  display: grid;
+  justify-items: center;
+}
+
+.t-heirloom .hl-place .hl-h {
+  margin-top: 26px;
+}
+
+.t-heirloom .hl-venue {
+  font-size: 46px;
+}
+
+.t-heirloom .hl-addr {
+  max-width: 28ch;
+  margin-top: 8px;
+  font: 400 16.5px/1.55 var(--f-body);
+  opacity: 0.86;
+}
+
+.t-heirloom .hl-when {
+  display: grid;
+  gap: 4px;
+  margin-top: 22px;
+  font: 500 21px/1.4 var(--f-body);
+}
+
+.t-heirloom .hl-when .hl-caps {
+  font-size: 10.5px;
+  color: #8f6e2d;
+}
+
+.t-heirloom .hl-place .hl-note,
+.t-heirloom .hl-place .hl-italic {
+  margin-top: 16px;
+}
+
+/* the map hangs in a gilded frame */
+.t-heirloom .hl-map {
+  width: calc(100% - 22px);
+  margin: 38px auto 6px;
+  aspect-ratio: 4 / 3;
+  border: 3px solid transparent;
+  border-radius: 0;
+  background:
+    linear-gradient(var(--hl-paper), var(--hl-paper)) padding-box,
+    var(--hl-gold) border-box;
+  outline: 1px solid var(--hl-line);
+  outline-offset: 6px;
+  box-shadow: 0 26px 34px -26px color-mix(in srgb, #3b2b22 70%, transparent);
+}
+
+.t-heirloom .hl-ev {
+  display: grid;
+  justify-items: center;
+  width: 100%;
+  margin-top: 36px;
+  padding-top: 36px;
+  border-top: 1px solid var(--hl-line);
+}
+
+.t-heirloom .hl-ev:first-of-type {
+  margin-top: 6px;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.t-heirloom .hl-ev .hl-venue {
+  font-size: 38px;
+}
+
+.t-heirloom .hl-ev-title {
+  margin-bottom: 4px;
+  font-size: 12.5px;
+  color: #8f6e2d;
+}
+
+/* ── the programme: a gold thread down a marble slab ── */
+
+.inv.t-heirloom .hl-day {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  padding: 84px 22px 90px;
+  background: url("/art/heirloom/marble.webp") center 30% / cover no-repeat;
+}
+
+.t-heirloom .hl-day-h {
+  margin-top: 2px;
+  font-size: 50px;
+}
+
+.t-heirloom .hl-tl {
+  position: relative;
+  list-style: none;
+  display: grid;
+  gap: 26px;
+  width: min(100%, 340px);
+  margin: 6px 0 0;
+  padding: 10px 0;
+}
+
+.t-heirloom .hl-tl::before {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  left: 50%;
+  width: 1px;
+  background: linear-gradient(#b08f4a, #d9bd78 50%, #b08f4a);
+  transform-origin: top;
+}
+
+.t-heirloom .hl-tl li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 11px 1fr;
+  align-items: center;
+  gap: 16px;
+}
+
+.t-heirloom .hl-tl time {
+  text-align: end;
+  font: 500 14px/1.3 var(--f-display);
+  letter-spacing: 0.14em;
+  color: #7d5f24;
+}
+
+.t-heirloom .hl-tl i {
+  width: 11px;
+  aspect-ratio: 1;
+  rotate: 45deg;
+  background: var(--hl-gold);
+  box-shadow: 0 0 0 3px #f4efe6;
+}
+
+.t-heirloom .hl-tl span {
+  text-align: start;
+  font: 500 20px/1.25 var(--f-body);
+}
+
+/* ── dress code: a plate with a double gold rule ── */
+
+.t-heirloom .hl-plate {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  width: min(100%, 330px);
+  margin-inline: auto;
+  padding: 52px 30px 54px;
+  background: #fdf9f0;
+  box-shadow: 0 30px 40px -32px color-mix(in srgb, #3b2b22 75%, transparent);
+}
+
+.t-heirloom :is(.hl-plate, .hl-card)::before,
+.t-heirloom :is(.hl-plate, .hl-card)::after {
+  content: "";
+  position: absolute;
+  inset: 9px;
+  border: 1px solid #b08f4a;
+  pointer-events: none;
+}
+
+.t-heirloom :is(.hl-plate, .hl-card)::after {
+  inset: 13px;
+  border-color: color-mix(in srgb, #b08f4a 46%, transparent);
+}
+
+.t-heirloom .hl-plate .hl-h {
+  margin-top: 24px;
+}
+
+.t-heirloom .hl-dress-sub {
+  margin-top: 6px;
+  font-size: 34px;
+}
+
+.t-heirloom .hl-plate .hl-note {
+  margin-top: 14px;
+}
+
+.t-heirloom .hl-plate .inv-swatches {
+  gap: 14px;
+  margin-top: 24px;
+}
+
+.t-heirloom .inv-swatches i {
+  width: 40px;
+  height: 40px;
+  box-shadow:
+    0 0 0 3px #fdf9f0,
+    0 0 0 4.5px #b08f4a;
+}
+
+/* ── notes for guests: cards on velvet ── */
+
+.inv.t-heirloom .hl-notes {
+  display: grid;
+  gap: 28px;
+  padding: 74px 26px 78px;
+}
+
+.t-heirloom .hl-card {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  padding: 46px 26px 48px;
+  background: #fdf9f0;
+  color: #3b2b22;
+  box-shadow: 0 26px 30px -20px color-mix(in srgb, #1c0409 85%, transparent);
+}
+
+.t-heirloom .hl-card .hl-h {
+  margin-top: 22px;
+}
+
+.t-heirloom .hl-card .hl-note {
+  margin-top: 12px;
+}
+
+/* ── gifts ── */
+
+.t-heirloom .hl-gift {
+  display: grid;
+  justify-items: center;
+}
+
+.t-heirloom .hl-gift-h {
+  margin-top: 22px;
+}
+
+/* ── RSVP: claret, with a quill ── */
+
+.inv.t-heirloom [data-sec="rsvp"] {
+  --bg: var(--hl-claret);
+  --ink: #f8efdd;
+  --accent: #dcc07c;
+  --on-accent: #3a0b15;
+  --line: color-mix(in srgb, #dcc07c 44%, transparent);
+  --card: color-mix(in srgb, #f8efdd 7%, transparent);
+  --hl-line: color-mix(in srgb, #dcc07c 60%, transparent);
+  padding-block: 74px 84px;
+  background: linear-gradient(#58131f, #430d18);
+  color: #f8efdd;
+  box-shadow:
+    inset 0 2px 0 #b08f4a,
+    inset 0 -2px 0 #b08f4a;
+}
+
+.t-heirloom [data-sec="rsvp"]::before {
+  content: "";
+  display: block;
+  width: 70px;
+  aspect-ratio: 367 / 527;
+  margin: 0 auto 22px;
+  background: var(--hl-gold-pale);
+  -webkit-mask: url("/art/heirloom/i-quill.webp") center / contain no-repeat;
+  mask: url("/art/heirloom/i-quill.webp") center / contain no-repeat;
+}
+
+.inv.t-heirloom .rp-btn {
+  border-radius: 0;
+  font: 500 10.5px/1 var(--f-display);
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+}
+
+.t-heirloom .rp-field input,
+.t-heirloom .rp-field textarea,
+.t-heirloom .rp-choice button,
+.t-heirloom .rp-pill,
+.t-heirloom .rp-card,
+.t-heirloom .rp-wish {
+  border-radius: 0;
+}
+
+/* ── closing: the portrait in a locket, and a seal ── */
+
+.inv.t-heirloom .hl-close {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  padding: 96px 34px 84px;
+  background: linear-gradient(#f5ecdb, #efe3cd);
+}
+
+/* the panelling of the salon wall again */
+.t-heirloom .hl-close::before,
+.t-heirloom .hl-close::after {
+  content: "";
+  position: absolute;
+  inset: 16px;
+  border: 2px solid #b08f4a;
+  pointer-events: none;
+}
+
+.t-heirloom .hl-close::after {
+  inset: 24px;
+  border-width: 1px;
+  border-color: color-mix(in srgb, #b08f4a 55%, transparent);
+}
+
+.t-heirloom .hl-locket {
+  display: block;
+  width: 150px;
+  aspect-ratio: 3 / 4;
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 3px #c9a659,
+    0 0 0 6px #f6eedf,
+    0 0 0 8px #a8843c,
+    0 22px 26px -16px color-mix(in srgb, #3b2b22 70%, transparent);
+}
+
+.t-heirloom .hl-locket-photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.t-heirloom .hl-close-text {
+  margin-top: 34px;
+  max-width: 26ch;
+}
+
+.t-heirloom .hl-close-names {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: baseline;
+  column-gap: 0.22em;
+  margin-top: 12px;
+  padding-block: 4px;
+  font-size: 52px;
+}
+
+.t-heirloom .hl-close-names .inv-amp {
+  font-size: 0.6em;
+}
+
+.t-heirloom .hl-close-meta {
+  margin-top: 12px;
+  max-width: 30ch;
+  font-size: 10px;
+  color: #7d5f24;
+}
+
+.t-heirloom .hl-seal {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 92px;
+  aspect-ratio: 1;
+  margin-top: 34px;
+  font: 600 21px/1 var(--f-display);
+  color: #6f531c;
+  filter: drop-shadow(0 8px 8px color-mix(in srgb, #3b2b22 35%, transparent));
+}
+
+.t-heirloom .hl-seal img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.t-heirloom .hl-seal .pt-ini {
+  position: relative;
+  text-shadow:
+    0 1px 0 color-mix(in srgb, #f7e3a6 70%, transparent),
+    0 -1px 0 color-mix(in srgb, #3f2c08 55%, transparent);
+}
+
+.t-heirloom .inv-credit {
+  background: #efe3cd;
+}
+
+/* ── motion: every surface answers the scroll ── */
+
+@keyframes hl-rise {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+}
+
+@keyframes hl-shine {
+  from {
+    background-position-x: 100%;
+  }
+  to {
+    background-position-x: 0%;
+  }
+}
+
+@keyframes hl-pan {
+  from {
+    background-position-y: 8%;
+  }
+  to {
+    background-position-y: 92%;
+  }
+}
+
+@keyframes hl-coin {
+  from {
+    opacity: 0;
+    transform: rotateY(100deg) scale(0.7);
+  }
+}
+
+@keyframes hl-etch {
+  from {
+    opacity: 0.2;
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes hl-hang {
+  from {
+    opacity: 0;
+    transform: translateY(46px) scale(0.92);
+  }
+}
+
+@keyframes hl-thread {
+  from {
+    transform: scaleY(0);
+  }
+}
+
+@keyframes hl-from-start {
+  from {
+    opacity: 0;
+    transform: translateX(-22px);
+  }
+}
+
+@keyframes hl-card-a {
+  from {
+    opacity: 0;
+    transform: translateY(70px) rotate(-3deg);
+  }
+}
+
+@keyframes hl-card-b {
+  from {
+    opacity: 0;
+    transform: translateY(70px) rotate(3deg);
+  }
+}
+
+@keyframes hl-locket {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+}
+
+@keyframes hl-stamp {
+  from {
+    opacity: 0;
+    transform: scale(1.7) rotate(-24deg);
+  }
+}
+
+@keyframes hl-zoom {
+  to {
+    transform: scale(1.14);
+  }
+}
+
+@supports (animation-timeline: view()) {
+  /* the portrait draws nearer as the wall scrolls away */
+  .inv.t-heirloom[data-phase="open"] .hl-photo img {
+    animation: hl-zoom linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 100svh;
+  }
+
+  .t-heirloom .rv {
+    animation: hl-rise linear both;
+    animation-timeline: view();
+    animation-range: entry 6% entry 60%;
+  }
+
+  /* gold catches the light for as long as it is on screen */
+  .t-heirloom .hl-foil.rv,
+  .t-heirloom .hl-foil {
+    animation:
+      hl-rise linear both,
+      hl-shine linear both;
+    animation-timeline: view(), view();
+    animation-range:
+      entry 6% entry 60%,
+      entry 0% exit 100%;
+  }
+
+  .t-heirloom :is(.hl-plate, .hl-card) .hl-foil {
+    animation: hl-shine linear both;
+    animation-timeline: view();
+    animation-range: entry 0% exit 100%;
+  }
+
+  .t-heirloom .hl-gold.rv {
+    animation:
+      hl-rise linear both,
+      hl-shine linear both;
+    animation-timeline: view(), view();
+    animation-range:
+      entry 6% entry 60%,
+      entry 0% exit 100%;
+  }
+
+  .t-heirloom :is(.hl-velvet, .hl-day) {
+    animation: hl-pan linear both;
+    animation-timeline: view();
+    animation-range: entry 0% exit 100%;
+  }
+
+  /* the medallions turn in like coins, one after the other */
+  .t-heirloom .hl-medals .inv-cd-unit {
+    animation: hl-coin linear both;
+    animation-timeline: view();
+    animation-range: entry 10% entry 80%;
+  }
+
+  .t-heirloom .hl-medals .inv-cd-unit:nth-child(2) {
+    animation-range: entry 24% entry 94%;
+  }
+
+  .t-heirloom .hl-medals .inv-cd-unit:nth-child(3) {
+    animation-range: entry 38% entry 108%;
+  }
+
+  .t-heirloom .hl-medals .inv-cd-unit:nth-child(4) {
+    animation-range: entry 52% entry 122%;
+  }
+
+  /* the engraving is drawn from left to right */
+  .t-heirloom .hl-engraving.rv {
+    animation: hl-etch linear both;
+    animation-timeline: view();
+    animation-range: entry 10% entry 110%;
+  }
+
+  .t-heirloom .hl-map {
+    animation: hl-hang linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 60%;
+  }
+
+  /* the thread runs down the marble with the scroll, and each hour arrives from its side */
+  .t-heirloom .hl-tl::before {
+    animation: hl-thread linear both;
+    animation-timeline: view();
+    animation-range: entry 10% cover 62%;
+  }
+
+  .t-heirloom .hl-tl li {
+    animation: hl-rise linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 100%;
+  }
+
+  .t-heirloom .hl-plate.rv {
+    animation: hl-hang linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 50%;
+  }
+
+  .t-heirloom .hl-card.rv {
+    animation-name: hl-card-a;
+    animation-range: entry 0% entry 70%;
+  }
+
+  .t-heirloom .hl-card.rv:nth-child(even) {
+    animation-name: hl-card-b;
+  }
+
+  .t-heirloom .hl-locket {
+    animation: hl-locket linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 100%;
+  }
+
+  /* the seal is pressed down last */
+  .t-heirloom .hl-seal {
+    animation: hl-stamp linear both;
+    animation-timeline: view();
+    animation-range: entry 20% entry 160%;
+  }
+}
+
+/* fields on claret: a faint wash and a gold rule */
+.t-heirloom [data-sec="rsvp"] .rp-field :is(input, textarea) {
+  background: color-mix(in srgb, #f8efdd 8%, transparent);
+  border-color: color-mix(in srgb, #dcc07c 50%, transparent);
+  color: #f8efdd;
+}
+
+.t-heirloom [data-sec="rsvp"] .rp-field :is(input, textarea)::placeholder {
+  color: color-mix(in srgb, #f8efdd 55%, transparent);
+}
+
+/* Cinzel has capitals only: people's names read better in the text face */
+.t-heirloom .inv-contact-name {
+  font: 500 22px/1.3 var(--f-body);
+}
+
+/* long names on a narrow phone */
+.t-heirloom .inv-pname {
+  font-size: clamp(30px, 10.6vw, 42px);
+  overflow-wrap: anywhere;
+}

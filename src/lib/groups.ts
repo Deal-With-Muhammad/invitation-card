@@ -4,6 +4,7 @@ import type { Occasion } from "@/invite/types";
  *  Their own section, first, in this order. */
 export const PREMIUM_DESIGNS = [
   "nacre",
+  "heirloom",
   "cypress",
   "arbour",
   "aisle",

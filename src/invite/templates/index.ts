@@ -65,6 +65,7 @@ import { mandap } from "./mandap";
 import { songket } from "./songket";
 import { savanna } from "./savanna";
 import { nacre } from "./nacre";
+import { heirloom } from "./heirloom";
 import type { Template } from "./types";
 import { TEMPLATE_ORDER } from "@/lib/groups";
 
@@ -88,6 +89,7 @@ const ALL: Template[] = [
   songket,
   savanna,
   nacre,
+  heirloom,
 ];
 
 // Gallery order: see TEMPLATE_ORDER (the wedding functions first).

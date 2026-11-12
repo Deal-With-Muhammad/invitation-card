@@ -1,7 +1,7 @@
 "use client";
 
 import { Button, buttonVariants } from "@heroui/react";
-import { BookOpenText, CalendarDays, Eye, Globe, Languages, Moon, Music, Palette, PartyPopper, Play, RotateCcw, Shapes, Sparkles, Users, X } from "lucide-react";
+import { BookOpenText, CalendarDays, Eye, Globe, Image as ImageIcon, Languages, Moon, Music, Palette, PartyPopper, Play, RotateCcw, Shapes, Sparkles, Users, X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
@@ -19,6 +19,7 @@ import { DesignSwitcher, withDesign } from "./design-switcher";
 import { Panel } from "./fields";
 import { EventsPanel, ExtrasPanel, FaithPanel, LanguagePanel, LookPanel, MotionPanel, OccasionPanel, PeoplePanel, WordsPanel, type Set } from "./panels";
 import { Thumb } from "@/invite/runtime/thumb";
+import { PhotoPicker } from "./photo-picker";
 import { Phone, PreviewFrame } from "./preview";
 import { EditAccess, PublishDialog, ShareDialog } from "./publish";
 import { clearDraft, forgetInvite, loadDraft, saveDraft } from "./storage";
@@ -32,6 +33,7 @@ type Props =
 const FOCUS: Record<string, string> = {
   occasion: "hero",
   design: "hero",
+  photo: "hero",
   people: "invite",
   events: "events",
   words: "invite",
@@ -245,6 +247,9 @@ export function Editor(props: Props) {
       body: <EventsPanel data={data} set={set} />,
     },
     { id: "words", icon: <BookOpenText className="size-4.5" />, title: "Wording", hint: "Title, invitation line, message", body: <WordsPanel data={data} set={set} /> },
+    ...(meta.photo
+      ? [{ id: "photo", icon: <ImageIcon className="size-4.5" />, title: "Your photo", hint: data.photo ? "Added" : "Sample photo showing", body: <PhotoPicker data={data} set={set} sample={`/art/${meta.id}/portrait-720.webp`} /> }]
+      : []),
     { id: "design", icon: <Shapes className="size-4.5" />, title: "Design", hint: meta.name, body: <CurrentDesign data={data} onChange={() => setSwitching(true)} /> },
     { id: "look", icon: <Palette className="size-4.5" />, title: "Colours & fonts", hint: data.look.palette === "custom" ? "Your own colours" : meta.palettes.find((p) => p.id === data.look.palette)?.name ?? "", body: <LookPanel data={data} set={set} /> },
     { id: "faith", icon: <Moon className="size-4.5" />, title: "Bismillah, salam & dua", hint: data.bismillah !== "none" || data.salam ? "On" : "Off", body: <FaithPanel data={data} set={set} /> },

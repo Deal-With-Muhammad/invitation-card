@@ -51,7 +51,7 @@ const BY_DESIGN: Record<MusicTrack, string[]> = {
   guitar: ["wildflower", "botanica", "seaside", "amalfi", "hacienda"],
   // stationery and grand rooms
   piano: ["lace", "filigree", "envelope", "blushletter", "nacre"],
-  strings: ["shagun", "velvetrose", "zardozi", "velvet", "sheeshmahal"],
+  strings: ["shagun", "velvetrose", "zardozi", "velvet", "sheeshmahal", "heirloom"],
   // arches, courtyards and lanterns
   oud: ["zellige", "riad", "haveli", "lanterns", "aarsi"],
   qanun: ["kashi", "celestial", "noor", "hilal", "majlis"],

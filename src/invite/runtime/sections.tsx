@@ -375,7 +375,8 @@ function WishesSection({ r, Ornament }: { r: Resolved; Ornament?: FC }) {
   );
 }
 
-const DEFAULTS: Record<SectionId, FC<{ r: Resolved; Ornament?: FC }>> = {
+/** The shared sections, for a design that wraps one in its own surroundings. */
+export const DEFAULT_SECTIONS: Record<SectionId, FC<{ r: Resolved; Ornament?: FC }>> = {
   invite: InviteSection,
   countdown: CountdownSection,
   events: EventsSection,
@@ -429,7 +430,7 @@ export function Body({ r, parts, credit }: { r: Resolved; parts: TemplateParts; 
     <>
       {ids.map((id, i) => {
         const Own = parts.sections?.[id];
-        const Def = DEFAULTS[id];
+        const Def = DEFAULT_SECTIONS[id];
         return (
           <Fragment key={id}>
             {Divider && (

@@ -120,6 +120,9 @@ export type InviteData = {
   contacts: Contact[];
   prayer: { text: string | null; arabic: string | null };
   gifts: { title: string | null; note: string | null };
+  /** The host's photo, on designs that show one: its id (see invite/photo.ts) and how far down the
+   *  picture the frame looks (0 = top, 100 = bottom). */
+  photo?: { id: string; y: number };
   /** Extra blocks the host adds (travel, where to stay, parking…). Missing on older invitations. */
   details?: DetailItem[];
   closing: string | null;

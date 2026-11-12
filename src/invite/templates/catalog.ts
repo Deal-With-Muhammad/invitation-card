@@ -1069,6 +1069,23 @@ export const CATALOG: TemplateMeta[] = [
     islamic: false,
     filmed: true,
   },
+  {
+    id: "heirloom",
+    name: "Heirloom",
+    tagline: "Your portrait unveiled in a gilded frame",
+    description:
+      "Filmed opening: on a salon wall of ivory panelling a gold cord unties and a veil of silk slips off a gilded oval frame; your own photo develops inside it and your names appear on the panel below. Then a walk through the salon as you scroll: a laurel crest with your initials, the countdown as enamel medallions on claret velvet, the venue with a gold engraving and a framed map, the programme down a marble slab, the dress code, travel notes, gifts, RSVP and wishes, and a gold seal to close.",
+    occasions: ["wedding", "nikah", "walima", "engagement", "reception", "anniversary"],
+    defaultOccasion: "wedding",
+    palettes: [p("main", "Ivory, gold & claret", "#f8f2e7", "#3b2b22", "#8f6e2d", "#ece2cf")],
+    fonts: { display: "cinzel", names: "great-vibes", body: "cormorant" },
+    opening: "The silk slips off your portrait, on film",
+    openMs: 5900,
+    keywords: ["wedding invitation with photo", "luxury wedding invitation", "classic wedding invitation", "gold wedding invitation", "photo wedding invitation online"],
+    islamic: false,
+    filmed: true,
+    photo: true,
+  },
 ];
 
 export const CATALOG_BY_ID: Record<string, TemplateMeta> = Object.fromEntries(CATALOG.map((m) => [m.id, m]));

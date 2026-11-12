@@ -67,6 +67,11 @@ Delete the design's old `art.tsx` / `cover.tsx` if it has them; nothing else imp
   section order. `nacre/` is the reference for a fully bespoke page: its own countdown plaque,
   scratch medallion, venue, programme between carved curtains, framed dress code, "details" blocks
   (the host's extra blocks: travel, where to stay…) and closing, each on a different surface.
+- A design that shows the host's photo sets `photo: true` in the catalog (the editor then offers
+  "Your photo") and draws `r.data.photo` with `photoUrl()` from `invite/photo.ts`, falling back to
+  its own sample (`public/art/<id>/portrait-720.webp`). `heirloom/` is the reference: `.hl-artbox`
+  is a box that sits exactly over the painting however the screen crops it, so the portrait lands
+  in the painted frame on every phone. Photos are stored by `lib/server/photos.ts`.
 - `celebrate(root)`: runs once after opening. `fx.ts` has `fall`, `tapToThrow`, `GOLD`,
   `RED_PETALS`, `PINK_PETALS`; `runtime/effects.ts` has `confetti`, `sparkles`, `petals`.
 
