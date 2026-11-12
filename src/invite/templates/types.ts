@@ -74,6 +74,8 @@ export type TemplateParts = {
   Ornament?: FC;
   /** Replace a whole section with the template's own layout. */
   sections?: Partial<Record<SectionId, FC<SectionProps>>>;
+  /** The design's own order for the sections after the hero (default: SECTION_ORDER). */
+  order?: SectionId[];
   /** Runs once when the invitation opens (confetti, petals…). */
   celebrate?: (root: HTMLElement) => void;
   /** Extra class on the invitation root, for a kit's shared styles. */

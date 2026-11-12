@@ -126,6 +126,8 @@ export type PaintedOpts = {
   Divider?: FC<{ index: number }>;
   Ornament?: FC;
   sections?: TemplateParts["sections"];
+  /** The design's own order for the sections after the hero. */
+  order?: SectionId[];
   celebrate?: TemplateParts["celebrate"];
 };
 
@@ -409,6 +411,7 @@ export function makePainted(id: string, o: PaintedOpts): Template {
     Divider,
     Ornament: o.Ornament ?? (b && art.motif ? Motif : undefined),
     sections: o.sections,
+    order: o.order,
     celebrate: o.celebrate,
     rootClass: `pk pk-${b ? "clear" : (o.panels ?? "paper")} pk-open-${o.cover.kind}${bodyClass ? ` ${bodyClass}` : ""}`,
   };

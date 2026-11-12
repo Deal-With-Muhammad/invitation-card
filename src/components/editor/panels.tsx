@@ -499,6 +499,33 @@ export function ExtrasPanel({ data, set }: P) {
       </div>
 
       <div className="border-t border-line pt-4">
+        <p className={groupLabel}>More details</p>
+        <p className="mb-3 text-[12.5px] text-muted">Extra blocks with your own title: getting there, where to stay, parking, children… Up to four.</p>
+        <div className="space-y-3">
+          {(data.details ?? []).map((x, i) => {
+            const patch = (p: Partial<{ title: string; text: string; mapUrl: string }>) => set((d) => ({ ...d, details: (d.details ?? []).map((y, j) => (j === i ? { ...y, ...p } : y)) }));
+            return (
+              <div key={i} className="space-y-2 rounded-2xl bg-paper-2 p-3">
+                <div className="flex items-end gap-2">
+                  <Text label="Title" className="flex-1" value={x.title} onChange={(v) => patch({ title: v })} placeholder="Getting there" maxLength={60} />
+                  <Button isIconOnly variant="ghost" aria-label="Remove this block" className={`${iconBtn} size-10 hover:text-wax`} onPress={() => set((d) => ({ ...d, details: (d.details ?? []).filter((_, j) => j !== i) }))}>
+                    <Trash2 className="size-4" aria-hidden />
+                  </Button>
+                </div>
+                <Area label="Text" value={x.text} onChange={(v) => patch({ text: v })} rows={3} maxLength={600} />
+                <Text label="Map link (optional)" type="url" inputMode="url" value={x.mapUrl} onChange={(v) => patch({ mapUrl: v.trim() })} placeholder="https://maps.app.goo.gl/…" maxLength={600} />
+              </div>
+            );
+          })}
+          {(data.details ?? []).length < 4 && (
+            <Button variant="outline" size="sm" onPress={() => set((d) => ({ ...d, details: [...(d.details ?? []), { title: "", text: "", mapUrl: "" }] }))}>
+              <Plus className="size-4" aria-hidden /> Add a block
+            </Button>
+          )}
+        </div>
+      </div>
+
+      <div className="border-t border-line pt-4">
         <Toggle label="Contacts" hint="WhatsApp and call buttons for guests' questions" checked={data.show.contacts} onChange={(v) => show("contacts", v)} />
         {data.show.contacts && (
           <div className="mt-3 space-y-2">

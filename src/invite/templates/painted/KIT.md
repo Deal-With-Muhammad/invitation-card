@@ -63,6 +63,10 @@ Delete the design's old `art.tsx` / `cover.tsx` if it has them; nothing else imp
   design has them, pass `art: { trim: false, motif: false, frame: false }`, a `trimY` (a band of the
   hero painting) and point `--pb-scene` at the closed art. Everything eases in with the scroll
   (`animation-timeline: view()`, with `runtime/reveal.ts` as the fallback).
+- `sections` + `order`: a design can replace any section with its own component and set its own
+  section order. `nacre/` is the reference for a fully bespoke page: its own countdown plaque,
+  scratch medallion, venue, programme between carved curtains, framed dress code, "details" blocks
+  (the host's extra blocks: travel, where to stay…) and closing, each on a different surface.
 - `celebrate(root)`: runs once after opening. `fx.ts` has `fall`, `tapToThrow`, `GOLD`,
   `RED_PETALS`, `PINK_PETALS`; `runtime/effects.ts` has `confetti`, `sparkles`, `petals`.
 

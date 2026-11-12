@@ -275,7 +275,21 @@ export function newInvite(template: string, occasion: Occasion, palette: string,
   // Yaadein starts in Urdu (with Hindi and English to switch to) unless another language was asked for.
   const urdu = template === "yaadein" && lang === "en";
   if (urdu) lang = "ur";
-  const sample = urdu ? { ...base, ...urduCard() } : metaFor(template).special ? { ...base, events: allFunctions() } : base;
+  // Nacre's sample wedding is one day with a programme, which its curtains are made for.
+  const oneDay =
+    template === "nacre" && occasion === "wedding"
+      ? {
+          events: [ev({ start: "16:30", end: "22:30", venue: "The Grand Ballroom", address: "Jalan Ampang, 50450 Kuala Lumpur" })],
+          schedule: [
+            { time: "4:30 PM", title: "Welcome" },
+            { time: "5:00 PM", title: "Ceremony" },
+            { time: "6:00 PM", title: "Photographs" },
+            { time: "8:00 PM", title: "Dinner" },
+            { time: "10:00 PM", title: "Farewell" },
+          ],
+        }
+      : null;
+  const sample = urdu ? { ...base, ...urduCard() } : metaFor(template).special ? { ...base, events: allFunctions() } : oneDay ? { ...base, ...oneDay } : base;
   // Designs that aren't Islamic in style start without the Bismillah; the host can add it.
   const s = metaFor(template).islamic === false ? { ...sample, bismillah: "none" as const, salam: false } : sample;
   return {
@@ -300,6 +314,15 @@ export function newInvite(template: string, occasion: Occasion, palette: string,
     contacts: s.contacts,
     prayer: { text: null, arabic: null },
     gifts: { title: null, note: null },
+    // Nacre has its own surfaces for travel and where to stay: start with samples to edit.
+    ...(template === "nacre" && lang === "en"
+      ? {
+          details: [
+            { title: "Getting there", text: "A coach leaves the city centre an hour before the ceremony and returns at the end of the evening. There is parking at the venue for anyone driving.", mapUrl: "" },
+            { title: "Where to stay", text: "We have set aside rooms at a hotel close to the venue. Mention our names when you book for the wedding rate.", mapUrl: "" },
+          ],
+        }
+      : {}),
     closing: null,
     show: {
       countdown: true,

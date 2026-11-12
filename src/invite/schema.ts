@@ -77,6 +77,7 @@ export const inviteSchema = z.object({
   contacts: z.array(z.object({ name: text(50), phone: text(24) })).max(4),
   prayer: z.object({ text: maybe(400), arabic: maybe(300) }),
   gifts: z.object({ title: maybe(80), note: maybe(400) }),
+  details: z.array(z.object({ title: text(60), text: text(600), mapUrl })).max(4).optional(),
   closing: maybe(200),
   show: z.object({
     countdown: z.boolean(),

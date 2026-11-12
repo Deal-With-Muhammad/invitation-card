@@ -64,6 +64,7 @@ import { majlis } from "./majlis";
 import { mandap } from "./mandap";
 import { songket } from "./songket";
 import { savanna } from "./savanna";
+import { nacre } from "./nacre";
 import type { Template } from "./types";
 import { TEMPLATE_ORDER } from "@/lib/groups";
 
@@ -86,6 +87,7 @@ const ALL: Template[] = [
   mandap,
   songket,
   savanna,
+  nacre,
 ];
 
 // Gallery order: see TEMPLATE_ORDER (the wedding functions first).

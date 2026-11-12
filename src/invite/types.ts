@@ -53,6 +53,8 @@ export type EventItem = {
 };
 
 export type ScheduleItem = { time: string; title: string };
+/** An extra block of information: "Getting there", "Where to stay"… with an optional map link. */
+export type DetailItem = { title: string; text: string; mapUrl: string };
 export type Contact = { name: string; phone: string };
 
 export type Bismillah = "none" | "calligraphy" | "arabic";
@@ -118,6 +120,8 @@ export type InviteData = {
   contacts: Contact[];
   prayer: { text: string | null; arabic: string | null };
   gifts: { title: string | null; note: string | null };
+  /** Extra blocks the host adds (travel, where to stay, parking…). Missing on older invitations. */
+  details?: DetailItem[];
   closing: string | null;
 
   show: {
@@ -147,6 +151,7 @@ export type SectionId =
   | "wishes"
   | "schedule"
   | "dress"
+  | "details"
   | "contacts"
   | "prayer"
   | "gifts"

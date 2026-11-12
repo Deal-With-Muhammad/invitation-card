@@ -3,6 +3,7 @@ import type { Occasion } from "@/invite/types";
 /** Premium designs: the most detailed ones, each opening on its own film, with RSVP and wishes.
  *  Their own section, first, in this order. */
 export const PREMIUM_DESIGNS = [
+  "nacre",
   "cypress",
   "arbour",
   "aisle",

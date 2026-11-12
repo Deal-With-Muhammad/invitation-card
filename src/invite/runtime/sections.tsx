@@ -308,6 +308,37 @@ function GiftsSection({ r, Ornament }: { r: Resolved; Ornament?: FC }) {
   );
 }
 
+/** The host's extra blocks (travel, where to stay…), each with its own title and an optional map link. */
+function DetailsSection({ r }: { r: Resolved }) {
+  const items = (r.data.details ?? []).filter((d) => d.title.trim() || d.text.trim());
+  if (!items.length) return null;
+  return (
+    <section className="inv-sec inv-details" data-sec="details">
+      {items.map((d, i) => (
+        <article key={i} className="inv-detail rv">
+          {d.title.trim() && <h2 className="inv-title">{d.title}</h2>}
+          {d.text.trim() && (
+            <p className="inv-detail-text">
+              <Lines text={d.text} />
+            </p>
+          )}
+          {d.mapUrl && (
+            <div className="inv-actions">
+              <a className="inv-btn" href={d.mapUrl} target="_blank" rel="noopener noreferrer">
+                <svg viewBox="0 0 24 24" aria-hidden>
+                  <path d="M12 21s-7-6.3-7-11.5A7 7 0 0 1 19 9.5C19 14.7 12 21 12 21Z" />
+                  <circle cx="12" cy="9.5" r="2.5" />
+                </svg>
+                {r.t.googleMaps}
+              </a>
+            </div>
+          )}
+        </article>
+      ))}
+    </section>
+  );
+}
+
 function ClosingSection({ r }: { r: Resolved }) {
   return (
     <footer className="inv-sec inv-closing" data-sec="closing">
@@ -352,16 +383,17 @@ const DEFAULTS: Record<SectionId, FC<{ r: Resolved; Ornament?: FC }>> = {
   wishes: WishesSection,
   schedule: ScheduleSection,
   dress: DressSection,
+  details: DetailsSection,
   contacts: ContactsSection,
   prayer: PrayerSection,
   gifts: GiftsSection,
   closing: ClosingSection,
 };
 
-export const SECTION_ORDER: SectionId[] = ["invite", "countdown", "events", "rsvp", "wishes", "schedule", "dress", "contacts", "prayer", "gifts", "closing"];
+export const SECTION_ORDER: SectionId[] = ["invite", "countdown", "events", "rsvp", "wishes", "schedule", "dress", "details", "contacts", "prayer", "gifts", "closing"];
 
-export function visibleSections(r: Resolved): SectionId[] {
-  return SECTION_ORDER.filter((id) => {
+export function visibleSections(r: Resolved, order: SectionId[] = SECTION_ORDER): SectionId[] {
+  return order.filter((id) => {
     switch (id) {
       case "countdown":
         return r.show.countdown;
@@ -377,6 +409,8 @@ export function visibleSections(r: Resolved): SectionId[] {
         return r.show.gifts && Boolean(r.gifts.title || r.gifts.note);
       case "events":
         return r.events.length > 0;
+      case "details":
+        return (r.data.details ?? []).some((d) => d.title.trim() || d.text.trim());
       case "rsvp":
         return r.show.rsvp === true && isPremium(r.data.template);
       case "wishes":
@@ -389,7 +423,7 @@ export function visibleSections(r: Resolved): SectionId[] {
 
 /** Every section after the hero, with the template's dividers in between. */
 export function Body({ r, parts, credit }: { r: Resolved; parts: TemplateParts; credit?: ReactNode }) {
-  const ids = visibleSections(r);
+  const ids = visibleSections(r, parts.order);
   const Divider = parts.Divider;
   return (
     <>

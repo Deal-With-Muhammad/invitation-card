@@ -503,6 +503,24 @@ html.inv-locked body {
   box-shadow: 0 0 0 3px var(--bg), 0 0 0 4px var(--line);
 }
 
+/* more details (travel, where to stay…) */
+.inv-details {
+  display: grid;
+  gap: 44px;
+}
+
+.inv-detail {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+}
+
+.inv-detail-text {
+  max-width: 34ch;
+  margin: 0 auto !important;
+  text-wrap: pretty;
+}
+
 /* contacts */
 .inv-contact-list {
   display: grid;

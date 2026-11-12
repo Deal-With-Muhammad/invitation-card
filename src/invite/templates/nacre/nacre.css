@@ -1,0 +1,742 @@
+/* Nacre (painted kit, filmed opening, its own sections: ./sections.tsx). */
+
+.inv.t-nacre {
+  --nc-paper: #f6f0f3;
+  --nc-band: #7d7890;
+  --nc-deep: #595369;
+  --nc-pearl: linear-gradient(135deg, #f7eef2, #e4d3db 46%, #faf3f6 70%, #dccad3);
+  --nc-rule: color-mix(in srgb, var(--ink) 32%, transparent);
+  /* the names wait until the bow has slipped off the card */
+  --twin-at: 0.9;
+}
+
+/* ── the card ── */
+
+.t-nacre .pt-title {
+  font: 500 calc(14.5 * var(--u)) / 1.35 var(--f-display);
+  letter-spacing: 0.03em;
+  text-transform: none;
+  color: var(--ink);
+  max-width: 13em;
+}
+
+.t-nacre .pt-names {
+  font-size: min(calc(50 * var(--u)), calc(100cqi / (var(--len) * 0.4)));
+  line-height: 1.16;
+  margin-block: calc(6 * var(--u));
+}
+
+.t-nacre .pt-names .inv-amp {
+  font-size: 0.44em;
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+.t-nacre .pt-date {
+  font: 500 calc(17 * var(--u)) / 1.3 var(--f-display);
+  letter-spacing: 0.1em;
+}
+
+.t-nacre .pt-sc {
+  font-size: calc(10.5 * var(--u));
+  letter-spacing: 0.24em;
+}
+
+.t-nacre .pt-venue {
+  font: 500 calc(16.5 * var(--u)) / 1.3 var(--f-display);
+  font-style: normal;
+}
+
+.t-nacre .pt-bless .inv-bism {
+  width: calc(128 * var(--u));
+}
+
+/* initials pressed into the pearl wax */
+.t-nacre .pt-seal.is-emboss .pt-ini,
+.t-nacre .nc-close-seal .pt-ini {
+  color: #b89aa8;
+  text-shadow:
+    0 1px 0 color-mix(in srgb, #fff6fa 80%, transparent),
+    0 -1px 0 color-mix(in srgb, #5d4353 45%, transparent);
+}
+
+/* ── the page ── */
+
+.t-nacre .pt-backdrop {
+  background: var(--nc-paper);
+}
+
+.t-nacre .pt-backdrop-art {
+  display: none;
+}
+
+.inv.t-nacre .inv-sec {
+  margin: 0;
+  padding: 76px 30px;
+  background: none;
+  border-radius: 0;
+  outline: 0;
+  box-shadow: none;
+}
+
+.t-nacre .nc-serif {
+  font: 400 38px/1.08 var(--f-display);
+  text-wrap: balance;
+}
+
+.t-nacre .nc-script {
+  font: 400 38px/1.15 var(--f-names);
+  text-wrap: balance;
+}
+
+.t-nacre .nc-caps {
+  font: 400 11px/1.6 var(--f-body);
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+}
+
+.inv.t-nacre:is([lang="ur"], [lang="ar"], [lang="fa"], [lang="hi"], [lang="bn"]) .nc-caps {
+  font-size: 14px;
+  letter-spacing: 0;
+}
+
+.t-nacre .nc-note {
+  max-width: 31ch;
+  margin-inline: auto;
+  font: 300 14.5px/1.75 var(--f-body);
+  text-wrap: pretty;
+}
+
+.t-nacre .nc-draw {
+  display: block;
+  height: auto;
+  max-width: 100%;
+  margin-inline: auto;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* default sections (invitation lines, RSVP, wishes, contacts, prayer) */
+.t-nacre .inv-title {
+  font: 400 38px/1.08 var(--f-display);
+}
+
+.t-nacre .inv-eyebrow {
+  font: 400 10.5px/1.5 var(--f-body);
+  letter-spacing: 0.3em;
+}
+
+.t-nacre .inv-hosts {
+  font-size: 20px;
+  line-height: 1.5;
+}
+
+.t-nacre .inv-line,
+.t-nacre .inv-message,
+.t-nacre .inv-prayer-text {
+  font: 300 15px/1.75 var(--f-body);
+}
+
+.t-nacre .inv-pname {
+  font: 400 34px/1.2 var(--f-names);
+}
+
+.t-nacre .inv-people-amp {
+  font-size: 22px;
+}
+
+.t-nacre [data-sec="invite"]::before {
+  content: "";
+  display: block;
+  width: 86px;
+  aspect-ratio: 336 / 268;
+  margin: 0 auto 26px;
+  background: url("/art/nacre/i-rings.webp") center / contain no-repeat;
+}
+
+/* fine double-line buttons */
+.t-nacre .inv-btn {
+  min-height: 44px;
+  padding: 11px 22px;
+  border: 1px solid var(--nc-rule);
+  border-radius: 0;
+  outline: 1px solid var(--nc-rule);
+  outline-offset: 3px;
+  background: none;
+  font: 400 10.5px/1 var(--f-body);
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+}
+
+.t-nacre .inv-actions {
+  gap: 18px;
+  margin-top: 26px;
+}
+
+.t-nacre .inv-btn.is-primary,
+.t-nacre .inv-cal .inv-btn {
+  border-color: var(--ink);
+  outline-color: var(--ink);
+  background: var(--ink);
+  color: var(--bg);
+}
+
+.t-nacre .inv-map {
+  margin-top: 26px;
+  border: 1px solid var(--nc-rule);
+  border-radius: 0;
+  outline: 1px solid var(--nc-rule);
+  outline-offset: 4px;
+}
+
+/* ── countdown: a slate band with a pearl plaque ── */
+
+.inv.t-nacre .nc-count {
+  padding: 52px 22px 44px;
+  background: linear-gradient(#827d95, #75708a);
+  color: #faf4f7;
+}
+
+.t-nacre .nc-count .nc-serif {
+  font-size: 34px;
+}
+
+.t-nacre .nc-plaque {
+  --n: 13px;
+  width: min(100%, 330px);
+  margin: 22px auto 16px;
+  padding: 17px 26px 15px;
+  background: var(--nc-pearl);
+  color: var(--ink);
+  /* a ticket: a bite out of each end and each corner */
+  -webkit-mask:
+    radial-gradient(circle var(--n) at 0 50%, #0000 97%, #000) top left / 51% 100% no-repeat,
+    radial-gradient(circle var(--n) at 100% 50%, #0000 97%, #000) top right / 51% 100% no-repeat;
+  mask:
+    radial-gradient(circle var(--n) at 0 50%, #0000 97%, #000) top left / 51% 100% no-repeat,
+    radial-gradient(circle var(--n) at 100% 50%, #0000 97%, #000) top right / 51% 100% no-repeat;
+  filter: drop-shadow(0 6px 10px color-mix(in srgb, #2c2740 45%, transparent));
+}
+
+.t-nacre .nc-plaque .inv-cd {
+  gap: 0;
+  max-width: none;
+}
+
+.t-nacre .nc-plaque .inv-cd-unit {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+}
+
+.t-nacre .nc-plaque .inv-cd-unit b {
+  font: 500 30px/1 var(--f-display);
+  color: var(--ink);
+}
+
+.t-nacre .nc-plaque .inv-cd-unit span {
+  margin-top: 3px;
+  font-size: 8.5px;
+  letter-spacing: 0.2em;
+  opacity: 0.8;
+}
+
+.t-nacre .nc-plaque .inv-cd-done {
+  font-size: 22px;
+}
+
+.t-nacre .nc-count-note {
+  font-size: 26px;
+  color: #ecdfe6;
+}
+
+/* ── the shell and its medallion ── */
+
+.inv.t-nacre .nc-shell {
+  display: grid;
+  place-items: center;
+  padding: 0;
+  aspect-ratio: 720 / 880;
+  background: url("/art/nacre/shell-720.webp") center / cover no-repeat;
+}
+
+.t-nacre .nc-scratch {
+  position: relative;
+  width: 39.5%;
+  aspect-ratio: 0.684;
+  border-radius: 50%;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.t-nacre .nc-scratch-in {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 1px;
+  background: radial-gradient(circle at 36% 30%, #fffafc, #f1e4ea 70%, #e6d5dd);
+  color: var(--ink);
+}
+
+.t-nacre .nc-sc-sm {
+  font: 400 9.5px/1.4 var(--f-body);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.t-nacre .nc-sc-day {
+  font: 400 62px/0.95 var(--f-display);
+  margin-block: 2px 4px;
+}
+
+.t-nacre .nc-sc-yr {
+  font: 500 15px/1.3 var(--f-display);
+  letter-spacing: 0.18em;
+}
+
+.t-nacre .nc-foil {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+  touch-action: none;
+  transition: opacity 0.9s ease;
+}
+
+.t-nacre .nc-scratch.is-done .nc-foil {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ── the place ── */
+
+.t-nacre .nc-loc {
+  display: grid;
+  justify-items: center;
+}
+
+.t-nacre .nc-venue {
+  margin-top: 14px;
+  font-size: 40px;
+  color: var(--accent);
+}
+
+.t-nacre .nc-addr {
+  max-width: 30ch;
+  margin-top: 10px;
+}
+
+.t-nacre .nc-when {
+  margin-top: 22px;
+  font: 500 19px/1.4 var(--f-display);
+  letter-spacing: 0.02em;
+}
+
+.t-nacre .nc-when span {
+  display: block;
+  margin-top: 4px;
+  font: 400 11px/1.6 var(--f-body);
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+}
+
+.t-nacre .nc-loc .nc-note {
+  margin-top: 18px;
+}
+
+.t-nacre .nc-loc .nc-draw {
+  margin-top: 30px;
+}
+
+.t-nacre .nc-ev {
+  display: grid;
+  justify-items: center;
+  width: 100%;
+  margin-top: 34px;
+  padding-top: 34px;
+  border-top: 1px solid var(--nc-rule);
+}
+
+.t-nacre .nc-ev .nc-venue {
+  font-size: 34px;
+}
+
+.t-nacre .nc-ev-title {
+  font-size: 12px;
+  letter-spacing: 0.34em;
+}
+
+/* ── the day, between carved curtains ── */
+
+.inv.t-nacre .nc-day {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  aspect-ratio: 9 / 16;
+  padding: 34% 25% 26%;
+  background: url("/art/nacre/curtains.webp") center / 100% 100% no-repeat;
+}
+
+.t-nacre .nc-day-h {
+  font-size: 46px;
+  line-height: 1;
+}
+
+.t-nacre .nc-day-sub {
+  margin-top: 10px;
+  font-size: 10px;
+}
+
+.t-nacre .nc-tl {
+  list-style: none;
+  display: grid;
+  gap: 20px;
+  margin: 26px 0 0;
+  padding: 4px 0 4px 20px;
+  border-inline-start: 1px solid var(--nc-rule);
+  text-align: start;
+}
+
+.t-nacre .nc-tl li {
+  position: relative;
+  display: grid;
+  gap: 1px;
+}
+
+.t-nacre .nc-tl li::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: -24.5px;
+  top: 8px;
+  width: 8px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--ink);
+  box-shadow: 0 0 0 3px color-mix(in srgb, #d2bdc7 90%, transparent);
+}
+
+.t-nacre .nc-tl time {
+  font: 500 19px/1.2 var(--f-display);
+}
+
+.t-nacre .nc-tl .nc-caps {
+  font-size: 10.5px;
+  letter-spacing: 0.22em;
+}
+
+/* ── dress code, in a fine frame with a wax seal ── */
+
+.t-nacre .nc-frame {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  width: min(100%, 310px);
+  margin-inline: auto;
+  padding: 26px 8px 34px;
+  border: 30px solid transparent;
+  border-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90' fill='none' stroke='%237d6876'%3E%3Cpath d='M24 2.5H66C66 15 75 24 87.5 24V66C75 66 66 75 66 87.5H24C24 75 15 66 2.5 66V24C15 24 24 15 24 2.5Z' stroke-width='1.3'/%3E%3Cpath d='M28 8H62C63.500 18.500 71.500 26.500 82 28V62C71.500 63.500 63.500 71.500 62 82H28C26.500 71.500 18.500 63.500 8 62V28C18.500 26.500 26.500 18.500 28 8Z' stroke-width='.7'/%3E%3C/svg%3E") 30 / 30px stretch;
+}
+
+.t-nacre .nc-frame .nc-serif {
+  max-width: 6em;
+  font-size: 40px;
+}
+
+.t-nacre .nc-dress-sub {
+  margin-top: 4px;
+  font-size: 28px;
+  color: var(--accent);
+}
+
+.t-nacre .nc-frame .nc-draw {
+  margin-top: 20px;
+}
+
+.t-nacre .nc-frame .nc-note {
+  margin-top: 18px;
+  font-size: 13.5px;
+}
+
+.t-nacre .nc-frame .inv-swatches {
+  margin-top: 20px;
+}
+
+.t-nacre .nc-frame-seal {
+  position: absolute;
+  inset-inline-end: -44px;
+  bottom: -44px;
+  width: 66px;
+  height: 66px;
+  filter: drop-shadow(0 4px 5px color-mix(in srgb, var(--ink) 35%, transparent));
+}
+
+/* ── more details: a paper card on shell, then a carved leaf frame ── */
+
+.inv.t-nacre .nc-float {
+  padding: 62px 26px;
+  background: url("/art/nacre/shell-720.webp") center 40% / cover no-repeat;
+}
+
+.t-nacre .nc-card {
+  display: grid;
+  justify-items: center;
+  padding: 40px 22px 44px;
+  background: #f8f3f5;
+  box-shadow: 0 22px 34px -22px color-mix(in srgb, #3d2f3a 70%, transparent);
+}
+
+.t-nacre .nc-float-h {
+  margin-top: 16px;
+  font-size: 42px;
+}
+
+.t-nacre .nc-card .nc-note,
+.t-nacre .nc-leaf .nc-note {
+  margin-top: 16px;
+}
+
+.t-nacre .nc-stay {
+  display: grid;
+  justify-items: center;
+}
+
+.t-nacre .nc-stay .nc-float-h {
+  margin-top: 0;
+}
+
+.t-nacre .nc-leaf {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  width: min(100%, 350px);
+  aspect-ratio: 9 / 14.5;
+  margin-top: 26px;
+  padding: 30% 23% 28%;
+  background: url("/art/nacre/leaves-720.webp") center / 100% 100% no-repeat;
+}
+
+.t-nacre .nc-leaf .nc-note {
+  margin-top: 0;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+/* ── gifts: a pearl-edged card on the slate band ── */
+
+.inv.t-nacre .nc-gift {
+  padding: 56px 30px;
+  background: linear-gradient(#827d95, #75708a);
+}
+
+.t-nacre .nc-card.is-pearl {
+  border: 9px solid;
+  border-image: linear-gradient(135deg, #fbf4f7, #d7c3cd 30%, #f9f1f5 55%, #cdb8c3 80%, #f4e9ee) 1;
+}
+
+/* ── RSVP: the deep slate ── */
+
+.inv.t-nacre [data-sec="rsvp"] {
+  --bg: var(--nc-deep);
+  --ink: #f6eff3;
+  --accent: #e3d0da;
+  --on-accent: var(--nc-deep);
+  --line: color-mix(in srgb, #f6eff3 30%, transparent);
+  --card: color-mix(in srgb, #f6eff3 8%, transparent);
+  --nc-rule: color-mix(in srgb, #f6eff3 42%, transparent);
+  padding-block: 70px 80px;
+  background: linear-gradient(#5d576d, #534d63);
+  color: #f6eff3;
+}
+
+.t-nacre [data-sec="rsvp"]::before {
+  content: "";
+  display: block;
+  width: 84px;
+  aspect-ratio: 332 / 316;
+  margin: 0 auto 20px;
+  background: #eadbe3;
+  -webkit-mask: url("/art/nacre/i-rsvp.webp") center / contain no-repeat;
+  mask: url("/art/nacre/i-rsvp.webp") center / contain no-repeat;
+}
+
+.t-nacre [data-sec="rsvp"] .inv-btn,
+.t-nacre [data-sec="rsvp"] .rp-btn {
+  border-radius: 0;
+}
+
+/* ── closing: the seal, and with love ── */
+
+.t-nacre .nc-close {
+  display: grid;
+  justify-items: center;
+  padding-bottom: 64px;
+}
+
+.t-nacre .nc-close-seal {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 104px;
+  aspect-ratio: 1;
+  font: 500 27px/1 var(--f-display);
+  filter: drop-shadow(0 8px 9px color-mix(in srgb, var(--ink) 30%, transparent));
+}
+
+.t-nacre .nc-close-seal img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.t-nacre .nc-close-seal .pt-ini {
+  position: relative;
+}
+
+.t-nacre .nc-close-text {
+  margin-top: 30px;
+  font-size: 15.5px;
+}
+
+.t-nacre .nc-close-names {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: baseline;
+  column-gap: 0.22em;
+  margin-top: 16px;
+  font-size: 46px;
+  color: var(--accent);
+}
+
+.t-nacre .nc-close-names .inv-amp {
+  font-size: 0.6em;
+}
+
+.t-nacre .nc-close-meta {
+  margin-top: 14px;
+  opacity: 0.8;
+}
+
+/* ── motion: each surface answers the scroll ── */
+
+@keyframes nc-rise {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+}
+
+@keyframes nc-pan {
+  from {
+    background-position-y: 22%;
+  }
+  to {
+    background-position-y: 78%;
+  }
+}
+
+@keyframes nc-plaque {
+  from {
+    opacity: 0;
+    transform: scaleX(0.6);
+  }
+}
+
+@keyframes nc-medal {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+}
+
+@keyframes nc-card {
+  from {
+    opacity: 0;
+    transform: translateY(60px) rotate(-2.5deg);
+  }
+}
+
+@keyframes nc-bloom {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+}
+
+@supports (animation-timeline: view()) {
+  .t-nacre .rv {
+    animation: nc-rise linear both;
+    animation-timeline: view();
+    animation-range: entry 6% entry 60%;
+  }
+
+  .t-nacre .nc-shell,
+  .t-nacre .nc-float {
+    animation: nc-pan linear both;
+    animation-timeline: view();
+    animation-range: entry 0% exit 100%;
+  }
+
+  .t-nacre .nc-plaque.rv {
+    animation-name: nc-plaque;
+    animation-range: entry 10% entry 80%;
+  }
+
+  .t-nacre .nc-scratch {
+    animation: nc-medal linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 90%;
+  }
+
+  .t-nacre .nc-card.rv {
+    animation-name: nc-card;
+    animation-range: entry 0% entry 70%;
+  }
+
+  .t-nacre :is(.nc-frame, .nc-leaf).rv {
+    animation-name: nc-bloom;
+    animation-range: entry 0% entry 55%;
+  }
+
+  /* the programme arrives hour by hour */
+  .t-nacre .nc-tl li.rv {
+    animation-range: entry 0% entry 100%;
+  }
+}
+
+/* guests' wishes and replies keep the square, fine-lined buttons */
+.inv.t-nacre .rp-btn {
+  border-radius: 0;
+  font: 400 10.5px/1 var(--f-body);
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+}
+
+.t-nacre .rp-field input,
+.t-nacre .rp-field textarea,
+.t-nacre .rp-choice button,
+.t-nacre .rp-pill,
+.t-nacre .rp-card,
+.t-nacre .rp-wish {
+  border-radius: 0;
+}
+
+/* narrow phones: the programme's heading stays between the drapes */
+.t-nacre .nc-day-h {
+  font-size: min(46px, 11.2vw);
+  overflow-wrap: anywhere;
+}
+
+/* Nastaliq and Arabic need taller lines than the Latin faces */
+.inv.t-nacre:is([lang="ur"], [lang="ar"], [lang="fa"]) :is(.nc-serif, .nc-script, .inv-title) {
+  line-height: 1.75;
+}
+
+.inv.t-nacre:is([lang="ur"], [lang="ar"], [lang="fa"]) .nc-frame .nc-serif {
+  font-size: 32px;
+}

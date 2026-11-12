@@ -1053,6 +1053,22 @@ export const CATALOG: TemplateMeta[] = [
     islamic: false,
     filmed: true,
   },
+  {
+    id: "nacre",
+    name: "Nacre",
+    tagline: "Carved mother-of-pearl, a silk bow and a wax seal",
+    description:
+      "Filmed opening: an envelope carved from blush mother-of-pearl opens at its wax seal, a card tied with an organza bow rises out, the bow unties itself, and your names appear inside the card's carved frame. Below it, every section is its own surface: a countdown on a pearl plaque, a medallion to scratch for the date, the programme between carved curtains, the dress code in a fine frame, travel and where to stay, gifts, RSVP and wishes.",
+    occasions: ["wedding", "nikah", "walima", "engagement", "reception", "anniversary"],
+    defaultOccasion: "wedding",
+    palettes: [p("main", "Blush pearl", "#f6f0f3", "#574452", "#96708a", "#e9dde3")],
+    fonts: { display: "cormorant", names: "pinyon", body: "jost" },
+    opening: "The pearl envelope opens and the bow unties, on film",
+    openMs: 9600,
+    keywords: ["mother of pearl wedding invitation", "luxury digital wedding invitation", "pearl wedding invitation", "scratch to reveal wedding invitation", "elegant wedding website invitation"],
+    islamic: false,
+    filmed: true,
+  },
 ];
 
 export const CATALOG_BY_ID: Record<string, TemplateMeta> = Object.fromEntries(CATALOG.map((m) => [m.id, m]));

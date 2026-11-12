@@ -50,7 +50,7 @@ const BY_DESIGN: Record<MusicTrack, string[]> = {
   waltz: ["rosestudy", "orchid", "chandelier", "porcelain", "cypress", "aisle"],
   guitar: ["wildflower", "botanica", "seaside", "amalfi", "hacienda"],
   // stationery and grand rooms
-  piano: ["lace", "filigree", "envelope", "blushletter"],
+  piano: ["lace", "filigree", "envelope", "blushletter", "nacre"],
   strings: ["shagun", "velvetrose", "zardozi", "velvet", "sheeshmahal"],
   // arches, courtyards and lanterns
   oud: ["zellige", "riad", "haveli", "lanterns", "aarsi"],
