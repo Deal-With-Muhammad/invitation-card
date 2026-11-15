@@ -68,7 +68,7 @@ export const site = {
   faqs: [
     {
       q: "Is DWM Invite free?",
-      a: "Yes. Making, publishing and sharing an invitation is free, with no sign-up and no ads. A small “Made with DWM Invite” line sits at the very bottom of each invitation.",
+      a: "Yes. Making, publishing and sharing an invitation is free, with no sign-up and no ads. Each invitation includes 100 visits (80 for premium designs). If you need more, unlimited visits for that invitation are a one-time US$6 (US$8 for a premium design), paid securely through Lemon Squeezy. A small “Made with DWM Invite” line sits at the very bottom of each invitation.",
     },
     {
       q: "How do guests open the invitation?",

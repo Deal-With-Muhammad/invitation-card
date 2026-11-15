@@ -73,6 +73,10 @@ export function SiteFooter() {
           Terms
         </Link>
         <span aria-hidden>·</span>
+        <Link className={link} href="/refunds">
+          Refunds
+        </Link>
+        <span aria-hidden>·</span>
         <span>Updated {site.updated.label}</span>
         <VisitCounter />
       </div>

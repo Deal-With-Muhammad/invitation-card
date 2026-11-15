@@ -6,6 +6,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { forgetInvite, loadDraft, loadMine, type MyInvite } from "@/components/editor/storage";
 import { isUnlimited, visitsLeft } from "@/components/editor/visits";
+import { UnlockButton } from "@/components/unlock";
 import { metaFor } from "@/invite/templates/catalog";
 
 type Status = { views: number; maxViews: number; saved: boolean } | null;
@@ -167,7 +168,16 @@ function InviteList({ rows, onRemove }: { rows: Row[]; onRemove?: (slug: string)
             {m.gone ? (
               <p className="mt-1.5 text-[13px] text-wax">No longer online</p>
             ) : (
-              m.views != null && m.maxViews != null && <Visits views={m.views} maxViews={m.maxViews} />
+              m.views != null && m.maxViews != null && (
+                <>
+                  <Visits views={m.views} maxViews={m.maxViews} />
+                  {!isUnlimited(m.maxViews) && (
+                    <div className="mt-2.5">
+                      <UnlockButton slug={m.slug} template={m.template} compact />
+                    </div>
+                  )}
+                </>
+              )
             )}
           </div>
           <div className="flex flex-wrap gap-2">

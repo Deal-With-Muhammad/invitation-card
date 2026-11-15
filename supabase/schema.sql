@@ -239,3 +239,25 @@ create table if not exists public.wishes (
 
 create index if not exists wishes_slug_idx on public.wishes (slug, created_at desc);
 alter table public.wishes enable row level security;
+
+-- Payments (Nov 2026): one row per Lemon Squeezy order for unlimited visits,
+-- written by the webhook (/api/lemonsqueezy/webhook) with the service role.
+-- Lemon Squeezy keeps the full order; this only links a payment to an invitation.
+create table if not exists public.payments (
+  order_id     text primary key,
+  order_number integer,
+  slug         text,
+  tier         text,
+  status       text not null,
+  total_usd    integer not null default 0,
+  total        integer not null default 0,
+  currency     text not null default 'USD',
+  email        text,
+  name         text,
+  test_mode    boolean not null default false,
+  created_at   timestamptz not null default now(),
+  updated_at   timestamptz not null default now()
+);
+create index if not exists payments_slug_idx on public.payments (slug);
+alter table public.payments enable row level security;
+-- No policies: only the service role (the site's server) reads or writes it.

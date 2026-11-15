@@ -19,7 +19,7 @@ const header = (h: Headers, name: string) => {
 
 export function origin(h: Headers): Origin {
   return {
-    country: (header(h, "x-vercel-ip-country") ?? header(h, "cloudfront-viewer-country"))?.toUpperCase() ?? null,
+    country: (header(h, "cf-ipcountry") ?? header(h, "x-vercel-ip-country") ?? header(h, "cloudfront-viewer-country"))?.toUpperCase().replace(/^(XX|T1)$/, "") || null,
     region: header(h, "x-vercel-ip-country-region") ?? header(h, "cloudfront-viewer-country-region"),
     city: header(h, "x-vercel-ip-city") ?? header(h, "cloudfront-viewer-city"),
   };

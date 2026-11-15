@@ -13,6 +13,7 @@ import { resolve } from "@/invite/resolve";
 import { getTemplate } from "@/invite/templates";
 import type { InviteData, Lang, Occasion } from "@/invite/types";
 import { LogoMark } from "@/components/logo";
+import { UnlockButton } from "@/components/unlock";
 import { OCCASION_LABEL } from "@/lib/filters";
 
 import { DesignSwitcher, withDesign } from "./design-switcher";
@@ -23,7 +24,7 @@ import { PhotoPicker } from "./photo-picker";
 import { Phone, PreviewFrame } from "./preview";
 import { EditAccess, PublishDialog, ShareDialog } from "./publish";
 import { clearDraft, forgetInvite, loadDraft, saveDraft } from "./storage";
-import { visitLimitFor, visitsLeft } from "./visits";
+import { isUnlimited, visitLimitFor, visitsLeft } from "./visits";
 
 type Props =
   | { mode: "create"; template: string; occasion?: Occasion; palette?: string; lang?: Lang }
@@ -308,6 +309,15 @@ export function Editor(props: Props) {
               </Panel>
             ))}
           </div>
+          {props.mode === "edit" && published && !isUnlimited(maxViews) && (
+            <div className="mt-6 rounded-2xl border border-line bg-card p-3.5">
+              <p className="text-[13px] font-medium text-muted">Visits</p>
+              <p className="mt-1 mb-3 text-[14px]">
+                {visitsLeft(props.views, maxViews)}. Every opening of the link counts, yours too. Unlimited visits are a one-time payment.
+              </p>
+              <UnlockButton slug={published.slug} template={data.template} />
+            </div>
+          )}
           {published && canManage && (
             <div className="mt-6 rounded-2xl border border-line bg-card p-3.5">
               <p className="mb-2 text-[13px] font-medium text-muted">Who can edit</p>

@@ -3,10 +3,11 @@ import Link from "next/link";
 
 import { LegalPage } from "@/components/legal";
 import { AUTHOR } from "@/lib/dwm";
+import { usd, UNLOCK_PRICE_CENTS } from "@/lib/pricing";
 
 export const metadata: Metadata = {
   title: "Terms of Use",
-  description: "The terms for using DWM Invite: visit limits, acceptable use, your content and Malaysian law.",
+  description: "The terms for using DWM Invite: visit limits, paying for unlimited visits, acceptable use, your content and Malaysian law.",
   alternates: { canonical: "/terms" },
 };
 
@@ -23,10 +24,21 @@ export default function TermsPage() {
 
       <h2>Free, and provided as-is</h2>
       <p>
-        Making and publishing an invitation is free. Each one includes 100 visits (80 for premium designs), and every opening of the link counts as one. When they&apos;re used up, guests see a message that the invitation is full instead of the card. Extra visits and custom designs are arranged with me directly, and any price is agreed before work starts.
+        Making and publishing an invitation is free. Each one includes 100 visits (80 for premium designs), and every opening of the link counts as one. When they&apos;re used up, guests see a message that the invitation is full instead of the card. You can buy unlimited visits for an invitation (see Payments below), or arrange it with me directly. Custom designs are arranged with me, and their price is agreed before work starts.
       </p>
       <p>
         I provide the service as it is, and can change it or stop it at any time. Please check your invitation before you send it, and keep your event details somewhere else as well.
+      </p>
+
+      <h2>Payments</h2>
+      <p>
+        Unlimited visits for one invitation cost {usd(UNLOCK_PRICE_CENTS.regular)} for a regular design or {usd(UNLOCK_PRICE_CENTS.premium)} for a premium design, as a one-time payment in US dollars. The amount the site shows in your own currency is an estimate; your bank decides the final amount. Prices can change, but a change never affects an invitation you&apos;ve already paid for.
+      </p>
+      <p>
+        Payments are processed by Lemon Squeezy, the merchant of record, which also handles any sales tax or VAT, receipts and refunds. Its <a href="https://www.lemonsqueezy.com/buyer-terms" target="_blank" rel="noopener noreferrer">buyer terms</a> apply to the purchase as well as these terms. You don&apos;t need an account to pay: the payment belongs to the invitation&apos;s link, so anyone can pay for an invitation, and paying gives no other rights over it (it doesn&apos;t let you edit it).
+      </p>
+      <p>
+        &ldquo;Unlimited&rdquo; means the invitation has no visit limit for as long as it stays on the site. It doesn&apos;t cover automated or abusive traffic, which I may block. If you change a paid invitation to another design, it stays unlimited. Refunds follow the <Link href="/refunds">Refund Policy</Link>. If I ever close DWM Invite, I&apos;ll give at least 30 days&apos; notice on the site, and refund unlimited visits bought for events that haven&apos;t happened yet.
       </p>
 
       <h2>Acceptable use</h2>
@@ -60,7 +72,7 @@ export default function TermsPage() {
 
       <h2>Contact</h2>
       <p>
-        Email <a href={`mailto:${AUTHOR.email}`}>{AUTHOR.email}</a> or message me on <a href={AUTHOR.whatsapp} target="_blank" rel="noopener noreferrer">WhatsApp at +60 11-3986 5270</a>. See also the <Link href="/privacy">Privacy Policy</Link>.
+        Email <a href={`mailto:${AUTHOR.email}`}>{AUTHOR.email}</a> or message me on <a href={AUTHOR.whatsapp} target="_blank" rel="noopener noreferrer">WhatsApp at +60 11-3986 5270</a>. See also the <Link href="/privacy">Privacy Policy</Link> and the <Link href="/refunds">Refund Policy</Link>.
       </p>
     </LegalPage>
   );

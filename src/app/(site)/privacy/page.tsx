@@ -24,7 +24,7 @@ export default function PrivacyPage() {
       <h2>What I collect, and why</h2>
       <ul>
         <li>
-          <strong>Your invitation:</strong> everything you type or choose when you publish, such as names, parents&apos; names, hosts, dates, venues, addresses, map links, messages, contact names and phone numbers, and your design choices. I store it so that guests can open it and you can edit it. No photos are uploaded.
+          <strong>Your invitation:</strong> everything you type or choose when you publish, such as names, parents&apos; names, hosts, dates, venues, addresses, map links, messages, contact names and phone numbers, and your design choices. I store it so that guests can open it and you can edit it. If your design has a photo, the photo you choose is uploaded, shrunk in your browser first, and can be opened by anyone who has its address.
         </li>
         <li>
           <strong>Where it was made:</strong> the country and city my host works out from your IP address, saved with the invitation.
@@ -34,6 +34,12 @@ export default function PrivacyPage() {
         </li>
         <li>
           <strong>Guest visits:</strong> each time an invitation is opened I count one visit against its limit and record the time, approximate location (country, region and city, from the host), device type (phone, tablet or desktop) and where the link was tapped (for example WhatsApp, or a website&apos;s address). Guests don&apos;t sign in, and I don&apos;t save their IP address with the visit.
+        </li>
+        <li>
+          <strong>Guest replies (designs with RSVP or wishes):</strong> what a guest types when they reply: their name, whether they&apos;re coming, how many, which events, and optionally a phone number and a note, or their name and a wish. Only the host (with the private replies link) and I can see RSVPs. Wishes show on the invitation unless the host hides them.
+        </li>
+        <li>
+          <strong>Payments:</strong> if you pay for unlimited visits, Lemon Squeezy tells me the order number, which invitation it&apos;s for, the amount and currency, its status (paid or refunded), and the buyer&apos;s name and email address. I keep that to match the payment to the invitation, help with refunds and keep accounts. Your card or payment details go only to Lemon Squeezy and its payment partners, never to me. Before you pay, the site uses your country (from your IP address, worked out by my host) to show the price in your currency; it isn&apos;t stored.
         </li>
         <li>
           <strong>Limits against abuse:</strong> short-lived counters that contain your IP address, and your email address when you ask for a sign-in code.
@@ -67,8 +73,9 @@ export default function PrivacyPage() {
       <h2>Who it&apos;s shared with</h2>
       <p>There are no ads on this site. These services handle data for it:</p>
       <ul>
-        <li><strong>Supabase</strong> stores invitations, accounts, visit records and limit counters, and runs the sign-in.</li>
-        <li><strong>Amazon Web Services (AWS Amplify)</strong> hosts this site. It receives visitors&apos; IP addresses and browser details and may keep them in its logs.</li>
+        <li><strong>Supabase</strong> stores invitations, uploaded photos, guest replies, payment records, accounts, visit records and limit counters, and runs the sign-in.</li>
+        <li><strong>Cloudflare</strong> hosts this site and handles its traffic. It receives visitors&apos; IP addresses and browser details, works out their approximate location, and may keep them in its logs.</li>
+        <li><strong>Lemon Squeezy</strong> (and the payment companies it works with, such as Stripe and PayPal) runs the checkout when you pay for unlimited visits. It is the merchant of record for the sale and collects your name, email, billing country and payment details under its own <a href="https://www.lemonsqueezy.com/privacy" target="_blank" rel="noopener noreferrer">privacy policy</a>.</li>
         <li><strong>Google (Gmail)</strong> delivers sign-in emails and holds email you send me.</li>
         <li><strong>Namecheap</strong> forwards email sent to {AUTHOR.email}.</li>
         <li><strong>Vercel and Upstash</strong> host my main site and its analytics database, which receive the page view data above and serve the analytics script and app menu.</li>
@@ -89,7 +96,7 @@ export default function PrivacyPage() {
 
       <h2>How long it&apos;s kept</h2>
       <p>
-        There&apos;s no automatic deletion: invitations and their visit records stay after the event, until you delete the invitation or I remove it. Deleting an invitation deletes its visit records. Accounts stay until you ask me to delete them; deleting an account doesn&apos;t delete its invitations unless you ask for that too. Limit counters are cleared from time to time once they&apos;re a day past expiry. The daily analytics ID lasts up to two days, while the analytics totals have no end date. Providers may keep logs and backups for their own periods, and email stays until I delete it.
+        There&apos;s no automatic deletion: invitations and their visit records stay after the event, until you delete the invitation or I remove it. Deleting an invitation deletes its visit records and guest replies. Payment records are kept even if the invitation is deleted, for as long as tax and accounting rules need (usually up to 7 years). Accounts stay until you ask me to delete them; deleting an account doesn&apos;t delete its invitations unless you ask for that too. Limit counters are cleared from time to time once they&apos;re a day past expiry. The daily analytics ID lasts up to two days, while the analytics totals have no end date. Providers may keep logs and backups for their own periods, and email stays until I delete it.
       </p>
 
       <h2>Security</h2>
@@ -107,7 +114,7 @@ export default function PrivacyPage() {
 
       <h2>Changes</h2>
       <p>
-        If what the site does changes, I&apos;ll update this page and the date at the top. See also the <Link href="/terms">Terms of Use</Link>.
+        If what the site does changes, I&apos;ll update this page and the date at the top. See also the <Link href="/terms">Terms of Use</Link> and the <Link href="/refunds">Refund Policy</Link>.
       </p>
     </LegalPage>
   );

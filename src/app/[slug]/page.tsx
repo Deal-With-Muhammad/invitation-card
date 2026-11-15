@@ -69,6 +69,6 @@ export default async function InvitePage(props: PageProps<"/[slug]">) {
   const rec = await load(slug);
   if (!rec) notFound();
   // Once every visit is used, nobody gets in (the admin still can, to check it).
-  if (rec.views >= rec.maxViews && !(await isAdminRequest())) return <VisitsUsedUp slug={slug} limit={rec.maxViews} />;
+  if (rec.views >= rec.maxViews && !(await isAdminRequest())) return <VisitsUsedUp slug={slug} limit={rec.maxViews} template={rec.data.template} />;
   return <Guest slug={slug} data={rec.data} />;
 }
