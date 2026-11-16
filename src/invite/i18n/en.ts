@@ -15,7 +15,7 @@ export const en = {
     son: "Son of",
     daughter: "Daughter of",
     and: "&",
-    salam: "Assalamu alaikum wa rahmatullah",
+    salam: "Assalamu alaikum wa rahmatullahi wa barakatuh",
     bismillahMeaning: "In the name of Allah, the Most Gracious, the Most Merciful",
 
     countdownTitle: "Counting down",

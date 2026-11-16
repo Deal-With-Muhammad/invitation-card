@@ -12,7 +12,7 @@ export const ar: Copy = {
     son: "نجل",
     daughter: "كريمة",
     and: "و",
-    salam: "السلام عليكم ورحمة الله",
+    salam: "السلام عليكم ورحمة الله وبركاته",
     bismillahMeaning: "بسم الله الرحمن الرحيم",
 
     countdownTitle: "العد التنازلي",

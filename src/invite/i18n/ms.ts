@@ -12,7 +12,7 @@ export const ms: Copy = {
     son: "Putera kepada",
     daughter: "Puteri kepada",
     and: "&",
-    salam: "Assalamualaikum warahmatullah",
+    salam: "Assalamualaikum warahmatullahi wabarakatuh",
     bismillahMeaning: "Dengan nama Allah Yang Maha Pemurah lagi Maha Penyayang",
 
     countdownTitle: "Menghitung hari",

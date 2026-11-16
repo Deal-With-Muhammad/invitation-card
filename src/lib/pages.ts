@@ -88,7 +88,7 @@ export const PAGES: Record<string, LandingPage> = {
         heading: "Islamic touches, all optional",
         items: [
           { term: "Bismillah", text: "As Nastaliq calligraphy or as Arabic text at the top of the card." },
-          { term: "Salam", text: "Assalamu alaikum wa rahmatullah before the families' names." },
+          { term: "Salam", text: "Assalamu alaikum wa rahmatullahi wa barakatuh before the families' names." },
           { term: "Dua for the couple", text: "بَارَكَ اللَّهُ لَهُمَا with its meaning, or your own words." },
           { term: "Hijri date", text: "Shown under the date of each function." },
         ],

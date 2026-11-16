@@ -12,7 +12,7 @@ export const ur: Copy = {
     son: "فرزندِ",
     daughter: "دخترِ",
     and: "اور",
-    salam: "السلام علیکم ورحمۃ اللہ",
+    salam: "السلام علیکم ورحمۃ اللہ وبرکاتہ",
     bismillahMeaning: "شروع اللہ کے نام سے جو بڑا مہربان، نہایت رحم والا ہے",
 
     countdownTitle: "الٹی گنتی",

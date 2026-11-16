@@ -399,7 +399,7 @@ export function FaithPanel({ data, set }: P) {
           { value: "arabic", label: "Arabic text" },
         ]}
       />
-      <Toggle label="Salam greeting" hint="السلام عليكم ورحمة الله before the families' names" checked={data.salam} onChange={(v) => set((d) => ({ ...d, salam: v }))} />
+      <Toggle label="Salam greeting" hint="السلام عليكم ورحمة الله وبركاته before the families' names" checked={data.salam} onChange={(v) => set((d) => ({ ...d, salam: v }))} />
       <Toggle label="Hijri date" hint="Shown under each date" checked={data.show.hijri} onChange={(v) => set((d) => ({ ...d, show: { ...d.show, hijri: v } }))} />
       <Toggle label="A dua / prayer" checked={data.show.prayer} onChange={(v) => set((d) => ({ ...d, show: { ...d.show, prayer: v } }))} />
       {data.show.prayer && (

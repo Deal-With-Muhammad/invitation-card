@@ -12,7 +12,7 @@ export const fa: Copy = {
     son: "پسر",
     daughter: "دختر",
     and: "و",
-    salam: "السلام علیکم و رحمة الله",
+    salam: "السلام علیکم و رحمة الله و برکاته",
     bismillahMeaning: "به نام خداوند بخشندهٔ مهربان",
 
     countdownTitle: "شمارش معکوس",

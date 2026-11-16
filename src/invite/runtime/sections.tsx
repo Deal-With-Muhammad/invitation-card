@@ -80,7 +80,7 @@ function InviteSection({ r }: { r: Resolved }) {
     <section className="inv-sec inv-invite" data-sec="invite">
       {r.show.salam && (
         <p className="inv-salam rv" lang={r.dir === "rtl" ? r.lang : "ar"} dir="rtl">
-          {r.dir === "rtl" ? r.t.salam : "السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ ٱللَّٰهِ"}
+          {r.dir === "rtl" ? r.t.salam : "السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ ٱللَّٰهِ وَبَرَكَاتُهُ"}
         </p>
       )}
       {r.hosts.length > 0 && (

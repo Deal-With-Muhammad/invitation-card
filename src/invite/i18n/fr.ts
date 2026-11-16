@@ -12,7 +12,7 @@ export const fr: Copy = {
     son: "Fils de",
     daughter: "Fille de",
     and: "&",
-    salam: "Assalamu alaikum wa rahmatullah",
+    salam: "Assalamu alaikum wa rahmatullahi wa barakatuh",
     bismillahMeaning: "Au nom d’Allah, le Tout Miséricordieux, le Très Miséricordieux",
 
     countdownTitle: "Compte à rebours",
