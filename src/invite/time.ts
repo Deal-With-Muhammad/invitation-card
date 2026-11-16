@@ -68,18 +68,41 @@ export function formatDate(ms: number, locale: string, timeZone: string, opts: I
   }
 }
 
-/** "18 Jumada al-Ula 1448 AH" in the guest's language. */
+const HIJRI_MONTHS = [
+  "Muharram", "Safar", "Rabi al-Awwal", "Rabi al-Thani", "Jumada al-Ula", "Jumada al-Akhirah",
+  "Rajab", "Shaban", "Ramadan", "Shawwal", "Dhu al-Qadah", "Dhu al-Hijjah",
+];
+
+/**
+ * "18 Jumada al-Ula 1448 AH" in the guest's language.
+ *
+ * Some Android browsers (and in-app browsers such as WhatsApp's) can work out
+ * the Hijri day, month and year but have no Hijri month names, so they print
+ * Gregorian ones and a Gregorian era: "29 July 1448 BC" for 29 Rajab 1448. That
+ * output is caught here and rebuilt from the numbers with our own month names;
+ * a browser with no Hijri calendar at all gets nothing rather than a wrong date.
+ */
 export function hijriDate(ms: number, locale: string, timeZone: string) {
   const base = locale.split("-u-")[0];
+  const at = new Date(ms);
   try {
-    return plainSpaces(
-      new Intl.DateTimeFormat(`${base}-u-ca-islamic-umalqura`, {
-        timeZone,
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-      }).format(new Date(ms)),
+    const long = new Intl.DateTimeFormat(`${base}-u-ca-islamic-umalqura`, { timeZone, day: "numeric", month: "long", year: "numeric" });
+    if (!long.resolvedOptions().calendar.startsWith("islamic")) return "";
+    const nums = new Intl.DateTimeFormat("en-u-ca-islamic-umalqura-nu-latn", { timeZone, day: "numeric", month: "numeric", year: "numeric" }).formatToParts(at);
+    const num = (type: string) => Number(nums.find((p) => p.type === type)?.value);
+    const [day, month, year] = [num("day"), num("month"), num("year")];
+    // A Hijri year is about 580 years behind; anything near today's Gregorian year means no Hijri calendar.
+    if (!(day >= 1 && day <= 30 && month >= 1 && month <= 12 && year > 1300 && year < 1700)) return "";
+
+    const text = plainSpaces(long.format(at));
+    const gregorianMonths = new Set(
+      Array.from({ length: 12 }, (_, i) =>
+        new Intl.DateTimeFormat(`${base}-u-ca-gregory`, { month: "long", timeZone: "UTC" }).format(new Date(Date.UTC(2000, i, 15))),
+      ),
     );
+    const monthName = long.formatToParts(at).find((p) => p.type === "month")?.value ?? "";
+    const broken = gregorianMonths.has(monthName) || /^\d+$/.test(monthName) || /\b(BC|AD|BCE|CE)\b/.test(text);
+    return broken ? `${day} ${HIJRI_MONTHS[month - 1]} ${year} AH` : text;
   } catch {
     return "";
   }
