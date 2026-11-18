@@ -1,7 +1,8 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   // DWM Invite on Cloudflare Workers (built with OpenNext), moved from AWS Amplify in Nov 2026.
-  // Secrets (set once with `npx wrangler secret put NAME`): SUPABASE_SERVICE_ROLE, SUPABASE_ANON_KEY,
+  // Secrets (set once with `npx wrangler secret put NAME`): SUPABASE_SERVICE_ROLE (also signs sign-in
+  // codes and sessions: changing it signs everyone out), SUPABASE_ANON_KEY,
   // LEMONSQUEEZY_API_KEY, LEMONSQUEEZY_WEBHOOK_SECRET (live mode).
   // NEXT_PUBLIC_* values are built in from .env.production / .env at build time.
   "name": "dwm-invite",
@@ -10,6 +11,8 @@
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "assets": { "directory": ".open-next/assets", "binding": "ASSETS" },
   "observability": { "enabled": true },
+  // Sign-in emails (src/lib/server/mail.ts): Cloudflare Email Service, sending as me@dealwithmuhammad.com.
+  "send_email": [{ "name": "EMAIL" }],
   // The site's address. The DNS record for "invite" is proxied (orange cloud) so this route serves it.
   "routes": [{ "pattern": "invite.dealwithmuhammad.com/*", "zone_name": "dealwithmuhammad.com" }],
   // Lemon Squeezy LIVE ids (product 1529959). The API key and webhook signing secret are

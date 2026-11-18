@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 
-import { auth, hasAuth } from "@/lib/supabase/server";
+import { endSession } from "@/lib/server/session";
 
 export async function POST() {
-  if (hasAuth()) await (await auth()).auth.signOut();
+  await endSession();
   return NextResponse.json({ ok: true });
 }

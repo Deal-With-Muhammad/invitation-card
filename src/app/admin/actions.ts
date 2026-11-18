@@ -7,7 +7,8 @@ import { requestIp, requireAdmin } from "@/lib/server/admin";
 import { UNLIMITED_VISITS, VISIT_LIMIT } from "@/lib/server/store";
 import { logAdmin } from "@/lib/server/auth-helpers";
 import { SLUG_RE } from "@/lib/slug";
-import { auth, db } from "@/lib/supabase/server";
+import { endSession } from "@/lib/server/session";
+import { db } from "@/lib/supabase/server";
 
 // Every action checks the admin session again: a server action is a public
 // endpoint, whatever page its button sits on.
@@ -94,6 +95,6 @@ export async function deleteInvite(form: FormData) {
 export async function signOut() {
   const admin = await requireAdmin();
   await logAdmin(admin.email!, "sign-out", undefined, await requestIp());
-  await (await auth()).auth.signOut();
+  await endSession();
   redirect("/login?next=/admin");
 }

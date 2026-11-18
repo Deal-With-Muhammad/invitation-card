@@ -364,7 +364,7 @@ async function Users({ users }: { users: { id: string; email?: string; created_a
               <td className="px-4 py-3">{u.email}</td>
               <td className="px-4 py-3 tabular-nums">{counts.get(u.id) ?? 0}</td>
               <td className="px-4 py-3 text-[13px] text-muted">{when(u.created_at)}</td>
-              <td className="px-4 py-3 text-[13px] text-muted">{when(u.last_sign_in_at)}</td>
+              <td className="px-4 py-3 text-[13px] text-muted">{when((u.app_metadata?.last_sign_in_at as string | undefined) ?? u.last_sign_in_at)}</td>
               <td className="px-4 py-3">
                 <form action={setAccountUnlimited} className="flex items-center gap-2">
                   <input type="hidden" name="id" value={u.id} />
