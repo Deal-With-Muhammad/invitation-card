@@ -34,8 +34,8 @@ export async function POST(req: Request) {
     console.error("sign-in email failed", e);
     const limited = e instanceof MailLimitError;
     return NextResponse.json(
-      { error: limited ? "Too many emails sent just now. Wait a minute and try again." : "Couldn't send the code. Please try again." },
-      { status: limited ? 429 : 500 },
+      { error: limited ? "We've run out of sign-in emails for today. Please try again in a few hours. Sorry about that." : "Couldn't send the code. Please try again." },
+      { status: limited ? 503 : 500 },
     );
   }
   return NextResponse.json({ ok: true });
